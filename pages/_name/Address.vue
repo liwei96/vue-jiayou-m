@@ -190,7 +190,7 @@
         <a href="#Z">Z</a>
       </li>
     </ul>
-    <div class="zhao"></div>
+    <div class="zhao" @click="close"></div>
     <div class="tan" v-if="kk">
       <img src="~/assets/w-del.png" alt class="del" @click="close" />
       <img class="bg" src="~/assets/addressd.png" alt />
@@ -373,8 +373,8 @@ export default {
       $cookies.set('cityname',name);
       localStorage.setItem("pinyin", n);
       $cookies.set('pinyin',n)
-      // window.location.href="/"+n
-      this.$router.push("/" + n);
+      window.location.href="/"+n
+      // this.$router.push("/" + n);
     },
 
     goback() {
@@ -394,6 +394,7 @@ export default {
     close() {
       $(".zhao").hide();
       this.kk = false;
+      this.ll=0;
     },
     tohot() {
       $(".zhao").hide();
@@ -407,7 +408,7 @@ export default {
         $(".msg").show();
         setTimeout(function() {
           $(".msg").hide();
-        }, 1000);
+        }, 2000);
       }
     }
   },

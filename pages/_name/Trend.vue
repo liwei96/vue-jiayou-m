@@ -49,7 +49,7 @@
       <div class="recommen">
         <div class="re-con">
           <div class="re-list" v-for="(list,key) in lists" :key="key">
-            <router-link :to="'/'+n+'/content/'+list.id">
+            <router-link :to="'/'+jkl+'/content/'+list.id">
               <div class="re-con-left">
                 <img :src="list.img" alt />
                 <span>
@@ -98,7 +98,7 @@
             <input class="l-p" type="text" placeholder="输入预约手机号码" />
             <p class="w-mg">
               <input class="w-mg-c" type="checkbox" checked v-model="check" />我已阅读并同意
-              <router-link :to="'/'+n+'/server'">
+              <router-link :to="'/'+jkl+'/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
             </p>
@@ -144,6 +144,7 @@ export default {
     let ip=context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
+    let jkl=context.store.state.cookie.pinyin;
     let [res]= await Promise.all([
       context.$axios.post('/api/price/trends',{ city: city, ip: ip, token: token, platform: 2 })
       .then((resp)=>{
@@ -184,11 +185,13 @@ export default {
           mb:res.price_trends.mb,
           yb:res.price_trends.yb,
           mounth:res.mounth,
-          price:res.price
+          price:res.price,
+          jkl:jkl
     }
   },
   data() {
     return {
+      jkl:'',
       change: false,
       succ: false,
       defaultHeight: "0",

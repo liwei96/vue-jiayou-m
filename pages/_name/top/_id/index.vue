@@ -28,7 +28,7 @@
     <!-- 楼盘列表 -->
     <div class="con" v-show="t1">
       <div class="con-list" v-for="(top,key) in top1s" :key="top.id">
-        <router-link :to="'/'+n+'/content/'+top.id">
+        <router-link :to="'/'+jkl+'/content/'+top.id">
           <div class="con-list-top">
             <div class="list-top-left">
               <img :src="top.img" alt />
@@ -74,7 +74,7 @@
     </div>
     <div class="con" v-show="t2">
       <div class="con-list" v-for="(top,key) in top2s" :key="top.id">
-        <router-link :to="'/'+n+'/content/'+top.id">
+        <router-link :to="'/'+jkl+'/content/'+top.id">
           <div class="con-list-top">
             <div class="list-top-left">
               <img :src="top.img" alt />
@@ -120,7 +120,7 @@
     </div>
     <div class="con" v-show="t3">
       <div class="con-list" v-for="(top,key) in top3s" :key="top.id">
-        <router-link :to="'/'+n+'/content/'+top.id">
+        <router-link :to="'/'+jkl+'/content/'+top.id">
           <div class="con-list-top">
             <div class="list-top-left">
               <img :src="top.img" alt />
@@ -166,7 +166,7 @@
     </div>
     <div class="con" v-show="t4">
       <div class="con-list" v-for="(top,key) in top4s" :key="top.id">
-        <router-link :to="'/'+n+'/content/'+top.id">
+        <router-link :to="'/'+jkl+'/content/'+top.id">
           <div class="con-list-top">
             <div class="list-top-left">
               <img :src="top.img" alt />
@@ -215,7 +215,7 @@
       <h4>猜你喜欢</h4>
       <div class="guess-con">
         <div class="re-list" v-for="(list ,index) in lists" :key="index">
-          <router-link :to="'/'+n+'/content/'+list.id">
+          <router-link :to="'/'+jkl+'/content/'+list.id">
             <div class="re-con-left">
               <img :src="list.img" />
               <span>
@@ -263,7 +263,7 @@
             <input class="l-p" type="text" placeholder="输入预约手机号码" />
             <p class="w-mg">
               <input class="w-mg-c" type="checkbox" checked v-model="check" />我已阅读并同意
-              <router-link :to="'/'+n+'/server'">
+              <router-link :to="'/'+jkl+'/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
             </p>
@@ -317,6 +317,7 @@ export default {
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
      let kk = context.params.type;
+     let jkl=context.store.state.cookie.pinyin;
     let [res]= await Promise.all([
       context.$axios.post('/api/first/feature_second_mobile',{ city: city, ip: ip, platform: 2, token: token })
       .then((resp)=>{
@@ -373,11 +374,13 @@ export default {
           top3s : res.improve,
           top4s : res.existing,
           lists : res.likes,
-          check:true
+          check:true,
+          jkl:jkl
     }
   },
   data() {
     return {
+      jkl:'',
       change: false,
       succ: false,
       defaultHeight: "0",

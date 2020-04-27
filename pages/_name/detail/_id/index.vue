@@ -141,7 +141,7 @@
             <input class="l-p" type="text" placeholder="输入预约手机号码" />
             <p class="w-mg">
               <input class="w-mg-c" type="checkbox" checked v-model="checks"/>我已阅读并同意
-              <router-link :to="'/'+n+'/server'">
+              <router-link :to="'/'+jkl+'/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
             </p>
@@ -192,7 +192,7 @@ export default {
     let ip=context.store.state.ip;
     let token=context.store.state.token;
     let id=context.params.id;
-    
+    let jkl=context.store.state.cookie.pinyin;
     let [res]= await Promise.all([
       context.$axios.post('/api/project/detail',{ platform: 2, id: id, ip: ip })
       .then((resp)=>{
@@ -201,11 +201,13 @@ export default {
       })
     ])
     return{
-          build:res
+          build:res,
+          jkl:jkl
     }
   },
   data() {
     return {
+      jkl:'',
       change: false,
       succ: false,
       defaultHeight: "0",

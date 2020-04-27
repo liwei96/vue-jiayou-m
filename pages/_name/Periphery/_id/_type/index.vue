@@ -32,7 +32,7 @@
                 <input class="l-p" type="text" placeholder="输入预约手机号码" />
                 <p class="w-mg">
                   <input class="w-mg-c" type="checkbox" checked v-model="check"/>我已阅读并同意
-                  <router-link :to="'/'+n+'/server'">
+                  <router-link :to="'/'+jkl+'/server'">
                     <a href="javasript:;">《允家新房用户协议》</a>
                   </router-link>
                 </p>
@@ -107,6 +107,12 @@ export default {
             },
         }
   },
+  async asyncData(context) {
+    let jkl=context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    };
+  },
   data() {
     return {
       change: false,
@@ -119,7 +125,8 @@ export default {
       call: "",
       type: "",
       id:'',
-      check:''
+      check:'',
+      jkl:''
     };
   },
   methods: {

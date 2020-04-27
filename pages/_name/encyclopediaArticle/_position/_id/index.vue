@@ -16,7 +16,7 @@
         <p v-html="con">{{con}}</p>
       </div>
       <div class="con-list" v-show="building={}?false:ture">
-        <router-link :to="'/content/'+building.id">
+        <router-link :to="'/'+jkl+'/content/'+building.id">
           <div class="con-list-top">
             <div class="list-top-left">
               <img :src="building.img" alt />
@@ -56,9 +56,9 @@
           <a :href="'tel:'+call" class="tel">电话咨询</a>
         </div>
       </div>
-      <div class="up" @click="agree($event)">
+      <div class="up" @click.once="agree($event)">
         <img src="~/assets/giveup.png" alt />
-        <p id="nn">{{num}}</p>
+        <p id="nn">{{like}}</p>
       </div>
       <div class="recommend">
         <h4>人气推荐</h4>
@@ -66,7 +66,7 @@
           <li v-for="(list,key) in recommands" :key="key" :data-v="list.id">
             
               <div class="list">
-                <router-link :to="'/'+n+'/encyclopediaArticle/'+list.position+'/'+list.id">
+                <router-link :to="'/'+jkl+'/encyclopediaArticle/'+list.position+'/'+list.id">
                 <div class="left">
                   <h5>{{list.title}}</h5>
                   <p>{{list.source?list.source:'允家新房'}} &nbsp;{{list.time}}</p>
@@ -144,14 +144,15 @@ export default {
     let token=context.store.state.cookie.token;
     let id=context.params.id;
     let t=context.params.position;
-    
+    let jkl=context.store.state.cookie.pinyin;
     let [res]= await Promise.all([
       context.$axios.post('/api/article/detail',{
         ip: ip,
         city: city,
         id: id,
         platform: 2,
-        position: t
+        position: t,
+        token:token
       })
       .then((resp)=>{
           let data = resp.data;
@@ -159,12 +160,14 @@ export default {
       })
     ])
     return{
+      jkl:jkl,
           building : res.data.project,
           tit : res.data.title,
           img : res.data.img,
           dis : res.data.description,
           con : res.data.content,
           num : res.data.visit_count,
+          like : res.data.like_count,
           recommands : res.data.recommands,
           type:res.data.source_type,
           source:res.data.source,
@@ -192,6 +195,8 @@ export default {
   },
   data() {
     return {
+      like:0,
+      jkl:'',
       lists: [
         {
           tit: "房地产行业集中度进一步提高百强 房企市场份额升",
@@ -258,13 +263,15 @@ export default {
       this.ip=ip;
       localStorage.getItem('ip');
       let city = localStorage.getItem("city");
+      let token=localStorage.getItem('token');
       let t=this.$route.params.position;
       encyclopediaarticle_data({
         ip: ip,
         city: city,
         id: id,
         platform: 2,
-        position: t
+        position: t,
+        token:token
       })
         .then(resp => {
           that.load=false
@@ -283,11 +290,11 @@ export default {
       let ip = this.ip;
       let token = localStorage.getItem("token");
       let that = this;
-      encyclopediaarticle_agree({ ip: ip, id: id, platform: 2, token: token })
+      if(token){
+        encyclopediaarticle_agree({ ip: ip, id: id, platform: 2, token: token })
         .then(resp => {
           if (resp.data.code == 500) {
             that.$router.push('/'+that.n+"/login")
-            // window.location.href = "/login";
           } else {
             that.num = that.num + 1;
             $("#nn").html(that.num);
@@ -296,6 +303,10 @@ export default {
         .catch(error => {
           console.log(error);
         });
+      }else{
+        that.$router.push('/'+that.n+"/login")
+      }
+      
     },
     sendmsg(p) {
       this.phone = p;
@@ -446,7 +457,6 @@ export default {
     }
   },
   created(){
-    
   }
 };
 </script>

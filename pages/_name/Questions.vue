@@ -36,6 +36,7 @@ export default {
     let ip=context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
+    let jkl=context.store.state.cookie.pinyin;
     let [res]= await Promise.all([
       context.$axios.post('/api/project/question_info',{
         ip: ip,
@@ -53,6 +54,7 @@ export default {
     ])
     return{
           lists : res,
+          jkl:jkl
     }
   },
   data() {
@@ -62,7 +64,8 @@ export default {
       id:'',
       n:'',
       page:2,
-      isok:true
+      isok:true,
+      jkl:''
     };
   },
   methods: {
@@ -81,7 +84,8 @@ export default {
       encyclopediaarticle_agree({ ip: ip, platform: 2, token: token })
         .then(resp => {
           if (resp.data.code == 500) {
-            that.$router.push('/'+that.n+"/login")
+            let kk=localStorage.getItem('pinyin')
+            that.$router.push('/'+kk+"/login")
             // window.location.href = "/login";
           } else {
             let type = e.target.getAttribute("data-d");
@@ -154,12 +158,13 @@ export default {
     this.start();
     let that = this;
     $("#btn").on("click", function() {
+      let kk=localStorage.getItem('pinyin')
       let token = localStorage.getItem("token");
       if (token) {
-        that.$router.push('/'+that.n+"/leavequestions")
+        that.$router.push('/'+kk+"/leavequestions")
         // window.location.href = "/leavequestion/" + that.id;
       } else {
-        that.$router.push('/'+that.n+"/login")
+        that.$router.push('/'+kk+"/login")
         // window.location.href = "/login";
       }
     });

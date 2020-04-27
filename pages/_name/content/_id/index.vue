@@ -31,7 +31,7 @@
         <div class="fixs" v-if="fx">
           <img src="~/assets/return.png" alt @click="goback" />
           <ul>
-            <li :class="fx1==key&&'active'" v-for="(item,key) in fxs" :key="key">{{item}}</li>
+            <li :class="fx1==key&&'active'" v-for="(item,key) in fxs" :key="key" @click='goto(key)'>{{item}}</li>
           </ul>
         </div>
       </transition>
@@ -181,7 +181,7 @@
         </h3>
         <div class="h-c" v-for="(h,key) in hu" :key="key">
           <div class="col-xs-4 h-c-i">
-            <router-link :to="'/'+n+'/HuAnalysis/'+h.id+'/'+building.id">
+            <router-link :to="'/'+jkl+'/HuAnalysis/'+h.id+'/'+building.id">
               <img :src="h.img" alt />
             </router-link>
           </div>
@@ -222,7 +222,7 @@
         <div class="dui-zi">
           <div class="swiper-wrapper">
             <div class="swiper-slide dui-box">
-              <router-link :to="'/'+n+'/analysis/'+id">
+              <router-link :to="'/'+jkl+'/analysis/'+id">
                 <div class="tou-con">
                   <h4>投资分析</h4>
                   <p v-for="(v,key) in invest" :key="key">{{key+1}}、{{v}}</p>
@@ -233,7 +233,7 @@
               </router-link>
             </div>
             <div class="swiper-slide dui-box">
-              <router-link :to="'/'+n+'/analysis/'+id">
+              <router-link :to="'/'+jkl+'/analysis/'+id">
                 <div class="tou-con">
                   <h4>宜居分析</h4>
                   <p v-for="(v,key) in live" :key="key">{{key+1}}、{{v}}</p>
@@ -349,7 +349,7 @@
             <img src="~/assets/m-go.png" alt />
           </span>
         </h3>
-        <router-link :to="'/' + n + '/Periphery/' + id + '/1'">
+        <router-link :to="'/' + jkl + '/Periphery/' + id + '/1'">
           <div class="m-continer" id="m-container"></div>
         </router-link>
         <div class="m-z-icons">
@@ -402,7 +402,7 @@
           <template  v-if="key<3?true:false">
             <input type="radio" name="pk" @click="pk($event)" :data-v="c.id" />
             <div class="re-list">
-              <router-link :to="'/'+n+'/content/'+c.id">
+              <router-link :to="'/'+jkl+'/content/'+c.id">
                 <div class="re-con-left">
                   <img :src="c.img" alt />
                 </div>
@@ -471,7 +471,7 @@
             </div>
           </li>
         </ul>
-        <router-link :to="'/'+n+'/comment/'+id">
+        <router-link :to="'/'+jkl+'/comment/'+id">
           <button class="m-d-x">我要点评</button>
         </router-link>
       </div>
@@ -490,7 +490,7 @@
         </div>
         <div class="re-con r1" v-show="n1">
           <div class="re-list" v-for="(list,key) in same_price" :key="key">
-            <router-link :to="'/'+n+'/content/'+list.id">
+            <router-link :to="'/'+jkl+'/content/'+list.id">
               <div class="re-con-left">
                 <img :src="list.img" alt />
                 <span>
@@ -526,7 +526,7 @@
         </div>
         <div class="re-con r2" v-show="n2">
           <div class="re-list" v-for="(list,key) in same_area" :key="key">
-            <router-link :to="'/'+n+'/content/'+list.id">
+            <router-link :to="'/'+jkl+'/content/'+list.id">
               <div class="re-con-left">
                 <img :src="list.img" alt />
                 <span>
@@ -606,7 +606,7 @@
                 <input class="l-p" type="text" placeholder="输入预约手机号码" />
                 <p class="w-mg">
                   <input class="w-mg-c" type="checkbox" checked v-model="check" />我已阅读并同意
-                  <router-link :to="'/'+n+'/server'">
+                  <router-link :to="'/'+jkl+'/server'">
                     <a href="javasript:;">《允家新房用户协议》</a>
                   </router-link>
                 </p>
@@ -688,7 +688,7 @@ export default {
     let id = context.params.id;
     let token = context.store.state.cookie.token;
     let ip = context.store.state.cookie.ip;
-
+    let jkl=context.store.state.cookie.pinyin;
     let [res] = await Promise.all([
       context.$axios
         .post("/api/project/detail", {
@@ -775,7 +775,7 @@ export default {
         })
     ]);
     return {
-      
+      jkl:jkl,
       call: res.p,
       la: res.building.latitude,
       ln: res.building.longitude,
@@ -822,6 +822,7 @@ export default {
   },
   data() {
     return {
+      jkl:'',
       change: false,
       fxs: ["楼盘", "户型", "问答", "周边"],
       fx: false,
@@ -1496,7 +1497,77 @@ export default {
         } else if (Y <= 100) {
           this.fx = false;
         }
+      },
+    goto(key){
+      if (process.client) {
+        let Y = window.scrollY;
+        if (key == 0) {
+          if (Y > 100) {
+            var timer = setInterval(function() {
+              window.scrollBy(0, -10);
+              if (window.scrollY <= 100) {
+                clearInterval(timer);
+              }
+            }, 0.01);
+          } else {
+            var timer = setInterval(function() {
+              window.scrollBy(0, 10);
+              if (window.scrollY >= 100) {
+                clearInterval(timer);
+              }
+            }, 1);
+          }
+        } else if (key == 1) {
+          if (Y > 1100) {
+            var timer = setInterval(function() {
+              window.scrollBy(0, -10);
+              if (window.scrollY <= 1100) {
+                clearInterval(timer);
+              }
+            }, 0.01);
+          } else {
+            var timer = setInterval(function() {
+              window.scrollBy(0, 10);
+              if (window.scrollY >= 1100) {
+                clearInterval(timer);
+              }
+            }, 1);
+          }
+        } else if (key == 2) {
+          if (Y > 2700) {
+            var timer = setInterval(function() {
+              window.scrollBy(0, -10);
+              if (window.scrollY <= 2700) {
+                clearInterval(timer);
+              }
+            }, 0.01);
+          } else {
+            var timer = setInterval(function() {
+              window.scrollBy(0, 10);
+              if (window.scrollY >= 2700) {
+                clearInterval(timer);
+              }
+            }, 1);
+          }
+        } else if (key == 3) {
+          if (Y > 3200) {
+            var timer = setInterval(function() {
+              window.scrollBy(0, -10);
+              if (window.scrollY <= 3200) {
+                clearInterval(timer);
+              }
+            }, 0.01);
+          } else {
+            var timer = setInterval(function() {
+              window.scrollBy(0, 10);
+              if (window.scrollY >= 3200) {
+                clearInterval(timer);
+              }
+            }, 1);
+          }
+        }
       }
+    }
   },
   mounted() {
     let that = this;
@@ -1512,12 +1583,7 @@ export default {
     })
     
     
-    // this.$nextTick(()=>{
-    //   this.drawline();
-    //   this.priceline();
-    // })
-    // this.drawline();
-    // this.priceline();
+    
     //获取默认高度
       this.defaultHeight = $(window).height();
       window.onresize = () => {

@@ -6,7 +6,7 @@
     <div class="recommen" v-show="false">
       <div class="re-con">
         <div class="re-list" v-for="(list ,index) in lists" :key="index">
-          <router-link :to="'/'+n+'/content/'+list.id">
+          <router-link :to="'/'+jkl+'/content/'+list.id">
           <div class="re-con-left">
             <img :src="list.img" />
 
@@ -40,7 +40,7 @@
     <div class="nothing">
       <img src="~/assets/footers.png" alt />
       <p>您还没有浏览记录，快去看看楼盘吧~</p>
-      <router-link :to="'/'+n+'/search'"><button>去看楼盘</button></router-link>
+      <router-link :to="'/'+jkl+'/search'"><button>去看楼盘</button></router-link>
     </div>
   </div>
 </template>
@@ -53,6 +53,7 @@ export default {
     let ip=context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
+    let jkl=context.store.state.cookie.pinyin;
     let [res]= await Promise.all([
       context.$axios.post('/api/project/my_foot',{ip:ip,city:city,page:1,limit:10,platform:2,token:token})
       .then((resp)=>{
@@ -61,7 +62,8 @@ export default {
       })
     ])
     return{
-          lists:res
+          lists:res,
+          jkl:jkl
     }
   },
   data() {
@@ -124,7 +126,8 @@ export default {
           tese: "繁华地段"
         }
       ],
-      n:''
+      n:'',
+      jkl:''
     };
   },
   methods: {

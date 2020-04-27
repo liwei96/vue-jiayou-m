@@ -8,24 +8,29 @@
     </nav>
     <div class="con">
       <div class="list" v-for="m in lists" :key="m.id">
-        <router-link :to="'/'+n+'/content/'+m.bid">
+        <router-link :to="'/'+jkl+'/content/'+m.bid">
           <p class="tit">
             <i class="round"></i>
             {{m.createtime}}
           </p>
+          </router-link>
           <div class="lcon">
+            <router-link :to="'/'+jkl+'/content/'+m.bid">
             <h4>{{m.building_name}}最新房源动态</h4>
+            </router-link>
             <div class="lcon-con">
+              <router-link :to="'/'+jkl+'/content/'+m.bid">
               <div class="left">
                 <img :src="m.building_img" alt />
               </div>
+              </router-link>
               <div class="right">
                 <p>{{m.introduce}}</p>
                 <span class="all" @click="all($event)">全文</span>
               </div>
             </div>
           </div>
-        </router-link>
+        
       </div>
     </div>
     <div class="m-botnav">
@@ -101,6 +106,7 @@ export default {
     let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token = context.store.state.cookie.token;
+    let jkl=context.store.state.cookie.pinyin;
     let [res] = await Promise.all([
       context.$axios
         .post("/api/project/dynamic", {
@@ -117,7 +123,8 @@ export default {
     ]);
     return {
       lists: res.dynamics.infos,
-      phone: res.phone
+      phone: res.phone,
+      jkl:jkl
     };
   },
   data() {
@@ -128,7 +135,8 @@ export default {
       ip: "",
       n: "",
       call: "",
-      ting: true
+      ting: true,
+      jkl:''
     };
   },
   methods: {

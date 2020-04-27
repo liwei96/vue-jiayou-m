@@ -251,7 +251,7 @@
             <input class="l-p" type="text" placeholder="输入预约手机号码" />
             <p class="w-mg">
               <input class="w-mg-c" type="checkbox" v-model="check"/>我已阅读并同意
-              <router-link :to="'/'+n+'/server'">
+              <router-link :to="'/'+jkl+'/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
             </p>
@@ -296,6 +296,7 @@ export default {
     let token=context.store.state.cookie.token;
     let id=context.params.id;
     let ids=context.params.ids;
+    let jkl=context.store.state.cookie.pinyin;
     let [res]= await Promise.all([
       context.$axios.post('http://ll.edefang.net/api/project/compare_mobile',{ ip: ip, ids: ids, platform: 2, token: token })
       .then((resp)=>{
@@ -307,11 +308,13 @@ export default {
     ])
     return{
           left : res[0],
-        right : res[1]
+        right : res[1],
+        jkl:jkl
     }
   },
   data() {
     return {
+      jkl:'',
       change: false,
       succ: false,
       defaultHeight: "0",

@@ -47,7 +47,7 @@
       
       <ul class="lists">
         <li v-for="(list,key) in lists" :key="key">
-          <router-link :to="'/'+n+'/encyclopediaArticle/'+list.position+'/'+list.id">
+          <router-link :to="'/'+jkl+'/encyclopediaArticle/'+list.position+'/'+list.id">
             <div class="list">
               <div class="left">
                 <h5>{{list.title}}</h5>
@@ -99,7 +99,7 @@
       
       <ul class="lists">
         <li v-for="(list,key) in list1" :key="key">
-          <router-link :to="'/'+n+'/encyclopediaArticle/'+list.position+'/'+list.id">
+          <router-link :to="'/'+jkl+'/encyclopediaArticle/'+list.position+'/'+list.id">
             <div class="list">
               <div class="left">
                 <h5>{{list.title}}</h5>
@@ -156,7 +156,7 @@
       
       <ul class="lists">
         <li v-for="(list,key) in list2" :key="key">
-          <router-link :to="'/'+n+'/encyclopediaArticle/'+list.position+'/'+list.id">
+          <router-link :to="'/'+jkl+'/encyclopediaArticle/'+list.position+'/'+list.id">
             <div class="list">
               <div class="left">
                 <h5>{{list.title}}</h5>
@@ -179,7 +179,7 @@
   </div>
 </template>
 <script>
-import {ip,encyclopedia_data} from '~/api/api'
+import {ip,encyclopedia_data} from '~/api/api' 
 import Swiper from "swiper";
 import "swiper/css/swiper.min.css";
 import Loadings from "@/components/loading";
@@ -192,27 +192,32 @@ export default {
    let ip=context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
+    let jkl = context.store.state.cookie.pinyin;
+    console.log(jkl)
     let [res1,res2,res3]= await Promise.all([
       context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:'56',platform:2,token:token})
       .then((resp)=>{
           let data=resp.data.data.data;
+          data.n=context.store.state.pinyin;
           return data;
       }),
-      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:'56',platform:2,token:token})
+      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:'60',platform:2,token:token})
       .then((resp)=>{
           let data=resp.data.data.data;
           return data;
       }),
-      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:'56',platform:2,token:token})
+      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:'65',platform:2,token:token})
       .then((resp)=>{
           let data=resp.data.data.data;
+          data.n=context.store.state.pinyin;
           return data;
       })
     ])
     return{
           lists:res1,
           list1:res2,
-          list2:res3
+          list2:res3,
+          jkl:jkl
     }
   },
   data() {
@@ -302,7 +307,8 @@ export default {
       p2:2,
       p3:2,
       n:'',
-      load:true
+      load:true,
+      jkl:''
     };
   },
   methods: {
@@ -463,6 +469,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.jkl)
     let width=document.documentElement.clientWidth;
     $('.fubox').css('width',width+'px')
     this.getip();
@@ -494,27 +501,6 @@ export default {
         .find("p")
         .removeClass("active");
     });
-    // $(document).scroll(function() {
-    //   let l = that;
-    //   var scrollTop = $(this).scrollTop();
-    //   var scrollHeight = $(window).height();
-    //   var windowHeight = $(this).height();
-    //   if (scrollTop + scrollHeight >= windowHeight) {
-    //     if(l.q1){
-    //       let id=l.id1;
-    //       let page=l.p1;
-    //       l.more1(id,page)
-    //     }else if(l.z1){
-    //       let id=l.id2;
-    //       let page=l.p2;
-    //       l.more2(id,page)
-    //     }else{
-    //       let id=l.id3;
-    //       let page=l.p3
-    //       l.more3(id,page)
-    //     }
-    //   }
-    // });
     window.addEventListener("scroll", this.scroll);
   },
   beforeDestroy() {

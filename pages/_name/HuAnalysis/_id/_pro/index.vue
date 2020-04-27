@@ -75,7 +75,7 @@
       <h4>本楼盘其它户型</h4>
       <ul>
         <li v-for="(item,key) in others" :key="key">
-          <router-link :to="'/'+n+'/HuAnalysis/'+item.id">
+          <router-link :to="'/'+jkl+'/HuAnalysis/'+item.id">
             <img :src="item.img" alt />
             <div class="h-right">
               <h5>
@@ -97,7 +97,7 @@
       <div class="recommen">
         <div class="re-con">
           <div class="re-list" v-for="(item,key) in likes" :key="key">
-            <router-link :to="'/'+n+'/content/'+item.id">
+            <router-link :to="'/'+jkl+'/content/'+item.id">
               <div class="re-con-left">
                 <img :src="item.img" alt />
                 <span>
@@ -162,7 +162,7 @@
             <input class="l-p" type="text" placeholder="输入预约手机号码" />
             <p class="w-mg">
               <input class="w-mg-c" type="checkbox" checked v-model="check"/>我已阅读并同意
-              <router-link :to="'/'+n+'/server'">
+              <router-link :to="'/'+jkl+'/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
             </p>
@@ -214,6 +214,7 @@ export default {
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
     let id=context.params.id;
+    let jkl=context.store.state.cookie.pinyin;
     let [res]= await Promise.all([
       context.$axios.post('/api/project/apartment',{ ip: ip, city: city, id: id, token: token })
       .then((resp)=>{
@@ -230,11 +231,13 @@ export default {
     return{
           others : res.others,
           likes : res.would_likes,
-          one:res.one
+          one:res.one,
+          jkl:jkl
     }
   },
   data() {
     return {
+      jkl:'',
       change: false,
       succ: false,
       defaultHeight: "0",

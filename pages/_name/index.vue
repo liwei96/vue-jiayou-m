@@ -278,6 +278,7 @@
           <h1>房产资讯</h1>
           <div class="lou_dong_box">
             <div
+              v-if="left_info"
               class="lou_dong_left"
               :data-v="left_info.id"
               :data-t="left_info.position"
@@ -297,6 +298,7 @@
             </div>
             <div class="lou_dong_right">
               <div
+                v-if="right_info1"
                 class="yu_shou"
                 :data-v="right_info1.id"
                 :data-t="right_info1.position"
@@ -315,6 +317,7 @@
                 >{{right_info1.description}}</p>
               </div>
               <div
+                v-if="right_info2"
                 class="yao_hao"
                 :data-v="right_info2.id"
                 :data-t="right_info2.position"
@@ -532,8 +535,8 @@
         <p>
           <span class="wen-time">{{q.time}}</span>
           <span class="Fabulous">
-            <img :src="click" @click="agree($event)" data-d="1" :data-v="q.id" :data-n="q.num" alt />
-            <span>有用({{q.num}})</span>
+            <img :src="click" @click.stop="agree($event)" data-d="1" :data-v="q.id" :data-n="q.num" alt />
+            <span @click.stop="agree($event)" data-d="1" :data-v="q.id" :data-n="q.num">有用({{q.num}})</span>
           </span>
         </p>
       </div>
@@ -640,17 +643,6 @@ export default {
       city = 1;
       context.store.commit("setcity", { city: city });
     }
-    // if(context.req.headers.cookie){
-    //   let cookieArr = context.req.headers.cookie.split(";");
-    //   let obj = {}
-    //   cookieArr.forEach((i) => {
-    //       let arr = i.split("=");
-    //       obj[arr[0].trim()] =arr[1];
-    //   });
-    //   let ip=obj['ip'];
-    //   let city=obj['city']
-    //   let token=obj['token']
-    // }
     let [res] = await Promise.all([
       context.$axios
         .post("/api/first/index_mobile", {
@@ -704,13 +696,13 @@ export default {
           if (data.dong) {
             data.dong.num = data.dynaminc.dynamic_list_count;
           }
-          data.left_info = data.article.focus_1
+          data.left_info = data.article.focus_1.length>0
             ? data.article.focus_1[0]
             : null;
-          data.right_info1 = data.article.focus_2
+          data.right_info1 = data.article.focus_2.length>0
             ? data.article.focus_2[0]
             : null;
-          data.right_info2 = data.article.focus_3
+          data.right_info2 = data.article.focus_3.length>0
             ? data.article.focus_3[0]
             : null;
 
@@ -1264,8 +1256,9 @@ export default {
       localStorage.setItem("ip", ip);
       index_start({ city: city, platform: 2, token: token, ip: ip })
         .then(resp => {
-          let pin = resp.data.city.pinyin;
+          let pin = resp.data.city.pinyin.charAt(0).toUpperCase()+resp.data.city.pinyin.substr(1);
           let cityname = resp.data.city.name;
+          $cookies.set('cityname',cityname);
           localStorage.setItem("cityname", cityname);
           if (!localStorage.getItem("num")) {
             if (nn) {
@@ -1488,7 +1481,6 @@ export default {
     window.addEventListener("scroll", this.scroll);
   },
   watch: {
-    cityname(val) {}
   }
 };
 </script>
@@ -1633,7 +1625,7 @@ li {
 .banner .trend {
   width: 100%;
   height: 42px;
-  padding: 10px 5.33% 10px 4%;
+  padding: 10px 2% 10px 4%;
   display: flex;
 }
 .trend .trend-lead {

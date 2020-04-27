@@ -7,7 +7,7 @@
       <div class="swiper-top">
         <div class="swiper-wrapper">
           <div class="swiper-slide" v-for="(lun,key) in luns" :key="key">
-            <router-link :to="'/'+n+'/encyclopediaArticle/'+lun.position+'/'+lun.id">
+            <router-link :to="'/'+jkl+'/encyclopediaArticle/'+lun.position+'/'+lun.id">
               <img :src="lun.img" style="width:100%" />
               <div class="zhe"></div>
             </router-link>
@@ -81,7 +81,7 @@
     </div>
     <ul class="lists">
       <li v-for="(list,key) in lists" :key="key">
-        <router-link :to="'/'+n+'/encyclopediaArticle/'+list.position+'/'+list.id">
+        <router-link :to="'/'+jkl+'/encyclopediaArticle/'+list.position+'/'+list.id">
           <div class="list">
             <div class="left">
               <h5>{{list.title}}</h5>
@@ -106,6 +106,7 @@ export default {
     let ip=context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
+    let jkl=context.store.state.cookie.pinyin;
     let [res1,res2]= await Promise.all([
       context.$axios.post('/api/article/info',{
         city: city,
@@ -136,7 +137,8 @@ export default {
           lists : res2,
           tit:res1.header.title,
           key:res1.header.keywords,
-          des:res1.header.description
+          des:res1.header.description,
+          jkl:jkl
     }
   },
   data() {
@@ -169,39 +171,10 @@ export default {
   methods: {
     start() {
       this.n = this.$route.params.name;
-      let that = this;
       let ip = returnCitySN["cip"];
       this.ip = ip;
-      localStorage.getItem("ip");
-      let token = localStorage.getItem("token");
-      let city = localStorage.getItem("city");
-      realInformations_start({
-        city: city,
-        ip: ip,
-        platform: 2,
-        token: token
-      })
-        .then(resp => {
-          let data = resp.data.data[0];
-          that.luns = data.imgs;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-      realInformations_data({
-        city: city,
-        platform: 2,
-        position: "46",
-        token: token,
-        page: 1,
-        limit: 10
-      })
-        .then(resp => {
-          that.lists = resp.data.data.data;
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      $cookies.set('ip',ip);
+      $cookies.set('pinyin',this.n);
     },
     get(e) {
       let id = e.target.getAttribute("data-v");
@@ -247,6 +220,7 @@ export default {
       spaceBetween: 0,
       observer: true, //修改swiper自己或子元素时，自动初始化swiper
       observeParents: true, //修改swiper的父元素时，自动初始化swiper
+      autoplay: true,
       pagination: {
         el: "#swiper-pagination1",
         clickable: true

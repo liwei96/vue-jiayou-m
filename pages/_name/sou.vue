@@ -22,7 +22,7 @@
         <p class="title">楼盘</p>
         <div>
           <router-link
-            :to="'/'+n+'/content/'+hot_id[key]"
+            :to="'/'+jkl+'/content/'+hot_id[key]"
             v-for="(name , key) in names"
             :data-v="hot_id[key]"
             :key="key"
@@ -71,6 +71,7 @@ export default {
    let ip=context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
+    let jkl=context.store.state.cookie.pinyin;
     let [res]= await Promise.all([
       context.$axios.post('/api/project/quick_search',{ token: token, city: city, ip: ip, platform: 2 })
       .then((resp)=>{
@@ -99,11 +100,13 @@ export default {
           te_id : res.te_id,
           names : res.names,
           hot_id : res.hot_id,
+          jkl:jkl
     }
   },
   data() {
     return {
       n: "",
+      jkl:'',
       names: ["世茂天辰", "千岛湖嘉苑·千岛湖壹号", "千岛湖嘉苑"],
       ip: "",
       hot_id: [],

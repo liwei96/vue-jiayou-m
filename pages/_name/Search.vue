@@ -10,7 +10,7 @@
         </span>
       </p>
       <p class="dian">
-        <router-link :to="'/'+n+'/map'">
+        <router-link :to="'/'+jkl+'/map'">
         <img src="~/assets/dian.png" alt />
         <span>地图</span>
         </router-link>
@@ -48,6 +48,7 @@
           </div>
           <div class="m-two col-xs-8 col-sm-8" @click="a1">
             <ul id="qu">
+              <li :class="num6==0?'m-l-active':''" data-v="0" @click="qu($event)">不限</li>
               <li
                 :class="num6==(city.id)?'m-l-active':''"
                 v-for="city in citys"
@@ -57,6 +58,7 @@
               >{{city.name}}</li>
             </ul>
             <ul id="tie">
+              <li :class="num7==0?'m-l-active':''" data-v="0" @click="tie($event)">不限</li>
               <li
                 :class="num7==(di.id)?'m-l-active':''"
                 v-for="di in dities"
@@ -76,6 +78,7 @@
           </div>
           <div class="m-two col-xs-8 col-sm-8" @click="p1">
             <ul id="zong">
+              <li :class="num4==0?'m-l-active':''" data-v="0" @click="zong($event)">不限</li>
               <li
                 :class="num4==(price.id)?'m-l-active':''"
                 v-for="price in total_prices"
@@ -85,7 +88,7 @@
               >{{price.name}}</li>
             </ul>
             <ul id="dan">
-              <li class="m-l-active danjia" data-v="0">不限</li>
+              <li :class="num5==0?'m-l-active':''" data-v="0" @click="dan($event)">不限</li>
               <li
                 :class="num5==(price.id)?'m-l-active':''"
                 v-for="price in single_prices"
@@ -167,7 +170,7 @@
     <div class="recommen" v-show="r">
       <div class="re-con">
         <div class="re-list" v-for="(b,key) in buildings" :key="key">
-          <router-link :to="'/'+nn+'/content/'+b.id">
+          <router-link :to="'/'+jkl+'/content/'+b.id">
             <div class="re-con-left">
               <img :src="b.img" alt />
               <span>
@@ -229,7 +232,7 @@ export default {
     let ip=context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
-    
+    let jkl=context.store.state.cookie.pinyin;
     
     let [res1,res2]= await Promise.all([
       context.$axios.post('/api/project/search_info',{ city: city, token: token, ip: ip, platform: 2 })
@@ -258,11 +261,13 @@ export default {
           apartments : res2.apartments,
           build_types : res2.build_types,
           features : res2.features,
-          buildings:res1
+          buildings:res1,
+          jkl:jkl
     }
   },
   data() {
     return {
+      jkl:'',
       kk: false,
       loading: false,
       isload: true,
@@ -389,7 +394,11 @@ export default {
     qu(e) {
       let id = e.target.getAttribute("data-v");
       let where = $cookies.get("where");
-      where.country = id;
+      if(id==0){
+        delete where.country
+      }else{
+        where.country = id;
+      }
       $cookies.set("where", where, 0);
       this.num6 = id;
       $(".quyu").removeClass("m-l-active");
@@ -403,7 +412,11 @@ export default {
     tie(e) {
       let id = e.target.getAttribute("data-v");
       let where = $cookies.get("where");
-      where.railway = id;
+      if(id==0){
+        delete where.railway
+      }else{
+        where.railway = id;
+      }
       $cookies.set("where", where, 0);
       window.scrollTo(0,0)
       this.search_data();
@@ -416,7 +429,11 @@ export default {
     zong(e) {
       let id = e.target.getAttribute("data-v");
       let where = $cookies.get("where");
-      where.totalprice = id;
+      if(id==0){
+        delete where.totalprice
+      }else{
+        where.totalprice = id;
+      }
       $cookies.set("where", where, 0);
       window.scrollTo(0,0)
       this.search_data();
@@ -429,7 +446,11 @@ export default {
     dan(e) {
       let id = e.target.getAttribute("data-v");
       let where = $cookies.get("where");
-      where.single_price = id;
+      if(id!=0){
+        where.single_price = id;
+      }else{
+        delete where.single_price
+      }
       $cookies.set("where", where, 0);
       window.scrollTo(0,0)
       this.search_data();
@@ -883,6 +904,9 @@ nav .dian img {
 .loadings img {
   width: 5%;
   margin-bottom: 1%;
+}
+.top{
+  position: relative;
 }
 .recommen {
   padding: 0px 15px 0px 15px;

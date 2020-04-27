@@ -35,13 +35,13 @@
         <div class="m-line"></div>
         <ul>
           <li>
-            <router-link :to="'/'+n+'/map'">
+            <router-link :to="'/'+jkl+'/map'">
             <img src="~/assets/address_icon.png" alt />
             </router-link>
             地图看房
           </li>
           <li>
-            <router-link :to="'/'+n+'/about'">
+            <router-link :to="'/'+jkl+'/about'">
               <img src="~/assets/home_icon.png" alt />
             </router-link>
             关于允家
@@ -57,25 +57,25 @@
             意见反馈
           </li>
           <li>
-            <router-link :to="'/'+n+'/copyright'">
+            <router-link :to="'/'+jkl+'/copyright'">
               <img src="~/assets/banquan.png" alt />
               </router-link>
             版权申明
           </li>
            <li>
-             <router-link :to="'/'+n+'/exemption'">
+             <router-link :to="'/'+jkl+'/exemption'">
               <img src="~/assets/mianze.png" alt />
               </router-link>
             免责协议
           </li>
            <li>
-            <router-link :to="'/'+n+'/privacy'">
+            <router-link :to="'/'+jkl+'/privacy'">
               <img src="~/assets/yinsi.png" alt />
             </router-link>
             隐私政策
           </li>
            <li>
-            <router-link :to="'/'+n+'/server'">
+            <router-link :to="'/'+jkl+'/server'">
               <img src="~/assets/fuwu.png" alt />
             </router-link>
             服务协议
@@ -87,19 +87,19 @@
         <div class="m-line"></div>
         <ul>
           <li>
-            <router-link :to="'/'+n+'/follow'">
+            <router-link :to="'/'+jkl+'/follow'">
               <img src="~/assets/WeChat.png" alt />
             </router-link>
             官方公众号
           </li>
           <li>
-            <router-link :to="'/'+n+'/customerService'">
+            <router-link :to="'/'+jkl+'/customerService'">
               <img src="~/assets/Customer service.png" alt />
             </router-link>
             关注客服
           </li>
           <li>
-            <router-link :to="'/'+n+'/participate'">
+            <router-link :to="'/'+jkl+'/participate'">
               <img src="~/assets/jiameng.png" alt />
             </router-link>
             城市加盟
@@ -122,6 +122,12 @@
 <script>
 export default {
   name: "Myhome",
+  async asyncData(context) {
+    let jkl=context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    };
+  },
   data() {
     return {
       n:'',
@@ -130,7 +136,8 @@ export default {
         backgroundImage: "url(" + require("@/assets/bg_login.png") + ")",
         backgroundRepeat: "no-repeat"
       },
-      call:''
+      call:'',
+      jkl:''
     };
   },
   methods:{
