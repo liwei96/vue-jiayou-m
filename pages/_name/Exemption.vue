@@ -22,6 +22,9 @@ export default {
       goback(){
           this.$router.go(-1)
       }
+  },
+  mounted(){
+    $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom:0 });
   }
 };
 </script>

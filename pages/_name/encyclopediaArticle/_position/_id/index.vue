@@ -56,9 +56,9 @@
           <a :href="'tel:'+call" class="tel">电话咨询</a>
         </div>
       </div>
-      <div class="up" @click.once="agree($event)">
-        <img src="~/assets/giveup.png" alt />
-        <p id="nn">{{like}}</p>
+      <div class="up" @click="agree($event)" :data-v="youlike">
+        <img src="~/assets/giveup.png" :data-v="youlike" alt />
+        <p id="nn" :data-v="youlike">{{like}}</p>
       </div>
       <div class="recommend">
         <h4>人气推荐</h4>
@@ -175,6 +175,7 @@ export default {
           title:res.data.position_name,
           keywords:res.header.keywords,
           description:res.header.description,
+          youlike:res.data.your_like
     }
   },
   head(){
@@ -249,7 +250,8 @@ export default {
       title:'',
       load:true,
       keywords:'',
-      description:''
+      description:'',
+      youlike:''
     }
   },
   methods: {
@@ -265,39 +267,30 @@ export default {
       let city = localStorage.getItem("city");
       let token=localStorage.getItem('token');
       let t=this.$route.params.position;
-      encyclopediaarticle_data({
-        ip: ip,
-        city: city,
-        id: id,
-        platform: 2,
-        position: t,
-        token:token
-      })
-        .then(resp => {
-          that.load=false
-          let data = resp.data.data;
-          
-          that.recommands = data.recommands;
-          
-        })
-        .catch(error => {
-          console.log(error);
-        });
-        
+      this.load=false
     },
     agree(e) {
       let id = this.id;
       let ip = this.ip;
       let token = localStorage.getItem("token");
       let that = this;
+      let ll=e.target.getAttribute('data-v');
       if(token){
-        encyclopediaarticle_agree({ ip: ip, id: id, platform: 2, token: token })
+        encyclopediaarticle_agree({ ip: ip, id: id, platform: 2, token: token,type:3 })
         .then(resp => {
           if (resp.data.code == 500) {
             that.$router.push('/'+that.n+"/login")
           } else {
-            that.num = that.num + 1;
-            $("#nn").html(that.num);
+            if(ll==0){
+              that.youlike=1
+              that.like = that.like + 1;
+              $("#nn").html(that.like);
+            }else{
+              that.youlike=0;
+              that.like = that.like - 1>0?that.like - 1:0;
+              $("#nn").html(that.like);
+            }
+            
           }
         })
         .catch(error => {
@@ -455,9 +448,8 @@ export default {
         document.head.appendChild(keywordsEl)
         document.head.appendChild(descriptionEl)
     }
-  },
-  created(){
   }
+  
 };
 </script>
 <style scoped>

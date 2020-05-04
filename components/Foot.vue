@@ -21,16 +21,27 @@ export default {
             n:''
         }
     },
-    mounted(){
-        this.n=localStorage.getItem('pinyin');
+    watch:{
+        '$route.path':function(news,old){
+            if(news==this.$route.path){
+                let h=document.body.clientHeight;
+                if(h<700){
+                    $('#Foot').css({'position':'fixed','bottom':'0','width':'100%'});
+                }else if(h>=700){
+                    $('#Foot').css({'position':'relative','bottom':'0','width':'100%'});
+                }
+            }
+            
+        }
     }
+    
 }
 </script>
 <style scoped>
 #Foot{
     height: 110px;
     background-color: #F2F3F5;
-    padding-top:11px
+    padding-top:11px;
 }
 #Foot ul{
     margin-bottom: 10px;

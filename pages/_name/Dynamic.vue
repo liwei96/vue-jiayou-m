@@ -56,11 +56,12 @@
       </div>
       <div class="t-bottom">
         <div class="t-b-first">
-          <input class="l-p" type="text" placeholder="输入预约手机号码" />
+          <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
           <p class="w-mg">
-            <input class="w-mg-c" type="radio" />我已阅读并同意
+            <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
             <a href="javasript:;">《允家新房用户协议》</a>
           </p>
+          <p class="tishi">请勾选用户协议</p>
           <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">立即订阅</button>
           <p class="w-tit">
             <img src="~/assets/w-call.png" />允家严格保障您的信息安全
@@ -129,6 +130,7 @@ export default {
   },
   data() {
     return {
+      baoming:'',
       page: 2,
       lists: [],
       phone: "",
@@ -136,7 +138,8 @@ export default {
       n: "",
       call: "",
       ting: true,
-      jkl:''
+      jkl:'',
+      checks:true
     };
   },
   methods: {
@@ -187,15 +190,6 @@ export default {
           let l = that.lists.concat(data);
           that.lists = l;
           that.page = that.page + 1;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
-    getip() {
-      ip()
-        .then(resp => {
-          this.ip = resp.data.data[0].origip;
         })
         .catch(error => {
           console.log(error);
@@ -275,7 +269,7 @@ export default {
     }
   },
   mounted() {
-    this.getip();
+    this.baoming=localStorage.getItem('phone')
     this.start_data();
     let that = this;
     $("#sea").on("click", function() {
@@ -293,8 +287,14 @@ export default {
     });
     // 接口验证码
     $(".t-b-btn2").on("click", function() {
+      let check = that.checks;
+      if (!check) {
+        $(".tishi").show();
+        return
+      } else {
+        $(".tishi").hide();
+      }
       var phone = $(this)
-        .prev()
         .prev()
         .prev()
         .val();
@@ -371,6 +371,11 @@ nav .back {
   width: 5%;
   margin-top: 14px;
   left: 4%;
+}
+.tishi {
+  color: red;
+  font-size: 10px;
+  display: none;
 }
 nav button {
   width: 83.3333%;

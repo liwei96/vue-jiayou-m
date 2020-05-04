@@ -42,6 +42,7 @@ export default {
     }
   },
   mounted(){
+    $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom:0 });
     this.n=this.$route.params.name;
     this.call=localStorage.getItem('call')
     let that=this;

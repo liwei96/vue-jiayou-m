@@ -26,13 +26,14 @@
               <span>{{item.createtime}}</span>
               <strong :data-v="item.id" @click="del($event)">删除</strong>
               <p class="interaction">
-                <span>
-                  <img src="~/assets/click.png" />点赞(12)
-                </span>
-                <span>回复(1)</span>
+                  <img id="agree" :data-v="item.id" :type="item.my_like" :data-n="item.like_num" @click="ag"  data-y="2" src="~/assets/click.png" />
+                    <span :data-v="item.id" :type="item.my_like" :data-n="item.like_num" data-y="2" @click="agrees($event)">
+                    点赞({{item.like_num}})
+                  </span>
+                <span @click="commentback(item.id)">回复({{item.children.length}})</span>
               </p>
             </div>
-            <div class="reply">
+            <div class="reply" v-if="item.children.length>0">
               <p class="msg">
                 <strong>{{item.children[0].mobile}}:</strong>
                 {{item.children[0].content}}
@@ -76,7 +77,7 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" />
+            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
             <p class="w-mg">
               <input class="w-mg-c" type="radio" checked v-model="checks"/>我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
@@ -124,7 +125,8 @@ import {
   verification,
   trend_put,
   collection,
-  login
+  login,
+  encyclopediaarticle_agree
 } from "~/api/api";
 export default {
   name: "MoreComments",
@@ -138,8 +140,6 @@ export default {
       context.$axios.post('/api/project/comment_info',{ city: city, id: id, page: 1, limit: 10 })
       .then((resp)=>{
         let data = resp.data.data;
-          
-          
           return data;
       })
     ])
@@ -150,6 +150,7 @@ export default {
   },
   data() {
     return {
+      baoming:'',
       jkl:'',
       change: false,
       succ: false,
@@ -283,9 +284,86 @@ export default {
     },
     goback() {
       this.$router.go(-1);
-    }
+    },
+    commentback(id){
+      this.$router.push('/'+this.jkl+'/commentback/'+id)
+    },
+    ag(e) {
+      // console.log(e.target)
+      let img = require("~/assets/clicked.png");
+      let id = e.target.getAttribute("data-v");
+      let ip = this.ip;
+      let token = localStorage.getItem("token");
+      let that = this;
+      let num = e.target.getAttribute("data-n");
+      let y=e.target.getAttribute('data-y')
+      encyclopediaarticle_agree({ ip: ip, id: id, platform: 2, token: token , type: y })
+        .then(resp => {
+          if (resp.data.code == 500) {
+            that.$router.push("/" + that.pinyin + "/login");
+            // window.location.href = "/login";
+          } else {
+            let type = e.target.getAttribute("type");
+            let click = require("~/assets/noclick.png");
+            if (type == 0) {
+              num = parseInt(num) + 1;
+              e.target.setAttribute("data-n", num);
+              e.target.setAttribute("type", 1);
+              e.target.setAttribute("src", img);
+              e.target.nextElementSibling.innerHTML = `有用(${num})`;
+            } else {
+              num = parseInt(num) - 1;
+              e.target.setAttribute("data-n", num);
+              e.target.setAttribute("type", 0);
+              e.target.setAttribute("src", click);
+              e.target.nextElementSibling.innerHTML = `有用(${num})`;
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    agrees(e) {
+      // console.log(e.target)
+      let img = require("~/assets/clicked.png");
+      let id = e.target.getAttribute("data-v");
+      let ip = this.ip;
+      let token = localStorage.getItem("token");
+      let that = this;
+      let num = e.target.getAttribute("data-n");
+      let y=e.target.getAttribute('data-y')
+      encyclopediaarticle_agree({ ip: ip, id: id, platform: 2, token: token , type: y })
+        .then(resp => {
+          if (resp.data.code == 500) {
+            that.$router.push("/" + that.pinyin + "/login");
+            // window.location.href = "/login";
+          } else {
+            let type = e.target.getAttribute("type");
+            let click = require("~/assets/noclick.png");
+            if (type == 0) {
+              num = parseInt(num) + 1;
+              e.target.setAttribute("data-n", num);
+              e.target.setAttribute("type", 1);
+              e.target.previousElementSibling.setAttribute("src", img);
+              e.target.innerHTML = `有用(${num})`;
+            } else {
+              num = parseInt(num) - 1;
+              e.target.setAttribute("data-n", num);
+              e.target.setAttribute("type", 0);
+              e.target.previousElementSibling.setAttribute("src", click);
+              e.target.innerHTML = `有用(${num})`;
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
   },
-  mounted() {
+  mounted() { 
+    $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom: '56px' });
+    this.baoming=localStorage.getItem('phone');
     this.start();
     let that = this;
     $(".p1").on("click", function() {
@@ -482,12 +560,10 @@ h3 img {
 }
 .con ul li .right .interaction span {
   font-size: 12px;
-  margin-left: 5%;
 }
 .con ul li .right .interaction img {
   width: 15px;
-  margin-right: 4px;
-  margin-bottom: -2px;
+  margin-bottom: 2px;
 }
 .con ul li .right .reply {
   padding: 15px;

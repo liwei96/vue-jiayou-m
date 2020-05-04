@@ -33,6 +33,7 @@
             </ul>
 
             <ul class="qu-right qu-quyu">
+              <li :class="num6==0?'m-l-active':''" data-v="0" @click="qu($event)">不限</li>
               <li
                 :class="q1==item.id?'active':''"
                 v-for="(item,key) in citys"
@@ -42,6 +43,7 @@
               >{{item.name}}</li>
             </ul>
             <ul class="qu-right qu-ditie">
+              <li :class="num7==0?'m-l-active':''" data-v="0" @click="tie($event)">不限</li>
               <li
                 :class="d1==item.id?'active':''"
                 v-for="(item,key) in dities"
@@ -59,6 +61,7 @@
             </ul>
 
             <ul class="price-right price-zong">
+              <li :class="num4==0?'m-l-active':''" data-v="0" @click="zong($event)">不限</li>
               <li
                 :class="z1==item.id?'active':''"
                 v-for="(item,key) in total_prices"
@@ -68,6 +71,7 @@
               >{{item.name}}</li>
             </ul>
             <ul class="price-right price-dan">
+              <li :class="num5==0?'m-l-active':''" data-v="0" @click="dan($event)">不限</li>
               <li
                 :class="dan1==item.id?'active':''"
                 v-for="(item,key) in single_prices"
@@ -103,11 +107,11 @@
                   @click="tp($event)"
                 >{{item.type}}</li>
               </ul>
-              <h2>开发商</h2>
+              <!-- <h2>开发商</h2>
               <ul class="kaifa bgg">
                 <li>万科</li>
                 <li>碧桂园</li>
-              </ul>
+              </ul> -->
               <h2>特色</h2>
               <ul class="tese bgg">
                 <li
@@ -264,7 +268,12 @@ export default {
       map:{},
       Bmap:{},
       level:1,
-      city:0
+      city:0,
+      num5:'',
+      num4:'',
+      num7:'',
+      num6:'',
+      
     };
   },
   created() {
@@ -376,7 +385,11 @@ export default {
     qu(e) {
       let id = e.target.getAttribute("data-v");
       let where = $cookies.get("mapwhere");
-      where.country = id;
+      if(id==0){
+        delete where.country
+      }else{
+        where.country = id;
+      }
       $cookies.set("mapwhere", where, 0);
       this.q1 = id;
       this.search_data();
@@ -390,7 +403,11 @@ export default {
     tie(e) {
       let id = e.target.getAttribute("data-v");
       let where = $cookies.get("mapwhere");
-      where.railway = id;
+      if(id==0){
+        delete where.railway
+      }else{
+        where.railway = id;
+      }
       $cookies.set("mapwhere", where, 0);
       this.search_data();
       this.d1 = id;
@@ -404,7 +421,11 @@ export default {
     zong(e) {
       let id = e.target.getAttribute("data-v");
       let where = $cookies.get("mapwhere");
-      where.totalprice = id;
+      if(id==0){
+        delete where.totalprice
+      }else{
+        where.totalprice = id;
+      }
       $cookies.set("mapwhere", where, 0);
       this.search_data();
       this.z1 = id;
@@ -418,7 +439,11 @@ export default {
     dan(e) {
       let id = e.target.getAttribute("data-v");
       let where = $cookies.get("mapwhere");
-      where.single_price = id;
+      if(id!=0){
+        where.single_price = id;
+      }else{
+        delete where.single_price
+      }
       $cookies.set("mapwhere", where, 0);
       this.search_data();
       this.dan1 = id;

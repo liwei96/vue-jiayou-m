@@ -260,7 +260,7 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" />
+            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
             <p class="w-mg">
               <input class="w-mg-c" type="checkbox" checked v-model="check" />我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
@@ -380,6 +380,7 @@ export default {
   },
   data() {
     return {
+      baoming:'',
       jkl:'',
       change: false,
       succ: false,
@@ -782,15 +783,6 @@ export default {
       this.t3 = false;
       this.t4 = true;
     },
-    getip() {
-      ip()
-        .then(resp => {
-          this.ip = resp.data.data[0].origip;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
     start_data() {
       let kk = this.$route.params.type;
       if (kk == 1) {
@@ -813,20 +805,9 @@ export default {
         city = 1;
         localStorage.setItem("city", 1);
       }
-      let that = this;
       let ip = returnCitySN["cip"];
       this.ip = ip;
-      localStorage.getItem("ip");
-      let token = localStorage.getItem("token");
-      let data = { city: city, ip: ip, platform: 2, token: token };
-      top_start(data)
-        .then(resp => {
-          that.load = false;
-          
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.load = false
     },
     show(e) {
       this.change = true;
@@ -913,7 +894,7 @@ export default {
     }
   },
   mounted() {
-    this.getip();
+    this.baoming=localStorage.getItem('phone');
     this.start_data();
     let that = this;
     $("nav ul li").on("click", function() {

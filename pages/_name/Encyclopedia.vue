@@ -371,16 +371,6 @@ export default {
         console.log(error)
       })
     },
-    getip() {
-      let that=this;
-      ip()
-        .then(resp => {
-          that.ip = resp.data.data[0].origip;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
     start(){
       this.n=this.$route.params.name
       let token=localStorage.getItem('token');
@@ -388,13 +378,7 @@ export default {
       let ip=returnCitySN['cip'];
       this.ip=ip;
       localStorage.getItem('ip');
-      let that=this;
-      encyclopedia_data({ip:ip,city:city,page:1,limit:10,position:'56',platform:2,token:token}).then(resp=>{
-        that.load=false
-      }).catch(error=>{
-        console.log(error)
-      })
-      
+      this.load=false
     },
     more3(id,page){
       let token=localStorage.getItem('token');
@@ -472,7 +456,6 @@ export default {
     console.log(this.jkl)
     let width=document.documentElement.clientWidth;
     $('.fubox').css('width',width+'px')
-    this.getip();
     this.start();
     let that=this
     var swiper05 = new Swiper(".swiper-container", {

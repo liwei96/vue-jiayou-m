@@ -7,32 +7,33 @@
       <div class="re-con">
         <div class="re-list" v-for="(list ,index) in lists" :key="index">
           <router-link :to="'/'+jkl+'/content/'+list.id">
-          <div class="re-con-left">
-            <img :src="list.img" />
+            <div class="re-con-left">
+              <img :src="list.img" />
 
-            <span>
-              <i class="iconfont iconyanjing"></i>{{list.num}}
-            </span>
-          </div>
-          <div class="re-con-right">
-            <h5>
-              {{list.name}}
-              <span>{{list.status}}</span>
-            </h5>
-            <p class="price">
-              <span>{{list.single_price}}</span>元/m²
-            </p>
-            <p class="area">
-              <span>{{list.city}}-{{list.country}}</span>
-              <span>建面</span>
-              <span>{{list.area_min}}-{{list.area_max}}m²</span>
-            </p>
-            <p class="tabs">
-              <strong>{{list.decorate}}</strong>
-              <span>{{list.railway}}</span>
-              <span id="tag">{{list.tag}}</span>
-            </p>
-          </div>
+              <span>
+                <i class="iconfont iconyanjing"></i>
+                {{list.num}}
+              </span>
+            </div>
+            <div class="re-con-right">
+              <h5>
+                {{list.name}}
+                <span>{{list.status}}</span>
+              </h5>
+              <p class="price">
+                <span>{{list.single_price}}</span>元/m²
+              </p>
+              <p class="area">
+                <span>{{list.city}}-{{list.country}}</span>
+                <span>建面</span>
+                <span>{{list.area_min}}-{{list.area_max}}m²</span>
+              </p>
+              <p class="tabs">
+                <strong>{{list.decorate}}</strong>
+                <span>{{list.railway}}</span>
+                <span id="tag">{{list.tag}}</span>
+              </p>
+            </div>
           </router-link>
         </div>
       </div>
@@ -40,31 +41,41 @@
     <div class="nothing">
       <img src="~/assets/footers.png" alt />
       <p>您还没有浏览记录，快去看看楼盘吧~</p>
-      <router-link :to="'/'+jkl+'/search'"><button>去看楼盘</button></router-link>
+      <router-link :to="'/'+jkl+'/search'">
+        <button>去看楼盘</button>
+      </router-link>
     </div>
   </div>
 </template>
 
 <script>
-import {foot_data,ip} from '~/api/api'
+import { foot_data, ip } from "~/api/api";
 export default {
   name: "Footprint",
-  async asyncData (context) {
-    let ip=context.store.state.cookie.ip;
+  async asyncData(context) {
+    let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
-    let token=context.store.state.cookie.token;
-    let jkl=context.store.state.cookie.pinyin;
-    let [res]= await Promise.all([
-      context.$axios.post('/api/project/my_foot',{ip:ip,city:city,page:1,limit:10,platform:2,token:token})
-      .then((resp)=>{
-        let data = resp.data.data;
+    let token = context.store.state.cookie.token;
+    let jkl = context.store.state.cookie.pinyin;
+    let [res] = await Promise.all([
+      context.$axios
+        .post("/api/project/my_foot", {
+          ip: ip,
+          city: city,
+          page: 1,
+          limit: 10,
+          platform: 2,
+          token: token
+        })
+        .then(resp => {
+          let data = resp.data.data;
           return data;
-      })
-    ])
-    return{
-          lists:res,
-          jkl:jkl
-    }
+        })
+    ]);
+    return {
+      lists: res,
+      jkl: jkl
+    };
   },
   data() {
     return {
@@ -126,8 +137,10 @@ export default {
           tese: "繁华地段"
         }
       ],
-      n:'',
-      jkl:''
+      n: "",
+      jkl: "",
+      page: 2,
+      ting: true
     };
   },
   methods: {
@@ -141,30 +154,65 @@ export default {
         this.$router.go(-1);
       }
     },
-    start(){
-      let that=this;
-      this.n=this.$route.params.name;
-      let ip=returnCitySN['cip'];
-      this.ip=ip;
-      localStorage.getItem('ip');
-      let city=localStorage.getItem('city');
-        let token=localStorage.getItem('token');
-      foot_data({ip:ip,city:city,page:1,limit:10,platform:2,token:token}).then(resp=>{
-          
-          if(that.lists.length!=0){
-            $('.nothing').hide();
-            $('.recommen').show();
-          }else{
-            $('.nothing').show();
-            $('.recommen').hide();
-          }
-        }).catch(error=>{
-
+    start() {
+      let that = this;
+      this.n = this.$route.params.name;
+      let ip = returnCitySN["cip"];
+      this.ip = ip;
+      if (that.lists.length != 0) {
+        $(".nothing").hide();
+        $(".recommen").show();
+      } else {
+        $(".nothing").show();
+        $(".recommen").hide();
+      }
+    },
+    getmore() {
+      this.ting = false;
+      let ip = returnCitySN["cip"];
+      let token = localStorage.getItem("token");
+      let page = this.page;
+      let city=localStorage.getItem('city')
+      let that = this;
+      foot_data({
+        ip: ip,
+        city: city,
+        page: page,
+        limit: 10,
+        platform: 2,
+        token: token
+      })
+        .then(res => {
+          that.ting=true
+          let data = res.data.data;
+          let l = that.lists.concat(data);
+          that.lists = l;
+          that.page = that.page + 1;
         })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    scroll() {
+      var scrollTop = window.scrollY;
+      var scrollHeight = window.screen.availHeight;
+      var windowHeight = document.body.scrollHeight;
+      // console.log(scrollTop, scrollHeight, windowHeight);
+      if (scrollTop + scrollHeight >= windowHeight) {
+        if (this.ting) {
+          this.getmore();
+        }
+      }
     }
   },
-  mounted(){
+  mounted() {
+    
+    $("#Foot").css({ position: "relative", bottom: "0", width: "100%",marginBottom:0 });
     this.start();
+    window.addEventListener("scroll", this.scroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.scroll);
   }
 };
 </script>
@@ -287,11 +335,11 @@ export default {
   margin-right: 6px;
   float: left;
 }
-.recommen .re-list .re-con-right .tabs #tag{
+.recommen .re-list .re-con-right .tabs #tag {
   display: inline-block;
-    width: 113px;
-    height: 20px;
-    overflow: hidden;
+  width: 113px;
+  height: 20px;
+  overflow: hidden;
 }
 .recommen .more-res {
   width: 100%;
@@ -323,7 +371,7 @@ h3 img {
 }
 
 /* 没收藏内容 */
-.nothing{
+.nothing {
   display: none;
 }
 .nothing img {

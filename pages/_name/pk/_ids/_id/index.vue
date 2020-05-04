@@ -38,29 +38,37 @@
 import { ip, PK } from "~/api/api";
 export default {
   name: "Pk",
-  async asyncData (context) {
-    let ip=context.store.state.ip;
-    let token=context.store.state.token;
-    let id=context.params.id;
+  async asyncData(context) {
+    let token = context.store.state.cookie.token;
+    let ip = context.store.state.cookie.ip;
+    let id = context.params.id;
     let ids = context.params.ids;
-      let kk = ids.split(",");
+    let kk = ids.split(",");
+    if (id!=ids ) {
       for (let i = kk.length; i >= 0; i--) {
         if (kk[i] == id) {
           kk.splice(i, 1);
         }
       }
       ids = kk.join(",");
-    let [res]= await Promise.all([
-      context.$axios.post('/api/project/compare_mobile',{ ip: ip, ids: ids, platform: 2, token: token })
-      .then((resp)=>{
-        let data = resp.data.data.buildings;
-          
-          
-          return data;
-      })
-    ])
-    return{
-          lists:res
+      let [res] = await Promise.all([
+        context.$axios
+          .post("/api/project/compare_mobile", {
+            ip: ip,
+            ids: ids,
+            platform: 2,
+            token: token
+          })
+          .then(resp => {
+            // console.log(resp)
+            let data = resp.data.data.buildings;
+
+            return data;
+          })
+      ]);
+      return {
+        lists: res
+      };
     }
   },
   data() {
@@ -86,11 +94,10 @@ export default {
       }
       ids = kk.join(",");
       this.ids = ids;
-      localStorage.setItem('ids',ids);
+      localStorage.setItem("ids", ids);
       let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
-      
     },
     idss(e) {
       let id = e.target.getAttribute("data-v");
@@ -106,13 +113,21 @@ export default {
     }
   },
   mounted() {
+    let h=document.body.clientHeight;
+                if(h<700){
+                    $('#Foot').css({'position':'fixed','bottom':'0','width':'100%'});
+                }else if(h>=700){
+                    $('#Foot').css({'position':'relative','bottom':'0','width':'100%'});
+                }
     this.start();
     let that = this;
     $(".pk").on("click", function() {
-      if(that.ids){
-        that.$router.push("/" + that.n + "/pkdetail/" + that.ids + "/" + that.id);
+      if (that.ids) {
+        that.$router.push(
+          "/" + that.n + "/pkdetail/" + that.ids + "/" + that.id
+        );
       }
-      
+
       // window.location.href = '/'+that.n+"/pkdetail/" + that.ids + "/" + that.id;
     });
     $("#add").on("click", function() {

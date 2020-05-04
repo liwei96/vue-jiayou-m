@@ -64,7 +64,9 @@
               </div>
             </div>
           </div>
+          <router-link :to="'/' + pinyin + '/realinformations'">
           <button id="encyclopedia">更多</button>
+          </router-link>
         </div>
       </div>
       <div class="line"></div>
@@ -73,10 +75,13 @@
         <h2>
           房价趋势
           <img class="cur-img" src="~/assets/indexprice.png" alt />
-          <span id="trend">
+          <router-link :to="'/' + pinyin + '/trend'">
+            <span id="trend">
             查看详情
             <img src="~/assets/m-go.png" alt />
           </span>
+          </router-link>
+          
         </h2>
         <div class="drift-con">
           <div class="drift-list">
@@ -210,11 +215,13 @@
                       <div class="hf-con">
                         <h1>{{hot.name}}</h1>
                         <p>
-                          {{hot.country}}&nbsp;建面：{{hot.area_min}}
-                          <span v-if="hot.area_max">-</span>
-                          {{hot.area_max}}m²
+                          {{hot.country}}&nbsp;&nbsp;&nbsp;{{parseInt(hot.area_min)}}
+                          <span
+                            v-if="hot.area_max"
+                          >-</span>
+                          {{parseInt(hot.area_max)}}m²
                         </p>
-                        <h6>{{hot.single_price}}元/m²起</h6>
+                        <h6>{{parseInt(hot.single_price)}}元/m²起</h6>
                       </div>
                     </div>
                   </router-link>
@@ -239,11 +246,13 @@
                       <div class="hf-con">
                         <h1>{{hot.name}}</h1>
                         <p>
-                          {{hot.country}}&nbsp;建面：{{hot.area_min}}
-                          <span v-if="hot.area_max">-</span>
-                          {{hot.area_max}}m²
+                          {{hot.country}}&nbsp;&nbsp;&nbsp;{{parseInt(hot.area_min)}}
+                          <span
+                            v-if="hot.area_max"
+                          >-</span>
+                          {{parseInt(hot.area_max)}}m²
                         </p>
-                        <h6>{{hot.single_price}}元/m²起</h6>
+                        <h6>{{parseInt(hot.single_price)}}元/m²起</h6>
                       </div>
                     </div>
                   </router-link>
@@ -258,11 +267,13 @@
       <div class="m-dong" v-if="dong">
         <h3>
           楼盘动态
-          <span class="m-d-more" id="dynamic">
-            共
-            <i>{{dong.num}}</i>条
-            <img src="~/assets/m-go.png" alt />
-          </span>
+          <router-link :to="'/' + pinyin + '/dynamic'">
+            <span class="m-d-more" id="dynamic">
+              共
+              <i>{{dong.num}}</i>条
+              <img src="~/assets/m-go.png" alt />
+            </span>
+          </router-link>
         </h3>
         <ul class="dong-t">
           <li>
@@ -519,10 +530,12 @@
     <div class="wen">
       <h4>
         楼盘问答
+        <router-link :to="'/' + pinyin + '/questions'">
         <span id="question">
           更多问答
           <img src="~/assets/m-go.png" alt />
         </span>
+        </router-link>
       </h4>
       <div class="wen-list" v-for="(q,key) in questions" :key="key">
         <h5>
@@ -535,8 +548,22 @@
         <p>
           <span class="wen-time">{{q.time}}</span>
           <span class="Fabulous">
-            <img :src="click" @click.stop="agree($event)" data-d="1" :data-v="q.id" :data-n="q.num" alt />
-            <span @click.stop="agree($event)" data-d="1" :data-v="q.id" :data-n="q.num">有用({{q.num}})</span>
+            <img
+              :src="click"
+              @click.stop="agree($event)"
+              data-d="1"
+              :data-v="q.id"
+              :data-n="q.num"
+              :type="q.my_like"
+              alt
+            />
+            <span
+              @click.stop="agrees($event)"
+              data-d="1"
+              :data-v="q.id"
+              :data-n="q.num"
+              :type="q.my_like"
+            >有用({{q.num}})</span>
           </span>
         </p>
       </div>
@@ -653,6 +680,7 @@ export default {
         })
         .then(resp => {
           let data = resp.data.data;
+          let back = resp.data;
           let tel = data.phone;
           context.store.commit("setcall", { call: tel });
 
@@ -696,59 +724,59 @@ export default {
           if (data.dong) {
             data.dong.num = data.dynaminc.dynamic_list_count;
           }
-          data.left_info = data.article.focus_1.length>0
-            ? data.article.focus_1[0]
-            : null;
-          data.right_info1 = data.article.focus_2.length>0
-            ? data.article.focus_2[0]
-            : null;
-          data.right_info2 = data.article.focus_3.length>0
-            ? data.article.focus_3[0]
-            : null;
+          data.left_info =
+            data.article.focus_1.length > 0 ? data.article.focus_1[0] : null;
+          data.right_info1 =
+            data.article.focus_2.length > 0 ? data.article.focus_2[0] : null;
+          data.right_info2 =
+            data.article.focus_3.length > 0 ? data.article.focus_3[0] : null;
 
           for (let item of data.recommand.data) {
             if (item.railway) {
               item.railway = item.railway.split(",")[0];
             }
           }
-
-          return data;
+          back.data = data;
+          return back;
         })
     ]);
     return {
-      trend_price: res.price_trend.price,
-      trend_down: res.price_trend.rate,
-      trend_up: res.price_trend.rate_lastyear,
-      trend_mounth: res.price_trend.time,
-      hots: res.tops.hot_search,
-      questions: res.answer,
-      buildings: res.recommand.data,
-      count: res.recommand.count,
-      tuis: res.tops.popular,
-      nows: res.tops.finish_deal,
-      trends: res.top_article,
-      s1_con: res.article.guide,
-      s5_con: res.article.hot_news,
-      s6_con: res.article.daily,
-      s7_con: res.article.land_auction,
-      s3_con: res.article.local,
-      s4_con: res.article.bulders,
-      s2_con: res.article.weiki,
-      existing1: res.existing1,
-      existing2: res.existing2,
-      invest1: res.invest1,
-      invest2: res.invest2,
-      rigid_demand1: res.rigid_demand1,
-      rigid_demand2: res.rigid_demand2,
-      improve1: res.improve1,
-      improve2: res.improve2,
-      dong: res.dong,
-      left_info: res.left_info,
-      right_info1: res.right_info1,
-      right_info2: res.right_info2,
-      title:res.title,
-      description:res.description,
-      keywords:res.keywords,
+      trend_price: res.data.price_trend.price,
+      trend_down: res.data.price_trend.rate,
+      trend_up: res.data.price_trend.rate_lastyear,
+      trend_mounth: res.data.price_trend.time,
+      hots: res.data.tops.hot_search,
+      questions: res.data.answer,
+      buildings: res.data.recommand.data,
+      count: res.data.recommand.count,
+      tuis: res.data.tops.popular,
+      nows: res.data.tops.finish_deal,
+      trends: res.data.top_article,
+      s1_con: res.data.article.guide,
+      s5_con: res.data.article.hot_news,
+      s6_con: res.data.article.daily,
+      s7_con: res.data.article.land_auction,
+      s3_con: res.data.article.local,
+      s4_con: res.data.article.bulders,
+      s2_con: res.data.article.weiki,
+      existing1: res.data.existing1,
+      existing2: res.data.existing2,
+      invest1: res.data.invest1,
+      invest2: res.data.invest2,
+      rigid_demand1: res.data.rigid_demand1,
+      rigid_demand2: res.data.rigid_demand2,
+      improve1: res.data.improve1,
+      improve2: res.data.improve2,
+      dong: res.data.dong,
+      left_info: res.data.left_info,
+      right_info1: res.data.right_info1,
+      right_info2: res.data.right_info2,
+      title: res.data.title,
+      description: res.data.description,
+      keywords: res.data.keywords,
+      pinyin: res.city.pinyin,
+      tel: res.data.phone,
+      cityname: res.city.name
     };
   },
   data() {
@@ -1153,13 +1181,14 @@ export default {
       click: require("~/assets/noclick.png"),
       cityname: "杭州",
       ip: "",
-      count: 123
+      count: 123,
+      tel: ""
     };
   },
-  head(){
+  head() {
     return {
-      title:this.title,
-      meta:[
+      title: this.title,
+      meta: [
         {
           name: "description",
           content: this.description
@@ -1169,7 +1198,7 @@ export default {
           content: this.keywords
         }
       ]
-    }
+    };
   },
   methods: {
     method1: function() {
@@ -1241,7 +1270,9 @@ export default {
     start_data() {
       let name = this.$route.params.name;
       let nn = localStorage.getItem("pinyin", name);
-      this.pinyin = name;
+      // if(name!=nn){
+      //   this.$router.push('/'+nn);
+      // }
       let city = $cookies.get("city");
       if (!city) {
         city = 1;
@@ -1249,40 +1280,33 @@ export default {
       }
       let token = localStorage.getItem("token");
       $cookies.set("token", token);
-      let that = this;
       let ip = returnCitySN["cip"];
       this.ip = ip;
       $cookies.set("ip", ip);
       localStorage.setItem("ip", ip);
-      index_start({ city: city, platform: 2, token: token, ip: ip })
-        .then(resp => {
-          let pin = resp.data.city.pinyin.charAt(0).toUpperCase()+resp.data.city.pinyin.substr(1);
-          let cityname = resp.data.city.name;
-          $cookies.set('cityname',cityname);
-          localStorage.setItem("cityname", cityname);
-          if (!localStorage.getItem("num")) {
-            if (nn) {
-            } else {
-              if (pin != name) {
-                localStorage.setItem("num", 1);
-                localStorage.setItem("pinyin", pin);
-                that.$router.push("/" + pin);
-              }
-            }
-          } else {
-            if (pin != name) {
-              pin = localStorage.getItem("pinyin");
-              that.$router.push("/" + pin);
-            }
+      let pin = this.pinyin.charAt(0).toUpperCase() + this.pinyin.substr(1);
+      let cityname = this.cityname;
+      $cookies.set("cityname", cityname);
+      localStorage.setItem("cityname", cityname);
+      if (!localStorage.getItem("num")) {
+        if (nn) {
+        } else {
+          if (pin != name) {
+            localStorage.setItem("num", 1);
+            localStorage.setItem("pinyin", pin);
+            this.$router.push("/" + pin);
           }
-          let data = resp.data.data;
-          let tel = data.phone;
-          that.isload = false;
-          localStorage.setItem("call", tel);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+        }
+      } else {
+        if (pin != name) {
+          pin = localStorage.getItem("pinyin");
+          this.$router.push("/" + pin);
+        }
+      }
+      $cookies.set('pinyin',pin)
+      let tel = this.tel;
+      this.isload = false;
+      localStorage.setItem("call", tel);
     },
     agree(e) {
       // console.log(e.target)
@@ -1292,26 +1316,73 @@ export default {
       let token = localStorage.getItem("token");
       let that = this;
       let num = e.target.getAttribute("data-n");
-      encyclopediaarticle_agree({ ip: ip, id: id, platform: 2, token: token })
+      encyclopediaarticle_agree({
+        ip: ip,
+        id: id,
+        platform: 2,
+        token: token,
+        type: 1
+      })
         .then(resp => {
           if (resp.data.code == 500) {
             that.$router.push("/" + that.pinyin + "/login");
             // window.location.href = "/login";
           } else {
-            let type = e.target.getAttribute("data-d");
+            let type = e.target.getAttribute("type");
             let click = require("~/assets/noclick.png");
-            if (type == 1) {
+            if (type == 0) {
               num = parseInt(num) + 1;
               e.target.setAttribute("data-n", num);
-              e.target.setAttribute("data-d", 0);
+              e.target.setAttribute("type", 1);
               e.target.setAttribute("src", img);
               e.target.nextElementSibling.innerHTML = `有用(${num})`;
             } else {
               num = parseInt(num) - 1;
               e.target.setAttribute("data-n", num);
-              e.target.setAttribute("data-d", 1);
+              e.target.setAttribute("type", 0);
               e.target.setAttribute("src", click);
               e.target.nextElementSibling.innerHTML = `有用(${num})`;
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    agrees(e) {
+      // console.log(e.target)
+      let img = require("~/assets/clicked.png");
+      let id = e.target.getAttribute("data-v");
+      let ip = this.ip;
+      let token = localStorage.getItem("token");
+      let that = this;
+      let num = e.target.getAttribute("data-n");
+      encyclopediaarticle_agree({
+        ip: ip,
+        id: id,
+        platform: 2,
+        token: token,
+        type: 1
+      })
+        .then(resp => {
+          if (resp.data.code == 500) {
+            that.$router.push("/" + that.pinyin + "/login");
+            // window.location.href = "/login";
+          } else {
+            let type = e.target.getAttribute("type");
+            let click = require("~/assets/noclick.png");
+            if (type == 0) {
+              num = parseInt(num) + 1;
+              e.target.setAttribute("data-n", num);
+              e.target.setAttribute("type", 1);
+              e.target.previousElementSibling.setAttribute("src", img);
+              e.target.innerHTML = `有用(${num})`;
+            } else {
+              num = parseInt(num) - 1;
+              e.target.setAttribute("data-n", num);
+              e.target.setAttribute("type", 0);
+              e.target.previousElementSibling.setAttribute("src", click);
+              e.target.innerHTML = `有用(${num})`;
             }
           }
         })
@@ -1361,6 +1432,12 @@ export default {
     }
   },
   mounted() {
+    let h = document.body.clientHeight;
+    if (h < 700) {
+      $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
+    } else if (h >= 700) {
+      $("#Foot").css({ position: "relative", bottom: "0", width: "100%" });
+    }
     this.ready();
     // 接口调用
     this.start_data();
@@ -1435,23 +1512,8 @@ export default {
       that.$router.push("/" + that.pinyin + "/address");
       // window.location.href = '/'+that.pinyin+"/address";
     });
-    $("#trend").on("click", function() {
-      that.$router.push("/" + that.pinyin + "/trend");
-      // window.location.href = '/'+that.pinyin+"/trend";
-    });
-    $("#encyclopedia").on("click", function() {
-      that.$router.push("/" + that.pinyin + "/realinformations");
-      // window.location.href = '/'+that.pinyin+"/realinformations";
-    });
 
-    $("#dynamic").on("click", function() {
-      that.$router.push("/" + that.pinyin + "/dynamic");
-      // window.location.href = '/'+that.pinyin+"/dynamic";
-    });
-    $("#question").on("click", function() {
-      that.$router.push("/" + that.pinyin + "/questions");
-      // window.location.href = '/'+that.pinyin+"/questions";
-    });
+    
 
     var swiper05 = new Swiper(".swiper-container1", {
       // eslint-disable-line no-unused-vars
@@ -1480,8 +1542,7 @@ export default {
 
     window.addEventListener("scroll", this.scroll);
   },
-  watch: {
-  }
+  watch: {}
 };
 </script>
 
@@ -1536,10 +1597,10 @@ li {
   margin-right: 1%;
 }
 .header .index-logo {
-    width: 11.3%;
-    position: absolute;
-    top: 1%;
-    left: 4%;
+  width: 11.3%;
+  position: absolute;
+  top: 1%;
+  left: 4%;
 }
 /* 头部图片 */
 .header {
@@ -1647,7 +1708,7 @@ li {
 .swiper-container9 {
   height: 20px;
 }
-.swiper-container9 >>> .swiper-wrapper{
+.swiper-container9 >>> .swiper-wrapper {
   display: block;
 }
 .trend .trend-con {
@@ -1675,7 +1736,7 @@ li {
   border-left: 0.5px solid #d5d5df;
   background-color: #fff;
   margin-left: 6px;
-  width: 13%;
+  padding-left: 6px;
 }
 
 .line {
@@ -2222,6 +2283,7 @@ li {
   padding-left: 7.536%;
   margin-bottom: 16px;
   position: relative;
+  width:99%
 }
 .wen .wen-list:nth-of-type(2) {
   border: 0;

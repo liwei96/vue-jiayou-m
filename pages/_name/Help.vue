@@ -52,7 +52,7 @@
           </div>
           <h4 class>联系方式</h4>
           <div class="m-one m-lian">
-            <input type="text" placeholder="请输入手机号" class="m-in" />
+            <input type="text" placeholder="请输入手机号" class="m-in" v-model="phone" />
           </div>
           <div class="m-s-btn">确定</div>
         </div>
@@ -76,6 +76,7 @@
         </div>
       </div>
     </div>
+    <div class="tishi" v-if="tishi">提交成功，会有专业人员跟进</div>
   </div>
 </template>
 <script>
@@ -97,10 +98,12 @@ export default {
           tes : res.features,
           cities : res.cities,
           hus : res.apartments,
+          phone:res.user_mobile
     }
   },
   data() {
     return {
+      tishi:false,
       starts: "200",
       end: "800",
       country: "",
@@ -126,17 +129,6 @@ export default {
         city = 1;
         localStorage.setItem("city", 1);
       }
-      let that = this;
-      let token = localStorage.getItem("token");
-      
-      let IP = localStorage.getItem("ip");
-      help_data({ city: city, token: token, platform: 2, ip: IP })
-        .then(resp => {
-          
-        })
-        .catch(error => {
-          console.log(error);
-        });
     },
     cc(e) {
       this.country = e.target.getAttribute("data-v");
@@ -183,7 +175,11 @@ export default {
       help_put(where)
         .then(resp => {
           if (resp.data.code == 200) {
-            that.$router.push('/'+that.n+"/myhome")
+            that.tishi=true;
+            setTimeout(function(){
+              that.$router.push('/'+that.n+"/myhome")
+            },2000)
+            
             // window.location.href = '/'+that.n+"/myhome";
           }
         })
@@ -205,7 +201,7 @@ export default {
     }
   },
   mounted() {
-    this.getip();
+    $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom:0 });
     this.start();
     var height = window.screen.height;
     $(".m-qu").css("height", height);
@@ -314,7 +310,18 @@ a:active {
 li {
   list-style-type: none;
 }
-
+.tishi{
+  width:60%;
+  height: 4vh;
+  font-size: 14px;
+  text-align: center;
+  line-height: 4vh;
+  position: fixed;
+  top:48vh;
+  left:20%;
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+}
 /* m */
 .m {
   padding: 0;
@@ -469,6 +476,7 @@ li {
   position: fixed;
   display: none;
   top: 0;
+  z-index: 1;
 }
 .m-qu .m-bottom {
   position: fixed;

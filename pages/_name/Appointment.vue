@@ -40,7 +40,7 @@
   </div>
 </template>
 <script>
-let moment =require('moment');
+let moment = require("moment");
 import { yuyue, ip } from "~/api/api";
 export default {
   name: "Appointment",
@@ -68,30 +68,24 @@ export default {
     },
     put() {
       let that = this;
-      ip()
+      let Ip = returnCitySN["cip"];
+      let city = localStorage.getItem("city");
+      let time = that.time;
+      let token = localStorage.getItem("token");
+      yuyue({
+        ip: Ip,
+        page: 3,
+        position: 5,
+        token: token,
+        appointment: time,
+        platform: 2,
+        city: city
+      })
         .then(resp => {
-          let Ip = resp.data.data[0].origip;
-          let city = localStorage.getItem("city");
-          let time = that.time;
-          let token = localStorage.getItem("token");
-          yuyue({
-            ip: Ip,
-            page: 3,
-            position: 5,
-            token: token,
-            appointment: time,
-            platform: 2,
-            city: city
-          })
-            .then(resp => {
-              if (resp.data.code == 200) {
-                that.$router.push("/" + that.n + "/myhome");
-                // window.location.href='/'+that.n+"/myhome";
-              }
-            })
-            .catch(error => {
-              console.log(error);
-            });
+          if (resp.data.code == 200) {
+            that.$router.push("/" + that.n + "/myhome");
+            // window.location.href='/'+that.n+"/myhome";
+          }
         })
         .catch(error => {
           console.log(error);
@@ -102,6 +96,7 @@ export default {
     }
   },
   mounted() {
+    $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom:0 });
     this.n = this.$route.params.name;
     let ip = returnCitySN["cip"];
     this.ip = ip;
@@ -177,6 +172,7 @@ li {
   width: 100%;
   padding: 0 4%;
   position: relative;
+  margin-bottom: 80px;
 }
 .m-content .m-form .m-t {
   font-size: 13px;

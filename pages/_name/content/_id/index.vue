@@ -1,7 +1,7 @@
 <template>
   <div class="Content">
     <no-ssr>
-    <remote-js src="https://webapi.amap.com/maps?v=1.4.14&key=729ac4d779c7e625bc11bd5ba3ff3112"></remote-js>
+      <remote-js src="https://webapi.amap.com/maps?v=1.4.14&key=729ac4d779c7e625bc11bd5ba3ff3112"></remote-js>
     </no-ssr>
     <div class="container-fluid m" v-cloak>
       <div class="headertop">
@@ -31,7 +31,12 @@
         <div class="fixs" v-if="fx">
           <img src="~/assets/return.png" alt @click="goback" />
           <ul>
-            <li :class="fx1==key&&'active'" v-for="(item,key) in fxs" :key="key" @click='goto(key)'>{{item}}</li>
+            <li
+              :class="fx1==key&&'active'"
+              v-for="(item,key) in fxs"
+              :key="key"
+              @click="goto(key)"
+            >{{item}}</li>
           </ul>
         </div>
       </transition>
@@ -86,10 +91,12 @@
               <span>{{building.first_open_time}}</span>
             </li>
           </ul>
-          <p id="moreinfro">
-            详情
-            <img src="~/assets/m-go.png" alt />
-          </p>
+          <router-link :to="'/' + jkl + '/detail/' + id">
+            <p id="moreinfro">
+              详情
+              <img src="~/assets/m-go.png" alt />
+            </p>
+          </router-link>
         </div>
         <div class="go-map">
           <img class="map-address" src="~/assets/blackaddress.png" alt />
@@ -115,10 +122,12 @@
       <div class="m-dong visible-xs-block .visible-sm-block">
         <h3 id="m_dong">
           楼盘动态
-          <span>
-            共{{ds}}条
-            <img src="~/assets/m-go.png" alt />
-          </span>
+          <router-link :to="'/' + jkl + '/contentdynamic/' + id">
+            <span>
+              共{{ds}}条
+              <img src="~/assets/m-go.png" alt />
+            </span>
+          </router-link>
         </h3>
 
         <div class="m-tai m-d">
@@ -174,10 +183,12 @@
       <div class="m-hu visible-xs-block .visible-sm-block">
         <h3>
           主力户型
-          <span class="m-h-more">
-            更多户型
-            <img src="~/assets/m-go.png" alt />
-          </span>
+          <router-link :to="'/' + jkl + '/morehus/' + id">
+            <span class="m-h-more">
+              更多户型
+              <img src="~/assets/m-go.png" alt />
+            </span>
+          </router-link>
         </h3>
         <div class="h-c" v-for="(h,key) in hu" :key="key">
           <div class="col-xs-4 h-c-i">
@@ -212,10 +223,12 @@
       <div class="m-fen visible-xs-block .visible-sm-block">
         <h3>
           对比分析资料
-          <span class="m-more-fen">
-            详细分析
-            <img class="xiang-img" src="~/assets/m-go.png" alt />
-          </span>
+          <router-link :to="'/' + jkl + '/analysis/' + id">
+            <span class="m-more-fen">
+              详细分析
+              <img class="xiang-img" src="~/assets/m-go.png" alt />
+            </span>
+          </router-link>
         </h3>
 
         <!--对比分析资料 -->
@@ -300,10 +313,12 @@
       <div class="m-dai visible-xs-block .visible-sm-block">
         <h3>
           楼盘问答
-          <span>
-            更多问答
-            <img src="~/assets/m-go.png" alt />
-          </span>
+          <router-link :to="'/' + jkl + '/question/' + id">
+            <span>
+              更多问答
+              <img src="~/assets/m-go.png" alt />
+            </span>
+          </router-link>
         </h3>
         <p id="tishi" v-if="questions.length==0?true:false">暂无问答，快来提问吧</p>
         <div class="m-d-content">
@@ -328,12 +343,19 @@
               <img
                 id="answer"
                 src="~/assets/giveup.png"
-                data-d="1"
+                :type="q.my_like"
                 :data-v="q.id"
                 :data-n="q.num"
+                data-y="1"
                 @click="agree($event)"
               />
-              <span>有用({{q.num}})</span>
+              <span
+                :type="q.my_like"
+                :data-v="q.id"
+                :data-n="q.num"
+                data-y="1"
+                @click="agrees($event)"
+              >有用({{q.num}})</span>
             </span>
           </div>
           <button class="question">我要提问</button>
@@ -399,7 +421,7 @@
       <div class="m-contrast">
         <h4>楼盘对比</h4>
         <div class="re-con" v-for="(c,key) in compares" :key="key">
-          <template  v-if="key<3?true:false">
+          <template v-if="key<3?true:false">
             <input type="radio" name="pk" @click="pk($event)" :data-v="c.id" />
             <div class="re-list">
               <router-link :to="'/'+jkl+'/content/'+c.id">
@@ -423,7 +445,6 @@
               </router-link>
             </div>
           </template>
-          
         </div>
 
         <button class="pkbtn" @click="pkhref()">楼盘对比</button>
@@ -433,10 +454,12 @@
       <div class="m-dian visible-xs-block .visible-sm-block">
         <h4>
           楼盘点评
+          <router-link :to="'/' + jkl + '/morecomments/' + id">
           <span id="m_d_more">
             更多评论
             <img src="~/assets/m-go.png" alt />
           </span>
+          </router-link>
         </h4>
         <p id="tishi" v-if="comments.length==0?true:false">暂无点评，快来点评吧</p>
         <ul>
@@ -459,13 +482,25 @@
               <p class="txt">{{v.content}}</p>
               <div class="btn">
                 <span>{{v.time}}</span>
-                <strong>删除</strong>
+                <strong :data-v="v.id" @click="del($event)">删除</strong>
                 <p class="interaction">
-                  <span>
-                    <img id="agree" src="~/assets/click.png" />
-                    点赞({{v.like_num}})
-                  </span>
-                  <span>回复({{v.answer_num}})</span>
+                  <img
+                    id="agree"
+                    :data-v="v.id"
+                    :type="v.my_like"
+                    :data-n="v.like_num"
+                    @click="agree($event)"
+                    data-y="2"
+                    src="~/assets/click.png"
+                  />
+                  <span
+                    :data-v="v.id"
+                    :type="v.my_like"
+                    :data-n="v.like_num"
+                    data-y="2"
+                    @click="agrees($event)"
+                  >点赞({{v.like_num}})</span>
+                  <span @click="commitback(v.id)">回复({{v.answer_num}})</span>
                 </p>
               </div>
             </div>
@@ -603,9 +638,9 @@
             </div>
             <div class="t-bottom">
               <div class="t-b-first">
-                <input class="l-p" type="text" placeholder="输入预约手机号码" />
+                <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming" />
                 <p class="w-mg">
-                  <input class="w-mg-c" type="checkbox" checked v-model="check" />我已阅读并同意
+                  <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
                   <router-link :to="'/'+jkl+'/server'">
                     <a href="javasript:;">《允家新房用户协议》</a>
                   </router-link>
@@ -665,7 +700,8 @@ import {
   verification,
   trend_put,
   PK,
-  encyclopediaarticle_agree
+  encyclopediaarticle_agree,
+  comment_del
 } from "~/api/api";
 export default {
   name: "Content",
@@ -688,7 +724,7 @@ export default {
     let id = context.params.id;
     let token = context.store.state.cookie.token;
     let ip = context.store.state.cookie.ip;
-    let jkl=context.store.state.cookie.pinyin;
+    let jkl = context.params.name;
     let [res] = await Promise.all([
       context.$axios
         .post("/api/project/detail", {
@@ -775,7 +811,7 @@ export default {
         })
     ]);
     return {
-      jkl:jkl,
+      jkl: jkl,
       call: res.p,
       la: res.building.latitude,
       ln: res.building.longitude,
@@ -817,12 +853,15 @@ export default {
       skss: res.skss,
       jf: res.jf,
       jfss: res.jfss,
-      title:res.title
+      title: res.title,
+      collect: res.collect,
+      checks: true
     };
   },
   data() {
     return {
-      jkl:'',
+      baoming: "",
+      jkl: "",
       change: false,
       fxs: ["楼盘", "户型", "问答", "周边"],
       fx: false,
@@ -1004,12 +1043,13 @@ export default {
       jftime: "",
       tit: "",
       over: false,
-      title:''
+      title: "",
+      checks: true
     };
   },
   head() {
     return {
-      title: this.title || '允家新房'
+      title: this.title || "允家新房"
     };
   },
   methods: {
@@ -1026,15 +1066,15 @@ export default {
       this.n2 = true;
     },
     start() {
-        let url = window.location.href;
-        url = url.split("?")[1];
-        if (url) {
-          url = url.split("&");
-          let kid = url[0].split("=")[1];
-          let other = url[1].split("=")[1];
-          sessionStorage.setItem("kid", kid);
-          sessionStorage.setItem("other", other);
-        }
+      let url = window.location.href;
+      url = url.split("?")[1];
+      if (url) {
+        url = url.split("&");
+        let kid = url[0].split("=")[1];
+        let other = url[1].split("=")[1];
+        sessionStorage.setItem("kid", kid);
+        sessionStorage.setItem("other", other);
+      }
 
       let ids = localStorage.getItem("ids");
       if (ids) {
@@ -1050,36 +1090,26 @@ export default {
       this.n = this.$route.params.name;
       let id = this.$route.params.id;
       this.id = id;
-      let that = this;
+      this.over = true;
+      this.load = false;
+      this.isload = true;
       let ip = returnCitySN["cip"];
       this.$store.commit("setip", { ip: ip });
       this.ip = ip;
-      localStorage.getItem("ip");
-      let token = localStorage.getItem("token");
-      content_data({ platform: 2, id: id, ip: ip, token: token })
-        .then(resp => {
-          that.over = true;
-          let data = resp.data.data;
-          that.load = false;
-          that.isload = true;
-          let collect = data.collect;
-          localStorage.setItem(id, collect);
-          if (collect == 0) {
-            $("#fork").show();
-            $(".m-fork").show();
-            $(".fed").hide();
-            $("#forked").hide();
-          } else if (collect == 1) {
-            $("#fork").hide();
-            $("#forked").show();
-            $(".m-fork").hide();
-            $(".fed").show();
-            $("#forked").css("display", "block");
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      let collect = this.collect;
+      localStorage.setItem(id, collect);
+      if (collect == 0) {
+        $("#fork").show();
+        $(".m-fork").show();
+        $(".fed").hide();
+        $("#forked").hide();
+      } else if (collect == 1) {
+        $("#fork").hide();
+        $("#forked").show();
+        $(".m-fork").hide();
+        $(".fed").show();
+        $("#forked").css("display", "block");
+      }
     },
     top() {
       /*头部轮播*/
@@ -1404,30 +1434,38 @@ export default {
       }
     },
     agree(e) {
+      // console.log(e.target)
       let img = require("~/assets/clicked.png");
       let id = e.target.getAttribute("data-v");
       let ip = this.ip;
       let token = localStorage.getItem("token");
       let that = this;
       let num = e.target.getAttribute("data-n");
-      encyclopediaarticle_agree({ ip: ip, id: id, platform: 2, token: token })
+      let y = e.target.getAttribute("data-y");
+      encyclopediaarticle_agree({
+        ip: ip,
+        id: id,
+        platform: 2,
+        token: token,
+        type: y
+      })
         .then(resp => {
           if (resp.data.code == 500) {
-            let n = that.n;
-            that.$router.push("/" + n + "/login");
+            that.$router.push("/" + that.pinyin + "/login");
+            // window.location.href = "/login";
           } else {
-            let type = e.target.getAttribute("data-d");
+            let type = e.target.getAttribute("type");
             let click = require("~/assets/noclick.png");
-            if (type == 1) {
+            if (type == 0) {
               num = parseInt(num) + 1;
               e.target.setAttribute("data-n", num);
-              e.target.setAttribute("data-d", 0);
+              e.target.setAttribute("type", 1);
               e.target.setAttribute("src", img);
               e.target.nextElementSibling.innerHTML = `有用(${num})`;
             } else {
               num = parseInt(num) - 1;
               e.target.setAttribute("data-n", num);
-              e.target.setAttribute("data-d", 1);
+              e.target.setAttribute("type", 0);
               e.target.setAttribute("src", click);
               e.target.nextElementSibling.innerHTML = `有用(${num})`;
             }
@@ -1436,6 +1474,66 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    agrees(e) {
+      // console.log(e.target)
+      let img = require("~/assets/clicked.png");
+      let id = e.target.getAttribute("data-v");
+      let ip = this.ip;
+      let token = localStorage.getItem("token");
+      let that = this;
+      let num = e.target.getAttribute("data-n");
+      let y = e.target.getAttribute("data-y");
+      encyclopediaarticle_agree({
+        ip: ip,
+        id: id,
+        platform: 2,
+        token: token,
+        type: y
+      })
+        .then(resp => {
+          if (resp.data.code == 500) {
+            that.$router.push("/" + that.pinyin + "/login");
+            // window.location.href = "/login";
+          } else {
+            let type = e.target.getAttribute("type");
+            let click = require("~/assets/noclick.png");
+            if (type == 0) {
+              num = parseInt(num) + 1;
+              e.target.setAttribute("data-n", num);
+              e.target.setAttribute("type", 1);
+              e.target.previousElementSibling.setAttribute("src", img);
+              e.target.innerHTML = `有用(${num})`;
+            } else {
+              num = parseInt(num) - 1;
+              e.target.setAttribute("data-n", num);
+              e.target.setAttribute("type", 0);
+              e.target.previousElementSibling.setAttribute("src", click);
+              e.target.innerHTML = `有用(${num})`;
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    del(e) {
+      let id = e.target.getAttribute("data-v");
+      if (localStorage.getItem("token") == null) {
+        this.$router.push("/" + that.n + "/login");
+        // window.location.href = "/login";
+      } else {
+        let token = localStorage.getItem("token");
+        comment_del({ token: token, id: id })
+          .then(resp => {
+            if (resp.data.code == 200) {
+              location.reload();
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
     },
     pks(e) {
       let id = e.target.getAttribute("data-v");
@@ -1481,24 +1579,24 @@ export default {
       this.$router.push("/" + this.n + "/sou");
     },
     handleScroll() {
-        let Y = window.scrollY;
-        if (Y > 100 && Y <= 1050) {
-          this.fx = true;
-          this.fx1 = 0;
-        } else if (Y > 1050 && Y <= 2600) {
-          this.fx = true;
-          this.fx1 = 1;
-        } else if (Y > 2600 && Y <= 3000) {
-          this.fx = true;
-          this.fx1 = 2;
-        } else if (Y > 3100 && Y <= 3700) {
-          this.fx = true;
-          this.fx1 = 3;
-        } else if (Y <= 100) {
-          this.fx = false;
-        }
-      },
-    goto(key){
+      let Y = window.scrollY;
+      if (Y > 100 && Y <= 1050) {
+        this.fx = true;
+        this.fx1 = 0;
+      } else if (Y > 1050 && Y <= 2600) {
+        this.fx = true;
+        this.fx1 = 1;
+      } else if (Y > 2600 && Y <= 3000) {
+        this.fx = true;
+        this.fx1 = 2;
+      } else if (Y > 3100 && Y <= 3700) {
+        this.fx = true;
+        this.fx1 = 3;
+      } else if (Y <= 100) {
+        this.fx = false;
+      }
+    },
+    goto(key) {
       if (process.client) {
         let Y = window.scrollY;
         if (key == 0) {
@@ -1567,30 +1665,41 @@ export default {
           }
         }
       }
+    },
+    commitback(id) {
+      this.$router.push("/" + this.jkl + "/commentback/" + id);
     }
   },
   mounted() {
+    let h = document.body.clientHeight;
+    if (h < 700) {
+      $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
+    } else if (h >= 700) {
+      $("#Foot").css({
+        position: "relative",
+        bottom: "0",
+        width: "100%",
+        marginBottom: "56px"
+      });
+    }
     let that = this;
+    that.baoming = localStorage.getItem("phone");
     let id = this.$route.params.id;
     this.id = id;
-    
-    this.$nextTick(()=>{
+    this.$nextTick(() => {
       this.start();
       setTimeout(() => {
         this.drawline();
         this.priceline();
       }, 10);
-    })
-    
-    
-    
+    });
     //获取默认高度
-      this.defaultHeight = $(window).height();
-      window.onresize = () => {
-        return (() => {
-          this.nowHeight = $(window).height();
-        })();
-      };
+    this.defaultHeight = $(window).height();
+    window.onresize = () => {
+      return (() => {
+        this.nowHeight = $(window).height();
+      })();
+    };
 
     $(".go-map").on("click", function() {
       that.$router.push("/" + that.n + "/Periphery/" + that.id + "/1");
@@ -1602,9 +1711,6 @@ export default {
         .addClass("n-active")
         .siblings("p")
         .removeClass("n-active");
-    });
-    $("#moreinfro").on("click", function() {
-      that.$router.push("/" + that.n + "/detail/" + that.id);
     });
     jQuery.fn.ratingStars = function(e) {
       var r = {
@@ -1708,9 +1814,9 @@ export default {
     $(".question").on("click", function() {
       let token = localStorage.getItem("token");
       if (token) {
-        that.$router.push("/" + that.n + "/leavequestion/" + that.id);
+        that.$router.push("/" + that.jkl + "/leavequestion/" + that.id);
       } else {
-        that.$router.push("/" + that.n + "/login");
+        that.$router.push("/" + that.jkl + "/login");
       }
     });
     /*对比分析资料轮播*/
@@ -1748,12 +1854,8 @@ export default {
     $(document).ready(function() {
       var h = $(".h-c-c").height();
       $(".h-c-i img").css("height", h + "px");
-      $(".m-h-more").on("click", function() {
-        that.$router.push("/" + that.n + "/morehus/" + that.id);
-      });
-      $("#m_d_more").on("click", function() {
-        that.$router.push("/" + that.n + "/morecomments/" + that.id);
-      });
+
+      
       var cnm = 1;
       $(".p-t-g").on("click", function() {
         var id = $(this)
@@ -1801,15 +1903,7 @@ export default {
         }
       });
 
-      // 楼盘问答
-      $(".m-dai h3 span").on("click", function() {
-        that.$router.push("/" + that.n + "/question/" + that.id);
-      });
-
-      // 详细分析跳转
-      $(".m-more-fen").on("click", function() {
-        that.$router.push("/" + that.n + "/analysis/" + id);
-      });
+      
 
       $(".p-c-exc").on("click", function() {
         $(".m-p-succ").hide();
@@ -1933,9 +2027,7 @@ export default {
         $(this).hide();
         $(".m-chang").hide();
       });
-      $("#m_dong").on("click", function() {
-        that.$router.push("/" + that.n + "/contentdynamic/" + that.id);
-      });
+
       $(".tophome").on("click", function() {
         that.$router.push("/" + that.n);
       });
@@ -2114,40 +2206,6 @@ export default {
         }
       });
 
-      $(".m-ishou").on("click", function() {
-        var txt = $(this)
-          .children("i")
-          .text();
-
-        if (txt == "收藏") {
-          var id = $(this).attr("data_v");
-          var that = $(this);
-          $.post(
-            "{:url('home/content/fork')}",
-            {
-              id: id
-            },
-            function(res) {
-              if (res.code == 100) {
-                $(".m-fork").attr("src", res.ss);
-                $(".m-fork").attr("alt", "已收藏");
-                var html = `
-                                <img style="margin-left:17%" src="${res.msg}" alt="">已收藏
-                                    `;
-                that.html(html);
-              } else {
-                $(".m-chang").show();
-                $("#m_ti").html(res.msg);
-                $("#m_ti").show();
-              }
-            },
-            "json"
-          );
-        } else {
-          return;
-        }
-      });
-
       $(".m-fork").on("click", function() {
         var txt = $(this).attr("alt");
         if (txt == "收藏") {
@@ -2266,7 +2324,7 @@ export default {
     });
 
     $(".p1").on("click", function() {
-        window.type = $(this).attr("data-v");
+      window.type = $(this).attr("data-v");
 
       if (type == "变价通知") {
         that.position = 8;
@@ -2350,9 +2408,10 @@ export default {
 
     // 接口验证码
     $(".t-b-btn2").on("click", function() {
-      let check = that.check;
+      let check = that.checks;
       if (!check) {
         $(".tishi").show();
+        return;
       } else {
         $(".tishi").hide();
       }
@@ -2838,7 +2897,7 @@ export default {
       changeColor("dingxue", "bg_02", "bg_01");
     });
     // 滚动高度
-      window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
   },
   watch: {
     topimgs(val) {

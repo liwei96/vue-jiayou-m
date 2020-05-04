@@ -47,23 +47,13 @@ export default {
     "my-loading": Loading
   },
   async asyncData (context) {
-    let token=null;
-    let city=null;
-    let ip=null;
-    if(context.req.headers.cookie){
-      let cookieArr = context.req.headers.cookie.split(";");
-      let obj = {} 
-      cookieArr.forEach((i) => {
-          let arr = i.split("=");
-          obj[arr[0].trim()] =arr[1];
-      });
-      ip=obj['ip'];
-      city=obj['city']
-      token=obj['token']
-    }
+    let token = context.store.state.cookie.token;
+    let ip = context.store.state.cookie.ip;
+    let city = context.store.state.cookie.city;
+    let jkl=context.store.state.cookie.pinyin;
     let id=context.params.id;
     let [res]= await Promise.all([
-      context.$axios.post('http://ll.edefang.net/api/project/pk_recommand',{ ip: ip, city: city, id: id, token: token })
+      context.$axios.post('/api/project/pk_recommand',{ ip: ip, city: city, id: id, token: token })
       .then((resp)=>{
         let data = resp.data.data;
           
@@ -127,24 +117,18 @@ export default {
       this.id = this.$route.params.id;
       let ip = returnCitySN["cip"];
       this.ip = ip;
-      localStorage.getItem("ip");
-      let city = localStorage.getItem("city");
-      let token = localStorage.getItem("token");
-      let that = this;
-      addbuilds({ token: token, limit: 10, city: city })
-        .then(resp => {
-          that.load = false;
-        })
-        .catch(error => {});
+      this.load=false
     },
     add(e) {
       let id = e.target.getAttribute("data-v");
+      let d=this.id;
       let ids = localStorage.getItem("ids");
       let ds = [];
       if (ids) {
         ds = ids.split(",");
       }
       ds.push(id);
+      
       ids = ds.join(",");
       localStorage.setItem("ids", ids);
     },
@@ -159,6 +143,7 @@ export default {
     }
   },
   mounted() {
+    $("#Foot").css({ position: "relative", bottom: "0", width: "100%", marginBottom: '80px' });
     this.start();
   }
 };
@@ -323,6 +308,7 @@ h3 span {
   width:100%;
   padding-top:20px;
   background-color: #fff;
+  z-index: 1;
 }
 .pk {
   width: 92%;

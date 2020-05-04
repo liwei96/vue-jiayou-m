@@ -43,9 +43,9 @@
             </div>
             <div class="t-bottom">
               <div class="t-b-first">
-                <input class="l-p" type="text" placeholder="输入预约手机号码" />
+                <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming" />
                 <p class="w-mg">
-                  <input class="w-mg-c" type="checkbox" checked v-model="checks"/>我已阅读并同意
+                  <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
                   <router-link :to="'/'+n+'/server'">
                     <a href="javasript:;">《允家新房用户协议》</a>
                   </router-link>
@@ -96,27 +96,29 @@ import {
 } from "~/api/api";
 export default {
   name: "Analysis",
-  async asyncData (context) {
-    let ip=context.store.state.cookie.ip;
+  async asyncData(context) {
+    let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
-    let token=context.store.state.cookie.token;
-    let id=context.params.id;
-    let [res]= await Promise.all([
-      context.$axios.post('/api/project/analysis',{ id: id, platform: 2, ip: ip })
-      .then((resp)=>{
-        let data = resp.data.data;
-          
+    let token = context.store.state.cookie.token;
+    let id = context.params.id;
+    let [res] = await Promise.all([
+      context.$axios
+        .post("/api/project/analysis", { id: id, platform: 2, ip: ip })
+        .then(resp => {
+          let data = resp.data.data;
+
           return data;
-      })
-    ])
-    return{
-          invest : res.invest,
-          live : res.live,
-          tel : res.phone
-    }
+        })
+    ]);
+    return {
+      invest: res.invest,
+      live: res.live,
+      tel: res.phone
+    };
   },
   data() {
     return {
+      baoming: "",
       change: false,
       succ: false,
       defaultHeight: "0",
@@ -128,8 +130,8 @@ export default {
       project: "",
       call: "",
       id: "",
-      checks:'',
-      n:''
+      checks: "",
+      n: ""
     };
   },
   methods: {
@@ -149,7 +151,6 @@ export default {
         $("#fork").hide();
         $("#forked").css("display", "block");
       }
-      
     },
     send(sends) {
       this.tel = sends;
@@ -276,6 +277,10 @@ export default {
     }
   },
   mounted() {
+    let h = document.body.clientHeight;
+    $("#Foot").css({ position: "relative",marginBottom: "64px", });
+    $("#Foot").css('marginBottom','64px');
+    this.baoming = localStorage.getItem("phone");
     this.start();
     let that = this;
     $(".p1").on("click", function() {
@@ -312,6 +317,13 @@ export default {
     });
     // 接口验证码
     $(".t-b-btn2").on("click", function() {
+      let check = that.checks;
+      if (!check) {
+        $(".tishi").show();
+        return
+      } else {
+        $(".tishi").hide();
+      }
       var phone = $(this)
         .prev()
         .prev()
@@ -419,6 +431,11 @@ export default {
   background-color: #fff;
   position: relative;
 }
+.tishi {
+  color: red;
+  font-size: 10px;
+  display: none;
+}
 #forked {
   display: none;
 }
@@ -499,11 +516,15 @@ export default {
   font-size: 15px;
   border-radius: 5px;
   border: 0px;
-  box-shadow:0px 2.5px 5px 0px rgba(255,76,76,0.2);
+  box-shadow: 0px 2.5px 5px 0px rgba(255, 76, 76, 0.2);
 }
 
 .m-botnav .m-pho {
-  background:linear-gradient(90deg,rgba(255,76,76,1),rgba(255,152,106,1));
+  background: linear-gradient(
+    90deg,
+    rgba(255, 76, 76, 1),
+    rgba(255, 152, 106, 1)
+  );
   color: #fff;
 }
 .m-botnav .m-pho .ph1 {
@@ -526,7 +547,11 @@ export default {
 }
 
 .m-botnav .m-y {
-  background:linear-gradient(-270deg,rgba(52,138,255,1),rgba(106,204,255,1));
+  background: linear-gradient(
+    -270deg,
+    rgba(52, 138, 255, 1),
+    rgba(106, 204, 255, 1)
+  );
   color: #fff;
   left: 62%;
 }

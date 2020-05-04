@@ -7,7 +7,7 @@
       </div>
       <p>关注允家新房公众号了解详细楼盘</p>
       <img src="~/assets/ma_02.png" alt class="two" />
-      <button>保存二维码图片</button>
+      <button @click="down">保存二维码图片</button>
       <div class="line"></div>
     </div>
     <div class="ke">
@@ -18,10 +18,24 @@
 <script>
 export default {
   name: "CustomerService",
+  data(){
+    return {
+      imgs:'http://test.jy8006.com/_nuxt/img/e0a216e.png'
+    }
+  },
   methods:{
     goback(){
       this.$router.go(-1)
+    },
+    down(){
+      var alink = document.createElement("a");
+      alink.href = this.imgs;
+      alink.download = "pic"; //图片名
+      alink.click();
     }
+  },
+  mounted(){
+    $("#Foot").css({ position: "relative", bottom: "0", width: "100%" });
   }
 };
 </script>

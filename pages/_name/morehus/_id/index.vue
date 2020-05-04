@@ -50,9 +50,9 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" />
+            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming" />
             <p class="w-mg">
-              <input class="w-mg-c" type="checkbox" checked v-model="checks"/>我已阅读并同意
+              <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
@@ -100,29 +100,31 @@ import {
 } from "~/api/api";
 export default {
   name: "MoreHus",
-  async asyncData (context) {
-    let ip=context.store.state.cookie.ip;
+  async asyncData(context) {
+    let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
-    let token=context.store.state.cookie.token;
-    let jkl=context.store.state.cookie.pinyin;
-    let id=context.params.id;
-    let [res]= await Promise.all([
-      context.$axios.post('/api/project/apartments',{ id: id, platform: 2, ip: ip })
-      .then((resp)=>{
-        let data = resp.data.data;
-          data.check=true;
+    let token = context.store.state.cookie.token;
+    let jkl = context.store.state.cookie.pinyin;
+    let id = context.params.id;
+    let [res] = await Promise.all([
+      context.$axios
+        .post("/api/project/apartments", { id: id, platform: 2, ip: ip })
+        .then(resp => {
+          let data = resp.data.data;
+          data.check = true;
           return data;
-      })
-    ])
-    return{
-          lists : res,
-          checks:res.check,
-          jkl:jkl
-    }
+        })
+    ]);
+    return {
+      lists: res,
+      checks: res.check,
+      jkl: jkl
+    };
   },
   data() {
     return {
-      jkl:'',
+      baoming: "",
+      jkl: "",
       change: false,
       succ: false,
       defaultHeight: "0",
@@ -143,7 +145,7 @@ export default {
       tel: "",
       n: "",
       call: "",
-      checks:''
+      checks: ""
     };
   },
   methods: {
@@ -157,14 +159,13 @@ export default {
       if (col == 0) {
         $("#fork").show();
         $("#forked").hide();
-      } else if(col==1){
+      } else if (col == 1) {
         $("#fork").hide();
         $("#forked").show();
       }
       let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
-      
     },
     send(sends) {
       this.tel = sends;
@@ -253,7 +254,14 @@ export default {
     }
   },
   mounted() {
+    let h = document.body.clientHeight;
+    if (h < 700) {
+      $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" ,marginBottom: '56px'});
+    } else if (h >= 700) {
+      $("#Foot").css({ position: "relative", bottom: "0", width: "100%", marginBottom: '56px' });
+    }
     let that = this;
+    that.baoming = localStorage.getItem("phone");
     this.start();
     $(".p1").on("click", function() {
       $(".m-chang").show();
@@ -266,11 +274,12 @@ export default {
     });
     // 接口验证码
     $(".t-b-btn2").on("click", function() {
-      let check=that.checks;
-      if(!check){
-        $('.tishi').show();
-      }else{
-        $('.tishi').hide();
+      let check = that.checks;
+      if (!check) {
+        $(".tishi").show();
+        return
+      } else {
+        $(".tishi").hide();
       }
       var phone = $(this)
         .prev()
@@ -352,8 +361,8 @@ export default {
 li {
   list-style: none;
 }
-.tishi{
-  color:red;
+.tishi {
+  color: red;
   font-size: 10px;
   display: none;
 }
@@ -467,11 +476,15 @@ h3 img {
   font-size: 15px;
   border-radius: 5px;
   border: 0px;
-  box-shadow:0px 2.5px 5px 0px rgba(78,169,255,0.2);
+  box-shadow: 0px 2.5px 5px 0px rgba(78, 169, 255, 0.2);
 }
 
 .m-botnav .m-pho {
-  background:linear-gradient(90deg,rgba(255,76,76,1),rgba(255,152,106,1));
+  background: linear-gradient(
+    90deg,
+    rgba(255, 76, 76, 1),
+    rgba(255, 152, 106, 1)
+  );
   color: #fff;
 }
 .m-botnav .m-pho .ph1 {
@@ -494,7 +507,11 @@ h3 img {
 }
 
 .m-botnav .m-y {
-  background:linear-gradient(-270deg,rgba(52,138,255,1),rgba(106,204,255,1));
+  background: linear-gradient(
+    -270deg,
+    rgba(52, 138, 255, 1),
+    rgba(106, 204, 255, 1)
+  );
   color: #fff;
   left: 62%;
 }

@@ -7,32 +7,33 @@
       <div class="re-con">
         <div class="re-list" v-for="(list ,index) in lists" :key="index">
           <router-link :to="'/'+jkl+'/content/'+list.id">
-          <div class="re-con-left">
-            <img :src="list.img" />
+            <div class="re-con-left">
+              <img :src="list.img" />
 
-            <span>
-              <i class="iconfont iconyanjing"></i>{{list.num}}
-            </span>
-          </div>
-          <div class="re-con-right">
-            <h5>
-              {{list.name}}
-              <span>{{list.status}}</span>
-            </h5>
-            <p class="price">
-              <span>{{list.single_price}}</span>元/m²
-            </p>
-            <p class="area">
-              <span>{{list.city}}-{{list.country}}</span>
-              <span>建面</span>
-              <span>{{list.area_min}}-{{list.area_max}}m²</span>
-            </p>
-            <p class="tabs">
-              <strong>{{list.decorate}}</strong>
-              <span v-show="list.railway">{{list.railway}}</span>
-              <span id="tag">{{list.tag}}</span>
-            </p>
-          </div>
+              <span>
+                <i class="iconfont iconyanjing"></i>
+                {{list.num}}
+              </span>
+            </div>
+            <div class="re-con-right">
+              <h5>
+                {{list.name}}
+                <span>{{list.status}}</span>
+              </h5>
+              <p class="price">
+                <span>{{list.single_price}}</span>元/m²
+              </p>
+              <p class="area">
+                <span>{{list.city}}-{{list.country}}</span>
+                <span>建面</span>
+                <span>{{list.area_min}}-{{list.area_max}}m²</span>
+              </p>
+              <p class="tabs">
+                <strong>{{list.decorate}}</strong>
+                <span v-show="list.railway">{{list.railway}}</span>
+                <span id="tag">{{list.tag}}</span>
+              </p>
+            </div>
           </router-link>
         </div>
       </div>
@@ -40,31 +41,41 @@
     <div class="nothing">
       <img src="~/assets/nothing.png" alt />
       <p>您还没有收藏，快去逛逛吧~</p>
-      <router-link :to="'/'+n+'/search'"><button>去收藏</button></router-link>
+      <router-link :to="'/'+n+'/search'">
+        <button>去收藏</button>
+      </router-link>
     </div>
   </div>
 </template>
 
 <script>
-import {collect_data,ip} from '~/api/api'
+import { collect_data, ip } from "~/api/api";
 export default {
   name: "Collection",
-  async asyncData (context) {
-    let ip=context.store.state.cookie.ip;
+  async asyncData(context) {
+    let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
-    let token=context.store.state.cookie.token;
-    let jkl=context.store.state.cookie.pinyin;
-    let [res]= await Promise.all([
-      context.$axios.post('/api/project/my_collects',{ip:ip,city:city,page:1,limit:10,platform:2,token:token})
-      .then((resp)=>{
-        let data = resp.data.data;
+    let token = context.store.state.cookie.token;
+    let jkl = context.store.state.cookie.pinyin;
+    let [res] = await Promise.all([
+      context.$axios
+        .post("/api/project/my_collects", {
+          ip: ip,
+          city: city,
+          page: 1,
+          limit: 10,
+          platform: 2,
+          token: token
+        })
+        .then(resp => {
+          let data = resp.data.data;
           return data;
-      })
-    ])
-    return{
-          lists:res,
-          jkl:jkl
-    }
+        })
+    ]);
+    return {
+      lists: res,
+      jkl: jkl
+    };
   },
   data() {
     return {
@@ -126,8 +137,8 @@ export default {
           tese: "繁华地段"
         }
       ],
-      n:'',
-      jkl:''
+      n: "",
+      jkl: ""
     };
   },
   methods: {
@@ -141,29 +152,21 @@ export default {
         this.$router.go(-1);
       }
     },
-    start(){
-      let that=this;
-      this.n=this.$route.params.name;
-      let ip=returnCitySN['cip'];
-      this.ip=ip;
-      localStorage.getItem('ip');
-      let city=localStorage.getItem('city');
-        let token=localStorage.getItem('token');
-        // let token='1f82a88ee023f';
-        collect_data({ip:ip,city:city,page:1,limit:10,platform:2,token:token}).then(resp=>{
-          if(that.lists.length!=0){
-            $('.nothing').hide();
-            $('.recommen').show();
-          }else{
-            $('.nothing').show();
-            $('.recommen').hide();
-          }
-        }).catch(error=>{
-
-        })
+    start() {
+      this.n = this.$route.params.name;
+      let ip = returnCitySN["cip"];
+      this.ip = ip;
+      if (this.lists.length != 0) {
+        $(".nothing").hide();
+        $(".recommen").show();
+      } else {
+        $(".nothing").show();
+        $(".recommen").hide();
+      }
     }
   },
-  mounted(){
+  mounted() {
+    $("#Foot").css({ position: "relative", bottom: "0", width: "100%",marginBottom:0 });
     this.start();
   }
 };
@@ -286,11 +289,11 @@ export default {
   margin-right: 6px;
   float: left;
 }
-.recommen .re-list .re-con-right .tabs #tag{
+.recommen .re-list .re-con-right .tabs #tag {
   display: inline-block;
-    width: 113px;
-    height: 20px;
-    overflow: hidden;
+  width: 113px;
+  height: 20px;
+  overflow: hidden;
 }
 .recommen .more-res {
   width: 100%;
@@ -322,7 +325,7 @@ h3 img {
 }
 
 /* 没收藏内容 */
-.nothing{
+.nothing {
   display: none;
 }
 .nothing img {

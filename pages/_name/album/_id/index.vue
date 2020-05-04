@@ -171,7 +171,7 @@
       </div>
       <div class="t-bottom">
         <div class="t-b-first">
-          <input class="l-p" type="text" placeholder="输入预约手机号码" />
+          <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
           <p class="w-mg">
             <input class="w-mg-c" type="checkbox" checked v-model="checks"/>我已阅读并同意
             <router-link :to="'/'+n+'/server'">
@@ -255,6 +255,7 @@ export default {
   },
   data() {
     return {
+      baoming:'',
       ip: "",
       id: "",
       tel: "",
@@ -388,6 +389,7 @@ export default {
   },
   mounted() {
     let that=this;
+    that.baoming=localStorage.getItem('phone');
     this.start();
     //暂时设计每个slide大小需要一致
     this.$nextTick(() => {
@@ -650,6 +652,7 @@ export default {
       let check=that.checks;
       if(!check){
         $('.tishi').show();
+        return
       }else{
         $('.tishi').hide();
       }

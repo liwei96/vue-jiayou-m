@@ -81,6 +81,14 @@ export default {
     goback() {
       this.$router.go(-1);
     }
+  },
+  mounted(){
+    let h = document.body.clientHeight;
+    if (h < 700) {
+      $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
+    } else if (h >= 700) {
+      $("#Foot").css({ position: "relative", bottom: "0", width: "100%" });
+    }
   }
 };
 </script>

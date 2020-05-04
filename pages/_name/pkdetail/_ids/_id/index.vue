@@ -250,7 +250,7 @@
           <div class="t-b-first">
             <input class="l-p" type="text" placeholder="输入预约手机号码" />
             <p class="w-mg">
-              <input class="w-mg-c" type="checkbox" v-model="check"/>我已阅读并同意
+              <input class="w-mg-c" type="checkbox" v-model="checks"/>我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
@@ -298,11 +298,9 @@ export default {
     let ids=context.params.ids;
     let jkl=context.store.state.cookie.pinyin;
     let [res]= await Promise.all([
-      context.$axios.post('http://ll.edefang.net/api/project/compare_mobile',{ ip: ip, ids: ids, platform: 2, token: token })
+      context.$axios.post('/api/project/compare_mobile',{ ip: ip, ids: ids, platform: 2, token: token })
       .then((resp)=>{
         let data = resp.data.data.buildings;
-          
-          
           return data;
       })
     ])
@@ -385,7 +383,7 @@ export default {
       tel: "",
       id: "",
       call:'',
-      check:'',
+      checks:'',
       n:''
     };
   },
@@ -618,7 +616,7 @@ export default {
     });
     // 接口验证码
     $(".t-b-btn2").on("click", function() {
-      let t=that.check;
+      let t=that.checks;
       if(t){
         $('.tishi').hide()
       }else{

@@ -115,6 +115,7 @@ export default {
     }
   },
   mounted() {
+    $("#Foot").css({ position: "relative", bottom: "0", width: "100%" });
     this.start();
     let that=this;
     $("#nav li").on("click", function() {

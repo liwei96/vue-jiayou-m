@@ -159,7 +159,7 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" />
+            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
             <p class="w-mg">
               <input class="w-mg-c" type="checkbox" checked v-model="check"/>我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
@@ -250,7 +250,8 @@ export default {
       pro: "",
       n: "",
       call: "",
-      checks:''
+      checks:'',
+      baoming:''
     };
   },
   methods: {
@@ -358,6 +359,13 @@ export default {
     }
   },
   mounted() {
+    let h = document.body.clientHeight;
+    if (h < 700) {
+      $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" ,marginBottom: '56px'});
+    } else if (h >= 700) {
+      $("#Foot").css({ position: "relative", bottom: "0", width: "100%", marginBottom: '56px' });
+    }
+    this.baoming=localStorage.getItem('phone')
     this.start();
     let that = this;
     $(".p1").on("click", function() {
@@ -397,6 +405,7 @@ export default {
       let check=that.checks;
       if(!check){
         $('.tishi').show();
+        return
       }else{
         $('.tishi').hide();
       }

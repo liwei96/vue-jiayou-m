@@ -14,10 +14,10 @@
           <p>{{item.answer}}</p>
         </div>
         <p class="bom">
-          <span class="time">2019-06-08 09:23</span>
+          <span class="time">{{item.createtime}}</span>
           <span class="click">
-            <img src="~/assets/noclick.png"  data-d="1" :data-n="item.count" @click="agree($event)" />
-            <span>有用({{item.count}})</span>
+            <img src="~/assets/noclick.png"  :type="item.my_like" :data-n="item.count" :data-v="item.id" @click="agree($event)" />
+            <span :type="item.my_like"  :data-v="item.id" :data-n="item.count" @click="agrees($event)">有用({{item.count}})</span>
           </span>
         </p>
       </li>
@@ -77,34 +77,66 @@ export default {
     agree(e) {
       // console.log(e.target)
       let img = require("~/assets/clicked.png");
+      let id = e.target.getAttribute("data-v");
       let ip = this.ip;
       let token = localStorage.getItem("token");
       let that = this;
       let num = e.target.getAttribute("data-n");
-      encyclopediaarticle_agree({ ip: ip, platform: 2, token: token })
+      encyclopediaarticle_agree({ ip: ip, id: id, platform: 2, token: token , type: 1 })
         .then(resp => {
           if (resp.data.code == 500) {
-            let kk=localStorage.getItem('pinyin')
-            that.$router.push('/'+kk+"/login")
+            that.$router.push("/" + that.pinyin + "/login");
             // window.location.href = "/login";
           } else {
-            let type = e.target.getAttribute("data-d");
+            let type = e.target.getAttribute("type");
             let click = require("~/assets/noclick.png");
-            if (type == 1) {
+            if (type == 0) {
               num = parseInt(num) + 1;
               e.target.setAttribute("data-n", num);
-              e.target.setAttribute("data-d", 0);
+              e.target.setAttribute("type", 1);
               e.target.setAttribute("src", img);
               e.target.nextElementSibling.innerHTML = `有用(${num})`;
             } else {
               num = parseInt(num) - 1;
-              if(num<0){
-                num==0
-              }
               e.target.setAttribute("data-n", num);
-              e.target.setAttribute("data-d", 1);
+              e.target.setAttribute("type", 0);
               e.target.setAttribute("src", click);
               e.target.nextElementSibling.innerHTML = `有用(${num})`;
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    agrees(e) {
+      // console.log(e.target)
+      let img = require("~/assets/clicked.png");
+      let id = e.target.getAttribute("data-v");
+      let ip = this.ip;
+      let token = localStorage.getItem("token");
+      let that = this;
+      let num = e.target.getAttribute("data-n");
+      encyclopediaarticle_agree({ ip: ip, id: id, platform: 2, token: token , type: 1 })
+        .then(resp => {
+          if (resp.data.code == 500) {
+            that.$router.push("/" + that.pinyin + "/login");
+            // window.location.href = "/login";
+          } else {
+            let type = e.target.getAttribute("type");
+            let click = require("~/assets/noclick.png");
+            if (type == 0) {
+              num = parseInt(num) + 1;
+              e.target.setAttribute("data-n", num);
+              e.target.setAttribute("type", 1);
+              e.target.previousElementSibling.setAttribute("src", img);
+              e.target.innerHTML = `有用(${num})`;
+            } else {
+              num = parseInt(num) - 1;
+              e.target.setAttribute("data-n", num);
+              e.target.setAttribute("type", 0);
+              e.target.previousElementSibling.setAttribute("src", click);
+              e.target.innerHTML = `有用(${num})`;
             }
           }
         })

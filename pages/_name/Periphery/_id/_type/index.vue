@@ -29,9 +29,9 @@
             </div>
             <div class="t-bottom">
               <div class="t-b-first">
-                <input class="l-p" type="text" placeholder="输入预约手机号码" />
+                <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
                 <p class="w-mg">
-                  <input class="w-mg-c" type="checkbox" checked v-model="check"/>我已阅读并同意
+                  <input class="w-mg-c" type="checkbox" checked v-model="checks"/>我已阅读并同意
                   <router-link :to="'/'+jkl+'/server'">
                     <a href="javasript:;">《允家新房用户协议》</a>
                   </router-link>
@@ -110,11 +110,13 @@ export default {
   async asyncData(context) {
     let jkl=context.store.state.cookie.pinyin;
     return {
-      jkl:jkl
+      jkl:jkl,
+      checks:false
     };
   },
   data() {
     return {
+      baoming:'',
       change: false,
       succ: false,
       defaultHeight: "0",
@@ -125,7 +127,7 @@ export default {
       call: "",
       type: "",
       id:'',
-      check:'',
+      checks:'',
       jkl:''
     };
   },
@@ -234,7 +236,6 @@ export default {
           });
       let type = this.$route.params.type;
       this.type = type;
-      // let AMap = window.AMap;
       var map = new AMap.Map("m-container", {
         // eslint-disable-line no-unused-vars
         resizeEnable: true,
@@ -263,6 +264,7 @@ export default {
         ) {
           // console.log(result);
         });
+        
         $(document).ready(function() {
           // 生活的周边查询
           function moren() {
@@ -498,13 +500,13 @@ export default {
                 });
                 $(".m-l-content").html(ht);
               });
-            } else if ($(this).text() == "学校") {
-              placeSearch.searchNearBy("学校", cpoint, 2000, function(
+            } else if ($(this).text() == "教育") {
+              placeSearch.searchNearBy("教育", cpoint, 2000, function(
                 // eslint-disable-line no-unused-vars
                 status,
                 result
               ) {
-                var ht = '<p class="m-type">学校</p>';
+                var ht = '<p class="m-type">教育</p>';
                 $.each(result.poiList.pois, function(i, e) {
                   var p2 = [e.location.lng, e.location.lat];
                   var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
@@ -549,6 +551,7 @@ export default {
     },
   },
   mounted() {
+    this.baoming=localStorage.getItem('phone');
     let that = this;
     this.start();
 
@@ -576,9 +579,11 @@ export default {
     
 
     $(".t-b-btn2").on("click", function() {
-      let check=that.check;
+      let check=that.checks;
+      console.log(check)
       if(!check){
         $('.tishi').show();
+        return
       }else{
         $('.tishi').hide();
       }

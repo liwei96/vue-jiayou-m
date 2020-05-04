@@ -95,9 +95,9 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" />
+            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
             <p class="w-mg">
-              <input class="w-mg-c" type="checkbox" checked v-model="check" />我已阅读并同意
+              <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
@@ -186,11 +186,13 @@ export default {
           yb:res.price_trends.yb,
           mounth:res.mounth,
           price:res.price,
-          jkl:jkl
+          jkl:jkl,
+          checks:true
     }
   },
   data() {
     return {
+      baoming:'',
       jkl:'',
       change: false,
       succ: false,
@@ -265,8 +267,7 @@ export default {
       tel: "",
       n: "",
       mb: "",
-      yb: "",
-      check: ""
+      yb: ""
     };
   },
   methods: {
@@ -284,13 +285,6 @@ export default {
       this.ip = ip;
       localStorage.getItem("ip");
       let token = localStorage.getItem("token");
-      trend_start({ city: city, ip: ip, token: token, platform: 2 })
-        .then(resp => {
-          
-        })
-        .catch(error => {
-          console.log(error);
-        });
     },
     drawline() {
       var chart = this.$echarts.init(document.getElementById("pic"));
@@ -461,6 +455,7 @@ export default {
     }
   },
   mounted() {
+    this.baoming=localStorage.getItem('phone');
     this.start_data();
     this.drawline();
     let that = this;
@@ -491,13 +486,15 @@ export default {
     });
     // 接口验证码
     $(".t-b-btn2").on("click", function() {
-      let check = that.check;
+      let check = that.checks;
+      console.log(check)
       if (!check) {
         $(".tishi").show();
         return;
       } else {
         $(".tishi").hide();
       }
+
       var phone = $(this)
         .prev()
         .prev()

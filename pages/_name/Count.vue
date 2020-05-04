@@ -473,6 +473,7 @@ export default {
     }
   },
   mounted() {
+    $("#Foot").css({ position: "relative", bottom: "0", width: "100%" });
     let that = this;
     this.start();
     $(".dai").on("click", function() {
@@ -719,6 +720,9 @@ export default {
 * {
   padding: 0;
   margin: 0;
+}
+.Count{
+  overflow: hidden;
 }
 li {
   list-style: none;

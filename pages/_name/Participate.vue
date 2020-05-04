@@ -233,23 +233,23 @@
         <ul>
           <li>
             <img src="~/assets/j-name.png" alt />
-            <input type="text" placeholder="请输入您的称呼" />
+            <input type="text" :placeholder="namemsg" v-model="name"/>
           </li>
           <li>
             <img src="~/assets/j-tel.png" alt />
-            <input type="text" placeholder="请输入手机号码" />
+            <input type="text" :placeholder="phonemsg" v-model.lazy="phone"/>
           </li>
           <li>
             <img src="~/assets/j-compancer.png" alt />
-            <input type="text" placeholder="请输入公司全称" />
+            <input type="text" :placeholder="companymsg" v-model="company"/>
           </li>
           <li>
             <img src="~/assets/j-city.png" alt />
-            <input type="text" placeholder="请选择城市" />
-            <img src="~/assets/j-more.png" alt class="more" />
+            <input type="text" :placeholder="citymsg" v-model="city"/>
+            <!-- <img src="~/assets/j-more.png" alt class="more" /> -->
           </li>
         </ul>
-        <button>提交申请</button>
+        <button @click="push">提交申请</button>
       </div>
     </transition>
     <div class="zhao"></div>
@@ -259,6 +259,7 @@
 import Swiper from "swiper";
 import "swiper/css/swiper.min.css";
 // import "~/static/js/iconfont.js";
+import { jiameng } from "~/api/api";
 export default {
   name: "Participate",
   head(){
@@ -275,7 +276,16 @@ export default {
       num: 0,
       show: false,
       defaultHeight: 0,
-      nowHeight: 0
+      nowHeight: 0,
+      city:'',
+      name:'',
+      phone:'',
+      company:'',
+      isok:true,
+      citymsg:'请输入城市',
+      namemsg:'请输入您的称呼',
+      phonemsg:'请输入手机号码',
+      companymsg:'请输入公司全称'
     };
   },
   methods: {
@@ -378,9 +388,63 @@ export default {
     close() {
       this.show = false;
       $(".zhao").hide();
+    },
+    push(){
+      let name=this.name;
+      let phone=this.phone;
+      let company=this.company;
+      let city=this.city;
+      var pattern_phone = /^1[3-9][0-9]{9}$/;
+      if (this.phone == "") {
+        console.log(this.phone,this.isok)
+       this.phone=''
+        this.phonemsg='手机号不能为空'
+        this.isok=false
+      } else if (!pattern_phone.test(phone)) {
+        this.isok=false
+        this.phone=''
+        this.phonemsg='请输入正确的号码'
+      }else{
+        this.isok=true
+      }
+      if(city==''){
+        this.isok=false
+        this.citymsg='不能为空'
+      }else{
+        this.isok=true
+      }
+      if(name==''){
+        this.isok=false
+        this.namemsg='不能为空'
+      }else{
+        this.isok=true
+      }
+      if(company==''){
+        this.isok=false
+        this.companymsg='不能为空'
+      }else{
+        this.isok=true
+      }
+      if(this.isok){
+        jiameng({city:city,name:name,phone:phone,company:company}).then(res=>{
+          if(res.data.code==200){
+            this.show=false
+            $('.zhao').hide();
+          }
+      }).catch(error=>{
+
+      })
+      }
+      
     }
   },
   mounted() {
+    let h = document.body.clientHeight;
+    if (h < 700) {
+      $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
+    } else if (h >= 700) {
+      $("#Foot").css({ position: "relative", bottom: "0", width: "100%",marginBottom: '56px' });
+    }
     let that = this;
     var swiper05 = new Swiper(".swiper-container", {
       // eslint-disable-line no-unused-vars
@@ -460,7 +524,7 @@ export default {
       } else {
         $(".fixs").css("top", "22vh");
       }
-    }
+    },
   }
 };
 </script>

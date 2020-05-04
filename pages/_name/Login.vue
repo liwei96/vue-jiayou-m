@@ -46,6 +46,7 @@ export default {
                 console.log(error);
               });
             var time = 60;
+            localStorage.setItem('phone',tel)
             var phone = tel.substr(0, 3) + "****" + tel.substr(7, 11);
             var fn = function() {
               time--;

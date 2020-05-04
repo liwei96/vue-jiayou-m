@@ -411,4 +411,21 @@ export const mapProject = (msg) => {
     })
 }
 
+export const commentBack = (msg) => {
+    return axios.request({
+        method: 'post',
+        url: '/api/project/comment_reply',
+        data: msg
+    })
+}
+
+
+export const jiameng = (msg) => {
+    return axios.request({
+        method: 'post',
+        url: '/api/map/cooperate',
+        data: msg
+    })
+}
+
 

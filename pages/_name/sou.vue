@@ -124,22 +124,14 @@ export default {
       let token = localStorage.getItem("token");
       let city = localStorage.getItem("city");
       let n = this.$route.params.name;
-      console.log(this.$store.state.ip);
       
       this.n = n;
       let that = this;
       let ip = returnCitySN["cip"];
       this.ip = ip;
-      console.log(ip)
       localStorage.getItem("ip");
       let data = { token: token, city: city, ip: ip, platform: 2 };
-      sou_data(data)
-        .then(resp => {
-          that.isload = false;
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.isload=false
       sou({ city: city })
         .then(resp => {
           that.builds = resp.data.data;

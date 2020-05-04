@@ -15,7 +15,7 @@
           <p>{{item.answer}}</p>
         </div>
         <p class="bom">
-          <span class="time">2019-06-08 09:23</span>
+          <span class="time">{{item.createtime}}</span>
           <span class="click">
             <img src="~/assets/noclick.png"  data-d="1" :data-v="item.id" :data-n="item.count" @click="agree($event)" />
             <span>有用({{item.count}})</span>
@@ -60,7 +60,8 @@ export default {
       lists: [],
       ip: "",
       id: "",
-      n:''
+      n:'',
+      ting:true
     };
   },
   methods: {
@@ -108,9 +109,52 @@ export default {
     },
     goback(){
       this.$router.go(-1)
+    },
+    getmore() {
+      let id = this.$route.params.id;
+      this.ting = false;
+      let ip = returnCitySN["cip"];
+      let token = localStorage.getItem("token");
+      let page = this.page;
+      let that = this;
+      question_data({
+        ip: ip,
+        id: id,
+        page: 1,
+        limit: 10,
+        platform: 2,
+        token: token
+      })
+        .then(res => {
+          that.ting=true
+          let data = res.data.data;
+          let l = that.lists.concat(data);
+          that.lists = l;
+          that.page = that.page + 1;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    scroll() {
+      var scrollTop = window.scrollY;
+      var scrollHeight = window.screen.availHeight;
+      var windowHeight = document.body.scrollHeight;
+      // console.log(scrollTop, scrollHeight, windowHeight);
+      if (scrollTop + scrollHeight >= windowHeight) {
+        if (this.ting) {
+          this.getmore();
+        }
+      }
     }
   },
   mounted() {
+    let h = document.body.clientHeight;
+    if (h < 700) {
+      $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
+    } else if (h >= 700) {
+      $("#Foot").css({ position: "relative", bottom: "0", width: "100%", marginBottom: '80px' });
+    }
     this.start();
     let that = this;
     this.n=this.$route.params.name
@@ -124,6 +168,10 @@ export default {
         // window.location.href = '/'+that.n+"/login";
       }
     });
+    window.addEventListener("scroll", this.scroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.scroll);
   }
 };
 </script>
@@ -250,5 +298,6 @@ button {
   width:100%;
   padding-top:20px;
   background-color: #fff;
+  z-index: 2;
 }
 </style>

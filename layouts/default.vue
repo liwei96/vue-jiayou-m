@@ -1,38 +1,41 @@
 <template>
-  <div>
-    <nuxt/>
+  <div id='bigbox'>
+    <nuxt />
     <foot-view></foot-view>
   </div>
 </template>
 
 <script>
-import footView from '@/components/Foot.vue'
+import footView from "@/components/Foot.vue";
 export default {
-  components:{
-    'foot-view':footView
+  components: {
+    "foot-view": footView
   },
-  head(){
+  head() {
     return {
-      title:'允家新房',
-      meta:[
+      title: "允家新房",
+      meta: [
         {
           name: "description",
-          content: '允家新房'
+          content: "允家新房"
         },
         {
           name: "keywords",
-          content: '允家新房'
+          content: "允家新房"
         }
       ]
-    }
-  },
-}
+    };
+  }
+};
 </script>
 
 <style>
+#bigbox{
+  position: relative;
+}
 html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -87,19 +90,19 @@ html {
   transition: opacity 0.5s;
 }
 
-@keyframes big-in{
-  0%{
+@keyframes big-in {
+  0% {
     transform: scale(0.7);
   }
-  100%{
+  100% {
     transform: scale(1);
   }
 }
-@keyframes big-out{
-  0%{
+@keyframes big-out {
+  0% {
     transform: scale(1);
   }
-  100%{
+  100% {
     transform: scale(0.5);
   }
 }
@@ -109,12 +112,11 @@ html {
   opacity: 0;
   scale: 0.5;
 }
-.change-enter-active
- {
+.change-enter-active {
   transition: opacity 0.5s;
   animation: big-in 0.5s;
 }
-.change-leave-active{
+.change-leave-active {
   transition: opacity 0.5s;
   animation: big-out 0.5s;
 }

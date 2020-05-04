@@ -7,7 +7,7 @@
       </button>
     </nav>
     <div class="con">
-      <div class="list" v-for="m in lists" :key="m.id">
+      <div class="list" v-for="(m,key) in lists" :key="key">
           <p class="tit">
             <i class="round"></i>
             {{m.createtime}}
@@ -49,11 +49,12 @@
       </div>
       <div class="t-bottom">
         <div class="t-b-first">
-          <input class="l-p" type="text" placeholder="输入预约手机号码" />
+          <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
           <p class="w-mg">
-            <input class="w-mg-c" type="radio" />我已阅读并同意
+            <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
             <a href="javasript:;">《允家新房用户协议》</a>
           </p>
+          <p class="tishi">请勾选用户协议</p>
           <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">立即订阅</button>
           <p class="w-tit">
             <img src="~/assets/w-call.png" />允家严格保障您的信息安全
@@ -109,18 +110,21 @@ export default {
     ])
     return{
           lists : res.dynamics.infos,
-          phone : res.phone
+          phone : res.phone,
+          checks:false
     }
   },
   data() {
     return {
+      baoming:'',
       page: 2,
       lists: [],
       phone: "",
       ip: "",
       n: "",
       call: "",
-      ting:true
+      ting:true,
+      checks:false
     };
   },
   methods: {
@@ -158,12 +162,14 @@ export default {
       }
       let ip = this.ip;
       let token = localStorage.getItem("token");
+      let id = this.$route.params.id
       dynamic({
         page: this.page,
         city: city,
         platform: 2,
         token: token,
-        ip: ip
+        ip: ip,
+        project:id
       })
         .then(resp => {
           that.ting=true
@@ -176,15 +182,7 @@ export default {
           console.log(error);
         });
     },
-    getip() {
-      ip()
-        .then(resp => {
-          this.ip = resp.data.data[0].origip;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
+    
     sendmsg(t) {
       this.phone = t;
       let that = this;
@@ -259,7 +257,7 @@ export default {
     }
   },
   mounted() {
-    this.getip();
+    this.baoming=localStorage.getItem('phone');
     this.start_data();
     let that = this;
     $("#sea").on("click", function() {
@@ -277,6 +275,14 @@ export default {
     });
     // 接口验证码
     $(".t-b-btn2").on("click", function() {
+      let check = that.checks;
+      console.log(check)
+      if (!check) {
+        $(".tishi").show();
+        return
+      } else {
+        $(".tishi").hide();
+      }
       var phone = $(this)
         .prev()
         .prev()
@@ -339,6 +345,11 @@ export default {
 * {
   padding: 0;
   margin: 0;
+}
+.tishi {
+  color: red;
+  font-size: 10px;
+  display: none;
 }
 nav {
   width: 100%;

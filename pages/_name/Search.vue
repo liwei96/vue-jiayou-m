@@ -11,8 +11,8 @@
       </p>
       <p class="dian">
         <router-link :to="'/'+jkl+'/map'">
-        <img src="~/assets/dian.png" alt />
-        <span>地图</span>
+          <img src="~/assets/dian.png" alt />
+          <span>地图</span>
         </router-link>
       </p>
     </nav>
@@ -132,13 +132,13 @@
               :data-v="key"
             >{{type.type}}</span>
           </div>
-          <h4>开发商</h4>
+          <!-- <h4>开发商</h4>
           <div class="m-one m-two" id="m-shang" @click="s1">
             <span>万科</span>
             <span>绿城</span>
             <span>龙湖</span>
             <span>绿城</span>
-          </div>
+          </div>-->
           <h4>特色</h4>
           <div class="m-one m-thr" id="m-te" @click="s1">
             <span
@@ -228,15 +228,21 @@ export default {
   components: {
     load: Loading
   },
-  async asyncData (context) {
-    let ip=context.store.state.cookie.ip;
+  async asyncData(context) {
+    let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
-    let token=context.store.state.cookie.token;
-    let jkl=context.store.state.cookie.pinyin;
-    
-    let [res1,res2]= await Promise.all([
-      context.$axios.post('/api/project/search_info',{ city: city, token: token, ip: ip, platform: 2 })
-      .then((resp)=>{
+    let token = context.store.state.cookie.token;
+    let jkl = context.store.state.cookie.pinyin;
+
+    let [res1, res2] = await Promise.all([
+      context.$axios
+        .post("/api/project/search_info", {
+          city: city,
+          token: token,
+          ip: ip,
+          platform: 2
+        })
+        .then(resp => {
           let data = resp.data.data.datas;
           for (let item of data) {
             if (item.railway) {
@@ -244,30 +250,35 @@ export default {
             }
           }
           return data;
-      }),
-      context.$axios.post('/api/project/search',{ city: city, platform: 2, ip: ip, token: token })
-      .then((resp)=>{
-        
+        }),
+      context.$axios
+        .post("/api/project/search", {
+          city: city,
+          platform: 2,
+          ip: ip,
+          token: token
+        })
+        .then(resp => {
           let data = resp.data.data.conditions;
-          
+
           return data;
-      })
-    ])
-    return{
-          citys : res2.cities,
-          dities : res2.railways,
-          single_prices : res2.single_prices,
-          total_prices : res2.total_prices,
-          apartments : res2.apartments,
-          build_types : res2.build_types,
-          features : res2.features,
-          buildings:res1,
-          jkl:jkl
-    }
+        })
+    ]);
+    return {
+      citys: res2.cities,
+      dities: res2.railways,
+      single_prices: res2.single_prices,
+      total_prices: res2.total_prices,
+      apartments: res2.apartments,
+      build_types: res2.build_types,
+      features: res2.features,
+      buildings: res1,
+      jkl: jkl
+    };
   },
   data() {
     return {
-      jkl:'',
+      jkl: "",
       kk: false,
       loading: false,
       isload: true,
@@ -300,7 +311,7 @@ export default {
       type1: 0,
       shai1: 0,
       loaded: true,
-      ting:true
+      ting: true
     };
   },
   computed: {
@@ -315,21 +326,14 @@ export default {
       let city = localStorage.getItem("city");
       if (!city) {
         city = 1;
-        localStorage.setItem("city", 4);
+        localStorage.setItem("city", city);
       }
       let ip = returnCitySN["cip"];
       this.ip = ip;
+      this.loading = true;
+      this.isload = false;
       localStorage.getItem("ip");
       let token = localStorage.getItem("token");
-      search_start({ city: city, token: token, ip: ip, platform: 2 })
-        .then(resp => {
-          this.loading = true;
-          this.isload = false;
-          
-        })
-        .catch(error => {
-          console.log(error);
-        });
     },
     search_datas() {
       this.kk = false;
@@ -345,14 +349,7 @@ export default {
       let t = sessionStorage.getItem("feature");
       let where = { city: city, platform: 2, ip: ip, token: token };
       $cookies.set("where", where, "5min");
-      $cookies.set('ip',ip)
-      search_search(where)
-        .then(resp => {
-          
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      $cookies.set("ip", ip);
     },
     search_data() {
       let city = localStorage.getItem("city");
@@ -394,31 +391,30 @@ export default {
     qu(e) {
       let id = e.target.getAttribute("data-v");
       let where = $cookies.get("where");
-      if(id==0){
-        delete where.country
-      }else{
+      if (id == 0) {
+        delete where.country;
+      } else {
         where.country = id;
       }
       $cookies.set("where", where, 0);
       this.num6 = id;
       $(".quyu").removeClass("m-l-active");
-      window.scrollTo(0,0)
+      window.scrollTo(0, 0);
       this.search_data();
       $(".m-qu").slideUp("fast");
       $(".m-box").hide();
       $(".m-u").removeClass("m-as");
-      
     },
     tie(e) {
       let id = e.target.getAttribute("data-v");
       let where = $cookies.get("where");
-      if(id==0){
-        delete where.railway
-      }else{
+      if (id == 0) {
+        delete where.railway;
+      } else {
         where.railway = id;
       }
       $cookies.set("where", where, 0);
-      window.scrollTo(0,0)
+      window.scrollTo(0, 0);
       this.search_data();
       this.num7 = id;
       $(".ditie").removeClass("m-l-active");
@@ -429,13 +425,13 @@ export default {
     zong(e) {
       let id = e.target.getAttribute("data-v");
       let where = $cookies.get("where");
-      if(id==0){
-        delete where.totalprice
-      }else{
+      if (id == 0) {
+        delete where.totalprice;
+      } else {
         where.totalprice = id;
       }
       $cookies.set("where", where, 0);
-      window.scrollTo(0,0)
+      window.scrollTo(0, 0);
       this.search_data();
       this.num4 = id;
       $(".zongjia").removeClass("m-l-active");
@@ -446,13 +442,13 @@ export default {
     dan(e) {
       let id = e.target.getAttribute("data-v");
       let where = $cookies.get("where");
-      if(id!=0){
+      if (id != 0) {
         where.single_price = id;
-      }else{
-        delete where.single_price
+      } else {
+        delete where.single_price;
       }
       $cookies.set("where", where, 0);
-      window.scrollTo(0,0)
+      window.scrollTo(0, 0);
       this.search_data();
       this.num5 = id;
       $(".danjia").removeClass("m-l-active");
@@ -466,7 +462,7 @@ export default {
       let where = $cookies.get("where");
       where.apartment = id;
       $cookies.set("where", where, 0);
-      window.scrollTo(0,0)
+      window.scrollTo(0, 0);
       this.search_data();
     },
     tp(e) {
@@ -490,7 +486,7 @@ export default {
         where.build_type = this.type;
       }
       $cookies.set("where", where, 0);
-      window.scrollTo(0,0)
+      window.scrollTo(0, 0);
       this.search_data();
     },
     getmore() {
@@ -505,8 +501,8 @@ export default {
             that.kk = false;
             that.loaded = true;
             let data = resp.data.data.datas;
-            if(data.length==0){
-              that.ting=false;
+            if (data.length == 0) {
+              that.ting = false;
             }
             let l = that.buildings.concat(data);
             that.buildings = l;
@@ -560,10 +556,9 @@ export default {
       var windowHeight = document.body.scrollHeight;
       // console.log(scrollTop, scrollHeight, windowHeight);
       if (scrollTop + scrollHeight >= windowHeight) {
-        if(this.ting){
+        if (this.ting) {
           this.getmore();
         }
-        
       }
       let Y = window.scrollY;
       if (Y <= 40) {
@@ -807,7 +802,7 @@ export default {
     window.addEventListener("scroll", this.scroll);
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.scroll);
+    window.removeEventListener("scroll", this.scroll);
   },
   activated() {
     this.kk = false;
@@ -880,7 +875,7 @@ nav .dian {
   margin-left: 2%;
   line-height: 40px;
 }
-nav .dian span{
+nav .dian span {
   color: #505158;
 }
 nav .dian img {
@@ -905,7 +900,7 @@ nav .dian img {
   width: 5%;
   margin-bottom: 1%;
 }
-.top{
+.top {
   position: relative;
 }
 .recommen {
@@ -974,14 +969,14 @@ nav .dian img {
   font-size: 17px;
   margin-bottom: 2px;
 }
-.recommen .re-list .re-con-right h5 strong{
-    font-weight: 400;
-    height: 19px;
-    width: 183px;
-    display: inline-block;
-    white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
+.recommen .re-list .re-con-right h5 strong {
+  font-weight: 400;
+  height: 19px;
+  width: 183px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .recommen .re-list .re-con-right h5 span {
   width: 36px;

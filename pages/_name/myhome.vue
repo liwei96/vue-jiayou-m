@@ -12,20 +12,20 @@
         <div class="m-nav">
           <ul class="row">
             <li class="col-xs-3 col-sm-3" @click="foot()">
-                <img src="~/assets/browse_icon.png" alt />
-                <p>浏览足迹</p>
+              <img src="~/assets/browse_icon.png" alt />
+              <p>浏览足迹</p>
             </li>
             <li class="col-xs-3 col-sm-3" @click="collect()">
-                <img src="~/assets/collect_icon.png" alt />
-                <p>我的收藏</p>
+              <img src="~/assets/collect_icon.png" alt />
+              <p>我的收藏</p>
             </li>
             <li class="col-xs-3 col-sm-3" @click="help()">
-                <img src="~/assets/room_icon.png" alt />
-                <p>帮我找房</p>
+              <img src="~/assets/room_icon.png" alt />
+              <p>帮我找房</p>
             </li>
             <li class="col-xs-3 col-sm-3" @click="appointment()">
-                <img src="~/assets/order_icon.png" alt />
-                <p>预约看房</p>
+              <img src="~/assets/order_icon.png" alt />
+              <p>预约看房</p>
             </li>
           </ul>
         </div>
@@ -36,15 +36,13 @@
         <ul>
           <li>
             <router-link :to="'/'+jkl+'/map'">
-            <img src="~/assets/address_icon.png" alt />
-            </router-link>
-            地图看房
+              <img src="~/assets/address_icon.png" alt />
+            </router-link>地图看房
           </li>
           <li>
             <router-link :to="'/'+jkl+'/about'">
               <img src="~/assets/home_icon.png" alt />
-            </router-link>
-            关于允家
+            </router-link>关于允家
           </li>
           <li>
             <a :href="'tel:'+call">
@@ -53,32 +51,28 @@
             联系我们
           </li>
           <li class="feeback">
-              <img src="~/assets/Opinion.png" alt />
+            <img src="~/assets/Opinion.png" alt />
             意见反馈
           </li>
           <li>
             <router-link :to="'/'+jkl+'/copyright'">
               <img src="~/assets/banquan.png" alt />
-              </router-link>
-            版权申明
+            </router-link>版权申明
           </li>
-           <li>
-             <router-link :to="'/'+jkl+'/exemption'">
+          <li>
+            <router-link :to="'/'+jkl+'/exemption'">
               <img src="~/assets/mianze.png" alt />
-              </router-link>
-            免责协议
+            </router-link>免责协议
           </li>
-           <li>
+          <li>
             <router-link :to="'/'+jkl+'/privacy'">
               <img src="~/assets/yinsi.png" alt />
-            </router-link>
-            隐私政策
+            </router-link>隐私政策
           </li>
-           <li>
+          <li>
             <router-link :to="'/'+jkl+'/server'">
               <img src="~/assets/fuwu.png" alt />
-            </router-link>
-            服务协议
+            </router-link>服务协议
           </li>
         </ul>
       </div>
@@ -89,20 +83,17 @@
           <li>
             <router-link :to="'/'+jkl+'/follow'">
               <img src="~/assets/WeChat.png" alt />
-            </router-link>
-            官方公众号
+            </router-link>官方公众号
           </li>
           <li>
             <router-link :to="'/'+jkl+'/customerService'">
               <img src="~/assets/Customer service.png" alt />
-            </router-link>
-            关注客服
+            </router-link>关注客服
           </li>
           <li>
             <router-link :to="'/'+jkl+'/participate'">
               <img src="~/assets/jiameng.png" alt />
-            </router-link>
-            城市加盟
+            </router-link>城市加盟
           </li>
         </ul>
       </div>
@@ -123,112 +114,114 @@
 export default {
   name: "Myhome",
   async asyncData(context) {
-    let jkl=context.store.state.cookie.pinyin;
+    let jkl = context.store.state.cookie.pinyin;
     return {
-      jkl:jkl
+      jkl: jkl
     };
   },
   data() {
     return {
-      n:'',
+      n: "",
       bannerimg: {
         // backgroundImage: "url(" + require("@/assets/bg_login.png") + ")",
         backgroundImage: "url(" + require("@/assets/bg_login.png") + ")",
         backgroundRepeat: "no-repeat"
       },
-      call:'',
-      jkl:''
+      call: "",
+      jkl: ""
     };
   },
-  methods:{
-    start(){
-      this.n=this.$route.params.name;
-      this.call=localStorage.getItem('call');
+  methods: {
+    start() {
+      this.n = this.$route.params.name;
+      this.call = localStorage.getItem("call");
     },
-    foot(){
-      let token=localStorage.getItem('token');
-      if(token){
-        this.$router.push('/'+this.n+"/footprint")
-      }else{
-        this.$router.push('/'+this.n+"/login")
+    foot() {
+      let token = localStorage.getItem("token");
+      if (token) {
+        this.$router.push("/" + this.n + "/footprint");
+      } else {
+        this.$router.push("/" + this.n + "/login");
       }
     },
-    collect(){
-      let token=localStorage.getItem('token');
-      if(token){
-        this.$router.push('/'+this.n+"/collection")
-      }else{
-        this.$router.push('/'+this.n+"/login")
+    collect() {
+      let token = localStorage.getItem("token");
+      if (token) {
+        this.$router.push("/" + this.n + "/collection");
+      } else {
+        this.$router.push("/" + this.n + "/login");
       }
     },
-    help(){
-      let token=localStorage.getItem('token');
-      if(token){
-        this.$router.push('/'+this.n+"/help")
-      }else{
-        this.$router.push('/'+this.n+"/login")
+    help() {
+      let token = localStorage.getItem("token");
+      if (token) {
+        this.$router.push("/" + this.n + "/help");
+      } else {
+        this.$router.push("/" + this.n + "/login");
       }
     },
-    appointment(){
-      let token=localStorage.getItem('token');
-      if(token){
-        this.$router.push('/'+this.n+"/appointment")
-      }else{
-        this.$router.push('/'+this.n+"/login")
+    appointment() {
+      let token = localStorage.getItem("token");
+      if (token) {
+        this.$router.push("/" + this.n + "/appointment");
+      } else {
+        this.$router.push("/" + this.n + "/login");
       }
     },
-    goback(){
-      this.$router.go(-1)
+    goback() {
+      this.$router.go(-1);
     }
   },
   mounted() {
+    $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom:0 });
     this.start();
-    let that=this;
-    let t=localStorage.getItem('token');
-    if(t){
-      $('.getout').show();
-      $('#m_login').hide();
-      let t=localStorage.getItem('tel');
-      $('#m-tel').html(t);
-    }else{
-      $('#m-tel').hide();
-      $('.getout').hide();
+    let that = this;
+    let t = localStorage.getItem("token");
+    if (t) {
+      $(".getout").show();
+      $("#m_login").hide();
+      let t = localStorage.getItem("tel");
+      $("#m-tel").html(t);
+    } else {
+      $("#m-tel").hide();
+      $(".getout").hide();
     }
     $("#no").on("click", function() {
       $(".m-out").hide();
     });
-    $('#yes').on('click',function(){
-      localStorage.removeItem('token');
-      localStorage.removeItem('tel');
-      $('.m-out').hide();
+    $("#yes").on("click", function() {
+      // localStorage.removeItem('token');
+      // localStorage.removeItem('tel');
+      $(".m-out").hide();
+      localStorage.clear();
       location.reload();
-    })
+    });
     $(".getout").on("click", function() {
       $(".m-out").show();
     });
-    $('#m_login').on('click',function(){
-      that.$router.push('/'+that.n+"/login")
+    $("#m_login").on("click", function() {
+      that.$router.push("/" + that.n + "/login");
       // window.location.href='/'+that.n+"/login"
-    })
-    $('.leave').on('click',function(){
-      let token=localStorage.getItem('token');
-      if(token){
-        that.$router.push('/'+that.n+"/leave")
+    });
+    $(".leave").on("click", function() {
+      let token = localStorage.getItem("token");
+      if (token) {
+        that.$router.push("/" + that.n + "/leave");
         // window.location.href='/'+that.n+"/leave"
-      }else{
-        that.$router.push('/'+that.n+"/login")
+      } else {
+        that.$router.push("/" + that.n + "/login");
         // window.location.href='/'+that.n+"/login";
       }
-    })
-    $('.feeback').on('click',function(){
-      if(t){
-        that.$router.push('/'+that.n+"/feedback")
+    });
+    $(".feeback").on("click", function() {
+      if (t) {
+        that.$router.push("/" + that.n + "/feedback");
         // window.location.href='/'+that.n+"/feedback"
-      }else{
-        that.$router.push('/'+that.n+"/login")
+      } else {
+        that.$router.push("/" + that.n + "/login");
         // window.location.href='/'+that.n+"/login";
       }
-    })
+    });
   }
 };
 </script>
