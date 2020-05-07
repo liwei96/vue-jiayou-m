@@ -85,6 +85,7 @@
         </div>
       </div>
     </div>
+    <foot-view :pinyin='jkl'></foot-view>
     <!-- 弹框 -->
     <transition name="change">
       <div class="weiter ts" v-show="change">
@@ -137,6 +138,7 @@
 </template>
 <script>
 // import { echarts } from "./static/js/echarts.min.js";
+import footView from "@/components/Foot.vue";
 import { trend_start, trend_put, msg, verification, ip } from "~/api/api";
 export default {
   name: "Trend",
@@ -189,6 +191,9 @@ export default {
           jkl:jkl,
           checks:true
     }
+  },
+  components: {
+    "foot-view": footView
   },
   data() {
     return {

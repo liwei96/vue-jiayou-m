@@ -7,12 +7,20 @@
       <textarea name id="txt" cols="30" rows="10" placeholder="输入您精彩评论" v-model="content"></textarea>
       <button @click="put">发表</button>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import {commentBack} from '~/api/api'
 export default {
   name: "Comment",
+  asyncData (context) {
+    let jkl = context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    }
+  },
   data(){
     return{
       id:'',
@@ -20,8 +28,12 @@ export default {
       status:'1',
       content:'',
       num:'3',
-      n:''
+      n:'',
+      jkl:''
     }
+  },
+  components: {
+    "foot-view": footView
   },
   methods: {
     

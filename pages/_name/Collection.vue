@@ -38,6 +38,7 @@
         </div>
       </div>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <div class="nothing">
       <img src="~/assets/nothing.png" alt />
       <p>您还没有收藏，快去逛逛吧~</p>
@@ -49,6 +50,7 @@
 </template>
 
 <script>
+import footView from "@/components/Foot.vue";
 import { collect_data, ip } from "~/api/api";
 export default {
   name: "Collection",
@@ -76,6 +78,9 @@ export default {
       lists: res,
       jkl: jkl
     };
+  },
+  components: {
+    "foot-view": footView
   },
   data() {
     return {

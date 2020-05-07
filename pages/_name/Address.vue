@@ -201,10 +201,12 @@
         <div class="b-right" @click="please">申请开放</div>
       </div>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <div class="msg">我们已收到您诚挚的申请，在下一个开放城市中我们会优先开放—{{getname}}</div>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import { address_start, ip } from "~/api/api";
 import axios from "axios";
 export default {
@@ -213,6 +215,7 @@ export default {
    let ip=context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
+    let jkl = context.store.state.cookie.pinyin;
     let [res]= await Promise.all([
       context.$axios.post('/api/first/city',{ platform: 2, token: token, ip: ip })
       .then((resp)=>{
@@ -247,6 +250,7 @@ export default {
             Y : res.Y,
             Z : res.Z,
             hots : res.hots,
+            jkl:jkl
     }
   },
   data() {
@@ -285,8 +289,12 @@ export default {
       city: "杭州",
       btn: "重新定位",
       hots: [],
-      ip: ""
+      ip: "",
+      jkl:''
     };
+  },
+  components: {
+    "foot-view": footView
   },
   methods: {
     start() {

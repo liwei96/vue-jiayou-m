@@ -38,6 +38,7 @@
         </div>
       </div>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <div class="nothing">
       <img src="~/assets/footers.png" alt />
       <p>您还没有浏览记录，快去看看楼盘吧~</p>
@@ -50,6 +51,7 @@
 
 <script>
 import { foot_data, ip } from "~/api/api";
+import footView from "@/components/Foot.vue";
 export default {
   name: "Footprint",
   async asyncData(context) {
@@ -76,6 +78,9 @@ export default {
       lists: res,
       jkl: jkl
     };
+  },
+  components: {
+    "foot-view": footView
   },
   data() {
     return {

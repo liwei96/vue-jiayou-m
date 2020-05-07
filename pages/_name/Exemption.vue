@@ -13,11 +13,27 @@
       <h6>（3）用户言论免责声明</h6>
       <p>网友问答仅供其表达个人疑惑或见解，并不代表本网立场，对其正确性、合法性、正当性本网不负任何责任。</p>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 export default {
   name: "Exemption",
+  asyncData (context) {
+    let jkl = context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    }
+  },
+  components: {
+    "foot-view": footView
+  },
+  data(){
+    return {
+      jkl:''
+    }
+  },
   methods:{
       goback(){
           this.$router.go(-1)

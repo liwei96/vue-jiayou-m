@@ -40,6 +40,7 @@
         </p>
       </button>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <!-- 弹框 -->
     <transition name="change">
       <div class="weiter ts" v-show="change">
@@ -90,6 +91,7 @@
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import {
   ip,
   msg,
@@ -120,6 +122,9 @@ export default {
       checks: res.check,
       jkl: jkl
     };
+  },
+  components: {
+    "foot-view": footView
   },
   data() {
     return {

@@ -25,10 +25,11 @@
     <div class="bottom">
       <button id="btn">我要提问</button>
     </div>
-    
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import { ip, question_data,encyclopediaarticle_agree } from "~/api/api";
 export default {
   name: "Question",
@@ -56,6 +57,9 @@ export default {
           lists : res,
           jkl:jkl
     }
+  },
+  components: {
+    "foot-view": footView
   },
   data() {
     return {

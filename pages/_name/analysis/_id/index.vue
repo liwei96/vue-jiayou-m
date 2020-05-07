@@ -32,7 +32,7 @@
           </p>
         </button>
       </div>
-
+      <foot-view :pinyin="jkl"></foot-view>
       <div class="m-tan visible-xs-block .visible-sm-block">
         <transition name="change">
           <div class="weiter ts" v-show="change">
@@ -46,7 +46,7 @@
                 <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming" />
                 <p class="w-mg">
                   <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
-                  <router-link :to="'/'+n+'/server'">
+                  <router-link :to="'/'+jkl+'/server'">
                     <a href="javasript:;">《允家新房用户协议》</a>
                   </router-link>
                 </p>
@@ -86,6 +86,7 @@
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import {
   analysis_data,
   ip,
@@ -97,6 +98,7 @@ import {
 export default {
   name: "Analysis",
   async asyncData(context) {
+    let jkl = context.store.state.cookie.pinyin;
     let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token = context.store.state.cookie.token;
@@ -113,7 +115,8 @@ export default {
     return {
       invest: res.invest,
       live: res.live,
-      tel: res.phone
+      tel: res.phone,
+      jkl:jkl
     };
   },
   data() {
@@ -131,8 +134,12 @@ export default {
       call: "",
       id: "",
       checks: "",
-      n: ""
+      n: "",
+      jkl:''
     };
+  },
+  components: {
+    "foot-view": footView
   },
   methods: {
     start() {

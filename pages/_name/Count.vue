@@ -254,6 +254,7 @@
         >{{item}}成</li>
       </ul>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <!-- 弹框 -->
     <transition name="change">
       <div class="weiter ts" v-show="change">
@@ -304,9 +305,16 @@
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import { ip, count_data, msg, verification, trend_put } from "~/api/api";
 export default {
   name: "Count",
+  asyncData (context) {
+    let jkl = context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    }
+  },
   data() {
     return {
       change: false,
@@ -337,8 +345,12 @@ export default {
       g1: "",
       gong: "3.25",
       n:'',
-      check:''
+      check:'',
+      jkl:''
     };
+  },
+  components: {
+    "foot-view": footView
   },
   methods: {
     t1s() {
@@ -731,6 +743,9 @@ li {
   color:red;
   font-size: 10px;
   display: none;
+}
+.peo{
+  overflow: hidden;
 }
 header {
   width: 100%;

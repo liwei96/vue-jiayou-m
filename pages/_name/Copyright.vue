@@ -27,11 +27,27 @@
       <p>12、本声明未涉及的问题请参见国允家关法律法规，当本声明与国允家关法律法规冲突时，以国家法律法规为准。</p>
       <p>13、本网站相关声明版权及其修改权、更新权和解释权均属允家新房所有。</p>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 export default {
   name: "Exemption",
+  asyncData (context) {
+    let jkl = context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    }
+  },
+  data(){
+    return {
+      jkl:''
+    }
+  },
+  components: {
+    "foot-view": footView
+  },
   methods: {
     goback() {
       this.$router.go(-1);

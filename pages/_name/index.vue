@@ -65,7 +65,7 @@
             </div>
           </div>
           <router-link :to="'/' + pinyin + '/realinformations'">
-          <button id="encyclopedia">更多</button>
+            <button id="encyclopedia">更多</button>
           </router-link>
         </div>
       </div>
@@ -77,11 +77,10 @@
           <img class="cur-img" src="~/assets/indexprice.png" alt />
           <router-link :to="'/' + pinyin + '/trend'">
             <span id="trend">
-            查看详情
-            <img src="~/assets/m-go.png" alt />
-          </span>
+              查看详情
+              <img src="~/assets/m-go.png" alt />
+            </span>
           </router-link>
-          
         </h2>
         <div class="drift-con">
           <div class="drift-list">
@@ -295,17 +294,21 @@
               :data-t="left_info.position"
               @click.self="ency($event)"
             >
-              <h2
-                :data-v="left_info.id"
-                :data-t="left_info.position"
-                @click.self="ency($event)"
-              >{{left_info.title}}</h2>
-              <p
-                v-if="left_info.description"
-                :data-v="left_info.id"
-                :data-t="left_info.position"
-                @click.self="ency($event)"
-              >{{left_info.description}}</p>
+              <router-link
+                :to="'/'+pinyin+'/encyclopediaArticle/'+left_info.position+'/'+left_info.id"
+              >
+                <h2
+                  :data-v="left_info.id"
+                  :data-t="left_info.position"
+                  @click.self="ency($event)"
+                >{{left_info.title}}</h2>
+                <p
+                  v-if="left_info.description"
+                  :data-v="left_info.id"
+                  :data-t="left_info.position"
+                  @click.self="ency($event)"
+                >{{left_info.description}}</p>
+              </router-link>
             </div>
             <div class="lou_dong_right">
               <div
@@ -315,6 +318,7 @@
                 :data-t="right_info1.position"
                 @click.self="ency($event)"
               >
+              <router-link :to="'/'+pinyin+'/encyclopediaArticle/'+right_info1.position+'/'+right_info1.id">
                 <h2
                   :data-v="right_info1.id"
                   :data-t="right_info1.position"
@@ -326,6 +330,7 @@
                   :data-t="right_info1.position"
                   @click.self="ency($event)"
                 >{{right_info1.description}}</p>
+              </router-link>
               </div>
               <div
                 v-if="right_info2"
@@ -334,6 +339,7 @@
                 :data-t="right_info2.position"
                 @click.self="ency($event)"
               >
+              <router-link :to="'/'+pinyin+'/encyclopediaArticle/'+right_info2.position+'/'+right_info2.id">
                 <h2
                   :data-v="right_info2.id"
                   :data-t="right_info2.position"
@@ -344,6 +350,7 @@
                   :data-t="right_info2.position"
                   @click.self="ency($event)"
                 >{{right_info2.description}}</p>
+              </router-link>
               </div>
             </div>
           </div>
@@ -531,10 +538,10 @@
       <h4>
         楼盘问答
         <router-link :to="'/' + pinyin + '/questions'">
-        <span id="question">
-          更多问答
-          <img src="~/assets/m-go.png" alt />
-        </span>
+          <span id="question">
+            更多问答
+            <img src="~/assets/m-go.png" alt />
+          </span>
         </router-link>
       </h4>
       <div class="wen-list" v-for="(q,key) in questions" :key="key">
@@ -623,6 +630,7 @@
       </div>
       <button class="more-res">查看更多房源</button>
     </div>
+    <foot-view :pinyin="pinyin"></foot-view>
     <transition name="fade">
       <load v-if="isload"></load>
     </transition>
@@ -654,10 +662,12 @@ import Swiper from "swiper";
 import "swiper/css/swiper.min.css";
 import { index_start, encyclopediaarticle_agree } from "~/api/api";
 import Loadings from "@/components/loading";
+import footView from "@/components/Foot.vue";
 export default {
   name: "Index",
   components: {
-    load: Loadings
+    load: Loadings,
+    "foot-view":footView
   },
 
   async asyncData(context) {
@@ -776,7 +786,7 @@ export default {
       keywords: res.data.keywords,
       pinyin: res.city.pinyin,
       tel: res.data.phone,
-      cityname: res.city.name
+      cityname: res.city.name,
     };
   },
   data() {
@@ -1303,7 +1313,7 @@ export default {
           this.$router.push("/" + pin);
         }
       }
-      $cookies.set('pinyin',pin)
+      $cookies.set("pinyin", pin);
       let tel = this.tel;
       this.isload = false;
       localStorage.setItem("call", tel);
@@ -1512,8 +1522,6 @@ export default {
       that.$router.push("/" + that.pinyin + "/address");
       // window.location.href = '/'+that.pinyin+"/address";
     });
-
-    
 
     var swiper05 = new Swiper(".swiper-container1", {
       // eslint-disable-line no-unused-vars
@@ -2283,7 +2291,7 @@ li {
   padding-left: 7.536%;
   margin-bottom: 16px;
   position: relative;
-  width:99%
+  width: 99%;
 }
 .wen .wen-list:nth-of-type(2) {
   border: 0;

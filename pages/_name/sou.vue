@@ -54,6 +54,7 @@
         >{{item.name}}</li>
       </ul>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <transition name="fade">
       <load v-if="isload"></load>
     </transition>
@@ -62,10 +63,12 @@
 <script>
 import { ip, sou_data, sou } from "~/api/api";
 import Loadings from "@/components/loading";
+import footView from "@/components/Foot.vue";
 export default {
   name: "Sou",
   components: {
-    load: Loadings
+    load: Loadings,
+    "foot-view" : footView
   },
   async asyncData (context) {
    let ip=context.store.state.cookie.ip;

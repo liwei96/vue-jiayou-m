@@ -21,6 +21,7 @@
         </div>
       </div>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <div class="m-zhe-tel"></div>
     <div class="m-zhe-box">
       <span class="iconfont iconguanbi" id="close"></span>
@@ -32,14 +33,25 @@
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import {top_sure} from '~/api/api'
 export default {
   name: "LeaveQuestion",
+  asyncData (context) {
+    let jkl = context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    }
+  },
   data(){
     return {
       tel:'',
-      con:''
+      con:'',
+      jkl:''
     }
+  },
+  components: {
+    "foot-view": footView
   },
   methods:{
     goback(){

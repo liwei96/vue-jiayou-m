@@ -250,6 +250,7 @@
         </div>
       </div>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <!-- 弹框 -->
     <transition name="change">
       <div class="weiter ts" v-show="change">
@@ -305,12 +306,14 @@
 </template>
 
 <script>
+import footView from "@/components/Foot.vue";
 import { top_start, ip, msg, top_sure, verification } from "~/api/api";
 import Loadings from "@/components/loading";
 export default {
   name: "Top",
   components: {
-    'load-view':Loadings
+    'load-view':Loadings,
+    'foot-view':footView
   },
   async asyncData (context) {
     let ip=context.store.state.cookie.ip;

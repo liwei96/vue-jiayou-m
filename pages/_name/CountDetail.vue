@@ -54,12 +54,20 @@
         </ul>
       </div>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import { ip, countdetail_data } from "~/api/api";
 export default {
   name: "CountDetail",
+  asyncData (context) {
+    let jkl = context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    }
+  },
   data() {
     return {
       lists: [],
@@ -68,8 +76,12 @@ export default {
       month: 360,
       year: 30,
       month_avg: "",
-      p:'1'
+      p:'1',
+      jkl:''
     };
+  },
+  components: {
+    "foot-view": footView
   },
   methods: {
     start() {

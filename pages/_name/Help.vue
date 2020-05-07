@@ -76,17 +76,20 @@
         </div>
       </div>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <div class="tishi" v-if="tishi">提交成功，会有专业人员跟进</div>
   </div>
 </template>
 <script>
 import { help_data, help_put, ip } from "~/api/api";
+import footView from "@/components/Foot.vue";
 export default {
   name: "Help",
   async asyncData (context) {
     let ip=context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
+    let jkl = context.store.state.cookie.pinyin;
     let [res]= await Promise.all([
       context.$axios.post('/api/project/help_me',{ city: city, token: token, platform: 2, ip: ip })
       .then((resp)=>{
@@ -98,7 +101,8 @@ export default {
           tes : res.features,
           cities : res.cities,
           hus : res.apartments,
-          phone:res.user_mobile
+          phone:res.user_mobile,
+          jkl:jkl
     }
   },
   data() {
@@ -120,6 +124,9 @@ export default {
       num3: "",
       n:''
     };
+  },
+  components: {
+    "foot-view": footView
   },
   methods: {
     start() {

@@ -91,9 +91,11 @@
         </p>
       </button>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import { ip, periphery_data, msg, trend_put, verification,collection } from "~/api/api";
 export default {
   name: "Periphery",
@@ -105,7 +107,8 @@ export default {
             props: {
             src: { type: String, required: true },
             },
-        }
+        },
+    "foot-view":footView
   },
   async asyncData(context) {
     let jkl=context.store.state.cookie.pinyin;

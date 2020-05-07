@@ -2,11 +2,11 @@
     <div id="Foot">
         <ul>
             <router-link to="/"><li>首页</li></router-link>
-            <router-link :to="'/'+n+'/encyclopedia'"><li>买房百科</li></router-link>
-            <router-link :to="'/'+n+'/realinformations'"><li>房产资讯</li></router-link>
-            <router-link :to="'/'+n+'/myhome'"><li>个人中心</li></router-link>
-            <router-link :to="'/'+n+'/participate'"><li>城市加盟</li></router-link>
-            <router-link :to="'/'+n+'/privacy'"><li>隐私政策</li></router-link>
+            <router-link :to="'/'+pinyin+'/encyclopedia'"><li>买房百科</li></router-link>
+            <router-link :to="'/'+pinyin+'/realinformations'"><li>房产资讯</li></router-link>
+            <router-link :to="'/'+pinyin+'/myhome'"><li>个人中心</li></router-link>
+            <router-link :to="'/'+pinyin+'/participate'"><li>城市加盟</li></router-link>
+            <router-link :to="'/'+pinyin+'/privacy'"><li>隐私政策</li></router-link>
         </ul>
         <p><img src="~/assets/f-logo.png">杭州易得房科技有限公司版权所有 </p>
         <p class="f-tel">电话：400-966-9995</p>
@@ -21,6 +21,7 @@ export default {
             n:''
         }
     },
+    props:['pinyin'],
     watch:{
         '$route.path':function(news,old){
             if(news==this.$route.path){

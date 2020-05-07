@@ -1,7 +1,7 @@
 <template>
   <div id='bigbox'>
     <nuxt />
-    <foot-view></foot-view>
+    <!-- <foot-view :pinyin="n"></foot-view> -->
   </div>
 </template>
 
@@ -10,6 +10,11 @@ import footView from "@/components/Foot.vue";
 export default {
   components: {
     "foot-view": footView
+  },
+  data(){
+    return {
+      n:''
+    }
   },
   head() {
     return {
@@ -25,6 +30,9 @@ export default {
         }
       ]
     };
+  },
+  mounted(){
+    this.n=$cookies.get('pinyin')
   }
 };
 </script>

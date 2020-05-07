@@ -173,6 +173,7 @@
       </ul>
       
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <transition name="fade">
       <load-view v-if="load"></load-view>
     </transition>
@@ -183,10 +184,12 @@ import {ip,encyclopedia_data} from '~/api/api'
 import Swiper from "swiper";
 import "swiper/css/swiper.min.css";
 import Loadings from "@/components/loading";
+import footView from "@/components/Foot.vue";
 export default {
   name: "Encyclopedia",
   components: {
-    loadView: Loadings
+    loadView: Loadings,
+    'foot-view':footView
   },
   async asyncData (context) {
    let ip=context.store.state.cookie.ip;
@@ -310,6 +313,9 @@ export default {
       load:true,
       jkl:''
     };
+  },
+  components: {
+    "foot-view": footView
   },
   methods: {
     q1s: function() {

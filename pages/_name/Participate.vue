@@ -253,6 +253,7 @@
       </div>
     </transition>
     <div class="zhao"></div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
@@ -260,8 +261,18 @@ import Swiper from "swiper";
 import "swiper/css/swiper.min.css";
 // import "~/static/js/iconfont.js";
 import { jiameng } from "~/api/api";
+import footView from "@/components/Foot.vue";
 export default {
   name: "Participate",
+  asyncData (context) {
+    let jkl = context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    }
+  },
+  components: {
+    "foot-view": footView
+  },
   head(){
     return {
       script: [
@@ -285,7 +296,8 @@ export default {
       citymsg:'请输入城市',
       namemsg:'请输入您的称呼',
       phonemsg:'请输入手机号码',
-      companymsg:'请输入公司全称'
+      companymsg:'请输入公司全称',
+      jkl:''
     };
   },
   methods: {

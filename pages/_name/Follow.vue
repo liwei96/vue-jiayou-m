@@ -13,14 +13,26 @@
     <div class="di">
       <img src="~/assets/buzhou.png" alt />
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 export default {
   name: "Follow",
+  asyncData (context) {
+    let jkl = context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    }
+  },
+  components: {
+    "foot-view": footView
+  },
   data(){
     return {
-      imgs:'http://test.jy8006.com/_nuxt/img/4525797.png'
+      imgs:'http://test.jy8006.com/_nuxt/img/4525797.png',
+      jkl:''
     }
   },
   methods:{

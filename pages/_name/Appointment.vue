@@ -37,13 +37,24 @@
         </div>
       </div>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 let moment = require("moment");
 import { yuyue, ip } from "~/api/api";
 export default {
   name: "Appointment",
+  asyncData (context) {
+    let jkl = context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    }
+  },
+  components: {
+    "foot-view": footView
+  },
   data() {
     return {
       minDate: new Date(2020, 0, 1),
@@ -51,7 +62,8 @@ export default {
       currentDate: new Date(),
       show: false,
       time: "请选择您要预约的看房时间",
-      n: ""
+      n: "",
+      jkl:''
     };
   },
   methods: {

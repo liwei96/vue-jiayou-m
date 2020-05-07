@@ -446,7 +446,7 @@
             </div>
           </template>
         </div>
-
+        <div class="warning" v-if="warn">请选择对比楼盘</div>
         <button class="pkbtn" @click="pkhref()">楼盘对比</button>
       </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
@@ -469,7 +469,7 @@
             </div>
             <div class="right">
               <h6>
-                天**空
+                {{v.mobile}}
                 <van-rate
                   v-model="value"
                   :size="13"
@@ -482,7 +482,7 @@
               <p class="txt">{{v.content}}</p>
               <div class="btn">
                 <span>{{v.time}}</span>
-                <strong :data-v="v.id" @click="del($event)">删除</strong>
+                <strong :data-v="v.id" @click="del($event)" v-if="tel==v.mobile">删除</strong>
                 <p class="interaction">
                   <img
                     id="agree"
@@ -616,7 +616,7 @@
           </p>
         </button>
       </div>
-
+      <foot-view :pinyin="jkl"></foot-view>
       <div class="visible-xs-block .visible-sm-block">
         <div class="m-p-succ">
           <div class="p-c-top">
@@ -687,6 +687,7 @@
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import Swiper from "swiper";
 import "swiper/css/swiper.min.css";
 // import { echarts } from "./static/js/echarts.min.js";
@@ -708,6 +709,7 @@ export default {
   transition: "change",
   components: {
     "my-loading": Loading,
+    'foot-view':footView,
     "remote-js": {
       render(createElement) {
         return createElement("script", {
@@ -860,6 +862,7 @@ export default {
   },
   data() {
     return {
+      warn:false,
       baoming: "",
       jkl: "",
       change: false,
@@ -1044,7 +1047,8 @@ export default {
       tit: "",
       over: false,
       title: "",
-      checks: true
+      checks: true,
+      tel:''
     };
   },
   head() {
@@ -1406,7 +1410,16 @@ export default {
     pkhref() {
       let ids = this.ids;
       let id = this.id;
-      this.$router.push("/" + this.n + "/pkdetail/" + ids + "/" + id);
+      if(ids){
+        this.$router.push("/" + this.n + "/pkdetail/" + ids + "/" + id);
+      }else{
+        this.warn=true;
+        let that=this;
+        setTimeout(function(){
+          that.warn=false
+        },1500)
+      }
+      
     },
     fork(e) {
       let id = e.target.getAttribute("data-v");
@@ -1671,6 +1684,7 @@ export default {
     }
   },
   mounted() {
+    this.tel=localStorage.getItem('tel');
     let h = document.body.clientHeight;
     if (h < 700) {
       $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
@@ -2953,6 +2967,19 @@ export default {
   float: left;
   margin-top: 2.6%;
   margin-left: 30%;
+}
+.warning{
+  width:40%;
+  height: 30px;
+  line-height: 30px;
+  background:rgba(0,0,0,0.8);
+  border-radius: 6px;
+  position: fixed;
+  top:48vh;
+  left:30%;
+  z-index: 2;
+  color: #fff;
+  text-align: center;
 }
 .zao {
   position: absolute;

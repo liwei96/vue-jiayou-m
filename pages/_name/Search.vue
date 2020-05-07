@@ -211,6 +211,7 @@
       <p>还没有收录该楼盘，快去看看其它楼盘吧~</p>
       <button>去收藏</button>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <transition name="fade">
       <load v-if="isload"></load>
       <div class="loadings" v-if="kk">
@@ -223,10 +224,12 @@
 <script>
 import { search_start, search_search, ip } from "~/api/api";
 import Loading from "@/components/loading";
+import footView from "@/components/Foot.vue";
 export default {
   name: "Search",
   components: {
-    load: Loading
+    load: Loading,
+    "foot-view" : footView
   },
   async asyncData(context) {
     let ip = context.store.state.cookie.ip;

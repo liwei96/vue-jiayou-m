@@ -40,6 +40,7 @@
         </p>
       </button>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <!-- 弹框 -->
     <div class="weiter ts">
       <div class="t-top">
@@ -85,6 +86,7 @@
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import {
   dynamic_start,
   dynamic,
@@ -100,6 +102,7 @@ export default {
     let ip=context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
+    let jkl = context.store.state.cookie.pinyin;
     let id=context.params.id;
     let [res]= await Promise.all([
       context.$axios.post('/api/project/dynamic',{ city: city, platform: 2, token: token, ip: ip , project:id , limit:50 })
@@ -111,7 +114,8 @@ export default {
     return{
           lists : res.dynamics.infos,
           phone : res.phone,
-          checks:false
+          checks:false,
+          jkl:jkl
     }
   },
   data() {
@@ -124,7 +128,8 @@ export default {
       n: "",
       call: "",
       ting:true,
-      checks:false
+      checks:false,
+      jkl:''
     };
   },
   methods: {
@@ -256,7 +261,16 @@ export default {
       }
     }
   },
+  components: {
+    "foot-view": footView
+  },
   mounted() {
+    let h=document.body.clientHeight;
+                if(h<700){
+                    $('#Foot').css({'position':'fixed','bottom':'0','width':'100%','marginBottom':'56px'});
+                }else if(h>=700){
+                    $('#Foot').css({'position':'relative','bottom':'0','width':'100%','marginBottom':'56px'});
+                }
     this.baoming=localStorage.getItem('phone');
     this.start_data();
     let that = this;

@@ -238,6 +238,7 @@
         <p class="ph2">置业顾问一对一服务</p>
       </button>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <!-- 弹框 -->
     <transition name="change">
       <div class="weiter ts" v-show="change">
@@ -287,6 +288,7 @@
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import { ip, msg, verification, morehus_put, PK } from "~/api/api";
 export default {
   name: "Pkdetail",
@@ -309,6 +311,9 @@ export default {
         right : res[1],
         jkl:jkl
     }
+  },
+  components: {
+    "foot-view": footView
   },
   data() {
     return {
@@ -720,6 +725,9 @@ h3 img {
 .fix .f-t-r p {
   color: #2e3033;
   font-size: 13px;
+  max-width: 120px;
+  height: 18px;
+  overflow: hidden;
 }
 .fix .f-bottom {
   margin-top: 15px;

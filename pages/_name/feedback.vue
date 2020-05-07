@@ -8,17 +8,29 @@
       <textarea name id cols="30" rows="10" placeholder="输入您需要的留言建议"></textarea>
       <button id="btn">确定</button>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import { ip, leave } from "~/api/api";
 export default {
   name: "Feedback",
+  asyncData (context) {
+    let jkl = context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    }
+  },
   data() {
     return {
       ip: "",
-      n: ""
+      n: "",
+      jkl:''
     };
+  },
+  components: {
+    "foot-view": footView
   },
   methods: {
     put(con) {

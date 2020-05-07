@@ -24,7 +24,7 @@
             <p class="txt">{{item.content}}</p>
             <div class="btn">
               <span>{{item.createtime}}</span>
-              <strong :data-v="item.id" @click="del($event)">删除</strong>
+              <strong :data-v="item.id" @click="del($event)"  v-if="tel==item.user_name">删除</strong>
               <p class="interaction">
                   <img id="agree" :data-v="item.id" :type="item.my_like" :data-n="item.like_num" @click="ag"  data-y="2" src="~/assets/click.png" />
                     <span :data-v="item.id" :type="item.my_like" :data-n="item.like_num" data-y="2" @click="agrees($event)">
@@ -40,7 +40,7 @@
               </p>
               <p class="time">
                 {{item.children[0].time}}
-                <span :data-v="item.children[0].id" @click="del($event)">删除</span>
+                <span :data-v="item.children[0].id" @click="del($event)" v-if="tel==item.children[0].mobile">删除</span>
               </p>
             </div>
           </div>
@@ -67,6 +67,7 @@
         <p class="ph2">置业顾问一对一服务</p>
       </button>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <!-- 弹框 -->
     <transition name="change">
       <div class="weiter ts" v-show="change">
@@ -117,6 +118,7 @@
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import {
   comments_data,
   ip,
@@ -164,8 +166,12 @@ export default {
       phone: "",
       n: "",
       call: "",
-      checks:''
+      checks:'',
+      tel:''
     };
+  },
+  components: {
+    "foot-view": footView
   },
   methods: {
     method1: function() {
@@ -362,6 +368,7 @@ export default {
     },
   },
   mounted() { 
+    this.tel=localStorage.getItem('tel')
     $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom: '56px' });
     this.baoming=localStorage.getItem('phone');
     this.start();

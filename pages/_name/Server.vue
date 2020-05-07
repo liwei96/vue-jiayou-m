@@ -121,15 +121,31 @@
       <p>为维护网民和相关权利人利益，杭州易得房科技有限公司已经以公示的方式，为用户及相关权利人提供了丰富、便捷的线上线下投诉渠道。基于网络用户间的公平考量，同时也为了使网络用户的投诉能够及时得到处理，避免被当做垃圾邮件屏蔽，杭州易得房科技有限公司拒绝接收和处理所有以电子邮件形式发送给本公司员工个人的网络侵权通知，更不承诺对发送给本公司员工个人的电子邮件侵权通知进行优先处理，特此告知。</p>
       
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 export default {
   name: "Exemption",
+  asyncData (context) {
+    let jkl = context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    }
+  },
+  data(){
+    return {
+      jkl:''
+    }
+  },
   methods: {
     goback() {
       this.$router.go(-1);
     }
+  },
+  components: {
+    "foot-view": footView
   },
   mounted(){
     let h = document.body.clientHeight;

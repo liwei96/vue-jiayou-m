@@ -97,6 +97,7 @@
           </li>
         </ul>
       </div>
+      <foot-view :pinyin="jkl"></foot-view>
       <div class="m-out">
         <div class="out-con">
           <h6>确定退出</h6>
@@ -111,6 +112,7 @@
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 export default {
   name: "Myhome",
   async asyncData(context) {
@@ -118,6 +120,9 @@ export default {
     return {
       jkl: jkl
     };
+  },
+  components: {
+    "foot-view": footView
   },
   data() {
     return {

@@ -32,9 +32,11 @@
       </div>
     </div>
     <button class="pk">PK一下</button>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import { ip, PK } from "~/api/api";
 export default {
   name: "Pk",
@@ -43,6 +45,7 @@ export default {
     let ip = context.store.state.cookie.ip;
     let id = context.params.id;
     let ids = context.params.ids;
+    let jkl = context.store.state.cookie.pinyin;
     let kk = ids.split(",");
     if (id!=ids ) {
       for (let i = kk.length; i >= 0; i--) {
@@ -67,8 +70,13 @@ export default {
           })
       ]);
       return {
-        lists: res
+        lists: res,
+        jkl:jkl
       };
+    }else{
+      return {
+        jkl:jkl
+      }
     }
   },
   data() {
@@ -77,8 +85,12 @@ export default {
       id: "",
       ip: "",
       ids: "",
-      n: ""
+      n: "",
+      jkl:''
     };
+  },
+  components: {
+    "foot-view": footView
   },
   methods: {
     start() {

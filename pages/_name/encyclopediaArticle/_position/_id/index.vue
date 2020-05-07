@@ -121,9 +121,11 @@
     <transition name="fade">
       <load v-if="load"></load>
     </transition>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import Loading from "@/components/loading";
 import {
   encyclopediaarticle_data,
@@ -136,7 +138,8 @@ import {
 export default {
   name: "EncyclopediaArticles",
   components: {
-    load: Loading
+    load: Loading,
+    'foot-view':footView
   },
   async asyncData (context) {
    let ip=context.store.state.cookie.ip;

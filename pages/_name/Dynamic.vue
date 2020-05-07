@@ -47,6 +47,7 @@
         </p>
       </button>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
     <!-- 弹框 -->
     <div class="weiter ts">
       <div class="t-top">
@@ -101,6 +102,7 @@ import {
   trend_put
 } from "~/api/api";
 import axios from "axios";
+import footView from "@/components/Foot.vue";
 export default {
   name: "Dynamic",
   async asyncData(context) {
@@ -141,6 +143,9 @@ export default {
       jkl:'',
       checks:true
     };
+  },
+  components: {
+    "foot-view": footView
   },
   methods: {
     start_data() {

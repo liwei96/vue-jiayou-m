@@ -26,9 +26,11 @@
     <div class="bottom">
       <button id="btn">我要提问</button>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import { ip, question_data,encyclopediaarticle_agree } from "~/api/api";
 export default {
   name: "Question",
@@ -36,6 +38,7 @@ export default {
     let ip=context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
+    let jkl = context.store.state.cookie.pinyin;
     let id=context.params.id;
     let [res]= await Promise.all([
       context.$axios.post('/api/project/question_info',{
@@ -52,8 +55,12 @@ export default {
       })
     ])
     return{
-          lists: res
+          lists: res,
+          jkl:jkl
     }
+  },
+  components: {
+    "foot-view": footView
   },
   data() {
     return {
@@ -61,7 +68,9 @@ export default {
       ip: "",
       id: "",
       n:'',
-      ting:true
+      ting:true,
+      jkl:'',
+      page:1
     };
   },
   methods: {
@@ -120,7 +129,7 @@ export default {
       question_data({
         ip: ip,
         id: id,
-        page: 1,
+        page: page,
         limit: 10,
         platform: 2,
         token: token

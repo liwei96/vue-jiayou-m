@@ -25,16 +25,28 @@
         </div>
       </div>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 export default {
   name: "About",
+  asyncData (context) {
+    let jkl = context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    }
+  },
   data(){
     return{
       n:'',
-      call:''
+      call:'',
+      jkl:''
     }
+  },
+  components: {
+    "foot-view": footView
   },
   methods:{
     goback(){

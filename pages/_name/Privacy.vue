@@ -72,11 +72,27 @@
       <p>如果您对我们的回复不满意，特别是您认为我们的个人信息处理行为损害了您的合法权益，您还可以通过向我们所地有管辖权的法院提起诉讼来寻求解决方案。</p>
       <p>十三、本网站相关声明版权及其修改权、更新权和最终解释权均属允家新房所有。</p>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 export default {
   name: "Exemption",
+  asyncData (context) {
+    let jkl = context.store.state.cookie.pinyin;
+    return {
+      jkl:jkl
+    }
+  },
+  components: {
+    "foot-view": footView
+  },
+  data(){
+    return {
+      jkl:''
+    }
+  },
   methods: {
     goback() {
       this.$router.go(-1);

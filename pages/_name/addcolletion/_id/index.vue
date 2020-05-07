@@ -36,15 +36,18 @@
     <transition name="fade">
       <my-loading v-if="load"></my-loading>
     </transition>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
+import footView from "@/components/Foot.vue";
 import { addbuilds } from "~/api/api";
 import Loading from "@/components/loading.vue";
 export default {
   name: "AddColletion",
   components: {
-    "my-loading": Loading
+    "my-loading": Loading,
+    'foot-view':footView
   },
   async asyncData (context) {
     let token = context.store.state.cookie.token;
@@ -62,8 +65,12 @@ export default {
       })
     ])
     return{
-          lists:res
+          lists:res,
+          jkl:jkl
     }
+  },
+  components: {
+    "foot-view": footView
   },
   data() {
     return {
@@ -108,7 +115,8 @@ export default {
       id: "",
       ip: "",
       load: true,
-      n: ""
+      n: "",
+      jkl:''
     };
   },
   methods: {

@@ -94,11 +94,13 @@
         </router-link>
       </li>
     </ul>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
 import Swiper from "swiper";
 import "swiper/css/swiper.min.css";
+import footView from "@/components/Foot.vue";
 import { realInformations_data, realInformations_start, ip } from "~/api/api";
 export default {
   name: "RealInformations",
@@ -152,6 +154,9 @@ export default {
       des:'',
       key:''
     };
+  },
+  components: {
+    "foot-view": footView
   },
   head(){
     return {
