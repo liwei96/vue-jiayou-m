@@ -228,14 +228,12 @@
           <p class="ph1">
             <img src="~/assets/phicon.png" alt />电话咨询
           </p>
-          <p class="ph2">保护您的号码安全</p>
         </button>
       </a>
       <button class="m-y p1" data-v="预约看房">
         <p class="ph1">
           <img src="~/assets/promsg.png" />预约看房
         </p>
-        <p class="ph2">置业顾问一对一服务</p>
       </button>
     </div>
     <foot-view :pinyin="jkl"></foot-view>
@@ -249,7 +247,7 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" />
+            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="tel"/>
             <p class="w-mg">
               <input class="w-mg-c" type="checkbox" v-model="checks"/>我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
@@ -499,7 +497,7 @@ export default {
   mounted() {
     let that = this;
     this.start();
-    
+    this.tel=localStorage.getItem('phone')
     jQuery.fn.ratingStars = function(e) {
       var r = {
           selectors: {
@@ -876,7 +874,7 @@ h3 img {
 }
 
 .m-botnav .m-pho {
-  background-color: #ff7866;
+  background: linear-gradient(90deg,rgba(255,76,76,1),rgba(255,152,106,1));
   color: #fff;
 }
 .m-botnav .m-pho .ph1 {
@@ -899,7 +897,7 @@ h3 img {
 }
 
 .m-botnav .m-y {
-  background-color: #58bbec;
+  background: linear-gradient(-270deg,rgba(52,138,255,1),rgba(106,204,255,1));
   color: #fff;
   left: 62%;
 }

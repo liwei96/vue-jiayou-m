@@ -1,7 +1,7 @@
 <template>
   <div class="Periphery">
     <no-ssr>
-    <remote-js src="https://webapi.amap.com/maps?v=1.4.14&key=729ac4d779c7e625bc11bd5ba3ff3112"></remote-js>
+      <remote-js src="https://webapi.amap.com/maps?v=1.4.14&key=729ac4d779c7e625bc11bd5ba3ff3112"></remote-js>
     </no-ssr>
     <div class="container-fluid m">
       <div class="m-title visible-xs-block .visible-sm-block">
@@ -9,7 +9,7 @@
         <h3>周边详情</h3>
       </div>
       <no-ssr>
-      <div class="m-continer" id="m-container"></div>
+        <div class="m-continer" id="m-container"></div>
       </no-ssr>
       <ul id="list">
         <li :class="type==1?'m-active':''">交通</li>
@@ -29,9 +29,9 @@
             </div>
             <div class="t-bottom">
               <div class="t-b-first">
-                <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
+                <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming" />
                 <p class="w-mg">
-                  <input class="w-mg-c" type="checkbox" checked v-model="checks"/>我已阅读并同意
+                  <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
                   <router-link :to="'/'+jkl+'/server'">
                     <a href="javasript:;">《允家新房用户协议》</a>
                   </router-link>
@@ -67,7 +67,6 @@
           </div>
         </transition>
 
-
         <div class="m-bigimgs">
           <img class="m_bigimgs" src alt />
         </div>
@@ -76,7 +75,7 @@
     <div class="m-botnav">
       <p id="m_shou" data-_v="{$data.id}">
         <img id="fork" src="~/assets/forks.png" alt :data-v="id" @click="collection($event)" />
-          <img id="forked" src="~/assets/heart.gif" />收藏
+        <img id="forked" src="~/assets/heart.gif" />收藏
       </p>
       <a :href="'tel:'+call">
         <button class="m-pho">
@@ -96,30 +95,39 @@
 </template>
 <script>
 import footView from "@/components/Foot.vue";
-import { ip, periphery_data, msg, trend_put, verification,collection } from "~/api/api";
+import {
+  ip,
+  periphery_data,
+  msg,
+  trend_put,
+  verification,
+  collection
+} from "~/api/api";
 export default {
   name: "Periphery",
   components: {
-    'remote-js': {
-            render(createElement) {
-              return createElement('script', { attrs: { type: 'text/javascript', src: this.src }});            
-            },
-            props: {
-            src: { type: String, required: true },
-            },
-        },
-    "foot-view":footView
+    "remote-js": {
+      render(createElement) {
+        return createElement("script", {
+          attrs: { type: "text/javascript", src: this.src }
+        });
+      },
+      props: {
+        src: { type: String, required: true }
+      }
+    },
+    "foot-view": footView
   },
   async asyncData(context) {
-    let jkl=context.store.state.cookie.pinyin;
+    let jkl = context.store.state.cookie.pinyin;
     return {
-      jkl:jkl,
-      checks:false
+      jkl: jkl,
+      checks: false
     };
   },
   data() {
     return {
-      baoming:'',
+      baoming: "",
       change: false,
       succ: false,
       defaultHeight: "0",
@@ -129,15 +137,15 @@ export default {
       ln: "",
       call: "",
       type: "",
-      id:'',
-      checks:'',
-      jkl:''
+      id: "",
+      checks: "",
+      jkl: ""
     };
   },
   methods: {
     start() {
       let id = this.$route.params.id;
-      this.id=id
+      this.id = id;
       let that = this;
       let collect = localStorage.getItem(id);
       if (collect == 0) {
@@ -154,7 +162,6 @@ export default {
           let data = resp.data.data;
           that.la = data.latitude;
           that.ln = data.longitude;
-          
         })
         .catch(error => {
           console.log(error);
@@ -230,13 +237,13 @@ export default {
     zhou() {
       let that = this;
       let baidu = [that.ln, that.la];
-          AMap.convertFrom(baidu, "baidu", function(status, result) {
-            if (result.info === "ok") {
-              var lnglats = result.locations; // Array.<LngLat>
-              that.la = lnglats[0].lat;
-              that.ln = lnglats[0].lng;
-            }
-          });
+      AMap.convertFrom(baidu, "baidu", function(status, result) {
+        if (result.info === "ok") {
+          var lnglats = result.locations; // Array.<LngLat>
+          that.la = lnglats[0].lat;
+          that.ln = lnglats[0].lng;
+        }
+      });
       let type = this.$route.params.type;
       this.type = type;
       var map = new AMap.Map("m-container", {
@@ -244,7 +251,13 @@ export default {
         resizeEnable: true,
         zoom: 15
       });
-      
+      let marker = new AMap.Marker({
+        icon:
+          "https://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png",
+        position: [that.ln, that.la],
+        offset: new AMap.Pixel(-13, -30)
+      });
+      marker.setMap(map);
       AMap.service(["AMap.PlaceSearch"], function() {
         // eslint-disable-line no-unused-vars
         //构造地点查询类
@@ -267,7 +280,7 @@ export default {
         ) {
           // console.log(result);
         });
-        
+
         $(document).ready(function() {
           // 生活的周边查询
           function moren() {
@@ -357,7 +370,7 @@ export default {
                         <div class="m-te">
                             <h5 class="m-name">${e.name}</h5>
                             <p class="m-area">${e.address}</p>
-                            <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
+                            <p class="m-ju"><img src="../assets/path.png" alt="">${s}km</p>
                         </div>
                         `;
               });
@@ -380,7 +393,7 @@ export default {
                         <div class="m-te">
                             <h5 class="m-name">${e.name}</h5>
                             <p class="m-area">${e.address}</p>
-                            <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
+                            <p class="m-ju"><img src="../assets/path.png" alt="">${s}km</p>
                         </div>
                         `;
               });
@@ -551,10 +564,10 @@ export default {
         .then(error => {
           console.log(error);
         });
-    },
+    }
   },
   mounted() {
-    this.baoming=localStorage.getItem('phone');
+    this.baoming = localStorage.getItem("phone");
     let that = this;
     this.start();
 
@@ -571,24 +584,25 @@ export default {
     });
 
     $("#w-esc").on("click", function() {
-      that.change = false;
       $(".m-chang").hide();
+      $(".weiter").hide();
+      $(".m-o-succ").hide();
     });
     $(".m-chang").on("click", function() {
+      console.log(123);
       that.change = false;
       that.succ = false;
       $(".m-chang").hide();
     });
-    
 
     $(".t-b-btn2").on("click", function() {
-      let check=that.checks;
-      console.log(check)
-      if(!check){
-        $('.tishi').show();
-        return
-      }else{
-        $('.tishi').hide();
+      let check = that.checks;
+      console.log(check);
+      if (!check) {
+        $(".tishi").show();
+        return;
+      } else {
+        $(".tishi").hide();
       }
       var phone = $(this)
         .prev()
@@ -638,13 +652,11 @@ export default {
       $(".m-chang").hide();
     });
   },
-  watch: {
-    
-  },
-  updated(){
-    setTimeout(()=>{
+  watch: {},
+  updated() {
+    setTimeout(() => {
       this.zhou();
-    },500)
+    }, 500);
   }
 };
 </script>
@@ -665,10 +677,13 @@ a:active {
 li {
   list-style-type: none;
 }
-.tishi{
-  color:red;
+.tishi {
+  color: red;
   font-size: 10px;
   display: none;
+}
+#Foot {
+  margin-bottom: 56px;
 }
 /* m */
 .m {
@@ -769,8 +784,6 @@ li {
   color: #808080;
 }
 .m-l-content >>> .m-te .m-ju img {
-  width: 22%;
-  margin-right: 10%;
   margin-top: -1px;
 }
 
@@ -1025,8 +1038,6 @@ li {
   z-index: 1000;
 }
 
-
-
 /* 页面底部悬浮 */
 /* m-botnav */
 .m-botnav {
@@ -1062,11 +1073,15 @@ li {
   font-size: 15px;
   border-radius: 5px;
   border: 0px;
-  box-shadow:0px 2.5px 5px 0px rgba(255,76,76,0.2);
+  box-shadow: 0px 2.5px 5px 0px rgba(255, 76, 76, 0.2);
 }
 
 .m-botnav .m-pho {
-  background:linear-gradient(90deg,rgba(255,76,76,1),rgba(255,152,106,1));
+  background: linear-gradient(
+    90deg,
+    rgba(255, 76, 76, 1),
+    rgba(255, 152, 106, 1)
+  );
   color: #fff;
 }
 .m-botnav .m-pho .ph1 {
@@ -1089,7 +1104,11 @@ li {
 }
 
 .m-botnav .m-y {
-  background:linear-gradient(-270deg,rgba(52,138,255,1),rgba(106,204,255,1));
+  background: linear-gradient(
+    -270deg,
+    rgba(52, 138, 255, 1),
+    rgba(106, 204, 255, 1)
+  );
   color: #fff;
   left: 62%;
 }

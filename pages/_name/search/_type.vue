@@ -3,7 +3,7 @@
     <nav>
       <img class="back" src="~/assets/return.png" @click="goback" />
       <p class="s-btn" id="sou">
-        <span class="s-b-city">杭州</span>
+        <span class="s-b-city">{{cityname}}</span>
         <img class="bom" src="~/assets/triangle.png" alt />
         <span class="btn">
           <img src="~/assets/search.png" alt />请输入楼盘名称
@@ -40,7 +40,7 @@
       </div>
       <div class="m-me">
         <div class="m-qu row">
-          <div class="m-one col-xs-4 col-sm-4">
+          <div class="m-one m-thre col-xs-4 col-sm-4">
             <ul>
               <li class="m-r-active">城区</li>
               <li>地铁</li>
@@ -70,7 +70,7 @@
           </div>
         </div>
         <div class="m-jia row">
-          <div class="m-one col-xs-4 col-sm-4">
+          <div class="m-one m-thre col-xs-4 col-sm-4">
             <ul>
               <li class="m-r-active">总价</li>
               <li>单价</li>
@@ -111,7 +111,8 @@
               >
                 <li v-for="hu in apartments" :key="hu.id" class="col-xs-12 col-sm-12">
                   <span>{{hu.name}}</span>
-                  <input type="checkbox" name="hu" v-model="hus" :value="hu.id" />
+                  <input type="checkbox" name="hu" hidden />
+                  <input type="checkbox" name v-model="hus" :value="hu.id" />
                 </li>
               </form>
             </ul>
@@ -123,7 +124,7 @@
         </div>
         <div class="m-shan row">
           <h4>类型</h4>
-          <div class="m-one" id="m-xing" @click="s1">
+          <div class="m-one m-thre" id="m-xing" @click="s1">
             <span
               :class="num3==key?'m-now':''"
               v-for="(type,key) in build_types"
@@ -140,7 +141,7 @@
             <span>绿城</span>
           </div>-->
           <h4>特色</h4>
-          <div class="m-one m-thr" id="m-te" @click="s1">
+          <div class="m-one m-thre m-thr" id="m-te" @click="s1">
             <span
               :class="num2==(te.id)?'m-now':''"
               v-for="te in features"
@@ -229,31 +230,83 @@ export default {
   name: "Search",
   components: {
     load: Loading,
-    "foot-view" : footView
+    "foot-view": footView
   },
   async asyncData(context) {
+    // console.log(context.route.path.split('/')[3].split('_')[0])
+    // console.log(context.route.path.split('/').length)
     let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token = context.store.state.cookie.token;
     let jkl = context.store.state.cookie.pinyin;
-
-    let [res1, res2] = await Promise.all([
-      context.$axios
-        .post("/api/project/search_info", {
-          city: city,
-          token: token,
-          ip: ip,
-          platform: 2
-        })
-        .then(resp => {
-          let data = resp.data.data.datas;
-          for (let item of data) {
-            if (item.railway) {
-              item.railway = item.railway.split(",")[0];
+    let options = { city: city, token: token, ip: ip, platform: 2 };
+    let area1 = 0;
+    let price1 = 0;
+    let type1 = 0;
+    let shai1 = 0;
+    let num6 = 0;
+    let num7 = 0;
+    let num4 = 0;
+    let num5 = 0;
+    let num3 = 100;
+    let num2 = 0;
+    let hus = [];
+    if (context.route.path.split("/").length == 4) {
+      let arr = context.route.path.split("/")[3].split("+");
+      for (let val of arr) {
+        let ll = val.split("-");
+        switch (ll[0]) {
+          case "country":
+            area1 = 1;
+            num6 = ll[1];
+            break;
+          case "railway":
+            area1 = 1;
+            num7 = ll[1];
+            break;
+          case "totalprice":
+            price1 = 1;
+            num4 = ll[1];
+            break;
+          case "single_price":
+            price1 = 1;
+            num5 = ll[1];
+            break;
+          case "apartment":
+            type1 = 1;
+            hus = ll[1].split(",");
+            break;
+          case "build_type":
+            shai1 = 1;
+            if(ll[1]=='公寓'){
+              num3 = 0;
+            }else if(ll[1]=='写字楼'){
+              num3 = 3;
+            }else if(ll[1]=='住宅'){
+              num3 = 1;
+            }else if(ll[1]=='商铺'){
+              num3 = 2;
             }
+            
+            break;
+          case "feature":
+            shai1 = 1;
+            num2 = ll[1];
+            break;
+        }
+        options[ll[0]] = ll[1];
+      }
+    }
+    let [res1, res2] = await Promise.all([
+      context.$axios.post("/api/project/search_info", options).then(resp => {
+        let data = resp.data.data.datas;
+        for (let item of data) {
+          if (item.railway) {
+            item.railway = item.railway.split(",")[0];
           }
-          return data;
-        }),
+        }
+        return data;
+      }),
       context.$axios
         .post("/api/project/search", {
           city: city,
@@ -276,7 +329,18 @@ export default {
       build_types: res2.build_types,
       features: res2.features,
       buildings: res1,
-      jkl: jkl
+      jkl: jkl,
+      area1: area1,
+      price1: price1,
+      type1: type1,
+      shai1: shai1,
+      num6: num6,
+      num7: num7,
+      num4: num4,
+      num5: num5,
+      num3: num3,
+      num2: num2,
+      hus: hus
     };
   },
   data() {
@@ -314,7 +378,13 @@ export default {
       type1: 0,
       shai1: 0,
       loaded: true,
-      ting: true
+      ting: true,
+      cityname: "",
+      test: {
+        q: 5,
+        t: 45,
+        h: 8
+      }
     };
   },
   computed: {
@@ -335,8 +405,20 @@ export default {
       this.ip = ip;
       this.loading = true;
       this.isload = false;
-      localStorage.getItem("ip");
-      let token = localStorage.getItem("token");
+      let type = $cookies.get("type");
+      if (!type) {
+        type = {};
+        $cookies.set("type", type);
+      }
+      let url = this.$route.path;
+      if (url.split("/").length == 4) {
+        let arr = url.split("/")[3].split("+");
+        for (let val of arr) {
+          let ll = val.split("-");
+          type[ll[0]] = ll[1];
+        }
+      }
+      $cookies.set("type", type);
     },
     search_datas() {
       this.kk = false;
@@ -399,14 +481,16 @@ export default {
       } else {
         where.country = id;
       }
+
       $cookies.set("where", where, 0);
       this.num6 = id;
       $(".quyu").removeClass("m-l-active");
       window.scrollTo(0, 0);
-      this.search_data();
+      // this.search_data();
       $(".m-qu").slideUp("fast");
       $(".m-box").hide();
       $(".m-u").removeClass("m-as");
+      this.tostring("country", id);
     },
     tie(e) {
       let id = e.target.getAttribute("data-v");
@@ -418,12 +502,13 @@ export default {
       }
       $cookies.set("where", where, 0);
       window.scrollTo(0, 0);
-      this.search_data();
+      // this.search_data();
       this.num7 = id;
       $(".ditie").removeClass("m-l-active");
       $(".m-qu").slideUp("fast");
       $(".m-u").removeClass("m-as");
       $(".m-box").hide();
+      this.tostring("railway", id);
     },
     zong(e) {
       let id = e.target.getAttribute("data-v");
@@ -435,12 +520,13 @@ export default {
       }
       $cookies.set("where", where, 0);
       window.scrollTo(0, 0);
-      this.search_data();
+      // this.search_data();
       this.num4 = id;
       $(".zongjia").removeClass("m-l-active");
       $(".m-jia").slideUp("fast");
       $(".m-a").removeClass("m-as");
       $(".m-box").hide();
+      this.tostring("totalprice", id);
     },
     dan(e) {
       let id = e.target.getAttribute("data-v");
@@ -458,6 +544,7 @@ export default {
       $(".m-jia").slideUp("fast");
       $(".m-a").removeClass("m-as");
       $(".m-box").hide();
+      this.tostring("single_price", id);
     },
     hu() {
       let id = this.hus;
@@ -466,7 +553,8 @@ export default {
       where.apartment = id;
       $cookies.set("where", where, 0);
       window.scrollTo(0, 0);
-      this.search_data();
+      // this.search_data();
+      this.tostring("apartment", id);
     },
     tp(e) {
       let id = e.target.innerHTML;
@@ -481,16 +569,30 @@ export default {
       this.num2 = id;
     },
     shai() {
+      let type = $cookies.get("type");
       let where = $cookies.get("where");
       if (this.te) {
         where.feature = this.te;
+        type.feature = this.te;
       }
       if (this.type) {
         where.build_type = this.type;
+        type.build_type = this.type;
       }
       $cookies.set("where", where, 0);
+      $cookies.set("type", type, 0);
       window.scrollTo(0, 0);
-      this.search_data();
+      // this.search_data();
+      let url = this.$route.path;
+      let str = "";
+      for (let key in type) {
+        str += key + "-" + type[key] + "+";
+      }
+      str = str.substring(0, str.length - 1);
+      let arr = url.split("/");
+      arr[3] = str;
+      url = arr.join("/");
+      this.$router.push(url);
     },
     getmore() {
       if (this.loaded) {
@@ -520,9 +622,13 @@ export default {
       this.num2 = "";
       this.num3 = "";
       let where = $cookies.get("where");
+      let type=$cookies.get('type');
       delete where.feature;
       delete where.build_type;
+      delete type.build_type;
+      delete type.feature;
       $cookies.set("where", where, 0);
+      $cookies.set("type", type, 0);
     },
     clear1() {
       // $("#hu li input").attr("checked", false);
@@ -571,13 +677,50 @@ export default {
         $(".top").css({ position: "fixed", top: 0, zIndex: 10, width: "100%" });
         $(".recommen").css("marginTop", "44px");
       }
+    },
+    tostring(name, val) {
+      let url = this.$route.path;
+      let type = $cookies.get("type");
+      if (val == 0) {
+        if (type.hasOwnProperty(name)) {
+          delete type[name];
+        }
+      } else {
+        type[name] = val;
+      }
+      $cookies.set("type", type, 0);
+      let str = "";
+      for (let key in type) {
+        str += key + "-" + type[key] + "+";
+      }
+      str = str.substring(0, str.length - 1);
+      let arr = url.split("/");
+      arr[3] = str;
+      url = arr.join("/");
+      this.$router.push(url);
     }
   },
   mounted() {
+    //   this.tostring();
+    //   console.log(this.$router.currentRoute.path)
+    // if(this.$router.currentRoute.path!='/hangzhou/search/1'){
+    //     this.$router.push('/hangzhou/search/1')
+    // }
+    if(this.$route.path.split('/').length!=4){
+      $cookies.set('type',{})
+      sessionStorage.clear();
+    }
+    let h = document.body.clientHeight;
+    if (h < 700) {
+      $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
+    } else if (h >= 700) {
+      $("#Foot").css({ position: "relative", bottom: "0", width: "100%" });
+    }
+    this.cityname = localStorage.getItem("cityname");
     this.kk = false;
     this.start_data();
     this.search_datas();
-    $(".m-one ul li").on("click", function() {
+    $(".m-thre ul li").on("click", function() {
       $(this)
         .addClass("m-r-active")
         .siblings("li")
@@ -663,21 +806,21 @@ export default {
         .removeClass("m-l-active");
       $(".m-menu ul li").removeClass("m-as");
     });
-    $(".m-hu .m-one ul li").on("click", function() {
-      if (
-        $(this)
-          .find("input")
-          .prop("checked")
-      ) {
-        $(this)
-          .find("input")
-          .prop("checked", false);
-      } else {
-        $(this)
-          .find("input")
-          .prop("checked", true);
-      }
-    });
+    // $(".m-hu .m-one ul li").on("click", function() {
+    //   if (
+    //     $(this)
+    //       .find("input")
+    //       .prop("checked")
+    //   ) {
+    //     $(this)
+    //       .find("input")
+    //       .prop("checked", false);
+    //   } else {
+    //     $(this)
+    //       .find("input")
+    //       .prop("checked", true);
+    //   }
+    // });
 
     $(".m-h-r").on("click", function() {
       $(".m-hu").slideUp(100);

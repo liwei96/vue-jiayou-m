@@ -162,7 +162,7 @@
         <div class="peo-con">
           <h6>
             李晓峰
-            <span>置业顾问</span>
+            <span>允家分析师</span>
           </h6>
           <p class="ping">评分 5.0</p>
           <p class="peo-msg">咨询我了解更多楼盘首付和贷款方案</p>
@@ -267,7 +267,7 @@
           <div class="t-b-first">
             <input class="l-p" type="text" placeholder="输入预约手机号码" checked/>
             <p class="w-mg">
-              <input class="w-mg-c" type="checkbox" checked v-model="check"/>我已阅读并同意
+              <input class="w-mg-c" type="checkbox" checked v-model="checks"/>我已阅读并同意
               <router-link :to="'/'+n+'/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
@@ -345,7 +345,7 @@ export default {
       g1: "",
       gong: "3.25",
       n:'',
-      check:'',
+      checks:'',
       jkl:''
     };
   },
@@ -578,7 +578,7 @@ export default {
     });
     // 接口验证码
     $(".t-b-btn2").on("click", function() {
-      let check=that.check;
+      let check=that.checks;
       if(!check){
         $('.tishi').show();
       }else{
@@ -910,7 +910,7 @@ input[type="radio"].blue {
   margin-bottom: 8px;
 }
 .con .peo .peo-con h6 span {
-  width: 55px;
+  width: 60px;
   height: 18px;
   display: inline-block;
   background-color: #f2f4f7;

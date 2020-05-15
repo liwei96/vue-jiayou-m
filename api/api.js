@@ -429,3 +429,21 @@ export const jiameng = (msg) => {
 }
 
 
+export const tuanmsg = (msg) => {
+    return axios.request({
+        method: 'post',
+        url: '/front/flow/sign',
+        data: msg
+    })
+}
+
+
+export const tuandata = (msg) => {
+    return axios.request({
+        method: 'post',
+        url: '/api/group_buy/info',
+        data: msg
+    })
+}
+
+

@@ -70,7 +70,7 @@ export default {
       n:'',
       ting:true,
       jkl:'',
-      page:1
+      page:2
     };
   },
   methods: {
@@ -160,7 +160,7 @@ export default {
   mounted() {
     let h = document.body.clientHeight;
     if (h < 700) {
-      $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
+      $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom: '80px' });
     } else if (h >= 700) {
       $("#Foot").css({ position: "relative", bottom: "0", width: "100%", marginBottom: '80px' });
     }

@@ -72,6 +72,7 @@ export default {
     }
   },
   mounted() {
+    $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom:0 });
     let that=this;
     that.tel=localStorage.getItem('phone')
     $(document).ready(function() {

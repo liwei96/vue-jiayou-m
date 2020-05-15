@@ -934,7 +934,6 @@ h3 img {
   border: 1px solid #c9c9c9;
   border-radius: 2px;
   -webkit-appearance: none;
-  display: inline-block;
   padding: 0;
   float: left;
   margin-top: 3px;

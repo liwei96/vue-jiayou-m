@@ -677,7 +677,7 @@ export default {
     let token = context.store.state.cookie.token;
     let nn = context.store.state.pinyin;
     if (!city) {
-      city = 1;
+      city = 0;
       context.store.commit("setcity", { city: city });
     }
     let [res] = await Promise.all([
@@ -787,6 +787,7 @@ export default {
       pinyin: res.city.pinyin,
       tel: res.data.phone,
       cityname: res.city.name,
+      city:res.city.id
     };
   },
   data() {
@@ -794,7 +795,7 @@ export default {
       kk: 0,
       lll: false,
       isload: true,
-      pinyin: "hangzhou",
+      pinyin: "",
       trends: [
         "That open was light. After also shall first rule third every place spirit light. Beginning together their hath, winged firmament.",
         "That creature his bring waters female morning place Give bearing in isnt from. Without his fowl void bearing. Blessed give.",
@@ -1192,7 +1193,8 @@ export default {
       cityname: "杭州",
       ip: "",
       count: 123,
-      tel: ""
+      tel: "",
+      city:0
     };
   },
   head() {
@@ -1279,40 +1281,50 @@ export default {
     },
     start_data() {
       let name = this.$route.params.name;
-      let nn = localStorage.getItem("pinyin", name);
-      // if(name!=nn){
-      //   this.$router.push('/'+nn);
-      // }
-      let city = $cookies.get("city");
-      if (!city) {
-        city = 1;
-        $cookies.set("city", city);
-      }
+      let nn = localStorage.getItem("pinyin", name);     
       let token = localStorage.getItem("token");
       $cookies.set("token", token);
+      // let ip = '111.121.72.100';
       let ip = returnCitySN["cip"];
+      // console.log(ip)
       this.ip = ip;
       $cookies.set("ip", ip);
       localStorage.setItem("ip", ip);
-      let pin = this.pinyin.charAt(0).toUpperCase() + this.pinyin.substr(1);
+      let pin = this.pinyin;
       let cityname = this.cityname;
-      $cookies.set("cityname", cityname);
-      localStorage.setItem("cityname", cityname);
+      
       if (!localStorage.getItem("num")) {
         if (nn) {
         } else {
-          if (pin != name) {
-            localStorage.setItem("num", 1);
-            localStorage.setItem("pinyin", pin);
-            this.$router.push("/" + pin);
-          }
+          let ll=[];
+          index_start({ip:ip,city:0}).then(resp=>{
+            ll=resp.data.city;
+            let citys=ll.id;
+            let pinyins=ll.pinyin;
+            let name=ll.name;
+            $cookies.set('city',citys,0);
+            $cookies.set('pinyin',pinyins,0);
+            if(name==cityname){
+              localStorage.setItem("num", 1);
+              localStorage.setItem("pinyin", pin);
+              this.$router.push("/" + pinyins);
+            }else{
+              window.location.href="/"+pinyins
+            }
+          })
         }
       } else {
         if (pin != name) {
-          pin = localStorage.getItem("pinyin");
-          this.$router.push("/" + pin);
+          localStorage.setItem("pinyin",pin);
+          window.location.href="/"+pin
+          // this.$router.push("/" + pin);
         }
       }
+      let city=this.city;
+      $cookies.set("city", city);
+      localStorage.setItem('city',city)
+      $cookies.set("cityname", cityname);
+      localStorage.setItem("cityname", cityname);
       $cookies.set("pinyin", pin);
       let tel = this.tel;
       this.isload = false;
@@ -1450,6 +1462,7 @@ export default {
     }
     this.ready();
     // 接口调用
+    
     this.start_data();
     // setTimeout(() => {
     //   if(that.kk==0){

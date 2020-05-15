@@ -175,6 +175,7 @@ export default {
     }
   },
   mounted() {
+    $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom:0 });
     let that = this;
     this.start();
   },

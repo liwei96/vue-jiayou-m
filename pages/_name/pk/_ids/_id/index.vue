@@ -32,6 +32,7 @@
       </div>
     </div>
     <button class="pk">PK一下</button>
+    <div class="tishi" v-if="warn">请选择一个要比较的楼盘</div>
     <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
@@ -47,7 +48,7 @@ export default {
     let ids = context.params.ids;
     let jkl = context.store.state.cookie.pinyin;
     let kk = ids.split(",");
-    if (id!=ids ) {
+    if (id != ids) {
       for (let i = kk.length; i >= 0; i--) {
         if (kk[i] == id) {
           kk.splice(i, 1);
@@ -71,12 +72,12 @@ export default {
       ]);
       return {
         lists: res,
-        jkl:jkl
+        jkl: jkl
       };
-    }else{
+    } else {
       return {
-        jkl:jkl
-      }
+        jkl: jkl
+      };
     }
   },
   data() {
@@ -86,7 +87,8 @@ export default {
       ip: "",
       ids: "",
       n: "",
-      jkl:''
+      jkl: "",
+      warn: false
     };
   },
   components: {
@@ -105,7 +107,6 @@ export default {
         }
       }
       ids = kk.join(",");
-      this.ids = ids;
       localStorage.setItem("ids", ids);
       let ip = returnCitySN["cip"];
       this.ip = ip;
@@ -125,12 +126,12 @@ export default {
     }
   },
   mounted() {
-    let h=document.body.clientHeight;
-                if(h<700){
-                    $('#Foot').css({'position':'fixed','bottom':'0','width':'100%'});
-                }else if(h>=700){
-                    $('#Foot').css({'position':'relative','bottom':'0','width':'100%'});
-                }
+    let h = document.body.clientHeight;
+    if (h < 700) {
+      $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
+    } else if (h >= 700) {
+      $("#Foot").css({ position: "relative", bottom: "0", width: "100%" });
+    }
     this.start();
     let that = this;
     $(".pk").on("click", function() {
@@ -138,6 +139,11 @@ export default {
         that.$router.push(
           "/" + that.n + "/pkdetail/" + that.ids + "/" + that.id
         );
+      } else {
+        that.warn = true;
+        setTimeout(function() {
+          that.warn = false;
+        }, 1500);
       }
 
       // window.location.href = '/'+that.n+"/pkdetail/" + that.ids + "/" + that.id;
@@ -153,6 +159,18 @@ export default {
 * {
   padding: 0;
   margin: 0;
+}
+.tishi {
+  position: fixed;
+  width: 60%;
+  height: 30px;
+  top: 50vh;
+  left: 20%;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 6px;
 }
 h3 {
   height: 48px;

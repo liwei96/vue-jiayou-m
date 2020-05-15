@@ -51,7 +51,7 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming" />
+            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="tel" />
             <p class="w-mg">
               <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
@@ -128,7 +128,6 @@ export default {
   },
   data() {
     return {
-      baoming: "",
       jkl: "",
       change: false,
       succ: false,
@@ -266,7 +265,7 @@ export default {
       $("#Foot").css({ position: "relative", bottom: "0", width: "100%", marginBottom: '56px' });
     }
     let that = this;
-    that.baoming = localStorage.getItem("phone");
+    that.tel = localStorage.getItem("phone");
     this.start();
     $(".p1").on("click", function() {
       $(".m-chang").show();

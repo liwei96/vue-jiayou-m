@@ -26,7 +26,7 @@
               <p class="area">
                 <span>{{list.city}}-{{list.country}}</span>
                 <span>建面</span>
-                <span>{{list.area_min}}-{{list.area_max}}m²</span>
+                <span>{{parseInt(list.area_min)}}-{{parseInt(list.area_max)}}m²</span>
               </p>
               <p class="tabs">
                 <strong>{{list.decorate}}</strong>
@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <foot-view :pinyin="jkl"></foot-view>
+
     <div class="nothing">
       <img src="~/assets/nothing.png" alt />
       <p>您还没有收藏，快去逛逛吧~</p>
@@ -46,6 +46,7 @@
         <button>去收藏</button>
       </router-link>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 
@@ -171,7 +172,24 @@ export default {
     }
   },
   mounted() {
-    $("#Foot").css({ position: "relative", bottom: "0", width: "100%",marginBottom:0 });
+    this.$nextTick(function() {
+      let h = $("body").height();
+      if (h < 700) {
+        $("#Foot").css({
+          position: "fixed",
+          bottom: "0",
+          width: "100%",
+          marginBottom: 0
+        });
+      } else if (h >= 700) {
+        $("#Foot").css({
+          position: "relative",
+          bottom: "0",
+          width: "100%",
+          marginBottom: 0
+        });
+      }
+    });
     this.start();
   }
 };
@@ -299,6 +317,8 @@ export default {
   width: 113px;
   height: 20px;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .recommen .more-res {
   width: 100%;

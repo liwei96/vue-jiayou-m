@@ -26,7 +26,7 @@
               <p class="area">
                 <span>{{list.city}}-{{list.country}}</span>
                 <span>建面</span>
-                <span>{{list.area_min}}-{{list.area_max}}m²</span>
+                <span>{{parseInt(list.area_min)}}-{{parseInt(list.area_max)}}m²</span>
               </p>
               <p class="tabs">
                 <strong>{{list.decorate}}</strong>
@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <foot-view :pinyin="jkl"></foot-view>
+
     <div class="nothing">
       <img src="~/assets/footers.png" alt />
       <p>您还没有浏览记录，快去看看楼盘吧~</p>
@@ -46,6 +46,7 @@
         <button>去看楼盘</button>
       </router-link>
     </div>
+    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 
@@ -177,7 +178,7 @@ export default {
       let ip = returnCitySN["cip"];
       let token = localStorage.getItem("token");
       let page = this.page;
-      let city=localStorage.getItem('city')
+      let city = localStorage.getItem("city");
       let that = this;
       foot_data({
         ip: ip,
@@ -188,7 +189,7 @@ export default {
         token: token
       })
         .then(res => {
-          that.ting=true
+          that.ting = true;
           let data = res.data.data;
           let l = that.lists.concat(data);
           that.lists = l;
@@ -211,8 +212,25 @@ export default {
     }
   },
   mounted() {
-    
-    $("#Foot").css({ position: "relative", bottom: "0", width: "100%",marginBottom:0 });
+    this.$nextTick(function() {
+      let h = $("body").height();
+      if (h < 700) {
+        $("#Foot").css({
+          position: "fixed",
+          bottom: "0",
+          width: "100%",
+          marginBottom: 0
+        });
+      } else if (h >= 700) {
+        $("#Foot").css({
+          position: "relative",
+          bottom: "0",
+          width: "100%",
+          marginBottom: 0
+        });
+      }
+    });
+
     this.start();
     window.addEventListener("scroll", this.scroll);
   },
@@ -345,6 +363,8 @@ export default {
   width: 113px;
   height: 20px;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .recommen .more-res {
   width: 100%;

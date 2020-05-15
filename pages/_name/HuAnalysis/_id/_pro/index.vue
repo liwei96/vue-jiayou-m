@@ -56,10 +56,10 @@
       <div class="peo-con">
         <h6>
           李晓峰
-          <span>置业顾问</span>
+          <span>允家分析师</span>
         </h6>
         <p class="ping">评分 5.0</p>
-        <p class="peo-msg">咨询我了解更多楼盘首付和贷款方案</p>
+        <p class="peo-msg">向他咨询更多详细户型信息</p>
         <img class="inf p1" src="~/assets/inf.png" alt data-v="咨询服务" />
         <a :href="'tel:'+call">
           <img class="tel" src="~/assets/redtel.png" alt />
@@ -466,7 +466,7 @@ export default {
       $(".m-chang").hide();
     });
     $(".con-msg").on("click", function() {
-      that.$router.push("/" + that.n + "/count");
+      that.$router.push("/" + that.jkl + "/count");
       // window.location.href = "/count";
     });
     //获取默认高度
@@ -656,7 +656,7 @@ h3 img {
   margin-bottom: 8px;
 }
 .peo .peo-con h6 span {
-  width: 55px;
+  width: 60px;
   height: 18px;
   display: inline-block;
   background-color: #f2f4f7;

@@ -287,6 +287,11 @@ export default {
       $(".weiter").hide();
       $(".m-o-succ").hide();
     });
+    $('#w-esc').on('click',function(){
+      $(".m-chang").hide();
+      $(".weiter").hide();
+      $(".m-o-succ").hide();
+    })
     // 接口验证码
     $(".t-b-btn2").on("click", function() {
       let check = that.checks;

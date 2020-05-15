@@ -40,6 +40,25 @@
           </ul>
         </div>
       </transition>
+      <div class="tuan-msg" v-if="tuan==1">
+        <div class="tar">
+          <div class="left">
+            <h5>
+              已售：
+              <span>{{group_buy.saled_num}}</span>
+              套&nbsp;&nbsp;距下一返期只差{{group_buy.remain_num}}套
+            </h5>
+            <p>(每多5套可优惠1000元最高优惠5000元)</p>
+          </div>
+          <div class="right">
+            <h5>距离活动结束</h5>
+            <p>
+              {{day}}天
+              <span>{{hour}}:{{min}}:{{second}}</span>
+            </p>
+          </div>
+        </div>
+      </div>
       <div class="m-incro visible-xs-block .visible-sm-block">
         <h3>{{building.name}}</h3>
         <div class="m-ic-icons">
@@ -118,7 +137,39 @@
           <img src="~/assets/mj-tell.png" alt />
         </a>
       </div>
-
+      <div class="pin" v-if="tuan==1">
+        <nav>
+          <h3>拼团优惠</h3>
+          <p>
+            距离活动结束
+            <span>{{day}}</span>天
+            <span>{{hour}}</span>:
+            <span>{{min}}</span>:
+            <span>{{second}}</span>
+          </p>
+        </nav>
+        <img src="~/assets/tuan-pin.png" alt />
+        <div class="pin-bao" @click="xiang" v-if="!newimg">立享优惠</div>
+        <img src="~/assets/tuna-hased.png" alt class="hased" v-if="newimg" />
+        <div class="bom">
+          <div class="trend-con1">
+            <div class="swiper-container10">
+              <div class="swiper-wrapper">
+                <div
+                  class="swiper-slide"
+                  v-for="(trend,key) in group_buy.last_tels"
+                  :key="key"
+                >{{trend}}领取了优惠券</div>
+              </div>
+            </div>
+          </div>
+          <p>
+            已有
+            <span>{{group_buy.received_num}}</span>人领取了优惠券
+          </p>
+        </div>
+      </div>
+      <div class="m-line visible-xs-block .visible-sm-block" v-if="tuan==1"></div>
       <div class="m-dong visible-xs-block .visible-sm-block">
         <h3 id="m_dong">
           楼盘动态
@@ -263,7 +314,18 @@
 
         <button class="p1" data-v="获取详细分析资料">获取详细分析资料</button>
       </div>
-
+      <div class="m-line visible-xs-block .visible-sm-block" v-if="tuan==1"></div>
+      <div class="tuan-qiang"  v-if="tuan==1">
+        <img src="~/assets/tuan-qiang.png" alt />
+        <div class="q-con">
+          <h6>省钱买好房拼团享优惠</h6>
+          <p>购房享1000元优惠最高5000元</p>
+        </div>
+        <div class="q-right">
+          <button @click="xiang">马上抢</button>
+          <p>{{group_buy.received_num}}已抢</p>
+        </div>
+      </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
       <div class="m-ling visible-xs-block .visible-sm-block">
         <h3>
@@ -455,10 +517,10 @@
         <h4>
           楼盘点评
           <router-link :to="'/' + jkl + '/morecomments/' + id">
-          <span id="m_d_more">
-            更多评论
-            <img src="~/assets/m-go.png" alt />
-          </span>
+            <span id="m_d_more">
+              更多评论
+              <img src="~/assets/m-go.png" alt />
+            </span>
           </router-link>
         </h4>
         <p id="tishi" v-if="comments.length==0?true:false">暂无点评，快来点评吧</p>
@@ -634,7 +696,7 @@
             <div class="t-top">
               <h6>预约看房</h6>
               <p>一键预约看房免费小车上门接送，可带家人一起参观多个热门楼盘</p>
-              <img id="w-esc" src="~/assets/w-del.png" alt />
+              <img id="w-esc" src="~/assets/w-del.png" alt @click="guanbi" />
             </div>
             <div class="t-bottom">
               <div class="t-b-first">
@@ -646,7 +708,7 @@
                   </router-link>
                 </p>
                 <p class="tishi">请勾选用户协议</p>
-                <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">立即订阅</button>
+                <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="dingyue">立即订阅</button>
                 <p class="w-tit">
                   <img src="~/assets/w-call.png" />允家严格保障您的信息安全
                 </p>
@@ -656,11 +718,11 @@
                   验证码已发送到
                   <span id="ytel">187****4376</span>，请注意查看
                 </p>
-                <input type="text" placeholder="请输入验证码" />
-                <button class="port1">确定</button>
+                <input type="text" placeholder="请输入验证码" v-model="ma" id="ma-ll" />
+                <button class="port1" @click="check">确定</button>
                 <input type="hidden" id="building_name" value />
                 <input type="hidden" value />
-                <button class="t-b-scode">获取验证码</button>
+                <button class="t-b-scode" @click="again">获取验证码</button>
               </div>
             </div>
           </div>
@@ -668,10 +730,10 @@
         <div class="m-chang"></div>
         <transition name="change">
           <div class="m-o-succ" v-show="succ">
-            <img class="o-esc" src="~/assets/m-esc.png" alt />
+            <img class="o-esc" src="~/assets/m-esc.png" alt @click="guanbi" />
             <img src="~/assets/m-success.png" alt class="o-success" />
             <p id="o_p">已成功订阅最新动态，我们会第一时间通过短信通知您！</p>
-            <button id="o_btn">确定</button>
+            <button id="o_btn" @click="guanbi">确定</button>
           </div>
         </transition>
         <div id="m_ti"></div>
@@ -709,7 +771,7 @@ export default {
   transition: "change",
   components: {
     "my-loading": Loading,
-    'foot-view':footView,
+    "foot-view": footView,
     "remote-js": {
       render(createElement) {
         return createElement("script", {
@@ -736,6 +798,7 @@ export default {
           token: token
         })
         .then(res => {
+          let dd = res.data;
           let data = res.data.data;
           let p = data.phone;
           context.store.commit("setcall", { call: p });
@@ -809,60 +872,69 @@ export default {
           data.p2 = p2;
           data.p3 = p3;
           data.t = t;
-          return data;
+          if (dd.group_buy.length!=0) {
+            dd.tuan = 1;
+          } else {
+            dd.tuan = 0;
+          }
+          return dd;
         })
     ]);
     return {
       jkl: jkl,
-      call: res.p,
-      la: res.building.latitude,
-      ln: res.building.longitude,
-      topimgs: res.top_imgs.img,
-      topnum: res.top_imgs.num,
-      building: res.building,
-      tit: res.building.name,
-      ds: res.dynamic_count,
-      phone: res.phone,
-      nowdong: res.last_dynamic,
-      tui: res.dynamic_add_push,
-      timeline: res.timeline,
-      hu: res.apartments,
-      live: res.analysis.live,
-      invest: res.analysis.invest,
-      searchnum: res.search_num,
-      chengjiao: res.deals,
-      times: res.times,
-      prices: res.prices,
-      questions: res.questions,
-      location: res.location,
-      compares: res.compare,
-      comments: res.comments,
-      same_price: res.same_price,
-      same_area: res.same_area,
-      trend_time: res.t,
-      trend_price1: res.p1,
-      trend_price2: res.p2,
-      trend_price3: res.p3,
-      ndtime: res.timeline["拿地"][0],
-      jftime: res.timeline["交房"][0],
-      sktime: res.timeline["首开"][0],
-      jttime: res.timeline["加推"][0],
-      nd: res.nd,
-      ndss: res.ndss,
-      jtss: res.jtss,
-      jt: res.jt,
-      sk: res.sk,
-      skss: res.skss,
-      jf: res.jf,
-      jfss: res.jfss,
-      title: res.title,
-      collect: res.collect,
-      checks: true
+      call: res.data.p,
+      la: res.data.building.latitude,
+      ln: res.data.building.longitude,
+      topimgs: res.data.top_imgs.img,
+      topnum: res.data.top_imgs.num,
+      building: res.data.building,
+      tit: res.data.building.name,
+      ds: res.data.dynamic_count,
+      phone: res.data.phone,
+      nowdong: res.data.last_dynamic,
+      tui: res.data.dynamic_add_push,
+      timeline: res.data.timeline,
+      hu: res.data.apartments,
+      live: res.data.analysis.live,
+      invest: res.data.analysis.invest,
+      searchnum: res.data.search_num,
+      chengjiao: res.data.deals,
+      times: res.data.times,
+      prices: res.data.prices,
+      questions: res.data.questions,
+      location: res.data.location,
+      compares: res.data.compare,
+      comments: res.data.comments,
+      same_price: res.data.same_price,
+      same_area: res.data.same_area,
+      trend_time: res.data.t,
+      trend_price1: res.data.p1,
+      trend_price2: res.data.p2,
+      trend_price3: res.data.p3,
+      ndtime: res.data.timeline["拿地"][0],
+      jftime: res.data.timeline["交房"][0],
+      sktime: res.data.timeline["首开"][0],
+      jttime: res.data.timeline["加推"][0],
+      nd: res.data.nd,
+      ndss: res.data.ndss,
+      jtss: res.data.jtss,
+      jt: res.data.jt,
+      sk: res.data.sk,
+      skss: res.data.skss,
+      jf: res.data.jf,
+      jfss: res.data.jfss,
+      title: res.data.title,
+      collect: res.data.collect,
+      checks: true,
+      city: res.city.id,
+      tuan: res.tuan,
+      group_buy: res.group_buy
     };
   },
   data() {
     return {
-      warn:false,
+      li: 0,
+      warn: false,
       baoming: "",
       jkl: "",
       change: false,
@@ -1048,7 +1120,17 @@ export default {
       over: false,
       title: "",
       checks: true,
-      tel:''
+      tel: "",
+      city: "",
+      ma: "",
+      tuan: 0,
+      group_buy: [],
+      day: "",
+      min: "",
+      hour: "",
+      second: "",
+      newimg: false,
+      ones: 0
     };
   },
   head() {
@@ -1057,6 +1139,15 @@ export default {
     };
   },
   methods: {
+    xiang() {
+      $(".m-chang").show();
+      this.change = true;
+      this.ones = 1;
+      $(".weiter .t-top h6").html('限时优惠');
+        $(".weiter .t-top p").html(
+          "临取团购限时优惠金！优惠金将与您手机号绑定"
+        );
+    },
     method1: function() {
       echarts();
       ratingStar();
@@ -1079,7 +1170,11 @@ export default {
         sessionStorage.setItem("kid", kid);
         sessionStorage.setItem("other", other);
       }
-
+      let pinyin = this.$route.params.name;
+      localStorage.setItem("pinyin", pinyin);
+      $cookies.set("pinyin", pinyin);
+      let city = this.city;
+      $cookies.set("city", city);
       let ids = localStorage.getItem("ids");
       if (ids) {
         let dds = ids.split(",");
@@ -1098,7 +1193,7 @@ export default {
       this.load = false;
       this.isload = true;
       let ip = returnCitySN["cip"];
-      this.$store.commit("setip", { ip: ip });
+      $cookies.set("ip", ip);
       this.ip = ip;
       let collect = this.collect;
       localStorage.setItem(id, collect);
@@ -1297,19 +1392,61 @@ export default {
       chart.setOption(option);
     },
     mmap() {
-      let that = this;
-      let baidu = [that.ln, that.la];
-      AMap.convertFrom(baidu, "baidu", function(status, result) {
-        if (result.info === "ok") {
-          var lnglats = result.locations; // Array.<LngLat>
-          that.la = lnglats[0].lat;
-          that.ln = lnglats[0].lng;
-        }
-      });
-      var map = new AMap.Map("m-container", {
-        zoom: 14, //初始化地图层级
-        center: [that.ln, that.la] //初始化地图中心点
-      });
+      if (!localStorage.getItem("map")) {
+        localStorage.setItem("map", 1);
+        let that = this;
+        let baidu = [that.ln, that.la];
+        var la = "";
+        var ln = "";
+        AMap.convertFrom(baidu, "baidu", function(status, result) {
+          if (result.info === "ok") {
+            var lnglats = result.locations; // Array.<LngLat>
+            la = lnglats[0].lat;
+            ln = lnglats[0].lng;
+            var map = new AMap.Map("m-container", {
+              zoom: 14, //初始化地图层级
+              center: [ln, la], //初始化地图中心点
+              zoomEnable: false,
+              dragEnable: false
+            });
+          }
+        });
+        console.log([ln, la]);
+      }
+    },
+    again() {
+      let tel = this.baoming;
+      let ip = returnCitySN["cip"];
+      let id = this.id;
+      let data = { channel: 2, phone: tel, ip: ip };
+      msg(data)
+        .then(resp => {
+          let code = resp.data.code;
+          if (code == 200) {
+            let city = localStorage.getItem("city");
+            if (!city) {
+              city = 1;
+              localStorage.setItem("city", 1);
+            }
+            var time = 60;
+            var fn = function() {
+              time--;
+              if (time > 0) {
+                $(".t-b-scode").html("重新发送" + time + "s");
+                $(".t-b-scode").attr("disabled", true);
+              } else {
+                clearInterval(interval);
+                $(".t-b-scode").html("获取验证码");
+                $(".t-b-scode").attr("disabled", false);
+              }
+            };
+            fn();
+            var interval = setInterval(fn, 1000);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     collections(e) {
       let id = e.target.getAttribute("data-v");
@@ -1345,7 +1482,7 @@ export default {
             let id = that.id;
             let kid = sessionStorage.getItem("kid");
             let other = sessionStorage.getItem("other");
-            trend_put({
+            let normal = {
               ip: ip,
               tel: tel,
               city: c,
@@ -1355,7 +1492,23 @@ export default {
               project: id,
               kid: kid,
               other: other
-            })
+            };
+            let tuan = {
+              city: c,
+              ip: ip,
+              tel: tel,
+              position: 23,
+              page: 3,
+              project: id,
+              remark: "团购2"
+            };
+            let options = {};
+            if (this.ones == 1) {
+              options = tuan;
+            } else {
+              options = normal;
+            }
+            trend_put(options)
               .then(resp => {
                 if (resp.data.code == 200) {
                 }
@@ -1365,6 +1518,7 @@ export default {
               });
             $(".t-b-first").hide();
             $(".t-b-second").show();
+
             var time = 60;
             var tels = t.substr(0, 3) + "****" + t.substr(7, 11);
             var fn = function() {
@@ -1387,12 +1541,24 @@ export default {
           console.log(error);
         });
     },
-    check(m) {
+    check() {
+      let m = this.ma;
+      if (!m) {
+        $("#ma-ll").attr("placeholder", "不能为空");
+        return;
+      }
       let tel = this.phone;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
         .then(resp => {
           if (resp.data.code == 200) {
+            if (this.ones == 1) {
+              this.li = 1;
+              if (this.li == 1) {
+                this.newimg = true;
+              }
+            }
+
             that.change = false;
             that.succ = true;
             $("#o_p").text("已成功订购服务，我们会第一时间通过电话联系您");
@@ -1410,16 +1576,15 @@ export default {
     pkhref() {
       let ids = this.ids;
       let id = this.id;
-      if(ids){
+      if (ids) {
         this.$router.push("/" + this.n + "/pkdetail/" + ids + "/" + id);
-      }else{
-        this.warn=true;
-        let that=this;
-        setTimeout(function(){
-          that.warn=false
-        },1500)
+      } else {
+        this.warn = true;
+        let that = this;
+        setTimeout(function() {
+          that.warn = false;
+        }, 1500);
       }
-      
     },
     fork(e) {
       let id = e.target.getAttribute("data-v");
@@ -1681,10 +1846,86 @@ export default {
     },
     commitback(id) {
       this.$router.push("/" + this.jkl + "/commentback/" + id);
+    },
+    dingyue() {
+      console.log(123);
+      let check = this.checks;
+      if (!check) {
+        $(".tishi").show();
+        return;
+      } else {
+        $(".tishi").hide();
+      }
+
+      let phone = this.baoming;
+      var pattern_phone = /^1[3-9][0-9]{9}$/;
+      if (phone == "") {
+        $(".l-p").attr("placeholder", "手机号不能为空");
+        return;
+      } else if (!pattern_phone.test(phone)) {
+        $(".l-p").val("");
+        $(".l-p").attr("placeholder", "手机号码不合法");
+        return;
+      }
+      this.sendmsg(phone);
+    },
+    guanbi() {
+      this.ones = 0;
+      this.change = false;
+      $(".m-chang").hide();
+      $(".t-b-first").show();
+      $(".t-b-second").hide();
+      this.succ = false;
+    },
+    // 倒计时
+    countTime() {
+      // 获取当前时间
+      let date = new Date();
+      let now = date.getTime();
+      // 设置截止时间
+      let endDate = new Date(this.group_buy.endline); // this.curStartTime需要倒计时的日期
+      let end = endDate.getTime();
+      // 时间差
+      let leftTime = end - now;
+      // 定义变量 d,h,m,s保存倒计时的时间
+      if (leftTime >= 0) {
+        // 天
+        let day = Math.floor(leftTime / 1000 / 60 / 60 / 24);
+        this.day = day < 10 ? "0" + day : day;
+        // 时
+        let h = Math.floor((leftTime / 1000 / 60 / 60) % 24);
+        this.hour = h < 10 ? "0" + h : h;
+        // 分
+        let m = Math.floor((leftTime / 1000 / 60) % 60);
+        this.min = m < 10 ? "0" + m : m;
+        // 秒
+        let s = Math.floor((leftTime / 1000) % 60);
+        this.second = s < 10 ? "0" + s : s;
+      } else {
+        this.day = 0;
+        this.hour = "00";
+        this.min = "00";
+        this.second = "00";
+      }
+      // 等于0的时候不调用
+      if (
+        Number(this.hour) === 0 &&
+        Number(this.day) === 0 &&
+        Number(this.min) === 0 &&
+        Number(this.second) === 0
+      ) {
+        return;
+      } else {
+        // 递归每秒调用countTime方法，显示动态时间效果,
+        setTimeout(this.countTime, 1000);
+      }
     }
   },
   mounted() {
-    this.tel=localStorage.getItem('tel');
+    if (this.tuan == 1) {
+      this.countTime();
+    }
+    this.tel = localStorage.getItem("tel");
     let h = document.body.clientHeight;
     if (h < 700) {
       $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
@@ -1833,6 +2074,12 @@ export default {
         that.$router.push("/" + that.jkl + "/login");
       }
     });
+    var mySwiper = new Swiper(".swiper-container10", {
+      direction: "vertical", // 垂直切换选项
+      autoplay: true,
+      observer: true, //修改swiper自己或子元素时，自动初始化swiper
+      observeParents: true //修改swiper的父元素时，自动初始化swiper
+    });
     /*对比分析资料轮播*/
     var swiper = new Swiper(".dui-zi", {
       // eslint-disable-line no-unused-vars
@@ -1869,55 +2116,7 @@ export default {
       var h = $(".h-c-c").height();
       $(".h-c-i img").css("height", h + "px");
 
-      
       var cnm = 1;
-      $(".p-t-g").on("click", function() {
-        var id = $(this)
-          .prev()
-          .val();
-        var num = $(this).attr("data-v");
-        num = parseInt(num);
-        var that = $(this);
-        if (cnm == 1) {
-          $.post(
-            "{:url('home/content/num')}",
-            {
-              type: 1,
-              id: id,
-              num: num
-            },
-
-            function(res) {
-              if (res.code == 200) {
-                that.attr("src", "./imgs/gooded.png");
-                that.next().html(num + 1);
-                that.attr("data-v", num + 1);
-                cnm = 0;
-              }
-            }
-          );
-        } else if (cnm == 0) {
-          $.post(
-            "{:url('home/content/num')}",
-            {
-              type: 2,
-              id: id,
-              num: num
-            },
-
-            function(res) {
-              if (res.code == 200) {
-                that.attr("src", "./imgs/good.png");
-                that.next().html(num - 1);
-                that.attr("data-v", num - 1);
-                cnm = 1;
-              }
-            }
-          );
-        }
-      });
-
-      
 
       $(".p-c-exc").on("click", function() {
         $(".m-p-succ").hide();
@@ -1981,185 +2180,12 @@ export default {
             .attr("placeholder", "手机号码不合法");
           return;
         }
-
-        $.post(
-          "{:url('home/user/login')}",
-          {
-            phone: tel
-          },
-          function(res) {
-            if (res.code == 100) {
-              var time = 60;
-              var fn = function() {
-                time--;
-                if (time > 0) {
-                  $(".m-c-btn").val("重新发送" + time + "s");
-                  $(".m-c-btn").attr("disabled", true);
-                } else {
-                  clearInterval(interval);
-                  $(".m-c-btn").val("获取验证码");
-                  $(".m-c-btn").attr("disabled", false);
-                }
-              };
-              fn();
-              var interval = setInterval(fn, 1000);
-            } else if (res.code == 1003) {
-              $(".m-c-btn").val("发送太频繁");
-            } else if (res.code == 300) {
-              $(".m-c-btn").val("今天报名上限");
-            }
-          }
-        );
-      });
-
-      $(".big").on("click", function() {
-        var img = $(this).attr("src");
-        var arr = img.split("/");
-        if (arr.length > 4) {
-          var a = arr[5].split("_");
-          a[1] = 800;
-          arr[5] = a.join("_");
-          img = arr.join("/");
-          var html = `
-                                        <img class="m_bigimg" src="${img}">
-                                    `;
-        } else {
-          var a = arr[3].split("_");
-          a[1] = 800;
-          arr[3] = a.join("_");
-          img = arr.join("/");
-          var html = `
-                                        <img class="m_bigimg" src="${img}">
-                                    `;
-        }
-
-        $(".m-bigimgs").html(html);
-        $(".m-bigimgs").show();
-        $(".m-chang").show();
-      });
-      $(".m-bigimgs").on("click", function() {
-        $(this).hide();
-        $(".m-chang").hide();
       });
 
       $(".tophome").on("click", function() {
         that.$router.push("/" + that.n);
       });
 
-      $(".f-b-p-l").on("click", function() {
-        var data = $(this)
-          .prev()
-          .val();
-        var id = $(this)
-          .next()
-          .val();
-        $.post(
-          "{:url('home/content/ping')}",
-          {
-            content: data,
-            bid: id
-          },
-          function(res) {
-            if (res.code == 200) {
-              $("#m_p_box").hide();
-              $(".m-p-succ").show();
-            } else {
-            }
-          }
-        );
-      });
-      $("#m_ul li").on("click", function() {
-        $(this)
-          .addClass("m-active")
-          .siblings("li")
-          .removeClass("m-active");
-        var type = $(this).attr("data-v");
-        var id = {
-          $id
-        };
-        $.post(
-          "{:url('home/content/imgs')}",
-          {
-            type: type,
-            id: id
-          },
-          function(res) {
-            if (res.code == 100) {
-              var html = "";
-
-              if (res.s == "p_small") {
-                $.each(res.data, function(i, e) {
-                  html += `
-                                    <div class="swiper-slide">
-                                        <img src="${e.p_small}" alt="" class="big" data-v="p">
-                                    </div>
-                                    `;
-                });
-              } else if (res.s == "j_small") {
-                $.each(res.data, function(i, e) {
-                  html += `
-                                    <div class="swiper-slide">
-                                        <img src="${e.j_small}" alt="" class="big" data-v="j">
-                                    </div>
-                                    `;
-                });
-              } else if (res.s == "x_small") {
-                $.each(res.data, function(i, e) {
-                  html += `
-                                    <div class="swiper-slide">
-                                        <img src="${e.x_small}" alt="" class="big" data-v="x">
-                                    </div>
-                                    `;
-                });
-              } else if (res.s == "y_small") {
-                $.each(res.data, function(i, e) {
-                  html += `
-                                    <div class="swiper-slide">
-                                        <img src="${e.y_small}" alt="" class="big" data-v="y">
-                                    </div>
-                                    `;
-                });
-              } else if (res.s == "s_small") {
-                $.each(res.data, function(i, e) {
-                  html += `
-                                    <div class="swiper-slide">
-                                        <img src="${e.s_small}" alt="" class="big" data-v="s">
-                                    </div>
-                                    `;
-                });
-              }
-
-              $(".m-lll").html(html);
-              $(".big").on("click", function() {
-                var img = $(this).attr("src");
-                var arr = img.split("/");
-                if (arr.length > 4) {
-                  var a = arr[5].split("_");
-                  a[1] = 800;
-                  arr[5] = a.join("_");
-                  img = arr.join("/");
-                  var html = `
-                                        <img class="m_bigimg" src="${img}">
-                                    `;
-                } else {
-                  var a = arr[3].split("_");
-                  a[1] = 800;
-                  arr[3] = a.join("_");
-                  img = arr.join("/");
-                  var html = `
-                                        <img class="m_bigimg" src="${img}">
-                                    `;
-                }
-
-                $(".m-bigimgs").html(html);
-                $(".m-bigimgs").show();
-                $(".m-chang").show();
-              });
-            }
-          },
-          "json"
-        );
-      });
       $(".m-listen").on("click", function() {
         $(".m-chang").show();
         $("#m_a_box").show(300);
@@ -2189,66 +2215,6 @@ export default {
       $("#m_f_esc").on("click", function() {
         $(".m-chang").hide();
         $("#m_f_box").hide();
-      });
-
-      $("#m_shou").on("click", function() {
-        var txt = $(this).text();
-
-        if (txt == "收藏") {
-          var id = $(this).attr("data_v");
-          var that = $(this);
-          $.post(
-            "{:url('home/content/fork')}",
-            {
-              id: id
-            },
-            function(res) {
-              if (res.code == 100) {
-                $(".m-fork").attr("src", res.ss);
-                $(".m-fork").attr("alt", "已收藏");
-                var html = `
-                                <img style="margin-left:17%" src="${res.msg}" alt="">已收藏
-                                    `;
-                that.html(html);
-              } else {
-              }
-            },
-            "json"
-          );
-        } else {
-          return;
-        }
-      });
-
-      $(".m-fork").on("click", function() {
-        var txt = $(this).attr("alt");
-        if (txt == "收藏") {
-          var id = $(this).attr("data_v");
-          var that = $(this);
-          $.post(
-            "{:url('home/content/fork')}",
-            {
-              id: id
-            },
-            function(res) {
-              if (res.code == 100) {
-                that.attr("src", res.ss);
-                that.attr("alt", "已收藏");
-                var html = `
-                            <img style="margin-left:17%" src="${res.msg}" alt="">已收藏
-                                    `;
-                $("#m_shou").html(html);
-              } else {
-                $(".m-chang").show();
-                $("#m_ti").html(res.msg);
-                $("#m_ti").show();
-              }
-            },
-            "json"
-          );
-        } else {
-          return;
-        }
       });
     });
 
@@ -2335,6 +2301,7 @@ export default {
       that.succ = false;
       $(".t-b-first").show();
       $(".t-b-second").hide();
+      that.ones = 0;
     });
 
     $(".p1").on("click", function() {
@@ -2420,44 +2387,6 @@ export default {
       that.change = true;
     });
 
-    // 接口验证码
-    $(".t-b-btn2").on("click", function() {
-      let check = that.checks;
-      if (!check) {
-        $(".tishi").show();
-        return;
-      } else {
-        $(".tishi").hide();
-      }
-
-      var phone = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var type = $(this)
-        .parent()
-        .parent()
-        .prev()
-        .find("h6")
-        .html();
-      var building_name = $(this)
-        .parent()
-        .next()
-        .find("#building_name")
-        .val();
-      var pattern_phone = /^1[3-9][0-9]{9}$/;
-      if (phone == "") {
-        $(".l-p").attr("placeholder", "手机号不能为空");
-        return;
-      } else if (!pattern_phone.test(phone)) {
-        $(".l-p").val("");
-        $(".l-p").attr("placeholder", "手机号码不合法");
-        return;
-      }
-      that.sendmsg(phone);
-    });
-
     $(".t-b-scode").on("click", function() {
       var phone = $(this)
         .prev()
@@ -2503,24 +2432,6 @@ export default {
       );
     });
 
-    $(".port1").on("click", function() {
-      var ma = $(this)
-        .prev()
-        .val();
-      if (!ma) {
-        $(this)
-          .prev()
-          .attr("placeholder", "验证码不能为空");
-        return;
-      }
-      that.check(ma);
-    });
-    $("#w-esc").on("click", function() {
-      that.change = false;
-      $(".m-chang").hide();
-      $(".t-b-first").show();
-      $(".t-b-second").hide();
-    });
     $("#s_esc").on("click", function() {
       $(".succ").hide();
       $(".zhao").hide();
@@ -2941,7 +2852,10 @@ export default {
         this.mmap();
       }, 400);
     }
-  }
+  },
+  destroyed() {
+    localStorage.removeItem('map')
+  },
 };
 </script>
 <style scoped>
@@ -2968,17 +2882,66 @@ export default {
   margin-top: 2.6%;
   margin-left: 30%;
 }
-.warning{
-  width:40%;
+.warning {
+  width: 40%;
   height: 30px;
   line-height: 30px;
-  background:rgba(0,0,0,0.8);
+  background: rgba(0, 0, 0, 0.8);
   border-radius: 6px;
   position: fixed;
-  top:48vh;
-  left:30%;
+  top: 48vh;
+  left: 30%;
   z-index: 2;
   color: #fff;
+  text-align: center;
+}
+.tuan-qiang {
+  display: flex;
+  height: 80px;
+  width: 100%;
+  padding-top: 12px;
+  padding-left: 4%;
+}
+.tuan-qiang img {
+  width: 16%;
+  height: 7vh;
+  margin-right: 4%;
+}
+.tuan-qiang .q-con {
+  margin-right: 8%;
+}
+.tuan-qiang .q-con h6 {
+  color: #333333;
+  font-size: 17px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+.tuan-qiang .q-con p {
+  color: #4d4d4d;
+  font-size: 13px;
+}
+.tuan-qiang .q-right button {
+  width: 64px;
+  height: 25px;
+  background: linear-gradient(
+    -90deg,
+    rgba(255, 133, 60, 1),
+    rgba(255, 67, 47, 1)
+  );
+  box-shadow: 0px 2px 7.5px 0px rgba(255, 36, 0, 0.2);
+  border-radius: 12.5px;
+  color: #fff;
+  font-size: 13px;
+  text-align: center;
+  line-height: 25px;
+  margin-bottom: 8px;
+  border: 0;
+  margin-top: 5px;
+}
+.tuan-qiang .q-right p {
+  color: #fe582f;
+  font-size: 12px;
   text-align: center;
 }
 .zao {
@@ -3413,5 +3376,137 @@ export default {
 
 .swiper-top .swiper-slide img {
   height: 210px !important;
+}
+
+.tar {
+  display: flex;
+}
+.tar .left {
+  width: 70%;
+  height: 50px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 133, 60, 1),
+    rgba(255, 67, 47, 1)
+  );
+}
+
+.tar .left h5 {
+  color: #fff;
+  font-size: 14px;
+  margin-left: 14px;
+  margin-top: 3px;
+}
+.tar .left h5 span {
+  font-size: 24px;
+}
+.tar .left p {
+  margin-left: 14px;
+  color: #fff;
+  font-size: 10px;
+}
+.tar .right {
+  height: 50px;
+  width: 30%;
+  background: rgba(248, 217, 110, 1);
+  padding-left: 14px;
+}
+.tar .right h5 {
+  color: #ff432f;
+  font-size: 14px;
+  margin-bottom: 6px;
+  padding-top: 4px;
+}
+.tar .right span {
+  font-size: 14px;
+  color: #5e3a13;
+  margin-left: 2px;
+}
+.pin {
+  padding: 20px 0 10px 0;
+  position: relative;
+}
+.pin nav {
+  padding: 0 4%;
+}
+.pin nav h3 {
+  float: left;
+  color: #121212;
+  font-size: 17px;
+  padding-left: 6px;
+  border-left: 2.5px solid #3eacf0;
+  font-weight: bold;
+}
+.pin nav p {
+  float: right;
+  color: #646466;
+  font-size: 13px;
+}
+.pin nav p span {
+  color: black;
+  font-size: 13px;
+  font-weight: bold;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-left: 4px;
+  margin-right: 4px;
+  background: #d6d6d6;
+  border-radius: 2px;
+  text-align: center;
+  line-height: 20px;
+  margin-bottom: 10px;
+}
+.pin-bao {
+  position: absolute;
+  width: 44.4px;
+  height: 44.4px;
+  background: linear-gradient(
+    -90deg,
+    rgba(255, 133, 60, 1),
+    rgba(255, 67, 47, 1)
+  );
+  border-radius: 5px;
+  color: #fff;
+  font-size: 13px;
+  word-wrap: break-word;
+  padding: 6px 8px 0 8px;
+  right: 10%;
+  top: 40%;
+}
+.pin img {
+  width: 100%;
+  margin-bottom: 10px;
+}
+.pin .bom {
+  padding: 0 4%;
+}
+.trend-con1 {
+  display: inline-block;
+  line-height: 20px;
+  width: 44%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 20px;
+  font-size: 12px;
+  color: #ff5650;
+}
+.trend-con1 .swiper-container10 {
+  height: 20px;
+}
+.pin .hased {
+  position: absolute;
+  width: 14%;
+  top: 39%;
+  right: 9%;
+}
+.pin .bom p {
+  float: right;
+  color: #646466;
+  font-size: 13px;
+}
+.pin .bom p span {
+  color: #fe582f;
 }
 </style>

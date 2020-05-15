@@ -238,8 +238,6 @@ export default {
       context.$axios.post('/api/project/imgs',{ ip: ip, id: id, platform: 2 })
       .then((resp)=>{
           let data = resp.data;
-          
-          
           return data;
       })
     ])
@@ -279,6 +277,7 @@ export default {
       let that = this;
       let ip = returnCitySN["cip"];
       this.ip = ip;
+      this.n=localStorage.getItem('pinyin');
       localStorage.getItem("ip");
       this.call = localStorage.getItem("call");
       album_data({ ip: ip, id: id, platform: 2 })

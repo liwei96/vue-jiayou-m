@@ -208,7 +208,7 @@ export default {
     }
   },
   mounted() {
-    $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom:0 });
+    $("#Foot").css({ position: "relative", bottom: "0", width: "100%",marginBottom:0 });
     this.start();
     var height = window.screen.height;
     $(".m-qu").css("height", height);
@@ -443,6 +443,7 @@ li {
   color: #fff;
   line-height: 40px;
   border-radius: 4px;
+  margin-bottom: 10px;
 }
 .m-me .m-shan .m-one .m-btn {
   width: 98%;

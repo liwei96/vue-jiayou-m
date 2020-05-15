@@ -7,9 +7,9 @@
       <h5>是否考虑购买该楼盘？</h5>
       <p>
         <span class="ti">必填</span>
-        <span class="btn tab" data-v='1'>有兴趣</span>
-        <span class="btn" data-v='2'>待对比</span>
-        <span class="btn" data-v='3'>不考虑</span>
+        <span class="btn tab" data-v="1">有兴趣</span>
+        <span class="btn" data-v="2">待对比</span>
+        <span class="btn" data-v="3">不考虑</span>
       </p>
       <div class="score">
         <p>
@@ -53,64 +53,73 @@
 </template>
 <script>
 import footView from "@/components/Foot.vue";
-import {ip,comment_put} from '~/api/api'
+import { ip, comment_put } from "~/api/api";
 export default {
   name: "Comment",
-  asyncData (context) {
+  asyncData(context) {
     let jkl = context.store.state.cookie.pinyin;
     return {
-      jkl:jkl
-    }
+      jkl: jkl
+    };
   },
   components: {
     "foot-view": footView
   },
-  data(){
-    return{
-      id:'',
-      ip:'',
-      status:'1',
-      content:'',
-      num:'3',
-      n:'',
-      jkl:''
-    }
+  data() {
+    return {
+      id: "",
+      ip: "",
+      status: "1",
+      content: "",
+      num: "3",
+      n: "",
+      jkl: ""
+    };
   },
   methods: {
-    
-    put(){
+    put() {
       if (localStorage.getItem("token") == null) {
-        let n=localStorage.getItem('pinyin')
-        this.$router.push('/'+n+"/login")
+        let n = localStorage.getItem("pinyin");
+        this.$router.push("/" + n + "/login");
         // window.location.href="/login"
-      }
-      else{
-        let i=this.id
-        let p=this.ip
-        let n=this.num
-        let s=this.status
-        let c=this.content
-        let token=localStorage.getItem('token');
-        let where={token:token,ip:p,score:n,content:c,platform:2,consider:s,project:i}
-        comment_put(where).then(resp=>{
-            if(resp.data.code==200){
-                this.$router.go(-1);
+      } else {
+        let i = this.id;
+        let p = this.ip;
+        let n = this.num;
+        let s = this.status;
+        let c = this.content;
+        let token = localStorage.getItem("token");
+        let where = {
+          token: token,
+          ip: p,
+          score: n,
+          content: c,
+          platform: 2,
+          consider: s,
+          project: i
+        };
+        comment_put(where)
+          .then(resp => {
+            if (resp.data.code == 200) {
+              this.$router.go(-1);
             }
-        }).catch(error=>{
-          console.log(error)
-        })
+          })
+          .catch(error => {
+            console.log(error);
+          });
       }
     },
-    getip(){
-      let ip=returnCitySN['cip'];
-      this.ip=ip;
-      localStorage.getItem('ip');
+    getip() {
+      let ip = returnCitySN["cip"];
+      this.ip = ip;
+      localStorage.getItem("ip");
     },
-    goback(){
-      this.$router.go(-1)
+    goback() {
+      this.$router.go(-1);
     }
   },
-  mounted() { 
+  mounted() {
+    
     jQuery.fn.ratingStars = function(e) {
       var r = {
           selectors: {
@@ -210,9 +219,9 @@ export default {
         s.init($(this));
       });
     };
-    let that=this
+    let that = this;
     let id = this.$route.params.id;
-    this.id=id;
+    this.id = id;
     this.getip();
     var ratingOptions = {
       selectors: {
@@ -229,17 +238,17 @@ export default {
     $(".rating-stars").on("ratingChanged", function(ev, data) {
       // dome something
       let nums = data.ratingValue;
-      that.num=nums
-      nums=nums+'.0';
-      $('#num').html(nums);
+      that.num = nums;
+      nums = nums + ".0";
+      $("#num").html(nums);
     });
     $(".btn").on("click", function() {
       $(this)
         .addClass("tab")
         .siblings("span")
         .removeClass("tab");
-      let n=$(this).attr('data-v');
-      that.status=n  
+      let n = $(this).attr("data-v");
+      that.status = n;
     });
   }
 };
@@ -249,6 +258,11 @@ export default {
 * {
   padding: 0;
   margin: 0;
+}
+#Foot{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 h3 {
   color: #333333;
