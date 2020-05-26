@@ -228,6 +228,21 @@ export default {
     MyOverlay,
     MyOverlays
   },
+  head(){
+    return {
+      title:  '允家新房-地图找房',
+      meta: [
+        {
+          name: "description",
+          content:  '允家新房'
+        },
+        {
+          name: "keywords",
+          content:  '允家新房'
+        }
+      ]
+    }
+  },
   data() {
     return {
       zoom: 12,

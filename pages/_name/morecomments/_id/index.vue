@@ -78,7 +78,7 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
+            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming"/>
             <p class="w-mg">
               <input class="w-mg-c" type="radio" checked v-model="checks"/>我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
@@ -96,7 +96,7 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" />
+            <input type="text" placeholder="请输入验证码" id="ma-ll"/>
             <button class="port1">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -141,13 +141,16 @@ export default {
     let [res]= await Promise.all([
       context.$axios.post('/api/project/comment_info',{ city: city, id: id, page: 1, limit: 10 })
       .then((resp)=>{
-        let data = resp.data.data;
+        let data = resp.data;
           return data;
       })
     ])
     return{
-         lists:res,
-         jkl:jkl
+         lists:res.data,
+         jkl:jkl,
+         title:res.title,
+          description:res.description,
+          keywords:res.keywords
     }
   },
   data() {
@@ -167,7 +170,25 @@ export default {
       n: "",
       call: "",
       checks:'',
-      tel:''
+      tel:'',
+      title:'',
+      description:'',
+      keywords:''
+    };
+  },
+  head() {
+    return {
+      title: this.title || '允家新房-楼盘评论',
+      meta: [
+        {
+          name: "description",
+          content: this.description || '允家新房'
+        },
+        {
+          name: "keywords",
+          content: this.keywords || '允家新房'
+        }
+      ]
     };
   },
   components: {
@@ -256,6 +277,9 @@ export default {
             fn();
             var interval = setInterval(fn, 1000);
             $("#ytel").html(tel);
+          }else{
+            $('.l-p').val('')
+            $(".l-p").attr("placeholder", "报名失败");
           }
         })
         .catch(error => {
@@ -263,13 +287,16 @@ export default {
         });
     },
     check(m) {
-      let tel = this.phone;
+      let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
         .then(resp => {
           if (resp.data.code == 200) {
             that.succ = true;
             that.change = false;
+          }else{
+            $("#ma-ll").val('');
+            $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
         .catch(error => {

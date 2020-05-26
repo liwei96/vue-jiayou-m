@@ -58,15 +58,18 @@ export default {
     let [res]= await Promise.all([
       context.$axios.post('/api/project/pk_recommand',{ ip: ip, city: city, id: id, token: token })
       .then((resp)=>{
-        let data = resp.data.data;
+        let data = resp.data;
           
           
           return data;
       })
     ])
     return{
-          lists:res,
-          jkl:jkl
+          lists:res.data,
+          jkl:jkl,
+          title:res.head.title,
+          description:res.head.description,
+          keywords:res.head.keywords
     }
   },
   components: {
@@ -116,7 +119,25 @@ export default {
       ip: "",
       load: true,
       n: "",
-      jkl:''
+      jkl:'',
+      title:'',
+      description:'',
+      keywords:''
+    };
+  },
+  head() {
+    return {
+      title: this.title || '允家新房-楼盘PK添加',
+      meta: [
+        {
+          name: "description",
+          content: this.description || '允家新房'
+        },
+        {
+          name: "keywords",
+          content: this.keywords || '允家新房'
+        }
+      ]
     };
   },
   methods: {

@@ -171,7 +171,7 @@
       </div>
       <div class="t-bottom">
         <div class="t-b-first">
-          <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
+          <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming"/>
           <p class="w-mg">
             <input class="w-mg-c" type="checkbox" checked v-model="checks"/>我已阅读并同意
             <router-link :to="'/'+n+'/server'">
@@ -189,7 +189,7 @@
             验证码已发送到
             <span id="ytel">187****4376</span>，请注意查看
           </p>
-          <input type="text" placeholder="请输入验证码" />
+          <input type="text" placeholder="请输入验证码" id="ma-ll"/>
           <button class="port1">确定</button>
           <input type="hidden" id="building_name" value />
           <input type="hidden" value />
@@ -248,7 +248,10 @@ export default {
           traffics : res.data.traffics,
           apartments : res.data.apartments,
           matchings : res.data.matchings,
-          phone : res.header.phone
+          phone : res.header.phone,
+          title:res.header.title,
+          description:res.header.description,
+          keywords:res.header.keywords
     }
   },
   data() {
@@ -267,7 +270,25 @@ export default {
       call: "",
       checks:'',
       n:'',
-      loadi:true
+      loadi:true,
+      title:'',
+      description:'',
+      keywords:''
+    };
+  },
+  head() {
+    return {
+      title: this.title || '允家新房-楼盘相册',
+      meta: [
+        {
+          name: "description",
+          content: this.description || '允家新房'
+        },
+        {
+          name: "keywords",
+          content: this.keywords || '允家新房'
+        }
+      ]
     };
   },
   methods: {
@@ -347,6 +368,9 @@ export default {
             fn();
             var interval = setInterval(fn, 1000);
             $("#ytel").html(tel);
+          }else{
+            $('.l-p').val('')
+            $(".l-p").attr("placeholder", "报名失败");
           }
         })
         .catch(error => {
@@ -354,13 +378,16 @@ export default {
         });
     },
     check(m) {
-      let tel = this.phone;
+      let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
         .then(resp => {
           if (resp.data.code == 200) {
             $(".weiter").hide();
             $(".m-o-succ").show();
+          }else{
+            $("#ma-ll").val('');
+            $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
         .catch(error => {

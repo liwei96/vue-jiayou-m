@@ -236,9 +236,14 @@ export default {
     // console.log(context.route.path.split('/')[3].split('_')[0])
     // console.log(context.route.path.split('/').length)
     let ip = context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
+    // let city = context.store.state.cookie.city;
+    let city = context.store.state.city;
+    console.log(city)
     let token = context.store.state.cookie.token;
-    let jkl = context.store.state.cookie.pinyin;
+    let jkl = context.params.name;
+    // if(jkl == 'chongqing'){
+    //   city = 41
+    // }
     let options = { city: city, token: token, ip: ip, platform: 2 };
     let area1 = 0;
     let price1 = 0;
@@ -286,8 +291,7 @@ export default {
               num3 = 1;
             }else if(ll[1]=='商铺'){
               num3 = 2;
-            }
-            
+            }  
             break;
           case "feature":
             shai1 = 1;
@@ -299,13 +303,14 @@ export default {
     }
     let [res1, res2] = await Promise.all([
       context.$axios.post("/api/project/search_info", options).then(resp => {
+        let dd=resp.data.data;
         let data = resp.data.data.datas;
         for (let item of data) {
           if (item.railway) {
             item.railway = item.railway.split(",")[0];
           }
         }
-        return data;
+        return dd;
       }),
       context.$axios
         .post("/api/project/search", {
@@ -316,7 +321,6 @@ export default {
         })
         .then(resp => {
           let data = resp.data.data.conditions;
-
           return data;
         })
     ]);
@@ -328,7 +332,7 @@ export default {
       apartments: res2.apartments,
       build_types: res2.build_types,
       features: res2.features,
-      buildings: res1,
+      buildings: res1.datas,
       jkl: jkl,
       area1: area1,
       price1: price1,
@@ -340,7 +344,11 @@ export default {
       num5: num5,
       num3: num3,
       num2: num2,
-      hus: hus
+      hus: hus,
+      city:city,
+      title:res1.title,
+      keywords:res1.keywords,
+      description:res1.description
     };
   },
   data() {
@@ -384,7 +392,26 @@ export default {
         q: 5,
         t: 45,
         h: 8
-      }
+      },
+      city:'',
+      title:'',
+      keywords:'',
+      description:''
+    };
+  },
+  head() {
+    return {
+      title: this.title || "允家新房",
+      meta:[
+        {
+          name: "description",
+          content: this.description
+        },
+        {
+          name: "keywords",
+          content: this.keywords
+        }
+      ]
     };
   },
   computed: {
@@ -396,11 +423,8 @@ export default {
     start_data() {
       this.nn = this.$route.params.name;
       this.kk = false;
-      let city = localStorage.getItem("city");
-      if (!city) {
-        city = 1;
-        localStorage.setItem("city", city);
-      }
+      localStorage.setItem('city',this.city)
+      
       let ip = returnCitySN["cip"];
       this.ip = ip;
       this.loading = true;
@@ -645,7 +669,7 @@ export default {
       $cookies.set("where", where, 0);
     },
     goback() {
-      this.$router.go(-1);
+      this.$router.push('/'+this.jkl);
     },
     a1() {
       this.area1 = 1;

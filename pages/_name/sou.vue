@@ -103,7 +103,10 @@ export default {
           te_id : res.te_id,
           names : res.names,
           hot_id : res.hot_id,
-          jkl:jkl
+          jkl:jkl,
+          title:res.title,
+          description:res.description,
+          keywords:res.keywords
     }
   },
   data() {
@@ -119,7 +122,10 @@ export default {
       name: "",
       builds: [],
       bbs: [],
-      ll:false
+      ll:false,
+      title:'',
+      description:'',
+      keywords:''
     };
   },
   methods: {
@@ -173,6 +179,21 @@ export default {
     goback() {
       this.$router.go(-1);
     }
+  },
+  head() {
+    return {
+      title: this.title || '允家新房-楼盘搜索',
+      meta: [
+        {
+          name: "description",
+          content: this.description || '允家新房'
+        },
+        {
+          name: "keywords",
+          content: this.keywords || '允家新房'
+        }
+      ]
+    };
   },
   mounted() {
     $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom:0 });

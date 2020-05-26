@@ -1,5 +1,21 @@
 <template>
   <div id="Tuan">
+    <div class="header">
+      <img src="~/assets/content-logo.png" alt />
+    </div>
+    <div class="swp" v-if="tu">
+      <slide-verify
+        :l="20"
+        :r="5"
+        :w="240"
+        :h="160"
+        :imgs="imgs"
+        @success="onSuccess"
+        @fail="onFail"
+        @refresh="onRefresh"
+        :slider-text="text"
+      ></slide-verify>
+    </div>
     <div class="top">
       <div class="top-img">
         <img :src="img" alt />
@@ -7,7 +23,7 @@
       <div class="des" v-html="description"></div>
     </div>
     <div class="line"></div>
-    <div class="pin">
+    <div class="pin" v-cloak>
       <nav>
         <h3>拼团优惠</h3>
         <p>
@@ -20,7 +36,7 @@
       </nav>
       <img src="~/assets/tuan-pin.png" alt />
       <div class="pin-bao" @click="xiang" v-if="!newimg">立享优惠</div>
-      <img src="~/assets/tuna-hased.png" alt="" class="hased" v-if="newimg">
+      <img src="~/assets/tuna-hased.png" alt class="hased" v-if="newimg" />
       <div class="bom">
         <div class="trend-con">
           <div class="swiper-container9">
@@ -39,20 +55,20 @@
     <div class="tui">
       <nav>
         <h3>拼团优惠</h3>
-          <button @click="showgui">活动规则</button>
+        <button @click="showgui">活动规则</button>
       </nav>
       <div class="con">
         <div class="contanter" v-for="(val,key) in cons" :key="key">
           <div class="con-top">
             <router-link :to="'/hangzhou/content/'+val.id">
-            <div class="top-left">
-              <div class="left-img">
-                <span>团购优惠</span>
-                <img :src="val.img" alt />
-              </div>
+              <div class="top-left">
+                <div class="left-img">
+                  <span>团购优惠</span>
+                  <img :src="val.img" alt />
+                </div>
 
-              <p>已售{{val.saled_num}}套</p>
-            </div>
+                <p>已售{{val.saled_num}}套</p>
+              </div>
             </router-link>
             <div class="top-right">
               <h4>
@@ -64,37 +80,66 @@
               </h5>
               <p>
                 {{val.country}}&nbsp;|&nbsp;{{val.area_min}}-{{val.area_max}}m²
-                <span>
+                <span
+                  v-if="val.distance"
+                >
                   <img src="~/assets/tuan-ju.png" alt />
                   {{val.distance}}m
                 </span>
               </p>
-              <p class="te">特色：{{flag!=key?val.content.substr(0,26):val.content}}<i v-if="flag!=key">...</i></p>
-              <p class="zhan" v-if="flag!=key" @click="showmore(key)">展开</p>
+              <p class="te">
+                特色：{{flag!=key?val.content.substr(0,26):val.content}}
+                <i v-if="flag!=key">...</i>
+              </p>
+              <span class="zhan" v-if="flag!=key" @click="showmore(key)">展开</span>
             </div>
           </div>
           <div class="con-bom">
-            <p>{{val.saled_phones[0]}} 优惠{{val.money}}元</p>
+            <div class="trend-con">
+              <div class="swiper-container9">
+                <div class="swiper-wrapper">
+                  <div
+                    class="swiper-slide"
+                    v-for="(trend,key) in val.saled_phones"
+                    :key="key"
+                  >{{trend}}优惠1000元</div>
+                </div>
+              </div>
+            </div>
             <button @click="to(val.id)">立享优惠</button>
             <button @click="btn(val.id)">咨询底价</button>
           </div>
         </div>
       </div>
     </div>
+    <div id="Footer">
+      <p>杭州易得房科技有限公司版权所有 电话：400-966-9995</p>
+      <p>
+        <img src="~/assets/f-logo.png" />网络经营许可证：
+        <a href="http://www.beian.miit.gov.cn/">
+          <span>浙ICP备18057005号</span>
+        </a>
+      </p>
+    </div>
+    <div class="tuan-tel">
+      <a href="tel:400-966-9995">
+        <img src="~/assets/tuan-tel1.png" alt />
+      </a>
+    </div>
     <transition name="change">
       <div class="weiter ts" v-show="change">
         <div class="t-top">
           <h6>限时优惠</h6>
-          <p>临取团购限时优惠金！优惠金将与您手机号绑定</p>
+          <p>领取团购限时优惠！优惠编码将与您手机号绑定</p>
           <img id="w-esc" src="~/assets/tuan-x.png" @click="hides" alt />
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
+            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
             <div class="w-mg">
               <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
               <!-- <router-link :to="'/'+jkl+'/server'"> -->
-                <a :href="'/'+jkl+'/server'">《允家新房用户协议》</a>
+              <a :href="'/'+jkl+'/server'">《允家新房用户协议》</a>
               <!-- </router-link> -->
             </div>
             <p class="tishi">请勾选用户协议</p>
@@ -108,7 +153,7 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" v-model="ma" class="yanzheng"/>
+            <input type="tel" placeholder="请输入验证码" v-model="ma" class="yanzheng" />
             <button class="port1" @click="yan">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -121,17 +166,23 @@
     <transition name="change">
       <div class="guizhe" v-show="gui">
         <h4>活动规则</h4>
-        <img src="~/assets/w-del.png" alt="" @click="hidegui">
+        <img src="~/assets/w-del.png" alt @click="hidegui" />
         <p>1、本次团购活动以分档累计补发的方案执行，通过允家网站成交该项目</p>
         <p>2、结算时间：网签成功后次月20号发放。补发费用待该范围内的最后一套网签成功后次月20号发放</p>
         <p>3、核算方式：由开发商或代理公司判定为允家平台客户即可享受这个优惠</p>
         <p>4、结算方式：提供已实名的支付宝账户给与您对接的允家咨询师，规定时间内会将优惠费用打至该账户</p>
-        <p>详细活动方案请致电允家客服电话：<span>400-966-9995</span> 注：活动最终解释权归允家所有 </p>
+        <p>
+          详细活动方案请致电允家客服电话：
+          <span>400-966-9995</span> 注：活动最终解释权归允家所有
+        </p>
       </div>
     </transition>
     <transition name="fade">
+      <my-loading v-if="load"></my-loading>
+    </transition>
+    <transition name="fade">
       <div class="m-o-succ" v-show="succ">
-        <img class="o-esc" src="~/assets/m-esc.png" alt @click="hides"/>
+        <img class="o-esc" src="~/assets/m-esc.png" alt @click="hides" />
         <img src="~/assets/m-success.png" alt class="o-success" />
         <p id="o_p">已成功参与活动！</p>
         <button id="o_btn" @click="hides">确定</button>
@@ -142,14 +193,20 @@
 <script>
 import Swiper from "swiper";
 import "swiper/css/swiper.min.css";
-import { tuanmsg,msg,verification,tuandata } from "~/api/api";
+import img1 from '~/assets/lou1.png';
+import img2 from '~/assets/lou2.png';
+import Loading from "@/components/loading.vue";
+import { tuanmsg, msg, verification, tuandata } from "~/api/api";
 export default {
   name: "Tuan",
+  components: {
+    "my-loading": Loading
+  },
   async asyncData(context) {
     let jkl = context.store.state.cookie.pinyin;
     let [res, res1] = await Promise.all([
       context.$axios.post("/api/group_buy/first", { id: 2 }).then(resp => {
-        let data = resp.data.data;
+        let data = resp.data;
         return data;
       }),
       context.$axios
@@ -161,22 +218,26 @@ export default {
     ]);
     return {
       jkl: jkl,
-      title: res.title,
-      description: res.description,
-      img: res.img,
-      tel: res.tel,
-      participate_num: res.participate_num,
-      last_tel: res.last_tel,
-      end: res.end,
-      begin: res.begin,
-      city: res.city,
-      endline: res.endline,
+      title: res.data.title,
+      description: res.data.description,
+      img: res.data.img,
+      tel: res.data.tel,
+      participate_num: res.data.participate_num,
+      last_tel: res.data.last_tel,
+      end: res.data.end,
+      begin: res.data.begin,
+      city: res.data.city,
+      endline: res.data.endline,
+      open: res.open,
       cons: res1,
-      flag:100,
+      flag: 100
     };
   },
   data() {
     return {
+      imgs:[img1,img2],
+      text: "向右滑",
+      msg: "",
       jkl: "",
       title: "",
       description: "",
@@ -193,18 +254,22 @@ export default {
       min: "",
       second: "",
       cons: [],
-      flag:100,
-      change:false,
-      checks:true,
-      succ:false,
-      baoming:'',
-      id:'',
-      ma:'',
-      page:2,
-      ting:true,
-      li:0,
-      newimg:false,
-      gui:false 
+      flag: 100,
+      change: false,
+      checks: true,
+      succ: false,
+      baoming: "",
+      id: "",
+      ma: "",
+      page: 2,
+      ting: true,
+      li: 0,
+      newimg: false,
+      gui: false,
+      load: true,
+      open: 0,
+      tu: false,
+      position:''
     };
   },
   head() {
@@ -219,14 +284,13 @@ export default {
     };
   },
   methods: {
-    
     // 倒计时
     countTime() {
       // 获取当前时间
       let date = new Date();
       let now = date.getTime();
       // 设置截止时间
-      let endDate = new Date(this.end); // this.curStartTime需要倒计时的日期
+      let endDate = new Date(this.endline.replace(/-/g, "/")); // this.curStartTime需要倒计时的日期
       let end = endDate.getTime();
       // 时间差
       let leftTime = end - now;
@@ -263,66 +327,77 @@ export default {
         setTimeout(this.countTime, 1000);
       }
     },
-    showmore(key){
-        this.flag=key;
+    showmore(key) {
+      this.flag = key;
     },
-    hides(){
+    hides() {
       $(".m-chang").hide();
+      $(".t-b-first").show();
+      $(".t-b-second").hide();
       this.change = false;
       this.succ = false;
+      this.tu = false;
     },
     send(tel) {
+      localStorage.setItem("phone", tel);
       let ip = returnCitySN["cip"];
-      let id=this.id;
+      let id = this.id;
       let data = { channel: 2, phone: tel, ip: ip };
-      msg(data)
+      let kid = sessionStorage.getItem("kid");
+      let other = sessionStorage.getItem("other");
+      let city = localStorage.getItem("city1");
+      let position= this.position
+      tuanmsg({
+        city: city,
+        ip: ip,
+        tel: tel,
+        position: position,
+        page: 3,
+        project: id,
+        remark: "团购2",
+        kid: kid,
+        other: other
+      })
         .then(resp => {
-          let code = resp.data.code;
-          if (code == 200) {
-            let city = localStorage.getItem("city1");
-            tuanmsg({
-              city:city,
-              ip: ip,
-              tel: tel,
-              position: 23,
-              page: 3,
-              project:id,
-              remark:'团购2'
-            })
+          if (resp.data.code == 200) {
+            msg(data)
               .then(resp => {
-                if (resp.data.code == 200) {
+                let code = resp.data.code;
+                if (code == 200) {
+                  $(".t-b-first").hide();
+                  $(".t-b-second").show();
+                  var time = 60;
+                  var phone = tel.substr(0, 3) + "****" + tel.substr(7, 11);
+                  var fn = function() {
+                    time--;
+                    if (time > 0) {
+                      $(".t-b-scode").html("重新发送" + time + "s");
+                      $(".t-b-scode").attr("disabled", true);
+                    } else {
+                      clearInterval(interval);
+                      $(".t-b-scode").html("获取验证码");
+                      $(".t-b-scode").attr("disabled", false);
+                    }
+                  };
+                  fn();
+                  var interval = setInterval(fn, 1000);
+                  $("#ytel").html(phone);
                 }
               })
               .catch(error => {
                 console.log(error);
               });
-            $(".t-b-first").hide();
-            $(".t-b-second").show();
-            var time = 60;
-            var phone = tel.substr(0, 3) + "****" + tel.substr(7, 11);
-            var fn = function() {
-              time--;
-              if (time > 0) {
-                $(".t-b-scode").html("重新发送" + time + "s");
-                $(".t-b-scode").attr("disabled", true);
-              } else {
-                clearInterval(interval);
-                $(".t-b-scode").html("获取验证码");
-                $(".t-b-scode").attr("disabled", false);
-              }
-            };
-            fn();
-            var interval = setInterval(fn, 1000);
-            $("#ytel").html(phone);
+          }else{
+            $('.l-p').val('')
+            $(".l-p").attr("placeholder", "报名失败");
           }
         })
         .catch(error => {
           console.log(error);
         });
     },
-    ding(){
+    ding() {
       let check = this.checks;
-      console.log(check)
       if (!check) {
         $(".tishi").show();
         return;
@@ -341,18 +416,23 @@ export default {
         return;
       }
       $(".port1").attr("data-v", phone);
-      
-      this.send(phone);
+      console.log(this.open);
+      if (this.open == 1) {
+        this.tu = true;
+      } else {
+        this.send(phone);
+      }
     },
-    btn(id){
+    btn(id) {
       $(".m-chang").show();
       this.change = true;
-      this.id=id;
+      this.id = id;
+      this.position= 23;
     },
-    again(){
-      let tel=this.baoming
+    again() {
+      let tel = this.baoming;
       let ip = returnCitySN["cip"];
-      let id=this.id;
+      let id = this.id;
       let data = { channel: 2, phone: tel, ip: ip };
       msg(data)
         .then(resp => {
@@ -383,49 +463,56 @@ export default {
           console.log(error);
         });
     },
-    xiang(){
-      this.li=1;
+    xiang() {
+      this.li = 1;
+      this.position=22
       $(".m-chang").show();
       this.change = true;
     },
     yan() {
-      let e=this.ma;
+      let e = this.ma;
       if (!e) {
-        $('.yanzheng').attr("placeholder", "验证码不能为空");
+        $("#ma-ll").attr("placeholder", "验证码不能为空");
         return;
       }
       let tel = this.baoming;
       let that = this;
-      
+
       verification({ phone: tel, code: e, channel: 2 })
         .then(resp => {
           if (resp.data.code == 200) {
-            if(this.li==1){
-              this.newimg=true
+            if (this.li == 1) {
+              this.newimg = true;
+              localStorage.setItem("newimg", true);
             }
             that.change = false;
             that.succ = true;
+          }else{
+            $("#ma-ll").val('');
+            $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
         .catch(error => {
           console.log(error);
         });
     },
-    getmore(){
-      let page=this.page
-      this.ting=false;
-      tuandata({ id: 2, page: page, limit: 5 }).then(res=>{
-        this.page=page+1;
-          this.ting=true
+    getmore() {
+      let page = this.page;
+      this.ting = false;
+      tuandata({ id: 2, page: page, limit: 5 })
+        .then(res => {
+          this.page = page + 1;
+          this.ting = true;
           let data = res.data.data;
-            if (data.length == 0) {
-              that.ting = false;
-            }
-            let l = this.cons.concat(data);
-            this.cons=l
-      }).catch(error=>{
-        console.log(error)
-      })
+          if (data.length == 0) {
+            that.ting = false;
+          }
+          let l = this.cons.concat(data);
+          this.cons = l;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     scroll() {
       var scrollTop = window.scrollY;
@@ -437,85 +524,97 @@ export default {
           this.getmore();
         }
       }
-      
     },
-    showgui(){
-      this.gui=true
+    showgui() {
+      this.gui = true;
       $(".m-chang").show();
     },
-    hidegui(){
-      this.gui=false
+    hidegui() {
+      this.gui = false;
       $(".m-chang").hide();
     },
-    to(id){
-      this.$router.push('/hangzhou/you/'+id)
+    to(id) {
+      this.$router.push("/hangzhou/you/" + id);
+    },
+    onSuccess() {
+      var phone = this.baoming;
+      this.send(phone);
+      this.tu = false;
+    },
+    onFail() {
+      this.msg = "";
+    },
+    onRefresh() {
+      this.msg = "";
     }
   },
   mounted() {
-    let city=this.city;
-    localStorage.setItem('city1',city);
-    let that=this;
-    this.countTime();
-    window.addEventListener("scroll", this.scroll);
-    var mySwiper = new Swiper(".swiper-container9", {
-      direction: "vertical", // 垂直切换选项
-      autoplay: true,
-      observer: true, //修改swiper自己或子元素时，自动初始化swiper
-      observeParents: true //修改swiper的父元素时，自动初始化swiper
-    });
-    // $("#w-esc").on("click", function() {
-    //   $(".m-chang").hide();
-    //   that.change = false;
-    // });
-    
-    $(".m-chang").on("click", function() {
-      $(".m-chang").hide();
-      that.change = false;
-      that.succ = false;
-      that.gui=false
-    });
-    // 接口验证码
-    $(".t-b-btn2").on("click", function() {
-      let check = that.checks;
-      console.log(check)
-      if (!check) {
-        $(".tishi").show();
-        return;
-      } else {
-        $(".tishi").hide();
+    if (process.server == false) {
+      let that = this;
+      setTimeout(function() {
+        that.load = false;
+      }, 100);
+      this.baoming = localStorage.getItem("phone");
+      this.newimg = localStorage.getItem("newimg");
+      let url = window.location.href;
+      url = url.split("?")[1];
+      if (url) {
+        url = url.split("&");
+        let kid = url[0].split("=")[1];
+        let other = url[1].split("=")[1];
+        sessionStorage.setItem("kid", kid);
+        sessionStorage.setItem("other", other);
       }
+      let city = this.city;
+      localStorage.setItem("city1", city);
+      this.countTime();
+      window.addEventListener("scroll", this.scroll);
+      var mySwiper = new Swiper(".swiper-container9", {
+        direction: "vertical", // 垂直切换选项
+        autoplay: true,
+        observer: true, //修改swiper自己或子元素时，自动初始化swiper
+        observeParents: true //修改swiper的父元素时，自动初始化swiper
+      });
+      // $("#w-esc").on("click", function() {
+      //   $(".m-chang").hide();
+      //   that.change = false;
+      // });
 
-      var phone = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var pattern_phone = /^1[3-9][0-9]{9}$/;
-      if (phone == "") {
-        $(".l-p").attr("placeholder", "手机号不能为空");
-        return;
-      } else if (!pattern_phone.test(phone)) {
-        $(".l-p").val("");
-        $(".l-p").attr("placeholder", "手机号码不合法");
-        return;
-      }
-      $(".port1").attr("data-v", phone);
-      
-      that.send(phone);
-    });
-    
-    $("#o_btn").on("click", function() {
-      that.succ = false;
-      $(".m-chang").hide();
-    });
-    $(".o-esc").on("click", function() {
-      that.succ = false;
-      $(".m-chang").hide();
-    });
+      $(".m-chang").on("click", function() {
+        $(".t-b-first").show();
+        $(".t-b-second").hide();
+        $(".m-chang").hide();
+        that.change = false;
+        that.succ = false;
+        that.gui = false;
+        that.tu = false;
+      });
+
+      $("#o_btn").on("click", function() {
+        that.succ = false;
+        $(".m-chang").hide();
+      });
+      $(".o-esc").on("click", function() {
+        that.succ = false;
+        $(".m-chang").hide();
+      });
+    }
   },
   beforeDestroy() {
     window.removeEventListener("scroll", this.scroll);
   },
+  watch: {
+    cons(val) {
+      setTimeout(function() {
+        var mySwiper = new Swiper(".swiper-container9", {
+          direction: "vertical", // 垂直切换选项
+          autoplay: true,
+          observer: true, //修改swiper自己或子元素时，自动初始化swiper
+          observeParents: true //修改swiper的父元素时，自动初始化swiper
+        });
+      }, 300);
+    }
+  }
 };
 </script>
 <style scoped>
@@ -523,8 +622,75 @@ export default {
   padding: 0;
   margin: 0;
 }
+html,
+body {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+[v-cloak] {
+  display: none;
+}
+.swp {
+  position: fixed;
+  left: 18%;
+  top: 40%;
+  z-index: 1002;
+  background-color: #fff;
+}
+.swp .slide-verify {
+  width: 240px;
+}
+.swp >>> .slide-verify-slider {
+  width: 100%;
+  height: 30px;
+  margin-top: 0;
+  line-height: 30px;
+}
+.swp >>> .slide-verify-slider .slide-verify-slider-mask-item {
+  width: 29px;
+  height: 29px;
+}
+.swp >>> .slide-verify-slider-mask {
+  height: 29px !important;
+}
+.swp >>> .slide-verify-slider-mask-item-icon {
+  top: 10px;
+  left: 6px;
+}
+
+.header {
+  height: 44px;
+  width: 100%;
+}
+.header img {
+  width: 14%;
+  margin-top: 2.6%;
+  margin-left: 43%;
+}
 .top-img img {
   width: 100%;
+}
+.tuan-tel {
+  position: fixed;
+  right: 0;
+  bottom: 10vh;
+  width: 70px;
+  height: 50px;
+  border-radius: 25px 0px 0px 25px;
+  background-color: #fff;
+  z-index: 10;
+  box-shadow: 0px 0px 5px 0.5px rgba(54, 140, 255, 0.16);
+}
+.tuan-tel img {
+  width: 40px;
+  margin-top: 5px;
+  margin-left: 5px;
 }
 .des {
   padding: 18px 4%;
@@ -534,41 +700,41 @@ export default {
 .des >>> p {
   margin: 0;
 }
-.guizhe{
+.guizhe {
   position: fixed;
-  width:80%;
+  width: 80%;
   background-color: #fff;
   left: 10%;
-  top:27vh;
-  height: 43vh;
+  top: 27vh;
+  height: 350px;
   z-index: 1001;
   border-radius: 10px;
 }
-.guizhe h4{
-  color: #27282B;
+.guizhe h4 {
+  color: #27282b;
   font-size: 18px;
   font-weight: bold;
   text-align: center;
-  padding-top:24px;
+  padding-top: 24px;
   margin-bottom: 22px;
 }
-.guizhe p{
-  color:#626266;
+.guizhe p {
+  color: #626266;
   font-size: 12px;
-  padding:0 20px;
+  padding: 0 20px;
   margin-bottom: 14px;
 }
-.guizhe p span{
+.guizhe p span {
   font-weight: bold;
 }
-.guizhe img{
+.guizhe img {
   position: absolute;
-  top:18px;
-  right:16px;
-  width:14px;
+  top: 18px;
+  right: 16px;
+  width: 14px;
 }
-.swiper-wrapper{
-    display: block!important;
+.swiper-wrapper {
+  display: block !important;
 }
 .line {
   width: 100%;
@@ -604,24 +770,28 @@ export default {
   height: 20px;
   margin-left: 4px;
   margin-right: 4px;
-  background: #D6D6D6;
+  background: #d6d6d6;
   border-radius: 2px;
   text-align: center;
   line-height: 20px;
   margin-bottom: 10px;
 }
-.pin-bao{
-    position: absolute;
-    width:44.4px;
-    height: 44.4px;
-    background:linear-gradient(-90deg,rgba(255,133,60,1),rgba(255,67,47,1));
-    border-radius:5px;
-    color:#fff;
-    font-size: 13px;
-    word-wrap:break-word;
-    padding:6px 8px 0 8px;
-    right:10%;
-    top:40%;
+.pin-bao {
+  position: absolute;
+  width: 44.4px;
+  height: 44.4px;
+  background: linear-gradient(
+    -90deg,
+    rgba(255, 133, 60, 1),
+    rgba(255, 67, 47, 1)
+  );
+  border-radius: 5px;
+  color: #fff;
+  font-size: 13px;
+  word-wrap: break-word;
+  padding: 6px 8px 0 8px;
+  right: 10%;
+  top: 40%;
 }
 .pin img {
   width: 100%;
@@ -633,7 +803,7 @@ export default {
 .trend-con {
   display: inline-block;
   line-height: 20px;
-  width: 44%;
+  width: 47%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -644,11 +814,11 @@ export default {
 .trend-con .swiper-container9 {
   height: 20px;
 }
-.pin .hased{
+.pin .hased {
   position: absolute;
-  width:14%;
-  top:39%;
-  right:9%
+  width: 14%;
+  top: 39%;
+  right: 9%;
 }
 .pin .bom p {
   float: right;
@@ -760,13 +930,13 @@ export default {
   line-height: 17px;
   background-color: #f0f9ff;
 }
-.top-right p.zhan{
-    position: absolute;
-    color:#6987B3;
-    font-size: 12px;
-    margin-bottom:0!important;
-    bottom:4px;
-    right:0
+.top-right span.zhan {
+  position: absolute;
+  color: #6987b3;
+  font-size: 12px;
+  margin-bottom: 0 !important;
+  bottom: 15px;
+  right: 4px;
 }
 .top-right h5 {
   color: #fe582f;
@@ -844,7 +1014,11 @@ export default {
   top: 220px;
   border-radius: 12px;
   z-index: 1001;
-  background:linear-gradient(0deg,rgba(255,133,60,1),rgba(255,67,47,1));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 133, 60, 1),
+    rgba(255, 67, 47, 1)
+  );
 }
 
 .weiter .t-top {
@@ -943,16 +1117,20 @@ export default {
   height: 44px;
   border: 0;
   border-radius: 6px;
-  color: #FF4A30;
+  color: #ff4a30;
   font-size: 16px;
   text-align: center;
   line-height: 40px;
   margin-left: 7.5%;
-  box-shadow: 0px 2.5px 6px 0px rgba(78,169,255,0.3);
+  box-shadow: 0px 2.5px 6px 0px rgba(78, 169, 255, 0.3);
 }
 
 .weiter .t-bottom .t-b-first .bg_01 {
-  background:linear-gradient(270deg,rgba(255,213,70,1),rgba(255,245,107,1));
+  background: linear-gradient(
+    270deg,
+    rgba(255, 213, 70, 1),
+    rgba(255, 245, 107, 1)
+  );
 }
 
 .weiter .t-bottom .t-b-first .bg_02 {
@@ -993,8 +1171,12 @@ export default {
   width: 85%;
   height: 44px;
   margin-left: 7.5%;
-  background:linear-gradient(270deg,rgba(255,213,70,1),rgba(255,245,107,1));
-  color: #FF4A30;
+  background: linear-gradient(
+    270deg,
+    rgba(255, 213, 70, 1),
+    rgba(255, 245, 107, 1)
+  );
+  color: #ff4a30;
   font-size: 16px;
   text-align: center;
   line-height: 40px;
@@ -1082,5 +1264,21 @@ export default {
   color: #fff;
   font-size: 10px;
   display: none;
+}
+#Footer {
+}
+#Footer p {
+  color: #929aa7;
+  font-size: 12px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+#Footer p img {
+  width: 6%;
+  margin-right: 2%;
+}
+#Footer p a {
+  color: #6a7b97;
+  text-decoration: underline;
 }
 </style>

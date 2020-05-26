@@ -93,7 +93,7 @@
           <p>
             <img src="~/assets/linshi.png" />允家严格保障您的信息安全
           </p>
-          <input class="l-p" type="text" placeholder="输入预约手机号码" />
+          <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming"/>
           <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">立即订阅</button>
         </div>
         <div class="t-b-second">
@@ -183,7 +183,7 @@ export default {
   },
   head(){
     return{
-      title:this.title,
+      title:this.tit,
       meta:[
         {
           name: "description",
@@ -199,6 +199,7 @@ export default {
   },
   data() {
     return {
+      baoming:'',
       like:0,
       jkl:'',
       lists: [
@@ -327,6 +328,9 @@ export default {
             fn();
             var interval = setInterval(fn, 1000);
             $("#ytel").html(tel);
+          }else{
+            $('.l-p').val('')
+            $(".l-p").attr("placeholder", "报名失败");
           }
         })
         .catch(error => {
@@ -334,7 +338,7 @@ export default {
         });
     },
     check(m) {
-      let tel = this.phone;
+      let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
         .then(resp => {
@@ -360,6 +364,9 @@ export default {
               .catch(error => {
                 console.log(error);
               });
+          }else{
+            $("#ma-ll").val('');
+            $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
         .catch(error => {

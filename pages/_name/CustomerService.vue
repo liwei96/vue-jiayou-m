@@ -32,6 +32,21 @@ export default {
       jkl:''
     }
   },
+  head() {
+    return {
+      title:  "允家新房-关注客服",
+      meta: [
+        {
+          name: "description",
+          content:  '允家新房'
+        },
+        {
+          name: "keywords",
+          content:  '允家新房'
+        }
+      ]
+    };
+  },
   components: {
     "foot-view": footView
   },

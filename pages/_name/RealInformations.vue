@@ -106,7 +106,7 @@ export default {
   name: "RealInformations",
   async asyncData (context) {
     let ip=context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
+    let city = context.store.state.city;
     let token=context.store.state.cookie.token;
     let jkl=context.store.state.cookie.pinyin;
     let [res1,res2]= await Promise.all([
@@ -140,7 +140,8 @@ export default {
           tit:res1.header.title,
           key:res1.header.keywords,
           des:res1.header.description,
-          jkl:jkl
+          jkl:jkl,
+          city:city
     }
   },
   data() {
@@ -184,7 +185,7 @@ export default {
     get(e) {
       let id = e.target.getAttribute("data-v");
       let ip = this.ip;
-      let city = localStorage.getItem("city");
+      let city = this.city;
       let token = localStorage.getItem("token");
       let that = this;
       realInformations_data({

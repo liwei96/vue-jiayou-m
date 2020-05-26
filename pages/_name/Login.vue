@@ -5,8 +5,8 @@
     </h3>
     <img id="bg" src="~/assets/login.png" alt="允家新房" />
     <div class="con">
-      <input type="text" placeholder="请输入您的手机号" id="tel" />
-      <input type="text" placeholder="请输入您的验证码" id="code" />
+      <input type="tel" placeholder="请输入您的手机号" id="tel" />
+      <input type="tel" placeholder="请输入您的验证码" id="code" />
       <button id="log">登录</button>
       <span id="ma">获取验证码</span>
       <img id="user" src="~/assets/login_user.png" alt />
@@ -97,6 +97,21 @@ export default {
     goback(){
       this.$router.go(-1)
     }
+  },
+  head() {
+    return {
+      title:  "允家新房-手机快捷登录",
+      meta: [
+        {
+          name: "description",
+          content:  '允家新房'
+        },
+        {
+          name: "keywords",
+          content:  '允家新房'
+        }
+      ]
+    };
   },
   mounted() {
     this.getip();

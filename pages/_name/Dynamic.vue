@@ -13,24 +13,23 @@
             <i class="round"></i>
             {{m.createtime}}
           </p>
-          </router-link>
-          <div class="lcon">
-            <router-link :to="'/'+jkl+'/content/'+m.bid">
+        </router-link>
+        <div class="lcon">
+          <router-link :to="'/'+jkl+'/content/'+m.bid">
             <h4>{{m.building_name}}最新房源动态</h4>
-            </router-link>
-            <div class="lcon-con">
-              <router-link :to="'/'+jkl+'/content/'+m.bid">
+          </router-link>
+          <div class="lcon-con">
+            <router-link :to="'/'+jkl+'/content/'+m.bid">
               <div class="left">
                 <img :src="m.building_img" alt />
               </div>
-              </router-link>
-              <div class="right">
-                <p>{{m.introduce}}</p>
-                <span class="all" @click="all($event)">全文</span>
-              </div>
+            </router-link>
+            <div class="right">
+              <p>{{m.introduce}}</p>
+              <span class="all" @click="all($event)">全文</span>
             </div>
           </div>
-        
+        </div>
       </div>
     </div>
     <div class="m-botnav">
@@ -53,17 +52,17 @@
       <div class="t-top">
         <h6>预约看房</h6>
         <p>一键预约看房免费小车上门接送，可带家人一起参观多个热门楼盘</p>
-        <img id="w-esc" src="~/assets/w-del.png" alt />
+        <img id="w-esc" src="~/assets/w-del.png" alt @click="hides"/>
       </div>
       <div class="t-bottom">
         <div class="t-b-first">
-          <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
+          <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
           <p class="w-mg">
             <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
             <a href="javasript:;">《允家新房用户协议》</a>
           </p>
           <p class="tishi">请勾选用户协议</p>
-          <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">立即订阅</button>
+          <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="ding">立即订阅</button>
           <p class="w-tit">
             <img src="~/assets/w-call.png" />允家严格保障您的信息安全
           </p>
@@ -73,7 +72,7 @@
             验证码已发送到
             <span id="ytel">187****4376</span>，请注意查看
           </p>
-          <input type="text" placeholder="请输入验证码" />
+          <input type="text" placeholder="请输入验证码" id="ma-ll"/>
           <button class="port1">确定</button>
           <input type="hidden" id="building_name" value />
           <input type="hidden" value />
@@ -85,10 +84,10 @@
     <div class="m-chang"></div>
 
     <div class="m-o-succ">
-      <img class="o-esc" src="~/assets/m-esc.png" alt />
+      <img class="o-esc" src="~/assets/m-esc.png" alt @click="hides"/>
       <img src="~/assets/m-success.png" alt class="o-success" />
       <p id="o_p">已成功订阅最新动态，我们会第一时间通过短信通知您！</p>
-      <button id="o_btn">确定</button>
+      <button id="o_btn" @click="hides">确定</button>
     </div>
   </div>
 </template>
@@ -109,7 +108,7 @@ export default {
     let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token = context.store.state.cookie.token;
-    let jkl=context.store.state.cookie.pinyin;
+    let jkl = context.store.state.cookie.pinyin;
     let [res] = await Promise.all([
       context.$axios
         .post("/api/project/dynamic", {
@@ -127,12 +126,16 @@ export default {
     return {
       lists: res.dynamics.infos,
       phone: res.phone,
-      jkl:jkl
+      jkl: jkl,
+      title: res.title,
+      description: res.description,
+      keywords: res.keywords
     };
   },
   data() {
     return {
-      baoming:'',
+      succ:false,
+      baoming: "",
       page: 2,
       lists: [],
       phone: "",
@@ -140,8 +143,26 @@ export default {
       n: "",
       call: "",
       ting: true,
-      jkl:'',
-      checks:true
+      jkl: "",
+      checks: true,
+      title: "",
+      description: "",
+      keywords: ""
+    };
+  },
+  head() {
+    return {
+      title: this.title || '允家新房-楼盘动态',
+      meta: [
+        {
+          name: "description",
+          content: this.description || '允家新房'
+        },
+        {
+          name: "keywords",
+          content: this.keywords || '允家新房'
+        }
+      ]
     };
   },
   components: {
@@ -174,7 +195,7 @@ export default {
     },
     getmore() {
       let that = this;
-      this.ting=false;
+      this.ting = false;
       let city = localStorage.getItem("city");
       if (!city) {
         city = 1;
@@ -190,7 +211,7 @@ export default {
         ip: ip
       })
         .then(resp => {
-          that.ting=true;
+          that.ting = true;
           let data = resp.data.data.dynamics.infos;
           let l = that.lists.concat(data);
           that.lists = l;
@@ -200,45 +221,55 @@ export default {
           console.log(error);
         });
     },
-    sendmsg(t) {
-      this.phone = t;
-      let that = this;
-      msg({ phone: t, channel: 2 })
+    sendmsg(tel) {
+      let ip = this.ip;
+      let data = { channel: 2, phone: tel, ip: ip };
+      this.tel = tel;
+      let city = this.$store.state.city;
+      let kid = sessionStorage.getItem("kid");
+      let other = sessionStorage.getItem("other");
+      trend_put({
+        ip: ip,
+        tel: tel,
+        city: city,
+        position: 6,
+        page: 2,
+        type: 6,
+        kid: kid,
+        other: other
+      })
         .then(resp => {
           if (resp.data.code == 200) {
-            let ip = that.ip;
-            let c = localStorage.getItem("city");
-            let p = that.page;
-            trend_put({
-              ip: ip,
-              tel: t,
-              city: c,
-              position: 5,
-              page: 2,
-              type: 9
-            })
-              .then(resp => {})
+            msg(data)
+              .then(resp => {
+                let code = resp.data.code;
+                if (code == 200) {
+                  $(".t-b-first").hide();
+                  $(".t-b-second").show();
+                  var time = 60;
+                  var phone = tel.substr(0, 3) + "****" + tel.substr(7, 11);
+                  var fn = function() {
+                    time--;
+                    if (time > 0) {
+                      $(".t-b-scode").html("重新发送" + time + "s");
+                      $(".t-b-scode").attr("disabled", true);
+                    } else {
+                      clearInterval(interval);
+                      $(".t-b-scode").html("获取验证码");
+                      $(".t-b-scode").attr("disabled", false);
+                    }
+                  };
+                  fn();
+                  var interval = setInterval(fn, 1000);
+                  $("#ytel").html(phone);
+                }
+              })
               .catch(error => {
                 console.log(error);
               });
-            $(".t-b-first").hide();
-            $(".t-b-second").show();
-            var time = 60;
-            var tel = t.substr(0, 3) + "****" + t.substr(7, 11);
-            var fn = function() {
-              time--;
-              if (time > 0) {
-                $(".t-b-scode").html("重新发送" + time + "s");
-                $(".t-b-scode").attr("disabled", true);
-              } else {
-                clearInterval(interval);
-                $(".t-b-scode").html("获取验证码");
-                $(".t-b-scode").attr("disabled", false);
-              }
-            };
-            fn();
-            var interval = setInterval(fn, 1000);
-            $("#ytel").html(tel);
+          }else{
+            $('.l-p').val('')
+            $(".l-p").attr("placeholder", "报名失败");
           }
         })
         .catch(error => {
@@ -246,13 +277,16 @@ export default {
         });
     },
     check(m) {
-      let tel = this.phone;
+      let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
         .then(resp => {
           if (resp.data.code == 200) {
             $(".weiter").hide();
             $(".m-o-succ").show();
+          }else{
+            $("#ma-ll").val('');
+            $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
         .catch(error => {
@@ -271,10 +305,38 @@ export default {
           this.getmore();
         }
       }
-    }
+    },
+    ding() {
+      let check = this.checks;
+      if (!check) {
+        $(".tishi").show();
+        return;
+      } else {
+        $(".tishi").hide();
+      }
+      var phone = this.baoming;
+      var pattern_phone = /^1[3-9][0-9]{9}$/;
+      if (phone == "") {
+        $(".l-p").attr("placeholder", "手机号不能为空");
+        return;
+      } else if (!pattern_phone.test(phone)) {
+        $(".l-p").val("");
+        $(".l-p").attr("placeholder", "手机号码不合法");
+        return;
+      }
+      $(".port1").attr("data-v", phone);
+      this.sendmsg(phone);
+    },
+    hides() {
+      $(".m-chang").hide();
+      $(".t-b-first").show();
+      $(".t-b-second").hide();
+      $('.weiter').hide();
+      $('.m-o-succ').hide();
+    },
   },
   mounted() {
-    this.baoming=localStorage.getItem('phone')
+    this.baoming = localStorage.getItem("phone");
     this.start_data();
     let that = this;
     $("#sea").on("click", function() {
@@ -295,7 +357,7 @@ export default {
       let check = that.checks;
       if (!check) {
         $(".tishi").show();
-        return
+        return;
       } else {
         $(".tishi").hide();
       }

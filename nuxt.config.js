@@ -1,4 +1,3 @@
-
 export default {
   mode: 'universal',
   /*
@@ -10,12 +9,14 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       // { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { 'http-equiv': 'X-UA-Compatible', content: 'IE=EDGE' }
     ],
     script: [
-      { src: 'https://cdn.bootcss.com/jquery/3.5.0/jquery.min.js' },
-      { src: 'https://cdn.bootcss.com/bootstrap-slider/10.6.1/bootstrap-slider.min.js' },
+      // { src: 'https://cdn.bootcss.com/jquery/3.5.0/jquery.min.js' },
+      { src: 'http://libs.baidu.com/jquery/2.0.0/jquery.min.js' },
+      // { src: 'https://cdn.bootcss.com/bootstrap-slider/10.6.1/bootstrap-slider.min.js' },
+      { src: 'https://cdn.bootcdn.net/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js' },
       { src: 'http://pv.sohu.com/cityjson?ie=utf-8' },
-
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -29,7 +30,7 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: '#6ACCFF',height: '2px' },
   /*
   ** Global CSS
   */
@@ -39,11 +40,14 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    
     { src: '~plugins/echarts', ssr: false },
     { src: '~plugins/cookies', ssr: false },
     { src: '~plugins/vant', ssr: false },
     { src: '~plugins/map', ssr: false },
+    { src: '~plugins/swip', ssr: false },
+    { src: '~plugins/axios', ssr: false },
+    { src: '~plugins/route', ssr: true },
+    // { src: '~plugins/babel', ssr: true },
   ],
   /*
   ** Nuxt.js dev-modules
@@ -64,10 +68,34 @@ export default {
     /*
     ** You can extend webpack config here
     */
+   
     extend (config, ctx) {
     },
      extractCSS: { allChunks: true },
-    vendor:[]
+    vendor:[],
+    // analyze: true,
+    productionSourceMap: false,
+    productionGzip: true,
+    productionGzipExtensions: ['js', 'css', 'svg'],
+    optimization: {
+      splitChunks: {
+        minSize: 10000,
+        maxSize: 250000
+      }
+    },
+    // analyze: {
+    //   analyzerMode: 'static'
+    // },
+    // transpile: [/^vuetify/]
+    babel: {
+      presets: [['@babel/preset-env',{
+        'modules': false,
+        useBuiltIns: 'entry',
+        corejs:3
+      }]],
+      plugins: ['@babel/plugin-transform-runtime',['@babel/plugin-proposal-decorators', { 'legacy': true }],
+      ['@babel/plugin-proposal-class-properties', {'loose': true}]]
+    }
   },
   proxyTable: {
     '/api': {
@@ -97,7 +125,7 @@ export default {
     credentials: true // 表示跨域请求时是否需要使用凭证
   },
  
-    router: {
-        middleware: ['browserVersion']
-      }
+    // router: {
+    //     middleware: ['browserVersion']
+    //   }
 }

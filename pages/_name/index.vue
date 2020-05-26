@@ -1,18 +1,22 @@
 <template>
   <div class="Index" v-cloak>
     <div class="header">
-      <img class="bg" src="~/assets/banner1.jpg" alt />
-      <img class="mine" src="~/assets/Mine.png" alt />
-      <img src="~/assets/index-logo.png" alt class="index-logo" />
       <div class="search">
-        <span class="city">
-          {{cityname}}
-          <i class="iconfont iconbelow-s"></i>
-        </span>
-        <button id="sea">
-          <span class="iconfont iconmagnifier"></span>请输入楼盘名称、地域
-        </button>
+        <img src="~/assets/index-logo.png" alt class="index-logo" />
+        <div class="sea-con">
+          <span class="city">
+            {{cityname}}
+            <i class="iconfont iconbelow-s"></i>
+          </span>
+          <button id="sea">
+            <img src="~/assets/jy-search.png" alt />
+            <!-- <span class="iconfont iconmagnifier"></span> -->
+            请输入楼盘名
+          </button>
+        </div>
+        <img class="mine" src="~/assets/Mine.png" alt />
       </div>
+      <img class="bg" src="~/assets/banner1.jpg" alt />
       <div class="banner">
         <nav class="m-na">
           <ul>
@@ -318,19 +322,21 @@
                 :data-t="right_info1.position"
                 @click.self="ency($event)"
               >
-              <router-link :to="'/'+pinyin+'/encyclopediaArticle/'+right_info1.position+'/'+right_info1.id">
-                <h2
-                  :data-v="right_info1.id"
-                  :data-t="right_info1.position"
-                  @click.self="ency($event)"
-                >{{right_info1.title}}</h2>
-                <p
-                  v-if="right_info1.description"
-                  :data-v="right_info1.id"
-                  :data-t="right_info1.position"
-                  @click.self="ency($event)"
-                >{{right_info1.description}}</p>
-              </router-link>
+                <router-link
+                  :to="'/'+pinyin+'/encyclopediaArticle/'+right_info1.position+'/'+right_info1.id"
+                >
+                  <h2
+                    :data-v="right_info1.id"
+                    :data-t="right_info1.position"
+                    @click.self="ency($event)"
+                  >{{right_info1.title}}</h2>
+                  <p
+                    v-if="right_info1.description"
+                    :data-v="right_info1.id"
+                    :data-t="right_info1.position"
+                    @click.self="ency($event)"
+                  >{{right_info1.description}}</p>
+                </router-link>
               </div>
               <div
                 v-if="right_info2"
@@ -339,18 +345,20 @@
                 :data-t="right_info2.position"
                 @click.self="ency($event)"
               >
-              <router-link :to="'/'+pinyin+'/encyclopediaArticle/'+right_info2.position+'/'+right_info2.id">
-                <h2
-                  :data-v="right_info2.id"
-                  :data-t="right_info2.position"
-                  @click.self="ency($event)"
-                >{{right_info2.title}}</h2>
-                <p
-                  :data-v="right_info2.id"
-                  :data-t="right_info2.position"
-                  @click.self="ency($event)"
-                >{{right_info2.description}}</p>
-              </router-link>
+                <router-link
+                  :to="'/'+pinyin+'/encyclopediaArticle/'+right_info2.position+'/'+right_info2.id"
+                >
+                  <h2
+                    :data-v="right_info2.id"
+                    :data-t="right_info2.position"
+                    @click.self="ency($event)"
+                  >{{right_info2.title}}</h2>
+                  <p
+                    :data-v="right_info2.id"
+                    :data-t="right_info2.position"
+                    @click.self="ency($event)"
+                  >{{right_info2.description}}</p>
+                </router-link>
               </div>
             </div>
           </div>
@@ -634,26 +642,6 @@
     <transition name="fade">
       <load v-if="isload"></load>
     </transition>
-    <transition name="fade">
-      <div class="search" id="s-nav" v-if="lll">
-        <router-link :to="'/'+pinyin+'/address'">
-          <span class="city">
-            {{cityname}}
-            <i class="iconfont iconbelow-s"></i>
-          </span>
-        </router-link>
-        <router-link :to="'/'+pinyin+'/sou'">
-          <button id="sea">
-            <span class="iconfont iconmagnifier"></span>请输入楼盘名称、地域
-          </button>
-        </router-link>
-        <router-link :to="'/'+pinyin+'/map'">
-          <span class="s-nav-img">
-            <img src="~/assets/s-nav-img.png" />地图
-          </span>
-        </router-link>
-      </div>
-    </transition>
   </div>
 </template>
 
@@ -667,13 +655,13 @@ export default {
   name: "Index",
   components: {
     load: Loadings,
-    "foot-view":footView
+    "foot-view": footView
   },
 
   async asyncData(context) {
     let name = context.params.name;
     let ip = context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
+    let city = context.store.state.city;
     let token = context.store.state.cookie.token;
     let nn = context.store.state.pinyin;
     if (!city) {
@@ -735,11 +723,11 @@ export default {
             data.dong.num = data.dynaminc.dynamic_list_count;
           }
           data.left_info =
-            data.article.focus_1.length > 0 ? data.article.focus_1[0] : null;
+            data.article.focus_1.length > 0 ? data.article.focus_1[0] : '';
           data.right_info1 =
-            data.article.focus_2.length > 0 ? data.article.focus_2[0] : null;
+            data.article.focus_2.length > 0 ? data.article.focus_2[0] : '';
           data.right_info2 =
-            data.article.focus_3.length > 0 ? data.article.focus_3[0] : null;
+            data.article.focus_3.length > 0 ? data.article.focus_3[0] : '';
 
           for (let item of data.recommand.data) {
             if (item.railway) {
@@ -787,7 +775,7 @@ export default {
       pinyin: res.city.pinyin,
       tel: res.data.phone,
       cityname: res.city.name,
-      city:res.city.id
+      city: res.city.id
     };
   },
   data() {
@@ -1194,7 +1182,7 @@ export default {
       ip: "",
       count: 123,
       tel: "",
-      city:0
+      city: 0
     };
   },
   head() {
@@ -1281,48 +1269,21 @@ export default {
     },
     start_data() {
       let name = this.$route.params.name;
-      let nn = localStorage.getItem("pinyin", name);     
       let token = localStorage.getItem("token");
       $cookies.set("token", token);
-      // let ip = '111.121.72.100';
       let ip = returnCitySN["cip"];
-      // console.log(ip)
       this.ip = ip;
       $cookies.set("ip", ip);
       localStorage.setItem("ip", ip);
       let pin = this.pinyin;
       let cityname = this.cityname;
-      
-      if (!localStorage.getItem("num")) {
-        if (nn) {
-        } else {
-          let ll=[];
-          index_start({ip:ip,city:0}).then(resp=>{
-            ll=resp.data.city;
-            let citys=ll.id;
-            let pinyins=ll.pinyin;
-            let name=ll.name;
-            $cookies.set('city',citys,0);
-            $cookies.set('pinyin',pinyins,0);
-            if(name==cityname){
-              localStorage.setItem("num", 1);
-              localStorage.setItem("pinyin", pin);
-              this.$router.push("/" + pinyins);
-            }else{
-              window.location.href="/"+pinyins
-            }
-          })
-        }
-      } else {
-        if (pin != name) {
-          localStorage.setItem("pinyin",pin);
-          window.location.href="/"+pin
-          // this.$router.push("/" + pin);
-        }
+      if (pin != name) {
+        localStorage.setItem("pinyin", pin);
+        window.location.href = "/" + pin;
       }
-      let city=this.city;
+      let city = this.city;
       $cookies.set("city", city);
-      localStorage.setItem('city',city)
+      localStorage.setItem("city", city);
       $cookies.set("cityname", cityname);
       localStorage.setItem("cityname", cityname);
       $cookies.set("pinyin", pin);
@@ -1434,11 +1395,6 @@ export default {
     gotop() {
       this.$router.push("/" + pinyin + "/top");
     },
-    ready() {
-      let ip = returnCitySN["cip"];
-      this.ip = ip;
-      localStorage.getItem("ip");
-    },
     scroll() {
       let Y = window.scrollY;
       if (Y <= 130) {
@@ -1460,9 +1416,8 @@ export default {
     } else if (h >= 700) {
       $("#Foot").css({ position: "relative", bottom: "0", width: "100%" });
     }
-    this.ready();
     // 接口调用
-    
+
     this.start_data();
     // setTimeout(() => {
     //   if(that.kk==0){
@@ -1585,6 +1540,10 @@ li {
 #arealine {
   margin: 0;
 }
+#sea img {
+  width: 15px;
+  margin-bottom: 3px;
+}
 /* 悬浮导航栏 */
 #s-nav {
   width: 100%;
@@ -1618,9 +1577,9 @@ li {
   margin-right: 1%;
 }
 .header .index-logo {
-  width: 11.3%;
+  width: 10%;
   position: absolute;
-  top: 1%;
+  top: 25%;
   left: 4%;
 }
 /* 头部图片 */
@@ -1629,33 +1588,41 @@ li {
 }
 .header .bg {
   width: 100%;
-  height: 150px;
+  height: 120px;
+  margin-top: 55px;
 }
 .header .mine {
   width: 6.4%;
   position: absolute;
-  top: 1%;
+  top: 25%;
   right: 4%;
 }
 .search {
-  width: 92%;
-  height: 40px;
+  width: 100%;
+  height: 55px;
   background: rgba(255, 255, 255, 1);
-  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
-  padding: 10px 12px;
-  position: absolute;
-  top: 130px;
-  left: 4%;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.05);
+  padding-top: 10px;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+}
+.search .sea-con {
+  width: 67%;
+  height: 34px;
+  border-radius: 17px;
+  background-color: #f0f0f2;
+  line-height: 34px;
+  padding-left: 3%;
+  margin-left: 17.8%;
 }
 .search .city {
   color: #80818b;
   font-size: 14px;
-  margin-right: 13px;
+  margin-right: 2%;
 }
 .search .city i {
   font-size: 8px;
-  margin-left: 6px;
 }
 .search #sea {
   height: 16px;
@@ -1664,7 +1631,7 @@ li {
   padding-left: 4.545%;
   border: 0;
   border-left: 0.5px solid #d5d5df;
-  background-color: #fff;
+  background-color: #f0f0f2;
   line-height: 16px;
 }
 .search #sea span {
@@ -1675,7 +1642,6 @@ li {
 /* 真导航 */
 .m-na {
   width: 100%;
-  margin-top: 20px;
   border-bottom: 0.5px solid #f3f5fb;
 }
 

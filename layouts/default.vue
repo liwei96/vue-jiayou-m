@@ -1,45 +1,67 @@
 <template>
-  <div id='bigbox'>
+  <div id="bigbox">
+    <!-- <head-view :pinyin="n"></head-view> -->
     <nuxt />
-    <!-- <foot-view :pinyin="n"></foot-view> -->
   </div>
 </template>
 
 <script>
-import footView from "@/components/Foot.vue";
+import axios from "axios";
+import headView from "@/components/Header.vue";
 export default {
   components: {
-    "foot-view": footView
+    "head-view": headView
   },
-  data(){
+  data() {
     return {
-      n:''
+      n: ""
+    };
+  },
+  beforeCreate() {
+    if (process.client) {
+      window.onresize = () => {
+        if (process.client && document.body.clientWidth > 450) {
+          window.location.href = "http://www.jy8006.com";
+        }
+      };
+      if (process.client && document.body.clientWidth > 450) {
+        window.location.href = "http://www.jy8006.com";
+      }
     }
   },
-  // head() {
-  //   return {
-  //     title: "允家新房",
-  //     meta: [
-  //       {
-  //         name: "description",
-  //         content: "允家新房"
-  //       },
-  //       {
-  //         name: "keywords",
-  //         content: "允家新房"
-  //       }
-  //     ]
-  //   };
-  // },
-  mounted(){
-    this.n=$cookies.get('pinyin')
+  mounted() {
+    axios.interceptors.request.use(
+      function(config) {
+        if (config.url == "/front/flow/sign") {
+          let kid = sessionStorage.getItem("kid");
+          let other = sessionStorage.getItem("other");
+          config.data.kid = kid;
+          config.data.other = other;
+          config.data.sign = $cookies.get("validate.jy8006.com");
+        }
+        if (config.url == "/front/flow/send") {
+          config.data.sign = $cookies.get("validate.jy8006.com");
+        }
+        return config;
+      },
+      function(error) {}
+    );
+    this.n = $cookies.get("pinyin");
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?ae7b8b5cafd465396d73f240cbef1973";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
   }
 };
 </script>
 
 <style>
-#bigbox{
+#bigbox {
   position: relative;
+  max-width: 450px;
 }
 html {
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",

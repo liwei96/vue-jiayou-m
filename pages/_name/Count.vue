@@ -32,17 +32,17 @@
         </li>
         <li class="f">
           <span class="tit">房价总额</span>
-          <input type="text" value="0" />
+          <input type="text" value="0" v-model="fangprice"/>
           <span class="suffix">万</span>
         </li>
         <li class="f">
           <span class="tit">贷款比例</span>
-          <span class="msg percentage">7成</span>
+          <span class="msg percentage">{{dai}}成</span>
           <img src="~/assets/m-go.png" alt />
         </li>
         <li class="d">
           <span class="tit">贷款总额</span>
-          <input type="text" value="0" />
+          <input type="text" value="0" v-model="alldai"/>
           <span class="suffix">万</span>
         </li>
         <li>
@@ -52,7 +52,7 @@
         </li>
         <li>
           <span class="tit">商贷利率</span>
-          <span class="msg loan">最新基准利率（4.75%）</span>
+          <span class="msg loan">最新基准利率（{{(business_rate[y]*bus).toFixed(2)}}%）</span>
           <img src="~/assets/m-go.png" alt />
         </li>
       </ul>
@@ -138,7 +138,7 @@
         </li>
         <li class="busrate">
           <span class="tit">商业利率</span>
-          <span class="msg loan">最新基准利率（4.75%）</span>
+          <span class="msg loan">最新基准利率（{{(business_rate[y]*bus).toFixed(2)}}%）</span>
           <img src="~/assets/m-go.png" alt />
         </li>
         <li>
@@ -182,12 +182,16 @@
       <ul class="tan">
         <li
           :class="g1==key?'focus':''"
-          v-for="(item,key) in fund_rate"
+          v-for="(item,key) in shang"
           :key="key"
           :data-v="item"
           @click="gon"
           :data-k="key"
-        >最新基准利率（{{item}}%）</li>
+        >
+          最新基准利率
+          {{item}}
+          倍（{{(fund_rate[years]*item).toFixed(2)}}%）
+        </li>
       </ul>
     </div>
     <div class="fund-tan t2">
@@ -198,12 +202,16 @@
       <ul class="tan">
         <li
           :class="b1==key?'focus':''"
-          v-for="(item,key) in business_rate"
+          v-for="(item,key) in shang"
           :key="key"
-          :data-v="item"
-          :data-k="key"
           @click="getbus($event)"
-        >最新基准利率（{{item}}%）</li>
+          :data-k="key"
+          :data-v="item"
+        >
+          最新基准利率
+          {{item}}
+          倍（{{(business_rate[y]*item).toFixed(2)}}%）
+        </li>
       </ul>
     </div>
     <div class="fund-tan t3">
@@ -265,9 +273,9 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" checked/>
+            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
             <p class="w-mg">
-              <input class="w-mg-c" type="checkbox" checked v-model="checks"/>我已阅读并同意
+              <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
               <router-link :to="'/'+n+'/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
@@ -283,7 +291,7 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" />
+            <input type="text" placeholder="请输入验证码" id="ma-ll" />
             <button class="port1">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -292,7 +300,6 @@
         </div>
       </div>
     </transition>
-
     <div class="m-chang"></div>
     <transition name="fade">
       <div class="m-o-succ" v-show="succ">
@@ -309,14 +316,30 @@ import footView from "@/components/Foot.vue";
 import { ip, count_data, msg, verification, trend_put } from "~/api/api";
 export default {
   name: "Count",
-  asyncData (context) {
+  asyncData(context) {
     let jkl = context.store.state.cookie.pinyin;
     return {
-      jkl:jkl
-    }
+      jkl: jkl
+    };
+  },
+  head() {
+    return {
+      title: "允家新房-房贷计算",
+      meta: [
+        {
+          name: "description",
+          content: "允家新房"
+        },
+        {
+          name: "keywords",
+          content: "允家新房"
+        }
+      ]
+    };
   },
   data() {
     return {
+      baoming: "",
       change: false,
       succ: false,
       defaultHeight: "0",
@@ -339,14 +362,18 @@ export default {
       years: "30",
       y1: "",
       d1: "",
-      dai: "7",
+      dai: 7,
       b1: "",
-      bus: "4.75",
+      bus: 1,
       g1: "",
-      gong: "3.25",
-      n:'',
-      checks:'',
-      jkl:''
+      gong: 1,
+      n: "",
+      checks: "",
+      jkl: "",
+      height: "",
+      shang: [0.85, 0.9, 0.95, 1, 1.1, 1.2, 1.3],
+      alldai:0,
+      fangprice:0
     };
   },
   components: {
@@ -370,15 +397,9 @@ export default {
     },
     start() {
       let that = this;
-      this.n=this.$route.params.name
+      this.n = this.$route.params.name;
       this.call = localStorage.getItem("call");
-      ip()
-        .then(resp => {
-          that.ip = resp.data.data[0].origip;
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.ip = returnCitySN["cip"];
       count_data()
         .then(resp => {
           let data = resp.data.data;
@@ -394,51 +415,58 @@ export default {
     },
     t4s(e) {
       this.dai = e.target.getAttribute("data-v");
+      this.alldai = this.dai*this.fangprice/10
       this.d1 = e.target.getAttribute("data-k");
     },
-    sendmsg(t) {
-      this.phone = t;
-      let that = this;
-      msg({ phone: t, channel: 2 })
+    sendmsg(tel) {
+      let ip = this.ip;
+      let data = { channel: 2, phone: tel, ip: ip };
+      this.tel = tel;
+      let city = this.$store.state.city;
+      let kid = sessionStorage.getItem("kid");
+      let other = sessionStorage.getItem("other");
+      trend_put({
+        ip: ip,
+        tel: tel,
+        city: city,
+        position: 6,
+        page: 2,
+        type: 6,
+        kid: kid,
+        other: other
+      })
         .then(resp => {
           if (resp.data.code == 200) {
-            let ip = that.ip;
-            let c = localStorage.getItem("city");
-            let p = that.page;
-            let kid = sessionStorage.getItem("kid");
-            let other = sessionStorage.getItem("other");
-            trend_put({
-              ip: ip,
-              tel: t,
-              city: c,
-              position: 5,
-              page: 2,
-              type: 9,
-              kid:kid,
-              other:other
-            })
-              .then(resp => {})
+            msg(data)
+              .then(resp => {
+                let code = resp.data.code;
+                if (code == 200) {
+                  $(".t-b-first").hide();
+                  $(".t-b-second").show();
+                  var time = 60;
+                  var phone = tel.substr(0, 3) + "****" + tel.substr(7, 11);
+                  var fn = function() {
+                    time--;
+                    if (time > 0) {
+                      $(".t-b-scode").html("重新发送" + time + "s");
+                      $(".t-b-scode").attr("disabled", true);
+                    } else {
+                      clearInterval(interval);
+                      $(".t-b-scode").html("获取验证码");
+                      $(".t-b-scode").attr("disabled", false);
+                    }
+                  };
+                  fn();
+                  var interval = setInterval(fn, 1000);
+                  $("#ytel").html(phone);
+                }
+              })
               .catch(error => {
                 console.log(error);
               });
-            $(".t-b-first").hide();
-            $(".t-b-second").show();
-            var time = 60;
-            var tel = t.substr(0, 3) + "****" + t.substr(7, 11);
-            var fn = function() {
-              time--;
-              if (time > 0) {
-                $(".t-b-scode").html("重新发送" + time + "s");
-                $(".t-b-scode").attr("disabled", true);
-              } else {
-                clearInterval(interval);
-                $(".t-b-scode").html("获取验证码");
-                $(".t-b-scode").attr("disabled", false);
-              }
-            };
-            fn();
-            var interval = setInterval(fn, 1000);
-            $("#ytel").html(tel);
+          } else {
+            $(".l-p").val("");
+            $(".l-p").attr("placeholder", "报名失败");
           }
         })
         .catch(error => {
@@ -446,20 +474,22 @@ export default {
         });
     },
     check(m) {
-      let tel = this.phone;
+      let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
         .then(resp => {
           if (resp.data.code == 200) {
-            that.change=false;
-            that.succ=true;
+            that.change = false;
+            that.succ = true;
+          } else {
+            $("#ma-ll").val("");
+            $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
         .catch(error => {
           console.log(error);
         });
     },
-    
     getyear(e) {
       let y = e.target.getAttribute("data-v");
       this.y = y;
@@ -480,12 +510,12 @@ export default {
       this.gong = y;
       this.g1 = e.target.getAttribute("data-k");
     },
-    goback(){
-      this.$router.go(-1)
+    goback() {
+      this.$router.go(-1);
     }
   },
   mounted() {
-    $("#Foot").css({ position: "relative", bottom: "0", width: "100%" });
+    this.height = document.body.clientHeight;
     let that = this;
     this.start();
     $(".dai").on("click", function() {
@@ -513,12 +543,6 @@ export default {
         .addClass("active")
         .siblings("li")
         .removeClass("active");
-    });
-    $(".tan li").on("click", function() {
-      $(this)
-        .addClass("focus")
-        .siblings("li")
-        .removeClass("focus");
     });
     $(".loan").on("click", function() {
       $(".zhao").show();
@@ -561,28 +585,30 @@ export default {
       $(".years").html(y1 + "年");
       let d = that.dai;
       $(".percentage").html(d + "成");
-      let b = that.bus;
+      let b = (that.business_rate[that.y] * that.bus).toFixed(2);
+      // (business_rate[y]*bus).toFixed(2)
       $(".loan").html(`最新基准利率（${b}%）`);
-      let g = that.gong;
+      // let g = that.gong;
+      let g = (that.fund_rate[that.years] * that.gong).toFixed(2);
       $(".benchmark").html(`最新基准利率（${g}%）`);
     });
 
     $(".p1").on("click", function() {
-      that.change=true;
+      that.change = true;
       $(".m-chang").show();
     });
     $(".m-chang").on("click", function() {
       $(".m-chang").hide();
-      that.change=false;
-      that.succ=false;
+      that.change = false;
+      that.succ = false;
     });
     // 接口验证码
     $(".t-b-btn2").on("click", function() {
-      let check=that.checks;
-      if(!check){
-        $('.tishi').show();
-      }else{
-        $('.tishi').hide();
+      let check = that.checks;
+      if (!check) {
+        $(".tishi").show();
+      } else {
+        $(".tishi").hide();
       }
       var phone = $(this)
         .prev()
@@ -624,15 +650,15 @@ export default {
       that.check(ma);
     });
     $("#o_btn").on("click", function() {
-      that.succ=false
+      that.succ = false;
       $(".m-chang").hide();
     });
     $(".o-esc").on("click", function() {
-      that.succ=false
+      that.succ = false;
       $(".m-chang").hide();
     });
     $(".con-msg").on("click", function() {
-      that.$router.push('/'+that.n+"/count")
+      that.$router.push("/" + that.n + "/count");
       // window.location.href = "/count";
     });
     $("#sum").on("click", function() {
@@ -643,6 +669,7 @@ export default {
         msg.type = 2;
         let total = 0;
         msg.year = that.y;
+        let rate = (that.business_rate[that.y] * that.bus).toFixed(2);
         msg.interest_rate = that.bus;
         if (type == 1) {
           total = $(".business .f input").val();
@@ -655,13 +682,14 @@ export default {
         msg.payway = 1;
         $cookies.set("sum", msg, 60);
         // window.location.href = '/'+that.n+"/countdetail";
-        that.$router.push('/'+that.n+"/countdetail")
+        that.$router.push("/" + that.n + "/countdetail");
       } else if (that.t2) {
         let type = $(".fund .blue:radio:checked").val();
         msg.method = type;
         msg.type = 1;
         let total = 0;
         msg.year = that.y;
+        let rate = (that.fund_rate[that.years] * that.gong).toFixed(2);
         msg.fund_interest_rate = that.gong;
         if (type == 1) {
           total = $(".fund .f input").val();
@@ -673,7 +701,7 @@ export default {
         }
         msg.payway = 1;
         $cookies.set("sum", msg, 60);
-        that.$router.push('/'+that.n+"/countdetail")
+        that.$router.push("/" + that.n + "/countdetail");
         // window.location.href = '/'+that.n+"/countdetail";
       } else {
         let type = $(".combination .blue:radio:checked").val();
@@ -682,6 +710,8 @@ export default {
         let total = 0;
         msg.fund_year = that.y;
         msg.business_year = that.years;
+        let rate1 = (that.business_rate[that.y] * that.bus).toFixed(2);
+        let rate2 = (that.fund_rate[that.years] * that.gong).toFixed(2);
         msg.fund_interest_rate = that.gong;
         msg.business_interest_rate = that.bus;
         if (type == 1) {
@@ -698,7 +728,7 @@ export default {
         }
         msg.payway = 1;
         $cookies.set("sum", msg, 60);
-         that.$router.push('/'+that.n+"/countdetail")
+        that.$router.push("/" + that.n + "/countdetail");
         // window.location.href = '/'+that.n+"/countdetail";
       }
     });
@@ -708,20 +738,28 @@ export default {
     });
     //获取默认高度
     this.defaultHeight = $(window).height();
+    let h = document.body.clientHeight;
+    $("#Foot").css({ position: "relative", bottom: "0", width: "100%" });
     window.onresize = () => {
       return (() => {
         this.nowHeight = $(window).height();
+        let h = document.body.clientHeight;
+        if (h < 700) {
+          $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
+        } else if (h >= 700) {
+          $("#Foot").css({ position: "relative", bottom: "0", width: "100%" });
+        }
       })();
     };
   },
   watch: {
     nowHeight: function() {
       if (this.defaultHeight != this.nowHeight) {
-          $('.weiter').css('top','100px')
-          $('#nav-list').css('top','42%')
-      }else{
-          $('.weiter').css('top','220px')
-          $('#nav-list').css('top','21%')
+        $(".weiter").css("top", "100px");
+        $("#nav-list").css("top", "42%");
+      } else {
+        $(".weiter").css("top", "220px");
+        $("#nav-list").css("top", "21%");
       }
     }
   }
@@ -733,18 +771,21 @@ export default {
   padding: 0;
   margin: 0;
 }
-.Count{
+.Count {
   overflow: hidden;
+}
+#Foot {
+  z-index: -1;
 }
 li {
   list-style: none;
 }
-.tishi{
-  color:red;
+.tishi {
+  color: red;
   font-size: 10px;
   display: none;
 }
-.peo{
+.peo {
   overflow: hidden;
 }
 header {
@@ -788,6 +829,7 @@ header ul li.active i {
 
 .con {
   padding: 0 4%;
+  margin-bottom: 15vh;
 }
 .con .f {
   display: none;
@@ -957,6 +999,7 @@ input[type="radio"].blue {
   display: none;
   position: fixed;
   bottom: 0;
+  z-index: 5;
   background-color: #fff;
 }
 .fund-tan h5 {
@@ -1072,7 +1115,7 @@ input[type="radio"].blue {
   border-radius: 6px;
 }
 
-.weiter .t-bottom .t-b-first .w-mg-c:before{
+.weiter .t-bottom .t-b-first .w-mg-c:before {
   display: none;
 }
 

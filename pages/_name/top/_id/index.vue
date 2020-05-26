@@ -261,7 +261,7 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
+            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming"/>
             <p class="w-mg">
               <input class="w-mg-c" type="checkbox" checked v-model="check" />我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
@@ -279,7 +279,7 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" />
+            <input type="text" placeholder="请输入验证码" id="ma-ll"/>
             <button class="port1">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -319,7 +319,7 @@ export default {
     let ip=context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
-     let kk = context.params.type;
+     let kk = context.params.id;
      let jkl=context.store.state.cookie.pinyin;
     let [res]= await Promise.all([
       context.$axios.post('/api/first/feature_second_mobile',{ city: city, ip: ip, platform: 2, token: token })
@@ -378,7 +378,10 @@ export default {
           top4s : res.existing,
           lists : res.likes,
           check:true,
-          jkl:jkl
+          jkl:jkl,
+          title:res.title,
+          description:res.description,
+          keywords:res.keywords
     }
   },
   data() {
@@ -748,7 +751,25 @@ export default {
       active2: "",
       active3: "",
       active4: "",
-      load: true
+      load: true,
+      title:'',
+      description:'',
+      keywords:''
+    };
+  },
+  head() {
+    return {
+      title: this.title || '允家新房-楼盘榜',
+      meta: [
+        {
+          name: "description",
+          content: this.description || '允家新房'
+        },
+        {
+          name: "keywords",
+          content: this.keywords || '允家新房'
+        }
+      ]
     };
   },
   methods: {
@@ -787,7 +808,7 @@ export default {
       this.t4 = true;
     },
     start_data() {
-      let kk = this.$route.params.type;
+      let kk = this.$route.params.id;
       if (kk == 1) {
         this.t1 = true;
         this.active1 = "active";
@@ -867,6 +888,9 @@ export default {
             fn();
             var interval = setInterval(fn, 1000);
             $("#ytel").html(phone);
+          }else{
+            $('.l-p').val('')
+            $(".l-p").attr("placeholder", "报名失败");
           }
         })
         .catch(error => {
@@ -874,13 +898,16 @@ export default {
         });
     },
     yan(code) {
-      let tel = this.phone;
+      let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: code, channel: 2 })
         .then(resp => {
           if (resp.data.code == 200) {
             that.change = false;
             that.succ = true;
+          }else{
+            $("#ma-ll").val('');
+            $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
         .catch(error => {
@@ -889,9 +916,9 @@ export default {
     },
     handleScroll() {
       let Y = window.scrollY;
-      if (Y <= 165) {
+      if (Y <= 165 && Y>=0) {
         $("#nav-list").css({ position: "absolute", top: "164px" });
-      } else {
+      } else if(Y>165) {
         $("#nav-list").css({ position: "fixed", top: "0" });
       }
     }

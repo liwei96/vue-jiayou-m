@@ -193,11 +193,10 @@ export default {
   },
   async asyncData (context) {
    let ip=context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
+    let city = context.store.state.city;
     let token=context.store.state.cookie.token;
-    let jkl = context.store.state.cookie.pinyin;
-    console.log(jkl)
-    let [res1,res2,res3]= await Promise.all([
+    let jkl = context.params.name;
+    let [res1,res2,res3,res4]= await Promise.all([
       context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:'56',platform:2,token:token})
       .then((resp)=>{
           let data=resp.data.data.data;
@@ -214,13 +213,22 @@ export default {
           let data=resp.data.data.data;
           data.n=context.store.state.pinyin;
           return data;
+      }),
+      context.$axios.post('/api/article/wiki',{ip:ip,city:city,platform:2,token:token})
+      .then((resp)=>{
+          let data=resp.data.header;
+          return data;
       })
     ])
     return{
           lists:res1,
           list1:res2,
           list2:res3,
-          jkl:jkl
+          jkl:jkl,
+          city:city,
+          title:res4.title,
+          keywords:res4.keywords,
+          description:res4.description
     }
   },
   data() {
@@ -311,7 +319,27 @@ export default {
       p3:2,
       n:'',
       load:true,
-      jkl:''
+      jkl:'',
+      city:'',
+      title:'',
+      keywords:'',
+      description:''
+    };
+  },
+  head() {
+    return {
+      title: this.title,
+      meta: [
+        {
+          name: "description",
+          content:
+            this.description
+        },
+        {
+          name: "keywords",
+          content: this.keywords
+        }
+      ]
     };
   },
   components: {
@@ -340,7 +368,7 @@ export default {
       this.id1=id;
       this.p1=2;
       let token=localStorage.getItem('token');
-      let city=localStorage.getItem('city');
+      let city=this.city;
       let ip=this.ip;
       let that=this;
       encyclopedia_data({ip:ip,city:city,page:1,limit:10,position:id,platform:2,token:token}).then(resp=>{
@@ -354,7 +382,7 @@ export default {
       this.id2=id;
       this.p2=2;
       let token=localStorage.getItem('token');
-      let city=localStorage.getItem('city');
+      let city=this.city;
       let ip=this.ip;
       let that=this;
       encyclopedia_data({ip:ip,city:city,page:1,limit:10,position:id,platform:2,token:token}).then(resp=>{
@@ -368,7 +396,7 @@ export default {
       this.id3=id;
       this.p3=2;
       let token=localStorage.getItem('token');
-      let city=localStorage.getItem('city');
+      let city=this.city;
       let ip=this.ip;
       let that=this;
       encyclopedia_data({ip:ip,city:city,page:1,limit:10,position:id,platform:2,token:token}).then(resp=>{
@@ -380,7 +408,7 @@ export default {
     start(){
       this.n=this.$route.params.name
       let token=localStorage.getItem('token');
-      let city=localStorage.getItem('city');
+      let city=this.city;
       let ip=returnCitySN['cip'];
       this.ip=ip;
       localStorage.getItem('ip');
@@ -388,7 +416,7 @@ export default {
     },
     more3(id,page){
       let token=localStorage.getItem('token');
-      let city=localStorage.getItem('city');
+      let city=this.city;
       let ip=this.ip;
       let that=this;
       encyclopedia_data({ip:ip,city:city,page:page,limit:10,position:id,platform:2,token:token}).then(resp=>{
@@ -402,7 +430,7 @@ export default {
     },
     more2 (id,page){
       let token=localStorage.getItem('token');
-      let city=localStorage.getItem('city');
+      let city=this.city;
       let ip=this.ip;
       let that=this;
       encyclopedia_data({ip:ip,city:city,page:page,limit:10,position:id,platform:2,token:token}).then(resp=>{
@@ -416,7 +444,7 @@ export default {
     },
     more1(id,page){
       let token=localStorage.getItem('token');
-      let city=localStorage.getItem('city');
+      let city=this.city;
       let ip=this.ip;
       let that=this;
       encyclopedia_data({ip:ip,city:city,page:page,limit:10,position:id,platform:2,token:token}).then(resp=>{
@@ -459,7 +487,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.jkl)
     let width=document.documentElement.clientWidth;
     $('.fubox').css('width',width+'px')
     this.start();

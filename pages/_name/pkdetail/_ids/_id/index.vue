@@ -2,7 +2,7 @@
 <template>
   <div class="Pkdetail">
     <h3>
-      <img src="~/assets/return.png" @click="goback" />户型分析
+      <img src="~/assets/return.png" @click="goback" />楼盘PK
     </h3>
     <div class="fix">
       <div class="f-top">
@@ -247,9 +247,9 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="tel"/>
+            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="tel" />
             <p class="w-mg">
-              <input class="w-mg-c" type="checkbox" v-model="checks"/>我已阅读并同意
+              <input class="w-mg-c" type="checkbox" v-model="checks" />我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
@@ -264,7 +264,7 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" />
+            <input type="text" placeholder="请输入验证码" id="ma-ll"/>
             <button class="port1">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -290,32 +290,41 @@ import footView from "@/components/Foot.vue";
 import { ip, msg, verification, morehus_put, PK } from "~/api/api";
 export default {
   name: "Pkdetail",
-  async asyncData (context) {
-    let ip=context.store.state.cookie.ip;
+  async asyncData(context) {
+    let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
-    let token=context.store.state.cookie.token;
-    let id=context.params.id;
-    let ids=context.params.ids;
-    let jkl=context.store.state.cookie.pinyin;
-    let [res]= await Promise.all([
-      context.$axios.post('/api/project/compare_mobile',{ ip: ip, ids: ids, platform: 2, token: token })
-      .then((resp)=>{
-        let data = resp.data.data.buildings;
+    let token = context.store.state.cookie.token;
+    let id = context.params.id;
+    let ids = context.params.ids;
+    let jkl = context.store.state.cookie.pinyin;
+    let [res] = await Promise.all([
+      context.$axios
+        .post("/api/project/compare_mobile", {
+          ip: ip,
+          ids: ids,
+          platform: 2,
+          token: token
+        })
+        .then(resp => {
+          let data = resp.data.data;
           return data;
-      })
-    ])
-    return{
-          left : res[0],
-        right : res[1],
-        jkl:jkl
-    }
+        })
+    ]);
+    return {
+      left: res.buildings[0],
+      right: res.buildings[1],
+      jkl: jkl,
+      title: res.title,
+      description: res.description,
+      keywords: res.keywords
+    };
   },
   components: {
     "foot-view": footView
   },
   data() {
     return {
-      jkl:'',
+      jkl: "",
       change: false,
       succ: false,
       defaultHeight: "0",
@@ -385,21 +394,23 @@ export default {
       ip: "",
       tel: "",
       id: "",
-      call:'',
-      checks:'',
-      n:''
+      call: "",
+      checks: "",
+      n: "",
+      title: "",
+      description: "",
+      keywords: ""
     };
   },
   methods: {
     start() {
       let that = this;
-      this.call=localStorage.getItem('call')
-      let ip=returnCitySN['cip'];
-      this.ip=ip;
-      localStorage.getItem('ip');
+      this.call = localStorage.getItem("call");
+      let ip = returnCitySN["cip"];
+      this.ip = ip;
+      localStorage.getItem("ip");
       let id = this.$route.params.id;
       this.id = id;
-      
     },
     send(sends) {
       this.tel = sends;
@@ -442,6 +453,9 @@ export default {
               });
             var interval = setInterval(fn, 1000);
             $("#ytel").html(tel);
+          }else{
+            $('.l-p').val('')
+            $(".l-p").attr("placeholder", "报名失败");
           }
         })
         .catch(error => {
@@ -462,7 +476,14 @@ export default {
         city: country,
         ip: ip
       })
-        .then(resp => {})
+        .then(resp => {
+          if(resp.data.code==200){
+
+          }else{
+            $("#ma-ll").val('');
+            $("#ma-ll").attr("placeholder", "验证码不正确");
+          }
+        })
         .catch(error => {
           console.log(error);
         });
@@ -473,31 +494,46 @@ export default {
       verification({ phone: t, code: checks, channel: 2 })
         .then(resp => {
           if (resp.data.code == 200) {
-            that.change=false
-            that.succ=true
+            that.change = false;
+            that.succ = true;
           }
         })
         .catch(error => {
           console.log(error);
         });
     },
-    goback(){
-      this.$router.go(-1)
+    goback() {
+      this.$router.go(-1);
     },
-    scroll(){
+    scroll() {
       let Y = window.scrollY;
-      Y=45-Y;
-      if(Y<=0){
-         $(".fix").css("top", "0px");
-      }else{
+      Y = 45 - Y;
+      if (Y <= 0) {
+        $(".fix").css("top", "0px");
+      } else {
         $(".fix").css("top", Y + "px");
       }
     }
   },
+  head() {
+    return {
+      title: this.title || "允家新房-楼盘PK",
+      meta: [
+        {
+          name: "description",
+          content: this.description || "允家新房"
+        },
+        {
+          name: "keywords",
+          content: this.keywords || "允家新房"
+        }
+      ]
+    };
+  },
   mounted() {
     let that = this;
     this.start();
-    this.tel=localStorage.getItem('phone')
+    this.tel = localStorage.getItem("phone");
     jQuery.fn.ratingStars = function(e) {
       var r = {
           selectors: {
@@ -609,7 +645,7 @@ export default {
     };
     $(".rating-stars").ratingStars(ratingOptions);
     $(".p1").on("click", function() {
-      that.change=true;
+      that.change = true;
       $(".m-chang").show();
     });
     $(".m-chang").on("click", function() {
@@ -619,19 +655,19 @@ export default {
     });
     // 接口验证码
     $(".t-b-btn2").on("click", function() {
-      let t=that.checks;
-      if(t){
-        $('.tishi').hide()
-      }else{
-        $('.tishi').show();
-        return
+      let t = that.checks;
+      if (t) {
+        $(".tishi").hide();
+      } else {
+        $(".tishi").show();
+        return;
       }
       var phone = $(this)
         .prev()
         .prev()
         .prev()
         .val();
-      
+
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -874,7 +910,11 @@ h3 img {
 }
 
 .m-botnav .m-pho {
-  background: linear-gradient(90deg,rgba(255,76,76,1),rgba(255,152,106,1));
+  background: linear-gradient(
+    90deg,
+    rgba(255, 76, 76, 1),
+    rgba(255, 152, 106, 1)
+  );
   color: #fff;
 }
 .m-botnav .m-pho .ph1 {
@@ -897,7 +937,11 @@ h3 img {
 }
 
 .m-botnav .m-y {
-  background: linear-gradient(-270deg,rgba(52,138,255,1),rgba(106,204,255,1));
+  background: linear-gradient(
+    -270deg,
+    rgba(52, 138, 255, 1),
+    rgba(106, 204, 255, 1)
+  );
   color: #fff;
   left: 62%;
 }
@@ -976,7 +1020,7 @@ h3 img {
   position: absolute;
   right: 5%;
   top: 5%;
-  width:16px;
+  width: 16px;
 }
 
 .weiter .t-bottom {
@@ -1002,14 +1046,14 @@ h3 img {
   margin-bottom: 2px;
 }
 
-.weiter .t-bottom .t-b-first .w-mg{
+.weiter .t-bottom .t-b-first .w-mg {
   font-size: 11px;
 }
 
 .weiter .t-bottom .t-b-first input {
   width: 85%;
   height: 44px;
-  border: 1px solid #C6C6CC;
+  border: 1px solid #c6c6cc;
   margin-top: 38px;
   margin-bottom: 5.5px;
   margin-left: 7.52%;
@@ -1050,7 +1094,7 @@ h3 img {
   text-align: center;
   line-height: 40px;
   margin-left: 7.5%;
-  box-shadow:0px 2.5px 6px 0px rgba(78,169,255,0.3);
+  box-shadow: 0px 2.5px 6px 0px rgba(78, 169, 255, 0.3);
 }
 
 .weiter .t-bottom .t-b-first .bg_01 {
@@ -1088,7 +1132,7 @@ h3 img {
   width: 85%;
   height: 40px;
   border-radius: 2px;
-  border: 1px solid #C6C6CC;
+  border: 1px solid #c6c6cc;
   margin-left: 7.5%;
   margin-bottom: 20px;
   padding-left: 4%;
@@ -1112,7 +1156,7 @@ h3 img {
   margin-bottom: 20px;
   border-radius: 1px;
   border-radius: 6px;
-  margin-top:20px;
+  margin-top: 20px;
 }
 
 .weiter .t-bottom .t-b-second .t-b-scode {

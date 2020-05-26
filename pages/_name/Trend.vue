@@ -85,18 +85,18 @@
         </div>
       </div>
     </div>
-    <foot-view :pinyin='jkl'></foot-view>
+    <foot-view :pinyin="jkl"></foot-view>
     <!-- 弹框 -->
     <transition name="change">
       <div class="weiter ts" v-show="change">
         <div class="t-top">
-          <h6>预约看房</h6>
+          <h6>变价通知</h6>
           <p>一键预约看房免费小车上门接送，可带家人一起参观多个热门楼盘</p>
           <img id="w-esc" src="~/assets/w-del.png" alt />
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming"/>
+            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
             <p class="w-mg">
               <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
@@ -114,7 +114,7 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" />
+            <input type="text" placeholder="请输入验证码" id="ma-ll"/>
             <button class="port1">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -142,29 +142,37 @@ import footView from "@/components/Foot.vue";
 import { trend_start, trend_put, msg, verification, ip } from "~/api/api";
 export default {
   name: "Trend",
-  async asyncData (context) {
-    let ip=context.store.state.cookie.ip;
+  async asyncData(context) {
+    let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
-    let token=context.store.state.cookie.token;
-    let jkl=context.store.state.cookie.pinyin;
-    let [res]= await Promise.all([
-      context.$axios.post('/api/price/trends',{ city: city, ip: ip, token: token, platform: 2 })
-      .then((resp)=>{
-        let trend = resp.data.data.price_trends;
-          let data=resp.data.data;
-          if (Number( trend.current.rate) > 0) {
+    let token = context.store.state.cookie.token;
+    let jkl = context.store.state.cookie.pinyin;
+    let [res] = await Promise.all([
+      context.$axios
+        .post("/api/price/trends", {
+          city: city,
+          ip: ip,
+          token: token,
+          platform: 2
+        })
+        .then(resp => {
+          let trend = resp.data.data.price_trends;
+          let data = resp.data.data;
+          if (Number(trend.current.rate) > 0) {
             trend.mb = "下降";
           } else {
             trend.mb = "上升";
-             trend.current.rate = Math.abs(Number( trend.current.rate));
+            trend.current.rate = Math.abs(Number(trend.current.rate));
           }
           if (Number(trend.current.rate_lastyear) < 0) {
             trend.yb = "下降";
-            trend.current.rate_lastyear = Math.abs(Number(trend.current.rate_lastyear));
+            trend.current.rate_lastyear = Math.abs(
+              Number(trend.current.rate_lastyear)
+            );
           } else {
             trend.yb = "上升";
           }
-          
+
           let m = [];
           let p = [];
           let ms = trend.data;
@@ -176,29 +184,32 @@ export default {
           data.mounth = m;
           data.price = p;
           return data;
-      })
-    ])
-    return{
-          trend_mounth : res.price_trends.current.time,
-          trend_price : res.price_trends.current.price,
-          trend_up : res.price_trends.current.rate_lastyear,
-          trend_down : res.price_trends.current.rate,
-          lists : res.recommands,
-          mb:res.price_trends.mb,
-          yb:res.price_trends.yb,
-          mounth:res.mounth,
-          price:res.price,
-          jkl:jkl,
-          checks:true
-    }
+        })
+    ]);
+    return {
+      trend_mounth: res.price_trends.current.time,
+      trend_price: res.price_trends.current.price,
+      trend_up: res.price_trends.current.rate_lastyear,
+      trend_down: res.price_trends.current.rate,
+      lists: res.recommands,
+      mb: res.price_trends.mb,
+      yb: res.price_trends.yb,
+      mounth: res.mounth,
+      price: res.price,
+      jkl: jkl,
+      checks: true,
+      title: res.title,
+      description: res.description,
+      keywords: res.keywords
+    };
   },
   components: {
     "foot-view": footView
   },
   data() {
     return {
-      baoming:'',
-      jkl:'',
+      baoming: "",
+      jkl: "",
       change: false,
       succ: false,
       defaultHeight: "0",
@@ -272,7 +283,10 @@ export default {
       tel: "",
       n: "",
       mb: "",
-      yb: ""
+      yb: "",
+      title: "",
+      description: "",
+      keywords: ""
     };
   },
   methods: {
@@ -389,52 +403,51 @@ export default {
       let ip = this.ip;
       let data = { channel: 2, phone: tel, ip: ip };
       this.tel = tel;
-      msg(data)
+      let city = this.$store.state.city;
+      let kid = sessionStorage.getItem("kid");
+      let other = sessionStorage.getItem("other");
+      trend_put({
+        ip: ip,
+        tel: tel,
+        city: city,
+        position: 6,
+        page: 2,
+        type: 6,
+        kid: kid,
+        other: other
+      })
         .then(resp => {
-          let code = resp.data.code;
-          if (code == 200) {
-            let city = localStorage.getItem("city");
-            if (!city) {
-              city = 1;
-              localStorage.setItem("city", 1);
-            }
-            let kid = sessionStorage.getItem("kid");
-            let other = sessionStorage.getItem("other");
-            trend_put({
-              ip: ip,
-              tel: tel,
-              city: city,
-              position: 6,
-              page: 2,
-              type: 6,
-              kid: kid,
-              other: other
-            })
+          if (resp.data.code == 200) {
+            msg(data)
               .then(resp => {
-                if (resp.data.code == 200) {
+                let code = resp.data.code;
+                if (code == 200) {
+                  $(".t-b-first").hide();
+                  $(".t-b-second").show();
+                  var time = 60;
+                  var phone = tel.substr(0, 3) + "****" + tel.substr(7, 11);
+                  var fn = function() {
+                    time--;
+                    if (time > 0) {
+                      $(".t-b-scode").html("重新发送" + time + "s");
+                      $(".t-b-scode").attr("disabled", true);
+                    } else {
+                      clearInterval(interval);
+                      $(".t-b-scode").html("获取验证码");
+                      $(".t-b-scode").attr("disabled", false);
+                    }
+                  };
+                  fn();
+                  var interval = setInterval(fn, 1000);
+                  $("#ytel").html(phone);
                 }
               })
               .catch(error => {
                 console.log(error);
               });
-            $(".t-b-first").hide();
-            $(".t-b-second").show();
-            var time = 60;
-            var phone = tel.substr(0, 3) + "****" + tel.substr(7, 11);
-            var fn = function() {
-              time--;
-              if (time > 0) {
-                $(".t-b-scode").html("重新发送" + time + "s");
-                $(".t-b-scode").attr("disabled", true);
-              } else {
-                clearInterval(interval);
-                $(".t-b-scode").html("获取验证码");
-                $(".t-b-scode").attr("disabled", false);
-              }
-            };
-            fn();
-            var interval = setInterval(fn, 1000);
-            $("#ytel").html(phone);
+          }else{
+            $('.l-p').val('')
+            $(".l-p").attr("placeholder", "报名失败");
           }
         })
         .catch(error => {
@@ -442,13 +455,16 @@ export default {
         });
     },
     yan(e) {
-      let tel = this.tel;
+      let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: e, channel: 2 })
         .then(resp => {
           if (resp.data.code == 200) {
             that.change = false;
             that.succ = true;
+          }else{
+            $("#ma-ll").val('');
+            $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
         .catch(error => {
@@ -459,8 +475,23 @@ export default {
       this.$router.go(-1);
     }
   },
+  head() {
+    return {
+      title: this.title || "允家新房-房价趋势",
+      meta: [
+        {
+          name: "description",
+          content: this.description || "允家新房"
+        },
+        {
+          name: "keywords",
+          content: this.keywords || "允家新房"
+        }
+      ]
+    };
+  },
   mounted() {
-    this.baoming=localStorage.getItem('phone');
+    this.baoming = localStorage.getItem("phone");
     this.start_data();
     this.drawline();
     let that = this;
@@ -492,7 +523,7 @@ export default {
     // 接口验证码
     $(".t-b-btn2").on("click", function() {
       let check = that.checks;
-      console.log(check)
+      console.log(check);
       if (!check) {
         $(".tishi").show();
         return;
@@ -584,7 +615,7 @@ h3 {
   position: relative;
   font-size: 16px;
   position: fixed;
-  top:0;
+  top: 0;
   width: 100%;
   background-color: #fff;
   z-index: 100;
@@ -599,7 +630,7 @@ h3 img {
 
 .con {
   padding: 11px 15px;
-  margin-top:44px;
+  margin-top: 44px;
 }
 
 .tishi {

@@ -66,6 +66,7 @@
           <span class="m-jing">{{building.decorate}}</span>
           <span v-if="building.railway">{{building.railway}}</span>
           <span>{{building.tag}}</span>
+          <strong v-if="tuan==1">限时优惠</strong>
           <i class="m-ishou">
             <img src="~/assets/contrast.png" alt />
             <i class="m_shou01" @click="pks($event)" :data-v="id">楼盘PK</i>
@@ -149,7 +150,7 @@
           </p>
         </nav>
         <img src="~/assets/tuan-pin.png" alt />
-        <div class="pin-bao" @click="xiang" v-if="!newimg">立享优惠</div>
+        <div class="pin-bao" @click="xiang(22)" v-if="!newimg">立享优惠</div>
         <img src="~/assets/tuna-hased.png" alt class="hased" v-if="newimg" />
         <div class="bom">
           <div class="trend-con1">
@@ -315,14 +316,14 @@
         <button class="p1" data-v="获取详细分析资料">获取详细分析资料</button>
       </div>
       <div class="m-line visible-xs-block .visible-sm-block" v-if="tuan==1"></div>
-      <div class="tuan-qiang"  v-if="tuan==1">
+      <div class="tuan-qiang" v-if="tuan==1">
         <img src="~/assets/tuan-qiang.png" alt />
         <div class="q-con">
           <h6>省钱买好房拼团享优惠</h6>
           <p>购房享1000元优惠最高5000元</p>
         </div>
         <div class="q-right">
-          <button @click="xiang">马上抢</button>
+          <button @click="xiang(25)">马上抢</button>
           <p>{{group_buy.received_num}}已抢</p>
         </div>
       </div>
@@ -700,7 +701,7 @@
             </div>
             <div class="t-bottom">
               <div class="t-b-first">
-                <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming" />
+                <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
                 <p class="w-mg">
                   <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
                   <router-link :to="'/'+jkl+'/server'">
@@ -718,7 +719,7 @@
                   验证码已发送到
                   <span id="ytel">187****4376</span>，请注意查看
                 </p>
-                <input type="text" placeholder="请输入验证码" v-model="ma" id="ma-ll" />
+                <input type="tel" placeholder="请输入验证码" v-model="ma" id="ma-ll" />
                 <button class="port1" @click="check">确定</button>
                 <input type="hidden" id="building_name" value />
                 <input type="hidden" value />
@@ -743,14 +744,28 @@
       </div>
       <div id="panel" style="display:none;"></div>
     </div>
-    <transition name="fade">
-      <my-loading v-if="load"></my-loading>
-    </transition>
+    
+    <div class="swp" v-if="tu">
+      <slide-verify
+        :l="20"
+        :r="5"
+        :w="240"
+        :h="160"
+        :imgs='imgs'
+        @success="onSuccess"
+        @fail="onFail"
+        @refresh="onRefresh"
+        :slider-text="text"
+      ></slide-verify>
+    </div>
+    <div class="iscookie" v-if="iscookie"><p>为了更好的体验，请在浏览器设置中打开cookie</p></div>
   </div>
 </template>
 <script>
 import footView from "@/components/Foot.vue";
 import Swiper from "swiper";
+import img1 from '~/assets/lou1.png';
+import img2 from '~/assets/lou2.png';
 import "swiper/css/swiper.min.css";
 // import { echarts } from "./static/js/echarts.min.js";
 import axios from "axios";
@@ -768,7 +783,6 @@ import {
 } from "~/api/api";
 export default {
   name: "Content",
-  transition: "change",
   components: {
     "my-loading": Loading,
     "foot-view": footView,
@@ -872,7 +886,7 @@ export default {
           data.p2 = p2;
           data.p3 = p3;
           data.t = t;
-          if (dd.group_buy.length!=0) {
+          if (dd.group_buy.length != 0) {
             dd.tuan = 1;
           } else {
             dd.tuan = 0;
@@ -924,15 +938,19 @@ export default {
       jf: res.data.jf,
       jfss: res.data.jfss,
       title: res.data.title,
+      description: res.data.description,
+      keywords: res.data.keywords,
       collect: res.data.collect,
       checks: true,
       city: res.city.id,
       tuan: res.tuan,
-      group_buy: res.group_buy
+      group_buy: res.group_buy,
+      open: res.open
     };
   },
   data() {
     return {
+      imgs:[img1,img2],
       li: 0,
       warn: false,
       baoming: "",
@@ -954,64 +972,7 @@ export default {
       n1: true,
       n2: false,
       id: "",
-      tongjia: [
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          area_max: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          area_max: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          area_max: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          area_max: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        }
-      ],
+      tongjia: [],
       tongqu: [
         {
           name: "绿地华家池印",
@@ -1119,6 +1080,8 @@ export default {
       tit: "",
       over: false,
       title: "",
+      keywords: "",
+      description: "",
       checks: true,
       tel: "",
       city: "",
@@ -1130,23 +1093,38 @@ export default {
       hour: "",
       second: "",
       newimg: false,
-      ones: 0
+      ones: 0,
+      open: 0,
+      tu: false,
+      text: "向右滑",
+      msg: "",
+      iscookie: false
     };
   },
   head() {
     return {
-      title: this.title || "允家新房"
+      title: this.title || "允家新房",
+      meta: [
+        {
+          name: "description",
+          content: this.description
+        },
+        {
+          name: "keywords",
+          content: this.keywords
+        }
+      ]
     };
   },
   methods: {
-    xiang() {
+    xiang(id) {
+      this.position=id
       $(".m-chang").show();
       this.change = true;
       this.ones = 1;
-      $(".weiter .t-top h6").html('限时优惠');
-        $(".weiter .t-top p").html(
-          "临取团购限时优惠金！优惠金将与您手机号绑定"
-        );
+      $(".weiter .t-top h6").html("限时优惠");
+      $(".weiter .t-top p").html("领取团购限时优惠！优惠编码将与您手机号绑定");
+      $('#dingxue').html('立即领取')
     },
     method1: function() {
       echarts();
@@ -1163,7 +1141,7 @@ export default {
     start() {
       let url = window.location.href;
       url = url.split("?")[1];
-      if (url) {
+      if (url && url.indexOf('kid') !== -1) {
         url = url.split("&");
         let kid = url[0].split("=")[1];
         let other = url[1].split("=")[1];
@@ -1392,27 +1370,28 @@ export default {
       chart.setOption(option);
     },
     mmap() {
-      if (!localStorage.getItem("map")) {
-        localStorage.setItem("map", 1);
-        let that = this;
-        let baidu = [that.ln, that.la];
-        var la = "";
-        var ln = "";
-        AMap.convertFrom(baidu, "baidu", function(status, result) {
-          if (result.info === "ok") {
-            var lnglats = result.locations; // Array.<LngLat>
-            la = lnglats[0].lat;
-            ln = lnglats[0].lng;
-            var map = new AMap.Map("m-container", {
-              zoom: 14, //初始化地图层级
-              center: [ln, la], //初始化地图中心点
-              zoomEnable: false,
-              dragEnable: false
-            });
-          }
-        });
-        console.log([ln, la]);
-      }
+      this.over = false;
+      // if (!localStorage.getItem("map")) {
+      // localStorage.setItem("map", 1);
+      let that = this;
+      let baidu = [that.ln, that.la];
+      var la = "";
+      var ln = "";
+      AMap.convertFrom(baidu, "baidu", function(status, result) {
+        if (result.info === "ok") {
+          var lnglats = result.locations; // Array.<LngLat>
+          la = lnglats[0].lat;
+          ln = lnglats[0].lng;
+          var map = new AMap.Map("m-container", {
+            zoom: 14, //初始化地图层级
+            center: [ln, la], //初始化地图中心点
+            zoomEnable: false,
+            dragEnable: false
+          });
+        }
+      });
+      // console.log([ln, la]);
+      // }
     },
     again() {
       let tel = this.baoming;
@@ -1469,72 +1448,76 @@ export default {
         });
     },
     sendmsg(t) {
-      this.phone = t;
       let that = this;
-      msg({ phone: t, channel: 2 })
+      let ip = returnCitySN["cip"];
+      let tel = that.baoming;
+      let c = localStorage.getItem("city");
+      let p = that.page;
+      let po = that.position;
+      let id = that.id;
+      let kid = sessionStorage.getItem("kid");
+      let other = sessionStorage.getItem("other");
+      let normal = {
+        ip: ip,
+        tel: tel,
+        city: c,
+        position: po,
+        page: 2,
+        type: 9,
+        project: id,
+        kid: kid,
+        other: other
+      };
+      let tuan = {
+        city: c,
+        ip: ip,
+        tel: tel,
+        position: po,
+        page: 3,
+        project: id,
+        remark: "团购2",
+        kid: kid,
+        other: other
+      };
+      let options = {};
+      if (this.ones == 1) {
+        options = tuan;
+      } else {
+        options = normal;
+      }
+      trend_put(options)
         .then(resp => {
           if (resp.data.code == 200) {
-            let tel = that.phone;
-            let ip = that.ip;
-            let c = localStorage.getItem("city");
-            let p = that.page;
-            let po = that.position;
-            let id = that.id;
-            let kid = sessionStorage.getItem("kid");
-            let other = sessionStorage.getItem("other");
-            let normal = {
-              ip: ip,
-              tel: tel,
-              city: c,
-              position: po,
-              page: 2,
-              type: 9,
-              project: id,
-              kid: kid,
-              other: other
-            };
-            let tuan = {
-              city: c,
-              ip: ip,
-              tel: tel,
-              position: 23,
-              page: 3,
-              project: id,
-              remark: "团购2"
-            };
-            let options = {};
-            if (this.ones == 1) {
-              options = tuan;
-            } else {
-              options = normal;
-            }
-            trend_put(options)
+            msg({ phone: t, channel: 2, ip: ip })
               .then(resp => {
                 if (resp.data.code == 200) {
+                  $(".t-b-first").hide();
+                  $(".t-b-second").show();
+
+                  var time = 60;
+                  var tels = t.substr(0, 3) + "****" + t.substr(7, 11);
+                  var fn = function() {
+                    time--;
+                    if (time > 0) {
+                      $(".t-b-scode").html("重新发送" + time + "s");
+                      $(".t-b-scode").attr("disabled", true);
+                    } else {
+                      clearInterval(interval);
+                      $(".t-b-scode").html("获取验证码");
+                      $(".t-b-scode").attr("disabled", false);
+                    }
+                  };
+                  fn();
+                  var interval = setInterval(fn, 1000);
+                  $("#ytel").html(tels);
                 }
               })
               .catch(error => {
                 console.log(error);
               });
-            $(".t-b-first").hide();
-            $(".t-b-second").show();
-
-            var time = 60;
-            var tels = t.substr(0, 3) + "****" + t.substr(7, 11);
-            var fn = function() {
-              time--;
-              if (time > 0) {
-                $(".t-b-scode").html("重新发送" + time + "s");
-                $(".t-b-scode").attr("disabled", true);
-              } else {
-                clearInterval(interval);
-                $(".t-b-scode").html("获取验证码");
-                $(".t-b-scode").attr("disabled", false);
-              }
-            };
-            fn();
-            var interval = setInterval(fn, 1000);
-            $("#ytel").html(tels);
+          }else{
+            $('.l-p').val('')
+            $(".l-p").attr("placeholder", "报名失败");
           }
         })
         .catch(error => {
@@ -1547,7 +1530,7 @@ export default {
         $("#ma-ll").attr("placeholder", "不能为空");
         return;
       }
-      let tel = this.phone;
+      let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
         .then(resp => {
@@ -1558,10 +1541,12 @@ export default {
                 this.newimg = true;
               }
             }
-
             that.change = false;
             that.succ = true;
             $("#o_p").text("已成功订购服务，我们会第一时间通过电话联系您");
+          }else{
+            $("#ma-ll").val('');
+            $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
         .catch(error => {
@@ -1697,7 +1682,7 @@ export default {
     },
     del(e) {
       let id = e.target.getAttribute("data-v");
-      if (localStorage.getItem("token") == null) {
+      if (!localStorage.getItem("token")) {
         this.$router.push("/" + that.n + "/login");
         // window.location.href = "/login";
       } else {
@@ -1867,7 +1852,11 @@ export default {
         $(".l-p").attr("placeholder", "手机号码不合法");
         return;
       }
-      this.sendmsg(phone);
+      if (this.open == 1) {
+        this.tu = true;
+      } else {
+        this.sendmsg(phone);
+      }
     },
     guanbi() {
       this.ones = 0;
@@ -1876,6 +1865,7 @@ export default {
       $(".t-b-first").show();
       $(".t-b-second").hide();
       this.succ = false;
+      this.tu = false;
     },
     // 倒计时
     countTime() {
@@ -1883,7 +1873,7 @@ export default {
       let date = new Date();
       let now = date.getTime();
       // 设置截止时间
-      let endDate = new Date(this.group_buy.endline); // this.curStartTime需要倒计时的日期
+      let endDate = new Date(this.group_buy.endline.replace(/-/g, "/")); // this.curStartTime需要倒计时的日期
       let end = endDate.getTime();
       // 时间差
       let leftTime = end - now;
@@ -1919,9 +1909,25 @@ export default {
         // 递归每秒调用countTime方法，显示动态时间效果,
         setTimeout(this.countTime, 1000);
       }
+    },
+    onSuccess() {
+      var phone = this.baoming;
+      this.sendmsg(phone);
+      this.tu = false;
+    },
+    onFail() {
+      this.msg = "";
+    },
+    onRefresh() {
+      this.msg = "";
     }
   },
   mounted() {
+    if (navigator.cookieEnabled!=true){
+      this.load = false;
+      this.iscookie = true;
+    }
+    this.newimg = localStorage.getItem("newimg");
     if (this.tuan == 1) {
       this.countTime();
     }
@@ -2302,6 +2308,7 @@ export default {
       $(".t-b-first").show();
       $(".t-b-second").hide();
       that.ones = 0;
+      that.tu = false;
     });
 
     $(".p1").on("click", function() {
@@ -2848,14 +2855,16 @@ export default {
   },
   updated() {
     if (this.over) {
-      setTimeout(() => {
-        this.mmap();
-      }, 400);
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.mmap();
+        }, 600);
+      });
     }
   },
   destroyed() {
-    localStorage.removeItem('map')
-  },
+    localStorage.removeItem("map");
+  }
 };
 </script>
 <style scoped>
@@ -2870,6 +2879,50 @@ export default {
 [v-cloak] {
   display: none;
 }
+.iscookie {
+  position: fixed;
+  z-index: 1000;
+  width:100vw;
+  height: 100vh;
+  background-color: #fff;
+  top: 0;
+}
+.iscookie p {
+  width: 80vw;
+  height: 10vh;
+  text-align: center;
+  position: absolute;
+  left: 10vw;
+  top:45vh;
+}
+.swp {
+  position: fixed;
+  left: 18%;
+  top: 40%;
+  z-index: 20002;
+  background-color: #fff;
+}
+.swp .slide-verify {
+  width: 240px;
+}
+.swp >>> .slide-verify-slider {
+  width: 100%;
+  height: 30px;
+  margin-top: 0;
+  line-height: 30px;
+}
+.swp >>> .slide-verify-slider .slide-verify-slider-mask-item {
+  width: 29px;
+  height: 29px;
+}
+.swp >>> .slide-verify-slider-mask {
+  height: 29px !important;
+}
+.swp >>> .slide-verify-slider-mask-item-icon {
+  top: 10px;
+  left: 6px;
+}
+
 #Foot {
   margin-bottom: 64px;
 }
@@ -3062,6 +3115,14 @@ export default {
   background: url(~assets/addressmap.png) no-repeat;
   background-size: 100%;
   background-position: left;
+}
+.m-incro .m-ic-icons strong{
+  color:#FE582F;
+  font-size: 11px;
+  font-weight: 400;
+  padding: 2px 4px;
+  border: 0.5px solid #FE582F;
+  border-radius: 2px;
 }
 /* 改版1.2css */
 /* 留言 */

@@ -65,14 +65,17 @@ export default {
           })
           .then(resp => {
             // console.log(resp)
-            let data = resp.data.data.buildings;
+            let data = resp.data.data;
 
             return data;
           })
       ]);
       return {
-        lists: res,
-        jkl: jkl
+        lists: res.buildings,
+        jkl: jkl,
+        title: res.title,
+      description: res.description,
+      keywords: res.keywords
       };
     } else {
       return {
@@ -88,11 +91,29 @@ export default {
       ids: "",
       n: "",
       jkl: "",
-      warn: false
+      warn: false,
+      title: "",
+      description: "",
+      keywords: ""
     };
   },
   components: {
     "foot-view": footView
+  },
+  head() {
+    return {
+      title: this.title || "允家新房-楼盘PK",
+      meta: [
+        {
+          name: "description",
+          content: this.description || "允家新房"
+        },
+        {
+          name: "keywords",
+          content: this.keywords || "允家新房"
+        }
+      ]
+    };
   },
   methods: {
     start() {

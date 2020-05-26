@@ -43,6 +43,7 @@ export default {
     height: 110px;
     background-color: #F2F3F5;
     padding-top:11px;
+    max-width: 450px;
 }
 #Foot ul{
     margin-bottom: 10px;

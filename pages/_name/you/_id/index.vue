@@ -85,12 +85,13 @@
     <div class="trend-con">
       <div class="swiper-container9">
         <div class="swiper-wrapper">
-          <div class="swiper-slide">186****4675 参团立享优惠金2000元</div>
-          <div class="swiper-slide">186****4675 参团立享优惠金2000元</div>
-          <div class="swiper-slide">186****4675 参团立享优惠金2000元</div>
-          <div class="swiper-slide">186****4675 参团立享优惠金2000元</div>
+          <div class="swiper-slide" v-for="(val,key) in last_tel" :key="key">{{val}} 参团立享优惠金1000元</div>
         </div>
       </div>
+    </div>
+    <div id="Footer">
+        <p>杭州易得房科技有限公司版权所有 电话：400-966-9995</p>
+        <p><img src="~/assets/f-logo.png">网络经营许可证：<a href="http://www.beian.miit.gov.cn/"><span>浙ICP备18057005号</span></a></p>
     </div>
     <div class="btn">
       <button @click="btn">立即报名</button>
@@ -99,12 +100,12 @@
       <div class="weiter ts" v-show="change">
         <div class="t-top">
           <h6>限时优惠</h6>
-          <p>临取团购限时优惠金！优惠金将与您手机号绑定</p>
+          <p>领取团购限时优惠！优惠编码将与您手机号绑定</p>
           <img id="w-esc" src="~/assets/tuan-x.png" @click="hides" alt />
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="baoming" />
+            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
             <div class="w-mg">
               <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
               <!-- <router-link :to="'/'+jkl+'/server'"> -->
@@ -122,7 +123,7 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" v-model="ma" class="yanzheng" />
+            <input type="tel" placeholder="请输入验证码" v-model="ma" class="yanzheng" id="ma-ll"/>
             <button class="port1" @click="yan">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -200,6 +201,11 @@ export default {
       id: ""
     };
   },
+  head() {
+    return {
+      title: this.title || "允家新房"
+    };
+  },
   methods: {
     goback() {
       this.$router.go(-1);
@@ -210,7 +216,7 @@ export default {
       let date = new Date();
       let now = date.getTime();
       // 设置截止时间
-      let endDate = new Date(this.end); // this.curStartTime需要倒计时的日期
+      let endDate = new Date(this.endline.replace(/-/g, "/")); // this.curStartTime需要倒计时的日期
       let end = endDate.getTime();
       // 时间差
       let leftTime = end - now;
@@ -298,6 +304,9 @@ export default {
             }
             that.change = false;
             that.succ = true;
+          }else{
+            $("#ma-ll").val('');
+            $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
         .catch(error => {
@@ -329,6 +338,8 @@ export default {
       this.send(phone);
     },
     hides() {
+      $(".t-b-first").show();
+      $(".t-b-second").hide();
       $(".m-chang").hide();
       this.change = false;
       this.succ = false;
@@ -338,56 +349,66 @@ export default {
       this.change = true;
     },
     send(tel) {
+      localStorage.setItem("phone", tel);
       let ip = returnCitySN["cip"];
       let id = this.id;
       let data = { channel: 2, phone: tel, ip: ip };
+      let kid = sessionStorage.getItem("kid");
+      let other = sessionStorage.getItem("other");
       let city = localStorage.getItem("city1");
-      msg(data)
+      let position= this.position
+      tuanmsg({
+        city: city,
+        ip: ip,
+        tel: tel,
+        position: position,
+        page: 3,
+        project: id,
+        remark: "团购2",
+        kid: kid,
+        other: other
+      })
         .then(resp => {
-          let code = resp.data.code;
-          if (code == 200) {
-            tuanmsg({
-              ip: ip,
-              tel: tel,
-              position: 22,
-              page: 3,
-              remark: "团购2",
-              project: id,
-              city: city
-            })
+          if (resp.data.code == 200) {
+            msg(data)
               .then(resp => {
-                if (resp.data.code == 200) {
-                }
+                let code = resp.data.code;
+                if (code == 200) {
+                  $(".t-b-first").hide();
+                  $(".t-b-second").show();
+                  var time = 60;
+                  var phone = tel.substr(0, 3) + "****" + tel.substr(7, 11);
+                  var fn = function() {
+                    time--;
+                    if (time > 0) {
+                      $(".t-b-scode").html("重新发送" + time + "s");
+                      $(".t-b-scode").attr("disabled", true);
+                    } else {
+                      clearInterval(interval);
+                      $(".t-b-scode").html("获取验证码");
+                      $(".t-b-scode").attr("disabled", false);
+                    }
+                  };
+                  fn();
+                  var interval = setInterval(fn, 1000);
+                  $("#ytel").html(phone);
+                }else{
+            $('.l-p').val('')
+            $(".l-p").attr("placeholder", "报名失败");
+          }
               })
               .catch(error => {
                 console.log(error);
               });
-            $(".t-b-first").hide();
-            $(".t-b-second").show();
-            var time = 60;
-            var phone = tel.substr(0, 3) + "****" + tel.substr(7, 11);
-            var fn = function() {
-              time--;
-              if (time > 0) {
-                $(".t-b-scode").html("重新发送" + time + "s");
-                $(".t-b-scode").attr("disabled", true);
-              } else {
-                clearInterval(interval);
-                $(".t-b-scode").html("获取验证码");
-                $(".t-b-scode").attr("disabled", false);
-              }
-            };
-            fn();
-            var interval = setInterval(fn, 1000);
-            $("#ytel").html(phone);
           }
         })
         .catch(error => {
           console.log(error);
         });
-    }
+    },
   },
   mounted() {
+    this.baoming=localStorage.getItem('phone')
     this.countTime();
     let that = this;
     var mySwiper = new Swiper(".swiper-container9", {
@@ -401,6 +422,8 @@ export default {
     });
     $(".m-chang").on("click", function() {
       $(".m-chang").hide();
+      $(".t-b-first").show();
+      $(".t-b-second").hide();
       that.change = false;
       that.succ = false;
       that.gui = false;
@@ -574,7 +597,7 @@ nav .goback{
   height: 108px;
   overflow: hidden;
   padding-left: 4%;
-  margin-bottom: 120px;
+  margin-bottom: 20px;
 }
 .swiper-slide {
   font-size: 15px;
@@ -871,5 +894,22 @@ nav .goback{
   color: #fff;
   font-size: 10px;
   display: none;
+}
+#Footer {
+  margin-bottom: 60px;
+}
+#Footer p{
+  color:#929AA7;
+  font-size: 12px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+#Footer p img{
+  width:6%;
+  margin-right: 2%;
+}
+#Footer p a{
+  color:#6A7B97;
+  text-decoration: underline
 }
 </style>

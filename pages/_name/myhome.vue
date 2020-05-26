@@ -97,7 +97,10 @@
           </li>
         </ul>
       </div>
-      <foot-view :pinyin="jkl"></foot-view>
+      <div id="Footer">
+        <p>杭州易得房科技有限公司版权所有 电话：400-966-9995</p>
+        <p><img src="~/assets/f-logo.png">网络经营许可证：<a href="http://www.beian.miit.gov.cn/"><span>浙ICP备18057005号</span></a></p>
+    </div>
       <div class="m-out">
         <div class="out-con">
           <h6>确定退出</h6>
@@ -112,7 +115,6 @@
   </div>
 </template>
 <script>
-import footView from "@/components/Foot.vue";
 export default {
   name: "Myhome",
   async asyncData(context) {
@@ -121,8 +123,21 @@ export default {
       jkl: jkl
     };
   },
-  components: {
-    "foot-view": footView
+  head() {
+    return {
+      title: "关于我们-允家新房",
+      meta: [
+        {
+          name: "description",
+          content:
+            "允家新房是专注于新房购买的O2O平台,为买房人提供一对一新房房产咨询服务和新楼盘信息，包括新楼盘价格走势和最新房源"
+        },
+        {
+          name: "keywords",
+          content: "关于我们"
+        }
+      ]
+    };
   },
   data() {
     return {
@@ -372,7 +387,7 @@ li {
 /* 家园功能 */
 .m-jia {
   width: 92%;
-  height: 190px;
+  height: 194px;
   background-color: #fff;
   border-radius: 8px;
   position: absolute;
@@ -402,7 +417,7 @@ li {
   color: #333333;
   font-size: 12px;
   float: left;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 .m-jia ul li img {
   display: block;
@@ -502,5 +517,24 @@ li {
 .m-out .out-con .out-btn button.active {
   color: #40a2f4;
   border-left: 0.5px solid #f2f2f2;
+}
+#Footer {
+  position: fixed;
+  bottom:0;
+  width:100%
+}
+#Footer p{
+  color:#929AA7;
+  font-size: 12px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+#Footer p img{
+  width:6%;
+  margin-right: 2%;
+}
+#Footer p a{
+  color:#6A7B97;
+  text-decoration: underline
 }
 </style>

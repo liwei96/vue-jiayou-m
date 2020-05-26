@@ -139,7 +139,7 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" />
+            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming"/>
             <p class="w-mg">
               <input class="w-mg-c" type="checkbox" checked v-model="checks"/>我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
@@ -157,7 +157,7 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" />
+            <input type="text" placeholder="请输入验证码" id="ma-ll"/>
             <button class="port1">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -198,17 +198,21 @@ export default {
     let [res]= await Promise.all([
       context.$axios.post('/api/project/detail',{ platform: 2, id: id, ip: ip })
       .then((resp)=>{
-        let data = resp.data.data.building;
+        let data = resp.data.data;
           return data;
       })
     ])
     return{
-          build:res,
-          jkl:jkl
+          build:res.building,
+          jkl:jkl,
+          title:res.title,
+          description:res.description,
+          keywords:res.keywords
     }
   },
   data() {
     return {
+      baoming:'',
       jkl:'',
       change: false,
       succ: false,
@@ -218,11 +222,29 @@ export default {
       id: "",
       call: "",
       checks:'',
-      n:''
+      n:'',
+      title:'',
+      description:'',
+      keywords:''
     };
   },
   components: {
     "foot-view": footView
+  },
+  head() {
+    return {
+      title: this.title || '允家新房-房价趋势',
+      meta: [
+        {
+          name: "description",
+          content: this.description || '允家新房'
+        },
+        {
+          name: "keywords",
+          content: this.keywords || '允家新房'
+        }
+      ]
+    };
   },
   methods: {
     start() {
@@ -281,6 +303,9 @@ export default {
             fn();
             var interval = setInterval(fn, 1000);
             $("#ytel").html(tel);
+          }else{
+            $('.l-p').val('')
+            $(".l-p").attr("placeholder", "报名失败");
           }
         })
         .catch(error => {
@@ -288,13 +313,16 @@ export default {
         });
     },
     check(m) {
-      let tel = this.phone;
+      let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
         .then(resp => {
           if (resp.data.code == 200) {
             that.change = false;
             that.succ = true;
+          }else{
+            $("#ma-ll").val('');
+            $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
         .catch(error => {

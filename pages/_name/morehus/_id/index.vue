@@ -51,7 +51,7 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="text" placeholder="输入预约手机号码" v-model="tel" />
+            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="tel" />
             <p class="w-mg">
               <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
@@ -69,7 +69,7 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" />
+            <input type="text" placeholder="请输入验证码" id="ma-ll"/>
             <button class="port1">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -112,15 +112,18 @@ export default {
       context.$axios
         .post("/api/project/apartments", { id: id, platform: 2, ip: ip })
         .then(resp => {
-          let data = resp.data.data;
+          let data = resp.data;
           data.check = true;
           return data;
         })
     ]);
     return {
-      lists: res,
+      lists: res.data,
       checks: res.check,
-      jkl: jkl
+      jkl: jkl,
+      title:res.head.title,
+          description:res.head.description,
+          keywords:res.head.keywords
     };
   },
   components: {
@@ -149,7 +152,25 @@ export default {
       tel: "",
       n: "",
       call: "",
-      checks: ""
+      checks: "",
+      title:'',
+      description:'',
+      keywords:''
+    };
+  },
+  head() {
+    return {
+      title: this.title || '允家新房-更多户型',
+      meta: [
+        {
+          name: "description",
+          content: this.description || '允家新房'
+        },
+        {
+          name: "keywords",
+          content: this.keywords || '允家新房'
+        }
+      ]
     };
   },
   methods: {
@@ -196,6 +217,9 @@ export default {
             fn();
             var interval = setInterval(fn, 1000);
             $("#ytel").html(tel);
+          }else{
+            $('.l-p').val('')
+            $(".l-p").attr("placeholder", "报名失败");
           }
         })
         .catch(error => {
@@ -233,6 +257,9 @@ export default {
           if (resp.data.code == 200) {
             that.succ = true;
             that.change = false;
+          }else{
+            $("#ma-ll").val('');
+            $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
         .catch(error => {

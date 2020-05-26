@@ -50,13 +50,16 @@ export default {
         token: token
       })
       .then((resp)=>{
-        let data = resp.data.data;
+        let data = resp.data;
           return data;
       })
     ])
     return{
-          lists: res,
-          jkl:jkl
+          lists: res.data,
+          jkl:jkl,
+          title:res.title,
+          description:res.description,
+          keywords:res.keywords
     }
   },
   components: {
@@ -70,7 +73,10 @@ export default {
       n:'',
       ting:true,
       jkl:'',
-      page:2
+      page:2,
+      title:'',
+      description:'',
+      keywords:''
     };
   },
   methods: {
@@ -156,6 +162,21 @@ export default {
         }
       }
     }
+  },
+  head() {
+    return {
+      title: this.title || '允家新房-楼盘问答',
+      meta: [
+        {
+          name: "description",
+          content: this.description || '允家新房'
+        },
+        {
+          name: "keywords",
+          content: this.keywords || '允家新房'
+        }
+      ]
+    };
   },
   mounted() {
     let h = document.body.clientHeight;

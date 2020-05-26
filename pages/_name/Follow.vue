@@ -35,6 +35,21 @@ export default {
       jkl:''
     }
   },
+  head() {
+    return {
+      title:  "允家新房-关注公众号",
+      meta: [
+        {
+          name: "description",
+          content:  '允家新房'
+        },
+        {
+          name: "keywords",
+          content:  '允家新房'
+        }
+      ]
+    };
+  },
   methods:{
     goback(){
       this.$router.go(-1)

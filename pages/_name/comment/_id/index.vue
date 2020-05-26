@@ -76,6 +76,21 @@ export default {
       jkl: ""
     };
   },
+  head() {
+    return {
+      title:  "允家新房-楼盘点评",
+      meta: [
+        {
+          name: "description",
+          content:  '允家新房'
+        },
+        {
+          name: "keywords",
+          content:  '允家新房'
+        }
+      ]
+    };
+  },
   methods: {
     put() {
       if (localStorage.getItem("token") == null) {

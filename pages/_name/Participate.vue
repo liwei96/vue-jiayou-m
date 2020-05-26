@@ -275,6 +275,17 @@ export default {
   },
   head(){
     return {
+      title:  '允家新房-城市加盟',
+      meta: [
+        {
+          name: "description",
+          content:  '允家新房'
+        },
+        {
+          name: "keywords",
+          content:  '允家新房'
+        }
+      ],
       script: [
         { src: '~/static/js/iconfont.js' },
       ]

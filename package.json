@@ -11,18 +11,31 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.9.6",
+    "@babel/polyfill": "^7.8.7",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-stage-0": "^7.8.3",
+    "@babel/runtime": "^7.9.6",
     "@gauseen/nuxt-proxy": "^1.0.1",
     "@nuxtjs/component-cache": "^1.1.5",
+    "babel-loader": "^8.1.0",
     "echarts": "^4.7.0",
     "moment": "^2.24.0",
     "nuxt": "^2.0.0",
     "vant": "^2.6.1",
     "vue-baidu-map": "^0.21.22",
-    "vue-cookies": "^1.7.0"
+    "vue-cookies": "^1.7.0",
+    "vue-monoplasty-slide-verify": "^1.1.2"
   },
   "devDependencies": {
     "@nuxtjs/axios": "^5.9.7",
     "@nuxtjs/proxy": "^1.3.3",
+    "core-js": "^3.6.5",
+    "regenerator-runtime": "^0.13.5",
     "swiper": "^5.3.7"
   },
   "config": {

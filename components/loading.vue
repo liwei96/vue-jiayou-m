@@ -22,6 +22,5 @@ export default {
     color: black;
     text-align: center;
     line-height: 110vh;
-
 }
 </style>

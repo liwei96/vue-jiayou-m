@@ -50,6 +50,21 @@ export default {
       jkl:''
     }
   },
+  head() {
+    return {
+      title:  "允家新房-楼盘留言提问",
+      meta: [
+        {
+          name: "description",
+          content:  '允家新房'
+        },
+        {
+          name: "keywords",
+          content:  '允家新房'
+        }
+      ]
+    };
+  },
   components: {
     "foot-view": footView
   },

@@ -219,38 +219,41 @@ export default {
     let [res]= await Promise.all([
       context.$axios.post('/api/first/city',{ platform: 2, token: token, ip: ip })
       .then((resp)=>{
-          let msg = resp.data.data.city;
+          let msg = resp.data.data;
             
           return msg;
       })
     ])
     return{
-          A : res.A,
-            B : res.B,
-            C : res.C,
-            D : res.D,
-            E : res.E,
-            F : res.F,
-            G : res.G,
-            H : res.H,
-            I : res.I,
-            J : res.J,
-            K : res.K,
-            L : res.L,
-            M : res.M,
-            N : res.N,
-            O : res.O,
-            P : res.P,
-            Q : res.Q,
-            R : res.R,
-            S : res.S,
-            T : res.T,
-            W : res.W,
-            X : res.X,
-            Y : res.Y,
-            Z : res.Z,
+          A : res.city.A,
+            B : res.city.B,
+            C : res.city.C,
+            D : res.city.D,
+            E : res.city.E,
+            F : res.city.F,
+            G : res.city.G,
+            H : res.city.H,
+            I : res.city.I,
+            J : res.city.J,
+            K : res.city.K,
+            L : res.city.L,
+            M : res.city.M,
+            N : res.city.N,
+            O : res.city.O,
+            P : res.city.P,
+            Q : res.city.Q,
+            R : res.city.R,
+            S : res.city.S,
+            T : res.city.T,
+            W : res.city.W,
+            X : res.city.X,
+            Y : res.city.Y,
+            Z : res.city.Z,
             hots : res.hots,
-            jkl:jkl
+            jkl:jkl,
+            title:res.city.title,
+            description:res.city.description,
+            keywords:res.city.keywords
     }
   },
   data() {
@@ -290,7 +293,25 @@ export default {
       btn: "重新定位",
       hots: [],
       ip: "",
-      jkl:''
+      jkl:'',
+      title:'',
+      keywords:'',
+      description:''
+    };
+  },
+    head() {
+    return {
+      title: this.title || "允家新房",
+      meta:[
+        {
+          name: "description",
+          content: this.description
+        },
+        {
+          name: "keywords",
+          content: this.keywords
+        }
+      ]
     };
   },
   components: {
@@ -367,7 +388,6 @@ export default {
         this.hots = address.hots;
       }
     },
-
     getcity() {
       this.getip();
     },

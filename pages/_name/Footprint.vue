@@ -83,6 +83,21 @@ export default {
   components: {
     "foot-view": footView
   },
+  head() {
+    return {
+      title:  "允家新房-我的足迹",
+      meta: [
+        {
+          name: "description",
+          content:  '允家新房'
+        },
+        {
+          name: "keywords",
+          content:  '允家新房'
+        }
+      ]
+    };
+  },
   data() {
     return {
       lists: [
