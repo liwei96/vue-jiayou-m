@@ -15,15 +15,17 @@
 
       <div class="m-lun visible-xs-block .visible-sm-block">
         <div class="zao"></div>
+       
         <div class="m-luns">
-          <div class="swiper-top">
+           <img :src="topimgs[0]" alt="">
+          <!-- <div class="swiper-top">
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="(img,key) in topimgs" :key="key">
                 <img :src="img" style="width:100%" />
               </div>
             </div>
             <div id="swiper-pagination1"></div>
-          </div>
+          </div> -->
           <span id="lnum">共{{topnum}}张</span>
         </div>
       </div>
@@ -119,16 +121,17 @@
           </router-link>
         </div>
         <div class="go-map">
-          <img class="map-address" src="~/assets/blackaddress.png" alt />
-          <span>{{building.address}}</span>
-          <img class="map-go" src="~/assets/m-go.png" alt />
+          <!-- <img class="map-address" src="~/assets/blackaddress.png" alt /> -->
+          <span class="map-address">地址：</span>
+          <span class="map-msg">{{building.address}}</span>
+          <img class="map-go" src="~/assets/map-address.png" alt />
         </div>
         <div class="m-new">
           <div href="javascript:;" class="p1" data-v="变价通知">
-            <img src="~/assets/force.png" />最新变价通知
+            <img src="~/assets/force.png" />降价通知
           </div>
           <div href="javascript:;" class="p1" data-v="开盘通知">
-            <img src="~/assets/horn.png" />最新开盘通知
+            <img src="~/assets/horn.png" />开盘通知
           </div>
         </div>
       </div>
@@ -230,9 +233,9 @@
         <button class="p1" data-v="最新动态">获取最新动态</button>
       </div>
 
-      <div class="m-line visible-xs-block .visible-sm-block"></div>
+      <div class="m-line visible-xs-block .visible-sm-block" v-if="hu.length !==0 "></div>
 
-      <div class="m-hu visible-xs-block .visible-sm-block">
+      <div class="m-hu visible-xs-block .visible-sm-block" v-if="hu.length !==0 ">
         <h3>
           主力户型
           <router-link :to="'/' + jkl + '/morehus/' + id">
@@ -744,28 +747,30 @@
       </div>
       <div id="panel" style="display:none;"></div>
     </div>
-    
+
     <div class="swp" v-if="tu">
       <slide-verify
         :l="20"
         :r="5"
         :w="240"
         :h="160"
-        :imgs='imgs'
+        :imgs="imgs"
         @success="onSuccess"
         @fail="onFail"
         @refresh="onRefresh"
         :slider-text="text"
       ></slide-verify>
     </div>
-    <div class="iscookie" v-if="iscookie"><p>为了更好的体验，请在浏览器设置中打开cookie</p></div>
+    <div class="iscookie" v-if="iscookie">
+      <p>为了更好的体验，请在浏览器设置中打开cookie</p>
+    </div>
   </div>
 </template>
 <script>
 import footView from "@/components/Foot.vue";
 import Swiper from "swiper";
-import img1 from '~/assets/lou1.png';
-import img2 from '~/assets/lou2.png';
+import img1 from "~/assets/lou1.png";
+import img2 from "~/assets/lou2.png";
 import "swiper/css/swiper.min.css";
 // import { echarts } from "./static/js/echarts.min.js";
 import axios from "axios";
@@ -797,7 +802,6 @@ export default {
       }
     }
   },
-
   async asyncData(context) {
     let id = context.params.id;
     let token = context.store.state.cookie.token;
@@ -950,7 +954,7 @@ export default {
   },
   data() {
     return {
-      imgs:[img1,img2],
+      imgs: [img1, img2],
       li: 0,
       warn: false,
       baoming: "",
@@ -1078,7 +1082,7 @@ export default {
       jttime: "",
       jftime: "",
       tit: "",
-      over: false,
+      over: true,
       title: "",
       keywords: "",
       description: "",
@@ -1118,13 +1122,13 @@ export default {
   },
   methods: {
     xiang(id) {
-      this.position=id
+      this.position = id;
       $(".m-chang").show();
       this.change = true;
       this.ones = 1;
       $(".weiter .t-top h6").html("限时优惠");
       $(".weiter .t-top p").html("领取团购限时优惠！优惠编码将与您手机号绑定");
-      $('#dingxue').html('立即领取')
+      $("#dingxue").html("立即领取");
     },
     method1: function() {
       echarts();
@@ -1141,7 +1145,7 @@ export default {
     start() {
       let url = window.location.href;
       url = url.split("?")[1];
-      if (url && url.indexOf('kid') !== -1) {
+      if (url && url.indexOf("kid") !== -1) {
         url = url.split("&");
         let kid = url[0].split("=")[1];
         let other = url[1].split("=")[1];
@@ -1190,14 +1194,14 @@ export default {
     },
     top() {
       /*头部轮播*/
-      var swiper = new Swiper(".swiper-top", {
-        // eslint-disable-line no-unused-vars
-        spaceBetween: 0,
-        pagination: {
-          el: "#swiper-pagination1",
-          clickable: true
-        }
-      });
+      // var swiper = new Swiper(".swiper-top", {
+      //   // eslint-disable-line no-unused-vars
+      //   spaceBetween: 0,
+      //   pagination: {
+      //     el: "#swiper-pagination1",
+      //     clickable: true
+      //   }
+      // });
     },
     drawline() {
       // 初始化图表标签
@@ -1515,8 +1519,8 @@ export default {
               .catch(error => {
                 console.log(error);
               });
-          }else{
-            $('.l-p').val('')
+          } else {
+            $(".l-p").val("");
             $(".l-p").attr("placeholder", "报名失败");
           }
         })
@@ -1544,8 +1548,8 @@ export default {
             that.change = false;
             that.succ = true;
             $("#o_p").text("已成功订购服务，我们会第一时间通过电话联系您");
-          }else{
-            $("#ma-ll").val('');
+          } else {
+            $("#ma-ll").val("");
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
@@ -1923,7 +1927,7 @@ export default {
     }
   },
   mounted() {
-    if (navigator.cookieEnabled!=true){
+    if (navigator.cookieEnabled != true) {
       this.load = false;
       this.iscookie = true;
     }
@@ -1933,16 +1937,13 @@ export default {
     }
     this.tel = localStorage.getItem("tel");
     let h = document.body.clientHeight;
-    if (h < 700) {
-      $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
-    } else if (h >= 700) {
-      $("#Foot").css({
-        position: "relative",
-        bottom: "0",
-        width: "100%",
-        marginBottom: "56px"
-      });
-    }
+
+    $("#Foot").css({
+      position: "relative",
+      bottom: "0",
+      width: "100%",
+      marginBottom: "56px"
+    });
     let that = this;
     that.baoming = localStorage.getItem("phone");
     let id = this.$route.params.id;
@@ -2875,14 +2876,21 @@ export default {
   font-family: "Microsoft YaHei";
   -webkit-overflow-scrolling: touch;
 }
-
+html {
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  height: 100%;
+  overflow: auto;
+}
 [v-cloak] {
   display: none;
 }
 .iscookie {
   position: fixed;
   z-index: 1000;
-  width:100vw;
+  width: 100vw;
   height: 100vh;
   background-color: #fff;
   top: 0;
@@ -2893,7 +2901,7 @@ export default {
   text-align: center;
   position: absolute;
   left: 10vw;
-  top:45vh;
+  top: 45vh;
 }
 .swp {
   position: fixed;
@@ -3112,17 +3120,18 @@ export default {
   display: none;
 }
 .m-incro .go-map {
-  background: url(~assets/addressmap.png) no-repeat;
-  background-size: 100%;
-  background-position: left;
+  /* background: url(~assets/addressmap.png) no-repeat; */
+  /* background-size: 100%;
+  background-position: left; */
 }
-.m-incro .m-ic-icons strong{
-  color:#FE582F;
+.m-incro .m-ic-icons strong {
+  color: #fe582f;
   font-size: 11px;
   font-weight: 400;
   padding: 2px 4px;
-  border: 0.5px solid #FE582F;
+  /* border: 0.5px solid #fe582f; */
   border-radius: 2px;
+  background-color: #FFEDE5;
 }
 /* 改版1.2css */
 /* 留言 */
@@ -3419,6 +3428,11 @@ export default {
   margin-right: 3.7% !important;
 }
 
+.m-lun .m-luns img{
+  height: 210px;
+  width:100%
+}
+
 .m-lun .m-luns #lnum {
   width: 13.3333%;
   background: rgba(0, 0, 0, 0.8);
@@ -3439,48 +3453,55 @@ export default {
   height: 210px !important;
 }
 
+.tuan-msg {
+  position: relative;
+  margin-top:-4px;
+  z-index: 10;
+}
 .tar {
   display: flex;
+  border-radius: 6px 6px 0 0;
+  overflow: hidden;
 }
 .tar .left {
   width: 70%;
   height: 50px;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 133, 60, 1),
-    rgba(255, 67, 47, 1)
-  );
+  background:linear-gradient(-90deg,rgba(255,1,91,1),rgba(255,69,29,1));
 }
 
 .tar .left h5 {
   color: #fff;
-  font-size: 14px;
+  font-size: 15px;
   margin-left: 14px;
-  margin-top: 3px;
+  margin-top: 7px;
+  margin-bottom: 3px;
 }
 .tar .left h5 span {
-  font-size: 24px;
+  font-size: 15px;
 }
 .tar .left p {
   margin-left: 14px;
-  color: #fff;
+  color: #FFCACD;
   font-size: 10px;
 }
 .tar .right {
   height: 50px;
   width: 30%;
-  background: rgba(248, 217, 110, 1);
+  background:rgba(255,228,177,1);
   padding-left: 14px;
 }
 .tar .right h5 {
-  color: #ff432f;
+  color: #FF3E24;
   font-size: 14px;
   margin-bottom: 6px;
   padding-top: 4px;
 }
+.tar .right p {
+  color: #FF3E24
+}
 .tar .right span {
   font-size: 14px;
-  color: #5e3a13;
+  color: #FF3E24;
   margin-left: 2px;
 }
 .pin {

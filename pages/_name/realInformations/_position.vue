@@ -21,60 +21,74 @@
       <div class="swiper-container">
         <div class="swiper-wrapper">
           <div class="swiper-slide" data-v="46">
+              <router-link :to="'/'+jkl+'/realinformations/46'">
             <div class="tegood">
-              <p class="active" @click="get($event)" data-v="46">
+              <p :class="position == 46 ? 'active' : ''" @click="get($event)" data-v="46">
                 楼盘导购
                 <i></i>
               </p>
             </div>
+            </router-link>
           </div>
           <div class="swiper-slide" data-v="48">
+              <router-link :to="'/'+jkl+'/realinformations/48'">
             <div class="tegood">
-              <p @click="get($event)" data-v="48">
+              <p :class="position == 48 ? 'active' : ''" @click="get($event)" data-v="48">
                 本地楼市
                 <i></i>
               </p>
             </div>
+            </router-link>
           </div>
           <div class="swiper-slide" data-v="49">
+              <router-link :to="'/'+jkl+'/realinformations/49'">
             <div class="tegood">
-              <p @click="get($event)" data-v="49">
+              <p :class="position == 49 ? 'active' : ''" @click="get($event)" data-v="49">
                 房企资讯
                 <i></i>
               </p>
             </div>
+            </router-link>
           </div>
           <div class="swiper-slide" data-v="50">
+              <router-link :to="'/'+jkl+'/realinformations/50'">
             <div class="tegood">
-              <p @click="get($event)" data-v="50">
+              <p :class="position == 50 ? 'active' : ''" @click="get($event)" data-v="50">
                 热点新闻
                 <i></i>
               </p>
             </div>
+            </router-link>
           </div>
           <div class="swiper-slide" data-v="51">
+              <router-link :to="'/'+jkl+'/realinformations/51'">
             <div class="tegood">
-              <p @click="get($event)" data-v="51">
+              <p :class="position == 51 ? 'active' : ''" @click="get($event)" data-v="51">
                 成交报告
                 <i></i>
               </p>
             </div>
+            </router-link>
           </div>
           <div class="swiper-slide" data-v="52">
+              <router-link :to="'/'+jkl+'/realinformations/52'">
             <div class="tegood">
-              <p @click="get($event)" data-v="52">
+              <p :class="position == 52 ? 'active' : ''" @click="get($event)" data-v="52">
                 土拍成交
                 <i></i>
               </p>
             </div>
+            </router-link>
           </div>
           <div class="swiper-slide" data-v="99">
+              <router-link :to="'/'+jkl+'/realinformations/99'">
             <div class="tegood">
-              <p @click="get($event)" data-v="99">
+              <p :class="position == 99 ? 'active' : ''" @click="get($event)" data-v="99">
                 楼盘动态
                 <i></i>
               </p>
             </div>
+            </router-link>
           </div>
         </div>
       </div>
@@ -108,7 +122,8 @@ export default {
     let ip=context.store.state.cookie.ip;
     let city = context.store.state.city;
     let token=context.store.state.cookie.token;
-    let jkl=context.store.state.cookie.pinyin;
+    let jkl=context.params.name;
+    let position = context.params.position;
     let [res1,res2]= await Promise.all([
       context.$axios.post('/api/article/info',{
         city: city,
@@ -123,7 +138,7 @@ export default {
       context.$axios.post('/api/article/page',{
         city: city,
         platform: 2,
-        position: "46",
+        position: position,
         token: token,
         page: 1,
         limit: 10
@@ -141,7 +156,8 @@ export default {
           key:res1.header.keywords,
           des:res1.header.description,
           jkl:jkl,
-          city:city
+          city:city,
+          position : position
     }
   },
   data() {
@@ -153,7 +169,10 @@ export default {
       n: "",
       tit:'',
       des:'',
-      key:''
+      key:'',
+      jkl:'',
+      position:'',
+      city:''
     };
   },
   components: {
@@ -204,7 +223,7 @@ export default {
         });
     },
     goback() {
-      this.$router.go(-1);
+      this.$router.push('/'+this.jkl);
     },
     scroll() {
       let Y = window.scrollY;
@@ -216,6 +235,7 @@ export default {
     }
   },
   mounted() {
+    $('html').css('overflow','initial')
     let width = document.documentElement.clientWidth;
     width = width * 0.96;
     $(".nav").css("width", width + "px");
@@ -285,7 +305,7 @@ h3 img {
 }
 .m-luns {
   height: 180px;
-  margin-bottom: 22px;
+  margin-bottom: 14px;
   overflow: hidden;
 }
 .m-luns .swiper-top {
@@ -334,10 +354,10 @@ h3 img {
 .nav {
   margin-left: 4%;
   background-color: #fff;
-  padding-top: 8px;
 }
 .nav .swiper-container {
-  height: 32px;
+  height: 40px;
+  padding-top: 8px;
   -webkit-box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.05);
   box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.05);
 }

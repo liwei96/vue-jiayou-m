@@ -167,7 +167,7 @@ export default {
     "foot-view": footView
   },
   mounted() {
-    let h = document.body.clientHeight;
+    let h = $("#Exemption").height();
     if (h < 700) {
       $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
     } else if (h >= 700) {

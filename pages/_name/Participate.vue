@@ -348,6 +348,7 @@ export default {
       $(".zhao").show();
     },
     scrollto(key) {
+      this.num = key;
       if (process.client) {
         let Y = window.scrollY;
         if (key == 0) {
@@ -462,12 +463,8 @@ export default {
     }
   },
   mounted() {
-    let h = document.body.clientHeight;
-    if (h < 700) {
-      $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
-    } else if (h >= 700) {
+    $('html').css('overflow','initial')
       $("#Foot").css({ position: "relative", bottom: "0", width: "100%",marginBottom: '56px' });
-    }
     let that = this;
     var swiper05 = new Swiper(".swiper-container", {
       // eslint-disable-line no-unused-vars
@@ -518,13 +515,11 @@ export default {
     if (process.client) {
       window.addEventListener("scroll", this.scroll);
     }
-
     $(".zhao").on("click", function() {
       that.show = false;
       $(this).hide();
     });
     //获取默认高度
-
     if (process.client) {
       this.defaultHeight = $(window).height();
       window.onresize = () => {

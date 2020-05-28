@@ -188,7 +188,7 @@ export default {
   },
   mounted() {
     this.$nextTick(function() {
-      let h = $("body").height();
+      let h = $(".Collection").height();
       if (h < 700) {
         $("#Foot").css({
           position: "fixed",

@@ -4,18 +4,24 @@
       <img src="~/assets/return.png" @click="goback" />买房百科
     </h3>
     <ul class="nav">
-      <li class="active" style="margin-left: 50px;" @click="q1s">
+      <router-link :to="'/'+jkl+'/encyclopedia/before/56'">
+      <li :class="type=='before'?'active':''" style="margin-left: 50px;">
         买房前
         <i></i>
       </li>
-      <li @click="z1s">
+      </router-link>
+      <router-link :to="'/'+jkl+'/encyclopedia/hand/60'">
+      <li :class="type=='hand'?'active':''">
         买房中
         <i></i>
       </li>
-      <li @click="h1s">
+      </router-link>
+      <router-link :to="'/'+jkl+'/encyclopedia/after/65'">
+      <li :class="type=='after'?'active':''">
         买房后
         <i></i>
       </li>
+      </router-link>
     </ul>
     <div class="q" v-show="q1">
       <div class="fubox">
@@ -23,22 +29,30 @@
         <div class="swiper-wrapper">
           <div class="swiper-slide">
             <div class="tegood">
-              <p class="active" @click="getb($event)" data-v="56">买房资格</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/before/56'">
+              <p :class="position==56?'active':''" data-v="56">买房资格</p>
+              </router-link>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="tegood">
-              <p  @click="getb($event)" data-v="57">买房能力</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/before/57'">
+              <p :class="position==57?'active':''" data-v="57">买房能力</p>
+              </router-link>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="tegood">
-              <p  @click="getb($event)" data-v="58">买房政策</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/before/58'">
+              <p :class="position==58?'active':''"  data-v="58">买房政策</p>
+              </router-link>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="tegood">
-              <p  @click="getb($event)" data-v="59">买房流程</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/before/59'">
+              <p :class="position==59?'active':''"  data-v="59">买房流程</p>
+              </router-link>
             </div>
           </div>
         </div>
@@ -70,27 +84,37 @@
         <div class="swiper-wrapper">
           <div class="swiper-slide">
             <div class="tegood">
-              <p class="active" @click="geti($event)" data-v="60">新房签约</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/hand/60'">
+              <p :class="position==60?'active':''" data-v="60">新房签约</p>
+              </router-link>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="tegood">
-              <p @click="geti($event)" data-v="61">缴纳定金</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/hand/61'">
+              <p :class="position==61?'active':''" data-v="61">缴纳定金</p>
+              </router-link>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="tegood">
-              <p @click="geti($event)" data-v="62">贷款政策</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/hand/62'">
+              <p :class="position==62?'active':''" data-v="62">贷款政策</p>
+              </router-link>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="tegood">
-              <p @click="geti($event)" data-v="63">商业贷款</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/hand/63'">
+              <p :class="position==63?'active':''" data-v="63">商业贷款</p>
+              </router-link>
             </div>
           </div>
            <div class="swiper-slide">
             <div class="tegood">
-              <p @click="geti($event)" data-v="64">公积金贷款</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/hand/64'">
+              <p :class="position==64?'active':''" data-v="64">公积金贷款</p>
+              </router-link>
             </div>
           </div>
         </div>
@@ -122,32 +146,44 @@
         <div class="swiper-wrapper">
           <div class="swiper-slide">
             <div class="tegood">
-              <p class="active" @click="geta($event)" data-v="65">还款</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/after/65'">
+              <p :class="position==65?'active':''" data-v="65">还款</p>
+              </router-link>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="tegood">
-              <p @click="geta($event)" data-v="66">全款</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/after/66'">
+              <p :class="position==66?'active':''" data-v="66">全款</p>
+              </router-link>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="tegood">
-              <p @click="geta($event)" data-v="67">新房验房</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/after/67'">
+              <p :class="position==67?'active':''" data-v="67">新房验房</p>
+              </router-link>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="tegood">
-              <p @click="geta($event)" data-v="68">物业</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/after/68'">
+              <p :class="position==68?'active':''" data-v="68">物业</p>
+              </router-link>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="tegood">
-              <p @click="geta($event)" data-v="69">退房流程</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/after/69'">
+              <p :class="position==69?'active':''" data-v="69">退房流程</p>
+              </router-link>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="tegood">
-              <p @click="geta($event)" data-v="70">落户</p>
+                <router-link :to="'/'+jkl+'/encyclopedia/after/70'">
+              <p :class="position==70?'active':''" data-v="70">落户</p>
+              </router-link>
             </div>
           </div>
         </div>
@@ -195,20 +231,41 @@ export default {
    let ip=context.store.state.cookie.ip;
     let city = context.store.state.city;
     let token=context.store.state.cookie.token;
+    let type = context.params.type;
+    let p1 = '56';
+    let p2 = '60';
+    let p3 = '65'
+    let position = context.params.position
+    let q1 = true;
+    let z1 = true;
+    let h1 = true;
+    if(type=='before'){
+      p1 = position
+      z1 = false
+      h1 = false
+    }else if(type =='hand'){
+      p2 = position
+      q1 = false
+      h1 = false
+    }else if(type == 'after') {
+      p3 = position
+      q1 = false
+      z1 = false
+    }
     let jkl = context.params.name;
     let [res1,res2,res3,res4]= await Promise.all([
-      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:'56',platform:2,token:token})
+      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:p1,platform:2,token:token})
       .then((resp)=>{
           let data=resp.data.data.data;
           data.n=context.store.state.pinyin;
           return data;
       }),
-      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:'60',platform:2,token:token})
+      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:p2,platform:2,token:token})
       .then((resp)=>{
           let data=resp.data.data.data;
           return data;
       }),
-      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:'65',platform:2,token:token})
+      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:p3,platform:2,token:token})
       .then((resp)=>{
           let data=resp.data.data.data;
           data.n=context.store.state.pinyin;
@@ -228,7 +285,12 @@ export default {
           city:city,
           title:res4.title,
           keywords:res4.keywords,
-          description:res4.description
+          description:res4.description,
+          type:type,
+          z1:z1,
+          h1:h1,
+          q1:q1,
+          position:position
     }
   },
   data() {
@@ -323,7 +385,9 @@ export default {
       city:'',
       title:'',
       keywords:'',
-      description:''
+      description:'',
+      type:0,
+      position:56
     };
   },
   head() {
@@ -346,23 +410,6 @@ export default {
     "foot-view": footView
   },
   methods: {
-    q1s: function() {
-      this.q1 = true;
-      this.z1 = false;
-      this.h1 = false;
-    },
-    z1s: function() {
-      this.q1 = false;
-      this.z1 = true;
-      this.h1 = false;
-      
-    },
-    h1s: function() {
-      this.q1 = false;
-      this.z1 = false;
-      this.h1 = true;
-      
-    },
     getb(e){
       let id=e.target.getAttribute('data-v');
       this.id1=id;
@@ -376,6 +423,7 @@ export default {
       }).catch(error=>{
         console.log(error)
       })
+      // $='/'+this.jkl+'/encyclopedia/0/'+id
     },
     geti(e){
       let id=e.target.getAttribute('data-v');
@@ -457,12 +505,12 @@ export default {
       })
     },
     goback(){
-      this.$router.go(-1)
+      this.$router.push('/'+this.jkl)
     },
     scroll(){
       let Y = window.scrollY;
       if(Y<=42){
-        $('.fubox').css({'position':'relative','height':'auto','padding':0})
+        $('.fubox').css({'position':'relative','height':'50px','paddingTop':'10px'})
       }else{
         $('.fubox').css({'position':'fixed','top':0,'height':'50px','paddingTop':'12px','background':'#fff'})
       }
@@ -487,6 +535,7 @@ export default {
     }
   },
   mounted() {
+    $('html').css('overflow','initial')
     let width=document.documentElement.clientWidth;
     $('.fubox').css('width',width+'px')
     this.start();
@@ -553,12 +602,13 @@ h3 img {
 .fubox{
     -webkit-box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.05);
     box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.05);
+    height: 50px;
+    padding-top: 10px;
 }
 .nav {
   width: 100%;
   height: 40px;
   border-bottom: 0.5px solid #f5f5f7;
-  margin-bottom: 15px;
   background-color: #fff;
 }
 .nav li {
@@ -609,7 +659,7 @@ h3 img {
 }
 
 .lists {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .lists li {
   padding: 0 4%;

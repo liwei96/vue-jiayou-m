@@ -285,7 +285,7 @@ export default {
     }
   },
   mounted() {
-    let h = document.body.clientHeight;
+    let h = $(".MoreHus").height();
     if (h < 700) {
       $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" ,marginBottom: '56px'});
     } else if (h >= 700) {

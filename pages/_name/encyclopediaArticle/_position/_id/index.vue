@@ -1,7 +1,8 @@
 <template>
   <div class="EncyclopediaArticles">
     <h3>
-      <img src="~/assets/return.png" @click="goback" />{{title}}
+      <img class="goback" src="~/assets/return.png" @click="goback" />{{title}}
+      <img class="con-img" src="~/assets/ency-img.png">
     </h3>
     <div class="con">
       <h2>{{tit}}</h2>
@@ -486,11 +487,14 @@ h3 {
   -webkit-box-shadow: 0 0 3px 0 rgba(0,0,0,.05);
     box-shadow: 0 0 3px 0 rgba(0,0,0,.05);
 }
-h3 img {
+h3 img.goback {
   position: absolute;
   width: 5%;
   margin-top: 14px;
   left: 5.33%;
+}
+h3 img.con-img {
+  width: 12%
 }
 .con {
   padding: 0 4%;

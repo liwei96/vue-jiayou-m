@@ -209,26 +209,26 @@ body {
 }
 
 .m-incro .go-map .map-address {
-  width: 6%;
-  margin-left: 6%;
-  margin-bottom: 3px;
+  color:#808080;
+  margin-left: 4%;
 }
 
 .m-incro .go-map span {
   color: #2E3033;
-  font-size: 16px;
+  font-size: 14px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 80%;
-  height: 30px;
   display: inline-block;
+}
+
+.m-incro .go-map .map-msg {
+  color:#2E2E2E
 }
 
 .m-incro .go-map .map-go {
   float: right;
-  width: 18px;
-  margin-top: 12px;
+  width: 40px;
 }
 
 
@@ -240,14 +240,14 @@ body {
 }
 
 .m-incro .m-new div {
-  color: #4DB5FF;
+  color: #3EACF0;
   display: inline-block;
   font-size: 15px;
   text-align: center;
   height: 44px;
   line-height: 44px;
   width: 40%;
-  background-color: #F0F2F5;
+  background-color: #EDF5FA;
   border-radius: 5px;
   margin-left: 6.666667%;
   font-weight: bold;
@@ -256,6 +256,7 @@ body {
 .m-incro .m-new div img {
   width: 10.5%;
   margin-right: 4%;
+  margin-bottom: 3px;
 }
 
 .m-incro .m-new .m-kai {

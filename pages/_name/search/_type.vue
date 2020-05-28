@@ -730,11 +730,12 @@ export default {
     // if(this.$router.currentRoute.path!='/hangzhou/search/1'){
     //     this.$router.push('/hangzhou/search/1')
     // }
+    $('html').css('overflow','initial')
     if(this.$route.path.split('/').length!=4){
       $cookies.set('type',{})
       sessionStorage.clear();
     }
-    let h = document.body.clientHeight;
+    let h = $(".Search").height();
     if (h < 700) {
       $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
     } else if (h >= 700) {

@@ -27,13 +27,13 @@
               </router-link>
             </li>
             <li>
-              <router-link :to="'/'+pinyin+'/encyclopedia'">
+              <router-link :to="'/'+pinyin+'/encyclopedia/before/56'">
                 <img src="~/assets/new-wiki.png" alt="买房百科" />
                 <p>买房百科</p>
               </router-link>
             </li>
             <li>
-              <router-link :to="'/'+pinyin+'/realinformations'">
+              <router-link :to="'/'+pinyin+'/realinformations/46'">
                 <img src="~/assets/new-zixun.png" alt="房产资讯" />
                 <p>房产资讯</p>
               </router-link>
@@ -68,7 +68,7 @@
               </div>
             </div>
           </div>
-          <router-link :to="'/' + pinyin + '/realinformations'">
+          <router-link :to="'/' + pinyin + '/realinformations/46'">
             <button id="encyclopedia">更多</button>
           </router-link>
         </div>
@@ -1410,7 +1410,7 @@ export default {
     }
   },
   mounted() {
-    let h = document.body.clientHeight;
+    let h = $(".Index").height();
     if (h < 700) {
       $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
     } else if (h >= 700) {
@@ -1606,6 +1606,7 @@ li {
   position: fixed;
   top: 0;
   z-index: 10;
+  max-width: 450px;
 }
 .search .sea-con {
   width: 67%;

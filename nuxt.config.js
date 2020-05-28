@@ -125,7 +125,20 @@ export default {
     credentials: true // 表示跨域请求时是否需要使用凭证
   },
  
-    // router: {
-    //     middleware: ['browserVersion']
-    //   }
+    router: {
+        scrollBehavior (to, from, savedPosition) {
+          // if (savedPosition) {        
+          //       return savedPosition    
+          // } else {      
+          //       if (from.meta.keepAlive) {        
+          //            from.meta.savedPosition = document.body.scrollTop;      
+          //       }        
+          //       return { x: 0, y: to.meta.savedPosition || 0 }    
+          // }  
+          return {x:0,y:0}
+        }      
+      },
+      render: {
+        resourceHints: false,
+    }
 }

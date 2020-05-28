@@ -311,7 +311,7 @@ export default {
     }
   },
   mounted() {
-    let h = document.body.clientHeight;
+    let h = $(".Analysis").height();
     $("#Foot").css({ position: "relative",marginBottom: "64px", });
     $("#Foot").css('marginBottom','64px');
     this.baoming = localStorage.getItem("phone");

@@ -5,6 +5,7 @@ export default ({
   store
 }) => {
   app.router.beforeEach((to, from, next) => {
+    
     switch (to.params.name) {
       case 'xuzhou':
         if (process.server == false) {

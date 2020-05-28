@@ -59,6 +59,10 @@ export default {
 </script>
 
 <style>
+a:active{
+  font-weight: normal!important;
+  text-decoration: none!important;
+}
 #bigbox {
   position: relative;
   max-width: 450px;
@@ -81,7 +85,14 @@ html {
   box-sizing: border-box;
   margin: 0;
 }
-
+body.position-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
 .button--green {
   display: inline-block;
   border-radius: 4px;
@@ -150,4 +161,5 @@ html {
   transition: opacity 0.5s;
   animation: big-out 0.5s;
 }
+
 </style>

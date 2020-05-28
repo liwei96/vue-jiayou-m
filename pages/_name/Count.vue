@@ -743,7 +743,7 @@ export default {
     window.onresize = () => {
       return (() => {
         this.nowHeight = $(window).height();
-        let h = document.body.clientHeight;
+        let h = $(".Count").height();
         if (h < 700) {
           $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
         } else if (h >= 700) {

@@ -924,6 +924,7 @@ export default {
     }
   },
   mounted() {
+    $('html').css('overflow','initial')
     this.baoming=localStorage.getItem('phone');
     this.start_data();
     let that = this;
@@ -1109,7 +1110,7 @@ nav ul li.active i {
 }
 .con .con-list {
   width: 100%;
-  height: 146px;
+  height: 150px;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.05);
   border-radius: 6px;
   margin-bottom: 20px;
