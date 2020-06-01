@@ -223,7 +223,8 @@ body {
 }
 
 .m-incro .go-map .map-msg {
-  color:#2E2E2E
+  color:#2E2E2E;
+  width: 70%
 }
 
 .m-incro .go-map .map-go {
@@ -250,7 +251,6 @@ body {
   background-color: #EDF5FA;
   border-radius: 5px;
   margin-left: 6.666667%;
-  font-weight: bold;
 }
 
 .m-incro .m-new div img {
@@ -444,8 +444,8 @@ body {
 .m-dong button {
   width: 92%;
   height: 44px;
-  background-color: #F0F2F5;
-  color: #4DB5FF;
+  background-color: #EDF5F9;
+  color: #3DABEF;
   font-size: 16px;
   text-align: center;
   line-height: 44px;
@@ -454,7 +454,6 @@ body {
   border: 0px;
   margin-bottom: 25px;
   margin-top: 20px;
-  font-weight: bold;
 }
 
 
@@ -551,6 +550,10 @@ body {
   white-space: nowrap;
 }
 
+.m-hu .swiper-house {
+  overflow: hidden;
+}
+
 .m-hu button {
   width: 92%;
   height: 44px;
@@ -567,9 +570,60 @@ body {
   font-weight: bold;
 }
 
+.m-hu .tegood .top {
+  background-color: #F5F5F5;
+  height: 120px;
+  text-align: center;
+}
 
+.m-hu .tegood .top img {
+  height: 100%;
+}
 
+.m-hu .tegood h5 {
+  color :#121212;
+  font-size: 17px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
 
+.m-hu .tegood h5 span {
+  display: inline-block;
+  width: 31px;
+  height: 16px;
+  border-radius: 2px;
+  background-color: #2CD264;
+  text-align: center;
+  line-height: 16px;
+  color: #fff;
+  font-size: 11px;
+}
+
+.m-hu .tegood .jian {
+  color: #646466;
+  font-size: 13px;
+  /* margin-bottom: 4px; */
+}
+
+.m-hu .tegood .red {
+  color: #FE582F;
+  font-size: 14px;
+}
+
+.m-hu .tegood .red span {
+  font-size: 18px;
+}
+
+.m-hu .tegood button {
+  width: 100%;
+  border-radius:3px;
+  margin-left: 0;
+  height: 36px;
+  line-height: 36px;
+  font-weight: normal;
+  background-color: #EDF5F9;
+  color: #3DABEF
+}
 
 /* m-dai */
 .m-dai {
@@ -647,27 +701,26 @@ body {
   display: block;
   width: 100%;
   height: 44px;
-  background: #F0F2F5;
+  background: #EDF5F9;
   border-radius: 5px;
-  color: #4DB5FF;
+  color: #3DABEF;
   font-size: 16px;
   border: 0px;
   text-align: center;
   line-height: 40px;
-  font-weight: bold;
 }
 
 .m-dai .m-d-content .m-w-content {
   padding-bottom: 16px;
   border-bottom: 0.5px solid #F2F4F7;
   margin-bottom: 16px;
-  width: 95%;
+  width: 100%;
 }
 
 .m-dai .m-d-content .m-w-content h4 {
-  color: #2E3033;
+  color: #333333;
   font-size: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .m-dai .m-d-content .m-w-content h4 u{
@@ -680,10 +733,10 @@ body {
 .m-dai .m-d-content .m-w-content p span {
   width: 16px;
   height: 16px;
-  background: #FAF6EB;
+  background:linear-gradient(-90deg,rgba(255,133,60,1),rgba(255,67,47,1));
   border-radius: 5px 0px 5px 0px;
   font-size: 12px;
-  color: #B47438;
+  color: #fff;
   margin-right: 12px;
   text-align: center;
   line-height: 16px;
@@ -691,14 +744,20 @@ body {
 }
 
 .m-dai .m-d-content .m-w-content p span {
-  background: #EBF3FA;
+  background:linear-gradient(-270deg,rgba(52,138,255,1),rgba(106,204,255,1));
   float: left;
-  color: #5A7699;
+  color: #fff;
 }
 
 .m-dai .m-d-content .m-w-content p {
   color: #999999;
   font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.m-dai .m-d-content .m-w-content p img {
+  width: 24px;
+  margin-right: 10px;
 }
 
 .m-dai .m-d-content .m-w-content p::after {
@@ -711,18 +770,28 @@ body {
 }
 
 .m-dai .m-d-content .m-w-content p i {
-  /* display: inline-block; */
   font-style: normal;
   float: left;
   color:#616366;
-  width: 91%;
   margin-bottom: 10px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
   overflow: hidden;
-
 }
+
+.m-dai .m-d-content .m-w-content p .peoname {
+  font-style: normal;
+  color: #343434;
+  font-style: 14px;
+  margin-right: 4px;
+}
+
+.m-dai .m-d-content .m-w-content p .peowork {
+  font-style: normal;
+  color: #3EACF0;
+  font-size: 10px;
+  padding: 2px 3px;
+  border: 0.5px solid #3EACF0;
+}
+
 .m-dai .m-d-content .m-w-content p i u{
   text-decoration: none;
   color:#919499;
@@ -732,14 +801,13 @@ body {
 .m-dai .m-d-content .m-w-content .time {
   color: #919499;
   font-size: 12px;
-  margin-left: 8%;
 }
 
 .m-dai .m-d-content .m-w-content .giveup {
   color: #919499;
   font-size: 11px;
   float: right;
-  margin-right: -9%;
+  margin-right: -3%;
 }
 
 .m-dai .m-d-content .m-w-content .giveup img {
@@ -784,33 +852,75 @@ body {
   border-radius: 5px;
 }
 
-.m-zhou .m-z-icons ul {
-  margin-left: 4%;
+.m-zhou .m-z-icons {
+  margin-bottom: 24px;
 }
 
-.m-zhou .m-z-icons ul li {
-  float: left;
-  width: 23%;
-  color: #666666;
-  font-size: 12px;
-  text-align: center;
-  margin-bottom: 25px;
+.m-zhou .m-z-icons .swiper-map {
+  padding-bottom: 10px;
+  border-bottom: 0.5px solid #F4F4F4;
+  overflow: hidden;
 }
 
-.m-zhou .m-z-icons ul li img {
-  width: 24px;
-  height: 24px;
-  margin-bottom: 10px;
+.m-zhou .m-z-icons .swiper-map .tegood {
+  font-size: 14px;
+  height: 23px;
+  color: #4C4C4C;
+}
+
+.m-zhou .m-z-icons .swiper-map .active {
+  color: #3DABEF;
+  position: relative;
+}
+
+.m-zhou .m-z-icons .swiper-map .active i {
   display: block;
-  margin-left: 39%;
+  position: absolute;
+  width: 25px;
+  height: 2px;
+  background-color: #3DABEF;
+  bottom: 0px;
+  left: 8px;
 }
 
+.m-zhou .m-z-icons .map-con .msg {
+  height: 160px;
+  width: 100%;
+  line-height: 160px;
+  text-align: center;
+}
+
+.m-zhou .m-z-icons .map-con >>> li {
+  margin-top: 20px;
+  padding: 0 4%
+}
+
+.m-zhou .m-z-icons .map-con >>> li h5 {
+  color: #191919;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.m-zhou .m-z-icons .map-con >>> li p {
+  color: #999999;
+  font-size: 13px;
+}
+
+.m-zhou .m-z-icons .map-con >>> li p span {
+  float: right;
+}
+
+.m-zhou .m-z-icons .map-con >>> li p span img {
+  width: 14px;
+  margin-right: 2px;
+  margin-bottom: 2px;
+}
 
 .m-zhou button {
   width: 92%;
   height: 44px;
-  background-color: #F0F2F5;
-  color: #4DB5FF;
+  background-color: #EDF5F9;
+  color: #3DABEF;
   font-size: 16px;
   text-align: center;
   line-height: 44px;
@@ -818,7 +928,6 @@ body {
   border-radius: 5px;
   border: 0px;
   margin-bottom: 25px;
-  font-weight: bold;
 }
 
 
@@ -846,8 +955,8 @@ body {
 }
 
 .m-ling img {
-  width: 32%;
-  height: 90px;
+  width: 26.67%;
+  height: 85px;
   margin-left: 4%;
   margin-bottom: 26px;
   margin-right: 4%;
@@ -859,13 +968,14 @@ body {
 .m-ling .m-iright {
   width: 56%;
   display: inline-block;
+  position: relative;
 }
 
 .m-ling .m-iright h4 {
   color: #666666;
   font-weight: bold;
   font-size: 15px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   margin-top: 0;
   line-height: 20px;
 }
@@ -873,7 +983,18 @@ body {
 .m-ling .m-iright p {
   color: #999999;
   font-size: 13px;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
+
+.m-ling .m-iright span {
+  color: #6987B3;
+  font-size: 13px;
+  position: absolute;
+  right:-21px;
+  bottom:3px
 }
 
 .m-ling p span {
@@ -892,7 +1013,6 @@ body {
   border-radius: 5px;
   border: 0px;
   margin-bottom: 25px;
-  font-weight: bold;
 }
 
 
@@ -919,6 +1039,22 @@ body {
 .m-huo h3 p span {
   color: #FF5959;
   font-weight: bold;
+}
+
+.m-huo .table {
+  position: relative;
+  height: 150px;
+  overflow: hidden;
+}
+
+.m-huo .table .huo-more {
+  width: 100%;
+  height: 50px;
+  background:linear-gradient(0deg,rgba(255,255,255,1),rgba(255,255,255,0));
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+  line-height: 50px;
 }
 
 .m-huo table {
@@ -1185,7 +1321,7 @@ body {
   width: 33.06667%;
   height: 44px;
   font-size: 15px;
-  border-radius: 5px;
+  border-radius: 22px;
   border: 0px;
 }
 

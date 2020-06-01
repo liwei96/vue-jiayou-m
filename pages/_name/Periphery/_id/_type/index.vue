@@ -391,7 +391,7 @@ export default {
                         <div class="m-te">
                             <h5 class="m-name">${e.name}</h5>
                             <p class="m-area">${e.address}</p>
-                            <p class="m-ju"><img src="../assets/path.png" alt="">${s}km</p>
+                            <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
                         </div>
                         `;
               });
@@ -414,7 +414,7 @@ export default {
                         <div class="m-te">
                             <h5 class="m-name">${e.name}</h5>
                             <p class="m-area">${e.address}</p>
-                            <p class="m-ju"><img src="../assets/path.png" alt="">${s}km</p>
+                            <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
                         </div>
                         `;
               });

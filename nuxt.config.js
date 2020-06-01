@@ -13,18 +13,18 @@ export default {
     ],
     script: [
       // { src: 'https://cdn.bootcss.com/jquery/3.5.0/jquery.min.js' },
-      { src: 'http://libs.baidu.com/jquery/2.0.0/jquery.min.js' },
-      // { src: 'https://cdn.bootcss.com/bootstrap-slider/10.6.1/bootstrap-slider.min.js' },
-      { src: 'https://cdn.bootcdn.net/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js' },
-      { src: 'http://pv.sohu.com/cityjson?ie=utf-8' },
+      { src: '//libs.baidu.com/jquery/2.0.0/jquery.min.js' },
+      // { src: '//cdn.bootcss.com/bootstrap-slider/10.6.1/bootstrap-slider.min.js' },
+      { src: '//cdn.bootcdn.net/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js' },
+      { src: '//pv.sohu.com/cityjson?ie=utf-8' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel:'stylesheet',href: 'https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css' },
-      { rel:'stylesheet',href: 'http://at.alicdn.com/t/font_1566358_0x5fpl1pct4s.css' },
-      { rel:'stylesheet',href: 'http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css' },
-      { rel:'stylesheet',href: 'https://at.alicdn.com/t/font_1416845_qauhw48dee.css' },
-      { rel:'stylesheet',href: 'http://at.alicdn.com/t/font_1416845_olgiihzyg8c.css' },
+      { rel:'stylesheet',href: '//cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css' },
+      { rel:'stylesheet',href: '//at.alicdn.com/t/font_1566358_0x5fpl1pct4s.css' },
+      { rel:'stylesheet',href: '//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css' },
+      { rel:'stylesheet',href: '//at.alicdn.com/t/font_1416845_qauhw48dee.css' },
+      { rel:'stylesheet',href: '//at.alicdn.com/t/font_1416845_olgiihzyg8c.css' },
     ]
   },
   /*

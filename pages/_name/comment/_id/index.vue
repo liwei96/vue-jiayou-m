@@ -269,7 +269,6 @@ export default {
 };
 </script>
 <style scoped>
-@import "http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css";
 * {
   padding: 0;
   margin: 0;

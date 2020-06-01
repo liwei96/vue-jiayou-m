@@ -15,9 +15,9 @@
 
       <div class="m-lun visible-xs-block .visible-sm-block">
         <div class="zao"></div>
-       
+
         <div class="m-luns">
-           <img :src="topimgs[0]" alt="">
+          <img :src="topimgs[0]" alt />
           <!-- <div class="swiper-top">
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="(img,key) in topimgs" :key="key">
@@ -25,7 +25,7 @@
               </div>
             </div>
             <div id="swiper-pagination1"></div>
-          </div> -->
+          </div>-->
           <span id="lnum">共{{topnum}}张</span>
         </div>
       </div>
@@ -127,11 +127,11 @@
           <img class="map-go" src="~/assets/map-address.png" alt />
         </div>
         <div class="m-new">
-          <div href="javascript:;" class="p1" data-v="变价通知">
-            <img src="~/assets/force.png" />降价通知
+          <div href="javascript:;" class="p1" data-v="最新变价通知">
+            <img src="~/assets/newforce.png" />最新变价通知
           </div>
-          <div href="javascript:;" class="p1" data-v="开盘通知">
-            <img src="~/assets/horn.png" />开盘通知
+          <div href="javascript:;" class="p1" data-v="最新开盘通知">
+            <img src="~/assets/newhorn.png" />最新开盘通知
           </div>
         </div>
       </div>
@@ -141,39 +141,62 @@
           <img src="~/assets/mj-tell.png" alt />
         </a>
       </div>
-      <div class="pin" v-if="tuan==1">
+      <div class="pin">
         <nav>
-          <h3>拼团优惠</h3>
-          <p>
-            距离活动结束
+          <h3>优惠信息</h3>
+          <p v-if="tuan==1">
+            参团活动结束
             <span>{{day}}</span>天
             <span>{{hour}}</span>:
             <span>{{min}}</span>:
             <span>{{second}}</span>
           </p>
         </nav>
-        <img src="~/assets/tuan-pin.png" alt />
-        <div class="pin-bao" @click="xiang(22)" v-if="!newimg">立享优惠</div>
-        <img src="~/assets/tuna-hased.png" alt class="hased" v-if="newimg" />
-        <div class="bom">
-          <div class="trend-con1">
-            <div class="swiper-container10">
-              <div class="swiper-wrapper">
-                <div
-                  class="swiper-slide"
-                  v-for="(trend,key) in group_buy.last_tels"
-                  :key="key"
-                >{{trend}}领取了优惠券</div>
+        <div class="top" v-if="tuan==1">
+          <img src="~/assets/newtuan-pin.jpg" alt />
+          <div class="pin-bao" @click="xiangs(22)" v-if="!newimg">立即参团</div>
+          <p class="pin-msg">已有{{group_buy.saled_num}}人加入</p>
+          <img src="~/assets/tuna-hased.png" alt class="hased" v-if="newimg" />
+          <div class="bom">
+            <div class="trend-con1">
+              <div class="swiper-container10">
+                <div class="swiper-wrapper">
+                  <div
+                    class="swiper-slide"
+                    v-for="(trend,key) in group_buy.last_tels"
+                    :key="key"
+                  >{{trend}}领取了优惠券</div>
+                </div>
               </div>
             </div>
           </div>
-          <p>
-            已有
-            <span>{{group_buy.received_num}}</span>人领取了优惠券
-          </p>
+        </div>
+        <div class="bomm">
+          <div class="pin-bao y1" v-if="!newimg" @click="xiang(25)">抢优惠券</div>
+          <p class="pin-msg ym">已有{{group_buy.saled_num}}人加入</p>
+          <img src="~/assets/youhui.jpg" alt />
+          <div class="bom">
+            <div class="trend-con1">
+              <div class="swiper-container10">
+                <div class="swiper-wrapper">
+                  <div
+                    class="swiper-slide"
+                    v-for="(trend,key) in group_buy.last_tels"
+                    :key="key"
+                  >{{trend}}领取了优惠券</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="m-line visible-xs-block .visible-sm-block" v-if="tuan==1"></div>
+      <div class="top-num">
+        <img src="~/assets/content-top.png" alt class="content-top" />
+        <span>刚需楼盘榜第4名</span>
+        <img class="totop" src="~/assets/m-go.png" alt />
+      </div>
+      <div class="m-line visible-xs-block .visible-sm-block"></div>
       <div class="m-dong visible-xs-block .visible-sm-block">
         <h3 id="m_dong">
           楼盘动态
@@ -207,7 +230,7 @@
         <div class="t-l l1"></div>
         <div class="t-l l2" v-if="tui.length==0?false:true"></div>
         <!-- <img style="margin-left: 10px;" :src="nd" alt /> -->
-        <div class="d-pic">
+        <!-- <div class="d-pic">
           <img style="margin-left: 10px;" :src="nd" alt />
           <img :src="sk" alt />
           <img :src="jt" alt />
@@ -228,9 +251,43 @@
             <span>{{jftime}}</span>
             <p>交房</p>
           </div>
+        </div>-->
+        <div class="dynamic-hd">
+          <div class="swiper-dynamic">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <div :class="ndss">
+                  <h5>拿地</h5>
+                  <p>{{ndtime}}</p>
+                  <div></div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div :class="jtss">
+                  <h5>首开</h5>
+                  <p>{{jttime}}</p>
+                  <div></div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div :class="skss">
+                  <h5>加推</h5>
+                  <p>{{sktime}}</p>
+                  <div></div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div :class="jfss">
+                  <h5>交房</h5>
+                  <p>{{jftime}}</p>
+                  <div></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <button class="p1" data-v="最新动态">获取最新动态</button>
+        <button class="p1" data-v="订阅最新动态">获取最新动态</button>
       </div>
 
       <div class="m-line visible-xs-block .visible-sm-block" v-if="hu.length !==0 "></div>
@@ -245,7 +302,7 @@
             </span>
           </router-link>
         </h3>
-        <div class="h-c" v-for="(h,key) in hu" :key="key">
+        <!-- <div class="h-c" v-for="(h,key) in hu" :key="key">
           <div class="col-xs-4 h-c-i">
             <router-link :to="'/'+jkl+'/HuAnalysis/'+h.id+'/'+building.id">
               <img :src="h.img" alt />
@@ -263,13 +320,37 @@
             <div class="sp">类型：{{h.type}}</div>
             <div class="sp sp-f">户型分析：{{h.analysis}}</div>
           </div>
+        </div>-->
+        <div class="swiper-house">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="(h,key) in hu" :key="key">
+              <div class="tegood">
+                <router-link :to="'/'+jkl+'/HuAnalysis/'+h.id+'/'+building.id">
+                  <div class="top">
+                    <img :src="h.img" alt />
+                  </div>
+                  <h5>
+                    {{h.title}}
+                    <span>{{h.status}}</span>
+                  </h5>
+                  <p class="jian">建面 {{h.area}}m²&nbsp;&nbsp;&nbsp;朝向 北</p>
+                  <p class="red">
+                    约
+                    <span>{{h.price}}</span>万起
+                  </p>
+                </router-link>
+                <button class="p1" data-v="咨询详细户型">咨询详细户型</button>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <button class="p1" data-v="了解详细户型">了解详细户型</button>
+        <!-- <button class="p1" data-v="了解详细户型">了解详细户型</button> -->
       </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
       <div class="m-you visible-xs-block .visible-sm-block">
-        <img class="m-y-g p1" src="~/assets/new-yuyue.jpg" data-v="抢免费专车票" />
+        <img class="m-y-g" src="~/assets/new-yuyue1.png" />
+        <button class="p1" data-v="预约看房">预约看房</button>
+        <span>876已领取</span>
       </div>
 
       <div class="m-line visible-xs-block .visible-sm-block"></div>
@@ -315,8 +396,7 @@
           <!-- Add Pagination -->
           <div class="swiper-pagination2"></div>
         </div>
-
-        <button class="p1" data-v="获取详细分析资料">获取详细分析资料</button>
+        <button class="p1" data-v="获取楼盘分析资料">获取楼盘分析资料</button>
       </div>
       <div class="m-line visible-xs-block .visible-sm-block" v-if="tuan==1"></div>
       <div class="tuan-qiang" v-if="tuan==1">
@@ -333,19 +413,20 @@
       <div class="m-line visible-xs-block .visible-sm-block"></div>
       <div class="m-ling visible-xs-block .visible-sm-block">
         <h3>
-          楼盘资料免费领
+          领取免费地图
           <span>
             已有
             <i>860</i>人领取
           </span>
         </h3>
-        <img src="~/assets/new_map.png" alt />
+        <img src="~/assets/new-map1.jpg" alt />
         <div class="m-iright">
           <h4>为什么大家在准备买房的时候领 一份资料？</h4>
-          <p>1.没领地图，许多人后悔买错了房子</p>
-          <p>2.楼盘价格走势及商业分析报告资料</p>
+          <p>1.优质地段、优质楼盘一图囊括</p>
+          <p class="ling-ssd">2.电子地图、快捷分享、多人收益电子地图、快捷分享、多人收益</p>
+          <span @click="lingbtn($event)">展开</span>
         </div>
-        <button class="p1" data-v="领取免费资料">我要领取地图</button>
+        <button class="p1" data-v="领取免费地图">我要领取地图</button>
       </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
       <div class="m-huo visible-xs-block .visible-sm-block">
@@ -357,22 +438,27 @@
           </p>
         </h3>
         <div id="chart" style="width:92%;height:250px;margin-left:4%"></div>
-        <table>
-          <tbody>
-            <tr>
-              <th>日期</th>
-              <th>成交套数</th>
-              <th>成交金额</th>
-            </tr>
-            <tr v-for="(dd,key) in chengjiao" :key="key">
-              <td>{{dd.date}}</td>
-              <td>{{dd.num}}套</td>
-              <td>***万</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table">
+          <table>
+            <tbody>
+              <tr>
+                <th>日期</th>
+                <th>成交套数</th>
+                <th>成交金额</th>
+              </tr>
+              <tr v-for="(dd,key) in chengjiao" :key="key">
+                <td>{{dd.date}}</td>
+                <td>{{dd.num}}套</td>
+                <td>***万</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="huo-more">
+            <img src="~/assets/huo-down.png" alt />
+          </div>
+        </div>
         <div class="m-btns">
-          <button class="p1" data-v="最新成交价">获取成交详情</button>
+          <button class="p1" data-v="获取最新成交价">获取最新成交价</button>
         </div>
       </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
@@ -395,8 +481,13 @@
             </h4>
             <p>
               <span>答</span>
+              <img src="~/assets/people.png" alt />
+              <em class="peoname">杨涛</em>
+              <em class="peowork">允家咨询师</em>
+            </p>
+            <p>
               <i>
-                {{q.answer.substr(0,30)}}{{q.answer.length>30?'~.':''}}
+                {{q.answer.substr(0,19)}}{{q.answer.length>20?'...':''}}
                 <u
                   v-if="q.answer.length>30"
                   @click="chan($event)"
@@ -441,26 +532,58 @@
           <div class="m-continer" id="m-container"></div>
         </router-link>
         <div class="m-z-icons">
-          <ul>
-            <li @click="jiaotong">
-              <img src="~/assets/icon_02.png" alt />
-              交通
-            </li>
-            <li @click="jiaoyu">
-              <img src="~/assets/icon_04.png" alt />
-              教育
-            </li>
-            <li @click="yiliao">
-              <img src="~/assets/icon_03.png" alt />
-              医疗
-            </li>
-            <li @click="shenghuo">
-              <img src="~/assets/icon_01.png" alt />
-              生活
-            </li>
-          </ul>
+          <div class="swiper-map">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <div :class="mapnum === 0 ? 'tegood active' : 'tegood'" @click="setmap(0, '地铁')">
+                  地铁(5)
+                  <i></i>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div :class="mapnum === 1 ? 'tegood active' : 'tegood'" @click="setmap(1 ,'公交')">
+                  公交(5)
+                  <i></i>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div :class="mapnum === 2 ? 'tegood active' : 'tegood'" @click="setmap(2, '教育')">
+                  教育(5)
+                  <i></i>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div :class="mapnum === 3 ? 'tegood active' : 'tegood'" @click="setmap(3, '医院')">
+                  医院(5)
+                  <i></i>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div :class="mapnum === 4 ? 'tegood active' : 'tegood'" @click="setmap(4, '购物')">
+                  购物(5)
+                  <i></i>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div :class="mapnum === 5 ? 'tegood active' : 'tegood'" @click="setmap(5, '美食')">
+                  美食(5)
+                  <i></i>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div :class="mapnum === 6 ? 'tegood active' : 'tegood'" @click="setmap(6, '娱乐')">
+                  娱乐(5)
+                  <i></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="map-con">
+            <ul class="con"></ul>
+            <p class="msg" v-if="isnull">附近没有{{mapname}}，您可以看看其他信息</p>
+          </div>
         </div>
-        <button class="p1" data-v="楼盘周边信息">获取周边信息</button>
+        <button class="p1" data-v="获取详细周边配套">获取详细周边配套</button>
       </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
       <!-- 房价趋势 -->
@@ -480,13 +603,13 @@
           价格变动这么快？
           订阅最新变价通知，楼盘变价我们第一时间通知您
         </p>
-        <button class="p1" data-v="变价通知">获取最新变价通知</button>
+        <button class="p1" data-v="最新房价趋势解读">最新房价趋势解读</button>
       </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
       <!-- 楼盘对比 -->
       <div class="m-contrast">
         <h4>楼盘对比</h4>
-        <div class="re-con" v-for="(c,key) in compares" :key="key">
+        <!-- <div class="re-con" v-for="(c,key) in compares" :key="key">
           <template v-if="key<3?true:false">
             <input type="radio" name="pk" @click="pk($event)" :data-v="c.id" />
             <div class="re-list">
@@ -513,7 +636,30 @@
           </template>
         </div>
         <div class="warning" v-if="warn">请选择对比楼盘</div>
-        <button class="pkbtn" @click="pkhref()">楼盘对比</button>
+        <button class="pkbtn" @click="pkhref()">楼盘对比</button>-->
+        <div class="swiper-pk">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="(c,key) in compares" :key="key">
+              <div class="tegood">
+                <div class="img">
+                  <img :src="c.img" alt />
+                  <p>相似楼盘</p>
+                </div>
+                <h5>{{c.name}}</h5>
+                <p class="llk">
+                  {{c.country}}&nbsp;&nbsp;
+                  <span v-if="c.area_min">
+                    {{parseInt(c.area_min)}}
+                    <span v-if="c.area_max">-</span>
+                    {{parseInt(c.area_max)}}m²
+                  </span>
+                </p>
+                <p class="red">{{parseInt(c.single_price)}}元/m²</p>
+                <button @click="pkhref(c.id)">加入对比</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
       <!-- 楼盘点评 -->
@@ -536,19 +682,7 @@
             <div class="right">
               <h6>
                 {{v.mobile}}
-                <van-rate
-                  v-model="value"
-                  :size="13"
-                  color="#2E3033"
-                  void-icon="star"
-                  void-color="#E8EBED"
-                  :readonly="read"
-                />
-              </h6>
-              <p class="txt">{{v.content}}</p>
-              <div class="btn">
-                <span>{{v.time}}</span>
-                <strong :data-v="v.id" @click="del($event)" v-if="tel==v.mobile">删除</strong>
+                <span class="attitude">有兴趣</span>
                 <p class="interaction">
                   <img
                     id="agree"
@@ -565,10 +699,22 @@
                     :data-n="v.like_num"
                     data-y="2"
                     @click="agrees($event)"
-                  >点赞({{v.like_num}})</span>
-                  <span @click="commitback(v.id)">回复({{v.answer_num}})</span>
+                  >{{v.like_num}}</span>
                 </p>
+              </h6>
+              <div class="btn">
+                <van-rate
+                  v-model="value"
+                  :size="8"
+                  color="#3DABEF"
+                  void-icon="star"
+                  void-color="#E8EBED"
+                  :readonly="read"
+                />
+                <span>{{v.time.substr(0,10)}}</span>
+                <strong :data-v="v.id" @click="del($event)" v-if="tel==v.mobile">删除</strong>
               </div>
+              <p class="txt">{{v.content}}</p>
             </div>
           </li>
         </ul>
@@ -608,18 +754,20 @@
                   <span>{{list.single_price}}</span>元/m²
                 </p>
                 <p class="area">
-                  <span>{{list.city}}-{{list.country}}</span>
-                  <span v-if="list.area_min">建面</span>
+                  <span>{{list.type}}</span>
+                  |
+                  <span>{{list.city.substr(0,2)}}-{{list.country.substr(0,2)}}</span>
+                  |
                   <span v-if="list.area_min">
                     {{parseInt(list.area_min)}}
-                    <span v-if="list.area_max">-</span>
+                    <i v-if="list.area_max">-</i>
                     {{parseInt(list.area_max)}}m²
                   </span>
                 </p>
                 <p class="tabs">
                   <span class="strong">{{list.decorate}}</span>
                   <span v-if="list.railway">{{list.railway}}</span>
-                  <span>{{list.type}}</span>
+                  <span>{{list.tag}}</span>
                 </p>
               </div>
             </router-link>
@@ -644,18 +792,20 @@
                   <span>{{list.single_price}}</span>元/m²
                 </p>
                 <p class="area">
-                  <span>{{list.city}}-{{list.country}}</span>
-                  <span>建面</span>
-                  <span>
+                  <span>{{list.type}}</span>
+                  |
+                  <span>{{list.city.substr(0,2)}}-{{list.country.substr(0,2)}}</span>
+                  |
+                  <span v-if="list.area_min">
                     {{parseInt(list.area_min)}}
-                    <span v-if="list.area_max">-</span>
+                    <i v-if="list.area_max">-</i>
                     {{parseInt(list.area_max)}}m²
                   </span>
                 </p>
                 <p class="tabs">
                   <span class="strong">{{list.decorate}}</span>
                   <span v-if="list.railway">{{list.railway}}</span>
-                  <span>{{list.type}}</span>
+                  <span>{{list.tag}}</span>
                 </p>
               </div>
             </router-link>
@@ -711,10 +861,11 @@
                     <a href="javasript:;">《允家新房用户协议》</a>
                   </router-link>
                 </p>
-                <p class="tishi">请勾选用户协议</p>
+                
                 <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="dingyue">立即订阅</button>
                 <p class="w-tit">
-                  <img src="~/assets/w-call.png" />允家严格保障您的信息安全
+                  <!-- <img src="~/assets/w-call.png" />允家严格保障您的信息安全 -->
+                  提交后将有咨询师与您取得联系并提供服务
                 </p>
               </div>
               <div class="t-b-second">
@@ -729,6 +880,7 @@
                 <button class="t-b-scode" @click="again">获取验证码</button>
               </div>
             </div>
+            <p class="tishi">请勾选用户协议</p>
           </div>
         </transition>
         <div class="m-chang"></div>
@@ -866,9 +1018,9 @@ export default {
               ? require("~/assets/topchoose.png")
               : require("~/assets/notopchoose.png");
           data.ndss =
-            data.timeline["拿地"]["1"] == 1 ? "dactive dtop dt1" : "dtop dt1";
+            data.timeline["拿地"]["1"] == 1 ? "dactive tegood" : "tegood";
           data.jtss =
-            data.timeline["加推"]["1"] == 1 ? "dactive dtop dt2" : "dtop dt2";
+            data.timeline["加推"]["1"] == 1 ? "dactive tegood" : "tegood";
           data.jt =
             data.timeline["加推"]["1"] == 1
               ? require("~/assets/topchoose.png")
@@ -878,13 +1030,13 @@ export default {
               ? require("~/assets/bomchoose.png")
               : require("~/assets/nobomchoose.png");
           data.skss =
-            data.timeline["首开"]["1"] == 1 ? "dbom dactive dt3" : "dbom dt3";
+            data.timeline["首开"]["1"] == 1 ? "dactive tegood" : "tegood";
           data.jf =
             data.timeline["交房"]["1"] == 0
               ? require("~/assets/nobomchoose.png")
               : require("~/assets/bomchoose.png");
           data.jfss =
-            data.timeline["交房"]["1"] == 1 ? "dbom dactive dt4" : "dbom dt4";
+            data.timeline["交房"]["1"] == 1 ? "dactive tegood" : "tegood";
           data.p = p;
           data.p1 = p1;
           data.p2 = p2;
@@ -954,6 +1106,7 @@ export default {
   },
   data() {
     return {
+      mapnum: 0,
       imgs: [img1, img2],
       li: 0,
       warn: false,
@@ -1102,7 +1255,11 @@ export default {
       tu: false,
       text: "向右滑",
       msg: "",
-      iscookie: false
+      iscookie: false,
+      isnull: false,
+      mapname: "地铁",
+      pois: [],
+      mapimg: require("~/assets/path.png")
     };
   },
   head() {
@@ -1126,9 +1283,20 @@ export default {
       $(".m-chang").show();
       this.change = true;
       this.ones = 1;
-      $(".weiter .t-top h6").html("限时优惠");
-      $(".weiter .t-top p").html("领取团购限时优惠！优惠编码将与您手机号绑定");
-      $("#dingxue").html("立即领取");
+      $(".weiter .t-top h6").html("抢优惠券");
+      $(".weiter .t-top p").html("专享限时优惠折扣，允家专场推出，早抢早优惠");
+      $("#dingxue").html("立即抢券");
+    },
+    xiangs(id) {
+      this.position = id;
+      $(".m-chang").show();
+      this.change = true;
+      this.ones = 1;
+      $(".weiter .t-top h6").html("参团优惠");
+      $(".weiter .t-top p").html(
+        "领取团购限时优惠券！优惠编码将与您手机号绑定"
+      );
+      $("#dingxue").html("立即抢券");
     },
     method1: function() {
       echarts();
@@ -1375,27 +1543,73 @@ export default {
     },
     mmap() {
       this.over = false;
-      // if (!localStorage.getItem("map")) {
-      // localStorage.setItem("map", 1);
+      let name = this.mapname;
       let that = this;
       let baidu = [that.ln, that.la];
-      var la = "";
-      var ln = "";
       AMap.convertFrom(baidu, "baidu", function(status, result) {
         if (result.info === "ok") {
           var lnglats = result.locations; // Array.<LngLat>
-          la = lnglats[0].lat;
-          ln = lnglats[0].lng;
+          that.pois = [lnglats[0].lng, lnglats[0].lat];
           var map = new AMap.Map("m-container", {
             zoom: 14, //初始化地图层级
-            center: [ln, la], //初始化地图中心点
+            center: that.pois, //初始化地图中心点
             zoomEnable: false,
             dragEnable: false
           });
+          let marker = new AMap.Marker({
+            icon:
+              "https://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png",
+            position: that.pois,
+            offset: new AMap.Pixel(-13, -30)
+          });
+          marker.setMap(map);
+          AMap.service(["AMap.PlaceSearch"], function() {
+            // eslint-disable-line no-unused-vars
+            //构造地点查询类
+            var placeSearch = new AMap.PlaceSearch({
+              pageSize: 10, // 单页显示结果条数
+              pageIndex: 1, // 页码
+              city: "", // 兴趣点城市
+              citylimit: false, //是否强制限制在设置的城市内搜索
+              map: map, // 展现结果的地图实例
+              panel: "panel", // 结果列表将在此容器中进行展示。
+              autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
+            });
+
+            var cpoint = that.pois; //中心点坐标
+            placeSearch.searchNearBy(name, cpoint, 2000, function(
+              // eslint-disable-line no-unused-vars
+              status,
+              result
+            ) {
+              var ht = "";
+              // console.log(ht)
+              let img = that.mapimg;
+              if (JSON.stringify(result) == "{}") {
+                that.isnull = true;
+              } else {
+                that.isnull = false;
+                $.each(result.poiList.pois, function(i, e) {
+                  if (i <= 2) {
+                    var p2 = [e.location.lng, e.location.lat];
+                    var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
+                    s = s.toFixed(1);
+                    ht += `
+                    <li>
+                      <h5>${e.name}</h5>
+                      <p>${e.address} <span><img src="${img}">${s}km</span></p>
+                    </li>
+                    `;
+                  }
+                  // console.log(e);
+                });
+              }
+
+              $(".con").html(ht);
+            });
+          });
         }
       });
-      // console.log([ln, la]);
-      // }
     },
     again() {
       let tel = this.baoming;
@@ -1531,7 +1745,7 @@ export default {
     check() {
       let m = this.ma;
       if (!m) {
-        $("#ma-ll").attr("placeholder", "不能为空");
+        this.tishi('验证码不能为空')
         return;
       }
       let tel = this.baoming;
@@ -1562,8 +1776,9 @@ export default {
       let ids = id + "," + this.id;
       this.ids = ids;
     },
-    pkhref() {
-      let ids = this.ids;
+    pkhref(num) {
+      let ids = num + "," + this.id;
+      this.ids = ids;
       let id = this.id;
       if (ids) {
         this.$router.push("/" + this.n + "/pkdetail/" + ids + "/" + id);
@@ -1837,23 +2052,20 @@ export default {
       this.$router.push("/" + this.jkl + "/commentback/" + id);
     },
     dingyue() {
-      console.log(123);
       let check = this.checks;
       if (!check) {
-        $(".tishi").show();
+        this.tishi('请勾选用户协议')
         return;
-      } else {
-        $(".tishi").hide();
-      }
+      } 
 
       let phone = this.baoming;
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
-        $(".l-p").attr("placeholder", "手机号不能为空");
+        this.tishi('手机号不能为空')
         return;
       } else if (!pattern_phone.test(phone)) {
         $(".l-p").val("");
-        $(".l-p").attr("placeholder", "手机号码不合法");
+        this.tishi('手机号不能为空')
         return;
       }
       if (this.open == 1) {
@@ -1861,6 +2073,13 @@ export default {
       } else {
         this.sendmsg(phone);
       }
+    },
+    tishi (msg) {
+      $(".tishi").html(msg);
+      $(".tishi").show();
+      setTimeout(() => {
+        $(".tishi").hide();
+      }, 1500);
     },
     guanbi() {
       this.ones = 0;
@@ -1924,9 +2143,49 @@ export default {
     },
     onRefresh() {
       this.msg = "";
+    },
+    lingbtn(e) {
+      $(".ling-ssd").css("whiteSpace", "inherit");
+      e.target.style.display = "none";
+    },
+    setmap(id, name) {
+      this.mapnum = id;
+      this.mapname = name;
+      this.mmap();
     }
   },
   mounted() {
+    $(".huo-more").on("click", function() {
+      $(this).hide();
+      $(".table").css("height", "auto");
+    });
+    var swiper08 = new Swiper(".swiper-map", {
+      slidesPerView: 4.8,
+      spaceBetween: 10,
+      observer: true,
+      slidesOffsetAfter: 12,
+      slidesOffsetBefore: 14
+    });
+    var swiper05 = new Swiper(".swiper-dynamic", {
+      slidesPerView: 3.8,
+      spaceBetween: 0,
+      observer: true,
+      slidesOffsetAfter: 12,
+      slidesOffsetBefore: 14
+    });
+    var swiper06 = new Swiper(".swiper-house", {
+      slidesPerView: 2,
+      spaceBetween: 10,
+      observer: true,
+      slidesOffsetAfter: 12,
+      slidesOffsetBefore: 14
+    });
+    var swiper07 = new Swiper(".swiper-pk", {
+      slidesPerView: 2.4,
+      spaceBetween: 10,
+      observer: true,
+      slidesOffsetAfter: 1
+    });
     if (navigator.cookieEnabled != true) {
       this.load = false;
       this.iscookie = true;
@@ -2315,21 +2574,23 @@ export default {
     $(".p1").on("click", function() {
       window.type = $(this).attr("data-v");
 
-      if (type == "变价通知") {
+      if (type == "最新变价通知") {
         that.position = 8;
         $(".weiter .t-top h6").html(type);
         $(".weiter .t-top p").html(
-          "一键订阅最新变价通知，不再错过变价信息哦！"
+          "价格变动这么快？订阅楼盘变价通知，楼盘变价我们将第一时间通知您"
         );
-      } else if (type == "开盘通知") {
+      } else if (type == "最新开盘通知") {
         that.position = 9;
         $(".weiter .t-top h6").html(type);
-        $(".weiter .t-top p").html("一键订阅最新开盘通知,不再错过开盘信息哦！");
+        $(".weiter .t-top p").html(
+          "一键订阅最新开盘通知，我们会第一时间通知,不再错过开盘时间"
+        );
       } else if (type == "预约看房") {
         that.position = 5;
         $(".weiter .t-top h6").html(type);
         $(".weiter .t-top p").html(
-          "一键预约看房免费小车上门接送，可带家人一起参观多个热门楼盘 "
+          "提前预约看房，我们将提供免费专车接送和专业楼盘讲解"
         );
       } else if (type == "我要优惠") {
         $(".weiter .t-top h6").html("报名获取考察旅游名额");
@@ -2337,26 +2598,32 @@ export default {
       } else if (type == "咨询服务") {
         $(".weiter .t-top h6").html(type);
         $(".weiter .t-top p").html("立即报名，专业人员为你解惑!");
-      } else if (type == "最新动态") {
+      } else if (type == "订阅最新动态") {
         that.position = 10;
         $(".weiter .t-top h6").html(type);
-        $(".weiter .t-top p").html("一键订阅楼盘动态,最新动态抢先知！");
-      } else if (type == "楼盘周边信息") {
+        $(".weiter .t-top p").html(
+          "订阅最新动态，楼盘最新情报抢先知道，帮您找准买房好时机"
+        );
+      } else if (type == "获取详细周边配套") {
         that.position = 15;
-        $(".weiter .t-top h6").html("获取楼盘周边信息");
-        $(".weiter .t-top p").html("立即向售楼人员咨询楼盘周边信息");
+        $(".weiter .t-top h6").html("获取详细周边配套");
+        $(".weiter .t-top p").html(
+          "附近有学区或商业街吗？想了解更多周边配套信息？立即获取全面周边配套详解"
+        );
       } else if (type == "最新预售许可证") {
         $(".weiter .t-top h6").html("了解最新预售许可证");
         $(".weiter .t-top p").html("向售楼人员咨询最新许可证");
-      } else if (type == "最新成交价") {
+      } else if (type == "获取最新成交价") {
         that.position = 14;
         $(".weiter .t-top h6").html("获取最新成交价");
-        $(".weiter .t-top p").html("向售楼人员咨询最新成交价");
-      } else if (type == "详细楼盘户型") {
-        that.position = 11;
-        $(".weiter .t-top h6").html("获取详细楼盘户型");
         $(".weiter .t-top p").html(
-          "获取详细楼盘户型，在买房之前了解更多楼盘户型"
+          "获取最新成交价格，看看房友都是什么价格买的房"
+        );
+      } else if (type == "咨询详细户型") {
+        that.position = 11;
+        $(".weiter .t-top h6").html("咨询详细户型");
+        $(".weiter .t-top p").html(
+          "好楼盘户型是关键，咨询详细户型信息，安安心心买房"
         );
       } else if (type == "领取免费资料") {
         that.position = 13;
@@ -2364,26 +2631,24 @@ export default {
         $(".weiter .t-top p").html(
           "一键订阅最新详细楼盘资料，获取更多楼盘分析资料"
         );
-      } else if (type == "免费领取地图") {
+      } else if (type == "领取免费地图") {
         that.position = 13;
-        $(".weiter .t-top h6").html("获取详细楼盘资料");
+        $(".weiter .t-top h6").html("领取免费地图");
         $(".weiter .t-top p").html(
-          "一键订阅最新详细楼盘资料，获取更多楼盘分析资料"
+          "领取电子楼盘地图，优质地段、快捷交通、一眼明了"
         );
-      } else if (type == "了解详细户型") {
+      } else if (type == "最新房价趋势解读") {
         that.position = 11;
-        $(".weiter .t-top h6").html("获取详细楼盘户型");
-        $(".weiter .t-top p").html(
-          "获取详细楼盘户型，在买房之前了解更多楼盘户型"
-        );
+        $(".weiter .t-top h6").html("最新房价趋势解读");
+        $(".weiter .t-top p").html("获取最近房价行情，抓住买房投资好时机");
       } else if (type == "获取高清配套图") {
         $(".weiter .t-top h6").html(type);
         $(".weiter .t-top p").html("一键领取高清图，楼盘图片清晰看！");
-      } else if (type == "获取详细分析资料") {
+      } else if (type == "获取楼盘分析资料") {
         that.position = 12;
-        $(".weiter .t-top h6").html("获取分析资料");
+        $(".weiter .t-top h6").html("详细楼盘分析资料");
         $(".weiter .t-top p").html(
-          "一键订阅最新项目深度分析资料，了解更多投资分析和宜居分析"
+          "最新楼盘分析资料，看看房产专家对楼盘的投资分析和宜居分析解读"
         );
       } else if (type == "抢免费专车票") {
         that.position = 12;
@@ -2573,218 +2838,6 @@ export default {
       var interval = setInterval(fn, 1000);
     });
 
-    $(".m-c-port1").on("click", function() {
-      var building_name = $(this)
-        .prev()
-        .val();
-      var ma = $(this)
-        .prev()
-        .prev()
-        .val();
-      var name = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var tel = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var type = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var pattern_tel = /^1[3-9][0-9]{9}$/;
-      if (tel == "") {
-        $(this)
-          .prev()
-          .prev()
-          .prev()
-          .prev()
-          .prev()
-          .val("");
-        $(this)
-          .prev()
-          .prev()
-          .prev()
-          .prev()
-          .prev()
-          .attr("placeholder", "手机号码不能为空");
-        return;
-      } else if (!pattern_tel.test(tel)) {
-        $(this)
-          .prev()
-          .prev()
-          .prev()
-          .prev()
-          .prev()
-          .val("");
-        $(this)
-          .prev()
-          .prev()
-          .prev()
-          .prev()
-          .prev()
-          .attr("placeholder", "手机号码不合法");
-        return;
-      }
-
-      var brower = getBrowserInfo();
-      var qu = qudao();
-
-      var data = {
-        phone: tel,
-        type: type,
-        name: name,
-        building_name: building_name,
-        brower: brower,
-        qu: qu,
-        ma: ma
-      };
-
-      var that = $(this);
-      $.post(
-        "{:url('home/content/port1')}",
-        data,
-        function(res) {
-          if (res.code == 100) {
-            that.parent().hide();
-            if (type == "变价通知") {
-              $("#o_p").text(
-                "已成功订阅变价通知，我们会第一时间通过短信通知您"
-              );
-              $(".m-o-succ").show();
-            } else if (type == "开盘通知") {
-              $("#o_p").text(
-                "已成功订阅开盘通知，我们会第一时间通过短信通知您"
-              );
-              $(".m-o-succ").show();
-            } else if (type == "预约看房") {
-              $("#o_p").text("已预约成功，我们会第一时间与您联系");
-              $(".m-o-succ").show();
-            } else if (type == "我要优惠") {
-              $("#o_p").text("已成功报名，我们会第一时间把优惠楼盘推送给您");
-              $(".m-o-succ").show();
-            } else if (type == "最新动态") {
-              $("#o_p").text(
-                "已成功订阅最新动态，我们会第一时间把楼盘动态推送给您"
-              );
-              $(".m-o-succ").show();
-            } else if (type == "获取最低成交价") {
-              $("#o_p").text(
-                "已成功订阅最低成交价，我们会第一时间把最低成交价推送给您"
-              );
-              $(".m-o-succ").show();
-            }
-          }
-        },
-        "json"
-      );
-    });
-    $(".m-c-port2").on("click", function() {
-      var building_name = $(this)
-        .prev()
-        .val();
-      var type = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var tel = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var address = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var name = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var ma = $(this)
-        .prev()
-        .prev()
-        .val();
-      var pattern_tel = /^1[3-9][0-9]{9}$/;
-      if (tel == "") {
-        $(this)
-          .prev()
-          .prev()
-          .prev()
-          .val("");
-        $(this)
-          .prev()
-          .prev()
-          .prev()
-          .attr("placeholder", "手机号码不能为空");
-        return;
-      } else if (!pattern_tel.test(tel)) {
-        $(this)
-          .prev()
-          .prev()
-          .prev()
-          .val("");
-        $(this)
-          .prev()
-          .prev()
-          .prev()
-          .attr("placeholder", "手机号码不合法");
-        return;
-      }
-      var brower = getBrowserInfo();
-      var qu = qudao();
-      var data = {
-        phone: tel,
-        type: type,
-        name: name,
-        address: address,
-        name: name,
-        building_name: building_name,
-        brower: brower,
-        qu: qu,
-        ma: ma
-      };
-      var that = $(this);
-      $.post(
-        "{:url('home/content/port2')}",
-        data,
-        function(res) {
-          if (res.code == 100) {
-            that.parent().hide();
-            if (type == "领取户型图") {
-              $("#o_p").text("已成功领取，我们会第一时间将资料送给您");
-              $(".m-o-succ").show();
-            } else if (type == "领取免费相册资料") {
-              $("#o_p").text("已成功领取，我们会第一时间将资料送给您");
-              $(".m-o-succ").show();
-            } else if (type == "楼盘周边信息") {
-              $("#o_p").text("已成功获取，我们会第一时间与您沟通");
-              $(".m-o-succ").show();
-            } else if (type == "领取免费资料") {
-              $("#o_p").text("已成功领取，我们会第一时间将资料送给您");
-              $(".m-o-succ").show();
-            }
-          }
-        },
-        "json"
-      );
-    });
-
     $("#o_btn").on("click", function() {
       that.succ = false;
       $(".m-chang").hide();
@@ -2869,7 +2922,6 @@ export default {
 };
 </script>
 <style scoped>
-@import "http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css";
 @import url("~/static/css/c-index.css");
 @import url("~/static/css/c-index1.2.css");
 * {
@@ -3020,9 +3072,19 @@ body {
   z-index: 200;
 }
 .tishi {
-  color: red;
-  font-size: 10px;
+  color: #CDCDCD;
+  font-size: 16px;
   display: none;
+  position: absolute;
+  width:170px;
+  height: 60px;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.8);
+  text-align: center;
+  line-height: 60px;
+  left: 50%;
+  margin-left: -85px;
+  top: 150px
 }
 .m-imgs .swiper-container {
   width: 100%;
@@ -3102,8 +3164,8 @@ body {
 .m-huo .m-btns button {
   width: 92%;
   height: 44px;
-  background-color: #f0f2f5;
-  color: #4db5ff;
+  background-color: #edf5f9;
+  color: #3dabef;
   font-size: 16px;
   text-align: center;
   line-height: 44px;
@@ -3113,7 +3175,6 @@ body {
   margin-bottom: 5px;
   position: inherit;
   margin-top: 25px;
-  font-weight: bold;
 }
 
 #m_sc_box {
@@ -3131,7 +3192,7 @@ body {
   padding: 2px 4px;
   /* border: 0.5px solid #fe582f; */
   border-radius: 2px;
-  background-color: #FFEDE5;
+  background-color: #ffede5;
 }
 /* 改版1.2css */
 /* 留言 */
@@ -3428,9 +3489,9 @@ body {
   margin-right: 3.7% !important;
 }
 
-.m-lun .m-luns img{
+.m-lun .m-luns img {
   height: 210px;
-  width:100%
+  width: 100%;
 }
 
 .m-lun .m-luns #lnum {
@@ -3455,7 +3516,7 @@ body {
 
 .tuan-msg {
   position: relative;
-  margin-top:-4px;
+  margin-top: -4px;
   z-index: 10;
 }
 .tar {
@@ -3466,7 +3527,11 @@ body {
 .tar .left {
   width: 70%;
   height: 50px;
-  background:linear-gradient(-90deg,rgba(255,1,91,1),rgba(255,69,29,1));
+  background: linear-gradient(
+    -90deg,
+    rgba(255, 1, 91, 1),
+    rgba(255, 69, 29, 1)
+  );
 }
 
 .tar .left h5 {
@@ -3481,27 +3546,27 @@ body {
 }
 .tar .left p {
   margin-left: 14px;
-  color: #FFCACD;
+  color: #ffcacd;
   font-size: 10px;
 }
 .tar .right {
   height: 50px;
   width: 30%;
-  background:rgba(255,228,177,1);
+  background: rgba(255, 228, 177, 1);
   padding-left: 14px;
 }
 .tar .right h5 {
-  color: #FF3E24;
+  color: #ff3e24;
   font-size: 14px;
   margin-bottom: 6px;
   padding-top: 4px;
 }
 .tar .right p {
-  color: #FF3E24
+  color: #ff3e24;
 }
 .tar .right span {
   font-size: 14px;
-  color: #FF3E24;
+  color: #ff3e24;
   margin-left: 2px;
 }
 .pin {
@@ -3510,6 +3575,8 @@ body {
 }
 .pin nav {
   padding: 0 4%;
+  overflow: hidden;
+  margin-bottom: 10px;
 }
 .pin nav h3 {
   float: left;
@@ -3521,47 +3588,85 @@ body {
 }
 .pin nav p {
   float: right;
-  color: #646466;
-  font-size: 13px;
+  color: #323232;
+  font-size: 10px;
 }
 .pin nav p span {
   color: black;
-  font-size: 13px;
-  font-weight: bold;
+  font-size: 11px;
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   margin-left: 4px;
   margin-right: 4px;
-  background: #d6d6d6;
+  background: #f1f1f1;
   border-radius: 2px;
   text-align: center;
-  line-height: 20px;
-  margin-bottom: 10px;
+  line-height: 14px;
 }
 .pin-bao {
   position: absolute;
-  width: 44.4px;
-  height: 44.4px;
+  width: 70px;
+  height: 26px;
   background: linear-gradient(
-    -90deg,
-    rgba(255, 133, 60, 1),
-    rgba(255, 67, 47, 1)
+    180deg,
+    rgba(248, 195, 61, 1),
+    rgba(255, 238, 187, 1)
   );
-  border-radius: 5px;
-  color: #fff;
+  border-radius: 13px;
+  color: #ef2b31;
   font-size: 13px;
-  word-wrap: break-word;
-  padding: 6px 8px 0 8px;
-  right: 10%;
-  top: 40%;
+  text-align: center;
+  line-height: 26px;
+  right: 8%;
+  top: 13%;
+}
+.pin .pin-msg {
+  position: absolute;
+  right: 8%;
+  top: 45%;
+  color: #ffd4ce;
+  font-size: 12px;
+}
+.pin .top,
+.pin .bomm {
+  position: relative;
+}
+.pin .y1 {
+  top: 14%;
+}
+.pin .ym {
+  top: 45%;
 }
 .pin img {
-  width: 100%;
+  width: 92%;
   margin-bottom: 10px;
+  margin-left: 4%;
 }
 .pin .bom {
   padding: 0 4%;
+}
+.top-num {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  color: #646466;
+  font-size: 15px;
+}
+.top-num img {
+  margin-bottom: 3px;
+}
+.top-num .totop {
+  width: 4.5%;
+  margin-right: 4%;
+  float: right;
+  margin-top: 4.2%;
+}
+.top-num .content-top {
+  width: 18px;
+  height: 18px;
+  margin-left: 4%;
+  margin-right: 3.4%;
 }
 .trend-con1 {
   display: inline-block;
