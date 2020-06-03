@@ -17,7 +17,7 @@
         <div class="zao"></div>
 
         <div class="m-luns">
-          <img :src="topimgs[0]" alt />
+          <img :src="topimg" alt />
           <!-- <div class="swiper-top">
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="(img,key) in topimgs" :key="key">
@@ -67,7 +67,7 @@
           <span class="m-zai">{{building.status}}</span>
           <span class="m-jing">{{building.decorate}}</span>
           <span v-if="building.railway">{{building.railway}}</span>
-          <span>{{building.tag}}</span>
+          <span>{{building.features[0]}}</span>
           <strong v-if="tuan==1">限时优惠</strong>
           <i class="m-ishou">
             <img src="~/assets/contrast.png" alt />
@@ -77,26 +77,26 @@
         <ul class="m-jtop">
           <li>
             <p>
-              <span>{{parseInt(building.total_price_min)}}</span>万起
+              <span>{{parseInt(building.single_price)}}</span>元/m²
             </p>
-            <span>总价</span>
+            <span>参考单价</span>
           </li>
           <li>
-            <p class="lo">{{building.apartment}}</p>
-            <span>户型</span>
+            <p class="lo">{{building.house}}</p>
+            <span>楼盘户型</span>
           </li>
           <li>
-            <p v-if="building.area_min">
-              <span>{{parseInt(building.area_min)}}-{{parseInt(building.area_max)}}</span>/m²
+            <p v-if="building.area">
+              <span>{{building.area}}</span>/m²
             </p>
-            <span>建面</span>
+            <span>建筑面积</span>
           </li>
         </ul>
         <div class="m-ibottom">
           <ul>
             <li>
-              单价&nbsp;:&nbsp;
-              <span class="m-pric">{{building.single_price}}元/m²起</span>
+              总价&nbsp;:&nbsp;
+              <span class="m-pric">{{parseInt(building.total_price)}}万起</span>
             </li>
             <li>
               装修&nbsp;:&nbsp;
@@ -110,7 +110,7 @@
             </li>
             <li>
               开盘&nbsp;:&nbsp;
-              <span>{{building.first_open_time}}</span>
+              <span>{{building.timeline.first_open_time}}</span>
             </li>
           </ul>
           <router-link :to="'/' + jkl + '/detail/' + id">
@@ -163,7 +163,7 @@
                 <div class="swiper-wrapper">
                   <div
                     class="swiper-slide"
-                    v-for="(trend,key) in group_buy.last_tels"
+                    v-for="(trend,key) in group_buy.joined_tels"
                     :key="key"
                   >{{trend}}领取了优惠券</div>
                 </div>
@@ -172,8 +172,8 @@
           </div>
         </div>
         <div class="bomm">
-          <div class="pin-bao y1" v-if="!newimg" @click="xiang(25)">抢优惠券</div>
-          <p class="pin-msg ym">已有{{group_buy.saled_num}}人加入</p>
+          <div class="pin-bao y1" v-if="!newimg" @click="xiang(28)">抢优惠券</div>
+          <p class="pin-msg ym">{{sign.num}}人已抢到</p>
           <img src="~/assets/youhui.jpg" alt />
           <div class="bom">
             <div class="trend-con1">
@@ -181,7 +181,7 @@
                 <div class="swiper-wrapper">
                   <div
                     class="swiper-slide"
-                    v-for="(trend,key) in group_buy.last_tels"
+                    v-for="(trend,key) in sign.info"
                     :key="key"
                   >{{trend}}领取了优惠券</div>
                 </div>
@@ -190,7 +190,7 @@
           </div>
         </div>
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block" v-if="tuan==1"></div>
+      <div class="m-line visible-xs-block .visible-sm-block"></div>
       <div class="top-num">
         <img src="~/assets/content-top.png" alt class="content-top" />
         <span>刚需楼盘榜第4名</span>
@@ -214,44 +214,21 @@
             <i>最新</i>
           </span>
           <h4>{{building.name}}最新房源动态</h4>
-          <p>{{nowdong.content}}</p>
+          <p>{{nowdong.introduce}}</p>
         </div>
-        <div class="m-jia m-d" v-if="tui.length==0?false:true">
+        <div class="m-jia m-d" v-if="tui.length">
           <span>
             {{tui.time}}
             <i>加推</i>
           </span>
           <h4>最新加推楼盘</h4>
-          <p>{{tui.content}}</p>
+          <p>{{tui.introduce}}</p>
         </div>
 
         <div class="t-o o1"></div>
-        <div class="t-o o2" v-if="tui.length==0?false:true"></div>
+        <div class="t-o o2" v-if="tui.length"></div>
         <div class="t-l l1"></div>
-        <div class="t-l l2" v-if="tui.length==0?false:true"></div>
-        <!-- <img style="margin-left: 10px;" :src="nd" alt /> -->
-        <!-- <div class="d-pic">
-          <img style="margin-left: 10px;" :src="nd" alt />
-          <img :src="sk" alt />
-          <img :src="jt" alt />
-          <img :src="jf" alt />
-          <div :class="ndss">
-            <p>拿地</p>
-            <span>{{ndtime}}</span>
-          </div>
-          <div :class="jtss">
-            <p>加推</p>
-            <span>{{jttime}}</span>
-          </div>
-          <div :class="skss">
-            <span>{{sktime}}</span>
-            <p>首开</p>
-          </div>
-          <div :class="jfss">
-            <span>{{jftime}}</span>
-            <p>交房</p>
-          </div>
-        </div>-->
+        <div class="t-l l2" v-if="tui.length"></div>
         <div class="dynamic-hd">
           <div class="swiper-dynamic">
             <div class="swiper-wrapper">
@@ -290,9 +267,9 @@
         <button class="p1" data-v="订阅最新动态">获取最新动态</button>
       </div>
 
-      <div class="m-line visible-xs-block .visible-sm-block" v-if="hu.length !==0 "></div>
+      <div class="m-line visible-xs-block .visible-sm-block" v-if="hu"></div>
 
-      <div class="m-hu visible-xs-block .visible-sm-block" v-if="hu.length !==0 ">
+      <div class="m-hu visible-xs-block .visible-sm-block" v-if="hu">
         <h3>
           主力户型
           <router-link :to="'/' + jkl + '/morehus/' + id">
@@ -302,38 +279,19 @@
             </span>
           </router-link>
         </h3>
-        <!-- <div class="h-c" v-for="(h,key) in hu" :key="key">
-          <div class="col-xs-4 h-c-i">
-            <router-link :to="'/'+jkl+'/HuAnalysis/'+h.id+'/'+building.id">
-              <img :src="h.img" alt />
-            </router-link>
-          </div>
-          <div class="col-xs-8 h-c-c">
-            <div class="h-t">
-              <h4>{{h.title}}</h4>
-              <span class="h-t-z">{{h.status}}</span>
-              <span class="h-t-m">
-                <i>{{h.price}}</i>万起
-              </span>
-            </div>
-            <div class="sp">特点：{{h.feature}}</div>
-            <div class="sp">类型：{{h.type}}</div>
-            <div class="sp sp-f">户型分析：{{h.analysis}}</div>
-          </div>
-        </div>-->
         <div class="swiper-house">
           <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="(h,key) in hu" :key="key">
               <div class="tegood">
                 <router-link :to="'/'+jkl+'/HuAnalysis/'+h.id+'/'+building.id">
                   <div class="top">
-                    <img :src="h.img" alt />
+                    <img :src="h.small" alt />
                   </div>
                   <h5>
                     {{h.title}}
                     <span>{{h.status}}</span>
                   </h5>
-                  <p class="jian">建面 {{h.area}}m²&nbsp;&nbsp;&nbsp;朝向 北</p>
+                  <p class="jian">建面 {{h.area}}&nbsp;&nbsp;&nbsp;朝向 北</p>
                   <p class="red">
                     约
                     <span>{{h.price}}</span>万起
@@ -407,7 +365,7 @@
         </div>
         <div class="q-right">
           <button @click="xiang(25)">马上抢</button>
-          <p>{{group_buy.received_num}}已抢</p>
+          <p>{{group_buy.snatched_num}}已抢</p>
         </div>
       </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
@@ -423,7 +381,14 @@
         <div class="m-iright">
           <h4>为什么大家在准备买房的时候领 一份资料？</h4>
           <p>1.优质地段、优质楼盘一图囊括</p>
-          <p class="ling-ssd">2.电子地图、快捷分享、多人收益电子地图、快捷分享、多人收益</p>
+          <p class="ling-ssd">
+            <i>
+              2.电子地图、快捷分享、多人收益
+              <em v-if="ling">...</em>
+            </i>
+            <i>3.高效率看房、更多楼盘三维对比</i>
+            <i>4.提供精准的价格、商业分析</i>
+          </p>
           <span @click="lingbtn($event)">展开</span>
         </div>
         <button class="p1" data-v="领取免费地图">我要领取地图</button>
@@ -474,6 +439,7 @@
         </h3>
         <p id="tishi" v-if="questions.length==0?true:false">暂无问答，快来提问吧</p>
         <div class="m-d-content">
+          <template v-if="questions.length==0?true:false">
           <div class="m-w-content" v-for="(q,key) in questions" :key="key">
             <h4>
               <span>问</span>
@@ -515,6 +481,7 @@
               >有用({{q.num}})</span>
             </span>
           </div>
+          </template>
           <button class="question">我要提问</button>
         </div>
       </div>
@@ -536,43 +503,43 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide">
                 <div :class="mapnum === 0 ? 'tegood active' : 'tegood'" @click="setmap(0, '地铁')">
-                  地铁(5)
+                  地铁({{ditie}})
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="mapnum === 1 ? 'tegood active' : 'tegood'" @click="setmap(1 ,'公交')">
-                  公交(5)
+                  公交({{gongjiao}})
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="mapnum === 2 ? 'tegood active' : 'tegood'" @click="setmap(2, '教育')">
-                  教育(5)
+                  教育({{jiaoyus}})
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="mapnum === 3 ? 'tegood active' : 'tegood'" @click="setmap(3, '医院')">
-                  医院(5)
+                  医院({{yiyuan}})
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="mapnum === 4 ? 'tegood active' : 'tegood'" @click="setmap(4, '购物')">
-                  购物(5)
+                  购物({{gouwu}})
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="mapnum === 5 ? 'tegood active' : 'tegood'" @click="setmap(5, '美食')">
-                  美食(5)
+                  美食({{meishi}})
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="mapnum === 6 ? 'tegood active' : 'tegood'" @click="setmap(6, '娱乐')">
-                  娱乐(5)
+                  娱乐({{yule}})
                   <i></i>
                 </div>
               </div>
@@ -594,9 +561,9 @@
           <i class="m-s1"></i>
           <span>{{building.name}}</span>
           <i class="m-s2"></i>
-          <span>{{building.country}}</span>
+          <span>{{building.country_name}}</span>
           <i class="m-s3"></i>
-          <span>{{building.city}}</span>
+          <span>{{building.city_name}}</span>
         </div>
         <p class="msg">
           <img src="~/assets/bell.png" alt />
@@ -609,34 +576,6 @@
       <!-- 楼盘对比 -->
       <div class="m-contrast">
         <h4>楼盘对比</h4>
-        <!-- <div class="re-con" v-for="(c,key) in compares" :key="key">
-          <template v-if="key<3?true:false">
-            <input type="radio" name="pk" @click="pk($event)" :data-v="c.id" />
-            <div class="re-list">
-              <router-link :to="'/'+jkl+'/content/'+c.id">
-                <div class="re-con-left">
-                  <img :src="c.img" alt />
-                </div>
-                <div class="re-con-right">
-                  <h5>{{c.name}}</h5>
-                  <p class="price">
-                    <span>{{parseInt(c.single_price)}}</span>元/m²
-                  </p>
-                  <p class="area">
-                    <span>{{c.city}}-{{c.country}}</span>
-                    <span v-if="c.area_min">
-                      {{parseInt(c.area_min)}}
-                      <span v-if="c.area_max">-</span>
-                      {{parseInt(c.area_max)}}m²
-                    </span>
-                  </p>
-                </div>
-              </router-link>
-            </div>
-          </template>
-        </div>
-        <div class="warning" v-if="warn">请选择对比楼盘</div>
-        <button class="pkbtn" @click="pkhref()">楼盘对比</button>-->
         <div class="swiper-pk">
           <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="(c,key) in compares" :key="key">
@@ -648,13 +587,9 @@
                 <h5>{{c.name}}</h5>
                 <p class="llk">
                   {{c.country}}&nbsp;&nbsp;
-                  <span v-if="c.area_min">
-                    {{parseInt(c.area_min)}}
-                    <span v-if="c.area_max">-</span>
-                    {{parseInt(c.area_max)}}m²
-                  </span>
+                  <span v-if="c.area">{{c.area}}m²</span>
                 </p>
-                <p class="red">{{parseInt(c.single_price)}}元/m²</p>
+                <p class="red">{{parseInt(c.price)}}元/m²</p>
                 <button @click="pkhref(c.id)">加入对比</button>
               </div>
             </div>
@@ -704,14 +639,14 @@
               </h6>
               <div class="btn">
                 <van-rate
-                  v-model="value"
+                  v-model="v.score"
                   :size="8"
                   color="#3DABEF"
                   void-icon="star"
                   void-color="#E8EBED"
                   :readonly="read"
                 />
-                <span>{{v.time.substr(0,10)}}</span>
+                <span>{{v.time}}</span>
                 <strong :data-v="v.id" @click="del($event)" v-if="tel==v.mobile">删除</strong>
               </div>
               <p class="txt">{{v.content}}</p>
@@ -751,18 +686,14 @@
                   <span>{{list.status}}</span>
                 </h5>
                 <p class="price">
-                  <span>{{list.single_price}}</span>元/m²
+                  <span>{{list.price}}</span>元/m²
                 </p>
                 <p class="area">
                   <span>{{list.type}}</span>
                   |
                   <span>{{list.city.substr(0,2)}}-{{list.country.substr(0,2)}}</span>
                   |
-                  <span v-if="list.area_min">
-                    {{parseInt(list.area_min)}}
-                    <i v-if="list.area_max">-</i>
-                    {{parseInt(list.area_max)}}m²
-                  </span>
+                  <span v-if="list.area">{{list.area}}m²</span>
                 </p>
                 <p class="tabs">
                   <span class="strong">{{list.decorate}}</span>
@@ -789,18 +720,14 @@
                   <span>{{list.status}}</span>
                 </h5>
                 <p class="price">
-                  <span>{{list.single_price}}</span>元/m²
+                  <span>{{list.price}}</span>元/m²
                 </p>
                 <p class="area">
                   <span>{{list.type}}</span>
                   |
                   <span>{{list.city.substr(0,2)}}-{{list.country.substr(0,2)}}</span>
                   |
-                  <span v-if="list.area_min">
-                    {{parseInt(list.area_min)}}
-                    <i v-if="list.area_max">-</i>
-                    {{parseInt(list.area_max)}}m²
-                  </span>
+                  <span v-if="list.area">{{list.area}}m²</span>
                 </p>
                 <p class="tabs">
                   <span class="strong">{{list.decorate}}</span>
@@ -854,14 +781,14 @@
             </div>
             <div class="t-bottom">
               <div class="t-b-first">
-                <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
+                <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" maxlength="11"/>
                 <p class="w-mg">
                   <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
                   <router-link :to="'/'+jkl+'/server'">
                     <a href="javasript:;">《允家新房用户协议》</a>
                   </router-link>
                 </p>
-                
+
                 <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="dingyue">立即订阅</button>
                 <p class="w-tit">
                   <!-- <img src="~/assets/w-call.png" />允家严格保障您的信息安全 -->
@@ -959,153 +886,155 @@ export default {
     let token = context.store.state.cookie.token;
     let ip = context.store.state.cookie.ip;
     let jkl = context.params.name;
-    let [res] = await Promise.all([
+    let [res1] = await Promise.all([
       context.$axios
-        .post("/api/project/detail", {
+        .post("/api/detail/mobile", {
           platform: 2,
           id: id,
           ip: ip,
           token: token
         })
         .then(res => {
-          let dd = res.data;
-          let data = res.data.data;
-          let p = data.phone;
-          context.store.commit("setcall", { call: p });
-          if (data.building.tag) {
-            data.building.tag = data.building.tag.split(",")[0];
-          }
-          if (data.building.railway) {
-            data.building.railway = data.building.railway.split(",")[0];
-          }
-          let prices = [];
-          for (let item of data.deals) {
-            prices.unshift(item.price);
-          }
-          let times = [];
-          for (let item of data.deals) {
-            times.unshift(item.date);
-          }
-          data.prices = prices;
-          data.times = times;
-          for (let m = 0; m < data.same_price.length; m++) {
-            if (data.same_price[m].railway) {
-              data.same_price[m].railway = data.same_price[m].railway.split(
-                ","
-              )[0];
+          if (res.data.code === 200) {
+            let data = res.data;
+            data.topimg = data.info.constant.img;
+            let times = [];
+            for (let item of data.info.constant.deals) {
+              times.unshift(item.date);
             }
-          }
-          for (let m = 0; m < data.same_area.length; m++) {
-            if (data.same_area[m].railway) {
-              data.same_area[m].railway = data.same_area[m].railway.split(
-                ","
-              )[0];
+            let prices = [];
+            for (let item of data.info.constant.deals) {
+              prices.unshift(item.money);
             }
+            data.prices = prices;
+            data.times = times;
+            let trend = data.info.constant.avg_prices;
+            let p1 = [];
+            let p2 = [];
+            let p3 = [];
+            let t = [];
+            for (let item in trend) {
+              p1.unshift((trend[item]["city"] / 10000).toFixed(1));
+              p2.unshift((trend[item]["country"] / 10000).toFixed(1));
+              p3.unshift((trend[item]["project"] / 10000).toFixed(1));
+              t.unshift(trend[item]["time"]);
+            }
+            data.p1 = p1;
+            data.p2 = p2;
+            data.p3 = p3;
+            data.t = t;
+            let date = new Date();
+            let now = date.getTime();
+            if (
+              new Date(
+                data.info.constant.timeline.give_time.replace(/-/g, "/")
+              ).getTime() < now
+            ) {
+              data.jfss = "dactive tegood";
+            } else {
+              data.jfss = "tegood";
+            }
+            if (
+              new Date(
+                data.info.constant.timeline.get_land_time.replace(/-/g, "/")
+              ).getTime() < now
+            ) {
+              data.ndss = "dactive tegood";
+            } else {
+              data.ndss = "tegood";
+            }
+            if (
+              new Date(
+                data.info.constant.timeline.first_open_time.replace(/-/g, "/")
+              ).getTime() < now
+            ) {
+              data.skss = "dactive tegood";
+            } else {
+              data.skss = "tegood";
+            }
+            if (
+              new Date(
+                data.info.constant.timeline.add_push_time.replace(/-/g, "/")
+              ).getTime() < now
+            ) {
+              data.jtss = "dactive tegood";
+            } else {
+              data.jtss = "tegood";
+            }
+            data.nowdong = {}
+            data.tui = {}
+            if(data.info.varialble.dynamics.length !=0) {
+              data.nowdong = data.info.varialble.dynamics[0]
+              if(data.info.varialble.dynamics.length === 2) {
+                data.tui = data.info.varialble.dynamics[1]
+              }
+            }
+            return data;
           }
-          let trend = data.price_trend;
-          let p1 = [];
-          let p2 = [];
-          let p3 = [];
-          let t = [];
-          for (let item in trend) {
-            p1.unshift((trend[item][data.building.city] / 10000).toFixed(1));
-            p2.unshift((trend[item][data.building.country] / 10000).toFixed(1));
-            p3.unshift((trend[item][data.building.name] / 10000).toFixed(1));
-            t.unshift(item);
-          }
-          data.nd =
-            data.timeline["拿地"]["1"] == 1
-              ? require("~/assets/topchoose.png")
-              : require("~/assets/notopchoose.png");
-          data.ndss =
-            data.timeline["拿地"]["1"] == 1 ? "dactive tegood" : "tegood";
-          data.jtss =
-            data.timeline["加推"]["1"] == 1 ? "dactive tegood" : "tegood";
-          data.jt =
-            data.timeline["加推"]["1"] == 1
-              ? require("~/assets/topchoose.png")
-              : require("~/assets/notopchoose.png");
-          data.sk =
-            data.timeline["首开"]["1"] == 1
-              ? require("~/assets/bomchoose.png")
-              : require("~/assets/nobomchoose.png");
-          data.skss =
-            data.timeline["首开"]["1"] == 1 ? "dactive tegood" : "tegood";
-          data.jf =
-            data.timeline["交房"]["1"] == 0
-              ? require("~/assets/nobomchoose.png")
-              : require("~/assets/bomchoose.png");
-          data.jfss =
-            data.timeline["交房"]["1"] == 1 ? "dactive tegood" : "tegood";
-          data.p = p;
-          data.p1 = p1;
-          data.p2 = p2;
-          data.p3 = p3;
-          data.t = t;
-          if (dd.group_buy.length != 0) {
-            dd.tuan = 1;
-          } else {
-            dd.tuan = 0;
-          }
-          return dd;
         })
     ]);
     return {
       jkl: jkl,
-      call: res.data.p,
-      la: res.data.building.latitude,
-      ln: res.data.building.longitude,
-      topimgs: res.data.top_imgs.img,
-      topnum: res.data.top_imgs.num,
-      building: res.data.building,
-      tit: res.data.building.name,
-      ds: res.data.dynamic_count,
-      phone: res.data.phone,
-      nowdong: res.data.last_dynamic,
-      tui: res.data.dynamic_add_push,
-      timeline: res.data.timeline,
-      hu: res.data.apartments,
-      live: res.data.analysis.live,
-      invest: res.data.analysis.invest,
-      searchnum: res.data.search_num,
-      chengjiao: res.data.deals,
-      times: res.data.times,
-      prices: res.data.prices,
-      questions: res.data.questions,
-      location: res.data.location,
-      compares: res.data.compare,
-      comments: res.data.comments,
-      same_price: res.data.same_price,
-      same_area: res.data.same_area,
-      trend_time: res.data.t,
-      trend_price1: res.data.p1,
-      trend_price2: res.data.p2,
-      trend_price3: res.data.p3,
-      ndtime: res.data.timeline["拿地"][0],
-      jftime: res.data.timeline["交房"][0],
-      sktime: res.data.timeline["首开"][0],
-      jttime: res.data.timeline["加推"][0],
-      nd: res.data.nd,
-      ndss: res.data.ndss,
-      jtss: res.data.jtss,
-      jt: res.data.jt,
-      sk: res.data.sk,
-      skss: res.data.skss,
-      jf: res.data.jf,
-      jfss: res.data.jfss,
-      title: res.data.title,
-      description: res.data.description,
-      keywords: res.data.keywords,
-      collect: res.data.collect,
+      call: res1.head.phone,
+      la: res1.info.constant.location.latitude,
+      ln: res1.info.constant.location.longitude,
+      topnum: res1.info.constant.img_count,
+      building: res1.info.constant,
+      tit: res1.info.constant.name,
+      ds: res1.info.varialble.dynamics_count,
+      phone: res1.head.phone,
+      nowdong: res1.nowdong,
+      tui: res1.tui,
+      hu: res1.info.constant.apartments,
+      live: res1.info.constant.analysis.live,
+      invest: res1.info.constant.analysis.invest,
+      searchnum: res1.info.varialble.num.search_num,
+      chengjiao: res1.info.constant.deals,
+      times: res1.times,
+      prices: res1.prices,
+      questions: res1.info.varialble.questions,
+      location: res1.info.constant.location,
+      compares: res1.info.varialble.compares,
+      comments: res1.info.varialble.comments,
+      same_price: res1.info.constant.same_price,
+      same_area: res1.info.constant.same_area,
+      trend_time: res1.t,
+      trend_price1: res1.p1,
+      trend_price2: res1.p2,
+      trend_price3: res1.p3,
+      ndtime: res1.info.constant.timeline.get_land_time,
+      jftime: res1.info.constant.timeline.give_time,
+      sktime: res1.info.constant.timeline.first_open_time,
+      jttime: res1.info.constant.timeline.add_push_time,
+      ndss: res1.ndss,
+      jtss: res1.jtss,
+      skss: res1.skss,
+      jfss: res1.jfss,
+      title: res1.head.title,
+      description: res1.head.description,
+      keywords: res1.head.keywords,
+      collect: res1.info.varialble.collect,
       checks: true,
-      city: res.city.id,
-      tuan: res.tuan,
-      group_buy: res.group_buy,
-      open: res.open
+      city: res1.info.constant.city,
+      tuan: res1.activity.group.flag,
+      group_buy: res1.activity.group.info,
+      sign: res1.activity.sign,
+      open: res1.head.open,
+      topimg: res1.topimg
     };
   },
   data() {
     return {
+      ditie:'?',
+      gongjiao:'?',
+      jiaoyus:'?',
+      yiyuan:'?',
+      gouwu:'?',
+      meishi:'?',
+      yule:'?',
+      sign: {},
+      topimg: "",
+      ling: true,
       mapnum: 0,
       imgs: [img1, img2],
       li: 0,
@@ -1130,64 +1059,7 @@ export default {
       n2: false,
       id: "",
       tongjia: [],
-      tongqu: [
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          area_max: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          area_max: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          area_max: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          area_max: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        }
-      ],
+      tongqu: [],
       id: "",
       topimgs: [],
       topnum: "",
@@ -1522,7 +1394,7 @@ export default {
             data: that.trend_price3
           },
           {
-            name: that.building.country + "&nbsp;&nbsp;均价",
+            name: that.building.country_name + "&nbsp;&nbsp;均价",
             type: "line",
             symbol: "none",
             smooth: 0.2,
@@ -1530,7 +1402,7 @@ export default {
             data: that.trend_price2
           },
           {
-            name: that.building.city + "&nbsp;&nbsp;均价",
+            name: that.building.city_name + "&nbsp;&nbsp;均价",
             type: "line",
             symbol: "none",
             smooth: 0.2,
@@ -1587,8 +1459,10 @@ export default {
               let img = that.mapimg;
               if (JSON.stringify(result) == "{}") {
                 that.isnull = true;
+                that.setzhou(name,0)
               } else {
                 that.isnull = false;
+                that.setzhou(name,result.poiList.pois.length)
                 $.each(result.poiList.pois, function(i, e) {
                   if (i <= 2) {
                     var p2 = [e.location.lng, e.location.lat];
@@ -1601,15 +1475,39 @@ export default {
                     </li>
                     `;
                   }
-                  // console.log(e);
                 });
               }
-
               $(".con").html(ht);
             });
           });
         }
       });
+    },
+    setzhou (name,num) {
+      let that = this
+      switch (name) {
+        case '地铁':
+          that.ditie = num
+          break
+        case '公交':
+          that.gongjiao = num
+          break
+        case '教育':
+          that.jiaoyus = num
+          break
+        case '医院':
+          that.yiyuan = num
+          break
+        case '购物':
+          that.gouwu = num
+          break
+        case '美食':
+          that.meishi = num
+          break
+        case '娱乐':
+          that.yule = num
+          break
+      }
     },
     again() {
       let tel = this.baoming;
@@ -1684,9 +1582,11 @@ export default {
         type: 9,
         project: id,
         kid: kid,
-        other: other
+        other: other,
+        platform: 2
       };
       let tuan = {
+        platform: 2,
         city: c,
         ip: ip,
         tel: tel,
@@ -1745,7 +1645,7 @@ export default {
     check() {
       let m = this.ma;
       if (!m) {
-        this.tishi('验证码不能为空')
+        this.tishi("验证码不能为空");
         return;
       }
       let tel = this.baoming;
@@ -2054,18 +1954,18 @@ export default {
     dingyue() {
       let check = this.checks;
       if (!check) {
-        this.tishi('请勾选用户协议')
+        this.tishi("请勾选用户协议");
         return;
-      } 
+      }
 
       let phone = this.baoming;
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
-        this.tishi('手机号不能为空')
+        this.tishi("手机号不能为空");
         return;
       } else if (!pattern_phone.test(phone)) {
         $(".l-p").val("");
-        this.tishi('手机号不能为空')
+        this.tishi("手机号不能为空");
         return;
       }
       if (this.open == 1) {
@@ -2074,7 +1974,7 @@ export default {
         this.sendmsg(phone);
       }
     },
-    tishi (msg) {
+    tishi(msg) {
       $(".tishi").html(msg);
       $(".tishi").show();
       setTimeout(() => {
@@ -2145,7 +2045,8 @@ export default {
       this.msg = "";
     },
     lingbtn(e) {
-      $(".ling-ssd").css("whiteSpace", "inherit");
+      this.ling = false;
+      $(".ling-ssd").css({ whiteSpace: "inherit", height: "auto" });
       e.target.style.display = "none";
     },
     setmap(id, name) {
@@ -2575,13 +2476,13 @@ export default {
       window.type = $(this).attr("data-v");
 
       if (type == "最新变价通知") {
-        that.position = 8;
+        that.position = 3;
         $(".weiter .t-top h6").html(type);
         $(".weiter .t-top p").html(
           "价格变动这么快？订阅楼盘变价通知，楼盘变价我们将第一时间通知您"
         );
       } else if (type == "最新开盘通知") {
-        that.position = 9;
+        that.position = 29;
         $(".weiter .t-top h6").html(type);
         $(".weiter .t-top p").html(
           "一键订阅最新开盘通知，我们会第一时间通知,不再错过开盘时间"
@@ -3072,19 +2973,19 @@ body {
   z-index: 200;
 }
 .tishi {
-  color: #CDCDCD;
+  color: #cdcdcd;
   font-size: 16px;
   display: none;
   position: absolute;
-  width:170px;
+  width: 170px;
   height: 60px;
   border-radius: 6px;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0, 0, 0, 0.8);
   text-align: center;
   line-height: 60px;
   left: 50%;
   margin-left: -85px;
-  top: 150px
+  top: 150px;
 }
 .m-imgs .swiper-container {
   width: 100%;
@@ -3205,9 +3106,9 @@ body {
 }
 
 .weiter {
-  width: 80%;
+  width: 86%;
   position: fixed;
-  left: 10%;
+  left: 7%;
   top: 220px;
   border-radius: 12px;
   z-index: 1001;
@@ -3215,17 +3116,16 @@ body {
 
 .weiter .t-top {
   width: 100%;
-  height: 100px;
   background-color: #fff;
   border-radius: 12px 12px 0 0;
-  padding-top: 30px;
+  padding-top: 39px;
 }
 
 .weiter .t-top h6 {
   color: #3a3c49;
   font-size: 20px;
   text-align: center;
-  margin-bottom: 14px;
+  margin-bottom: 22px;
   font-weight: bold;
 }
 
@@ -3244,7 +3144,7 @@ body {
 
 .weiter .t-bottom {
   width: 100%;
-  height: 228px;
+  height: 248px;
   background-color: #fff;
   border-radius: 0 0 12px 12px;
 }
@@ -3274,10 +3174,10 @@ body {
 
 .weiter .t-bottom .t-b-first input {
   width: 85%;
-  height: 44px;
-  border: 1px solid #c6c6cc;
-  margin-top: 38px;
-  margin-bottom: 5.5px;
+  height: 55px;
+  border: 1.5px solid #c6c6cc;
+  margin-top: 30px;
+  margin-bottom: 10px;
   margin-left: 7.52%;
   padding-left: 5%;
   font-size: 15px;
@@ -3289,7 +3189,7 @@ body {
   height: 10px;
   margin: 0;
   margin-left: 7.5%;
-  margin-bottom: 29px;
+  margin-bottom: 35px;
   background-color: #fff;
   border: 1px solid #c9c9c9;
   border-radius: 2px;
@@ -3320,17 +3220,17 @@ body {
 
 .weiter .t-bottom .t-b-first .bg_01 {
   background: linear-gradient(
-    270deg,
-    rgba(102, 207, 255, 1),
-    rgba(76, 181, 255, 1)
+    -270deg,
+    rgba(52, 138, 255, 1),
+    rgba(106, 204, 255, 1)
   );
 }
 
 .weiter .t-bottom .t-b-first .bg_02 {
   background: linear-gradient(
-    270deg,
-    rgba(102, 207, 255, 1),
-    rgba(76, 181, 255, 1)
+    -270deg,
+    rgba(52, 138, 255, 1),
+    rgba(106, 204, 255, 1)
   );
 }
 
@@ -3341,7 +3241,7 @@ body {
 }
 
 .weiter .t-bottom .t-b-second p {
-  margin-top: 20px;
+  margin-top: 10px;
   color: #808080;
   font-size: 12px;
   width: 85%;
@@ -3351,9 +3251,9 @@ body {
 
 .weiter .t-bottom .t-b-second input {
   width: 85%;
-  height: 40px;
-  border-radius: 2px;
-  border: 1px solid #c6c6cc;
+  height: 55px;
+  border-radius: 6px;
+  border: 1.5px solid #c6c6cc;
   margin-left: 7.5%;
   margin-bottom: 20px;
   padding-left: 4%;
@@ -3386,7 +3286,7 @@ body {
   font-size: 13px;
   position: absolute;
   right: 10%;
-  top: 55%;
+  top: 54%;
   background-color: #fff;
 }
 
@@ -3576,14 +3476,12 @@ body {
 .pin nav {
   padding: 0 4%;
   overflow: hidden;
-  margin-bottom: 10px;
+  margin-bottom: 24px;
 }
 .pin nav h3 {
   float: left;
   color: #121212;
   font-size: 17px;
-  padding-left: 6px;
-  border-left: 2.5px solid #3eacf0;
   font-weight: bold;
 }
 .pin nav p {
