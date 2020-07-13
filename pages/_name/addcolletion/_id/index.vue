@@ -144,7 +144,8 @@ export default {
     start() {
       this.n = this.$route.params.name;
       this.id = this.$route.params.id;
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       this.load=false
     },

@@ -269,7 +269,7 @@
               </router-link>
             </p>
             <p class="tishi">请勾选用户协议</p>
-            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">立即订阅</button>
+            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="getmsg">立即订阅</button>
             <p class="w-tit">
               <img src="~/assets/w-call.png" />允家严格保障您的信息安全
             </p>
@@ -279,8 +279,8 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" id="ma-ll"/>
-            <button class="port1">确定</button>
+            <input type="text" placeholder="请输入验证码" id="ma-ll" v-model="yanz"/>
+            <button class="port1" @click="yan">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
             <button class="t-b-scode">获取验证码</button>
@@ -754,7 +754,8 @@ export default {
       load: true,
       title:'',
       description:'',
-      keywords:''
+      keywords:'',
+      yanz:''
     };
   },
   head() {
@@ -829,7 +830,8 @@ export default {
         city = 1;
         localStorage.setItem("city", 1);
       }
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       this.load = false
     },
@@ -839,9 +841,27 @@ export default {
       // $(".weiter").show();
       this.id = e.target.getAttribute("data-v");
     },
-    getmsg(tel) {
-      let data = { phone: tel, channel: 2 };
-      this.phone = tel;
+    getmsg() {
+      let check = this.check;
+      if (!check) {
+        $(".tishi").show();
+        return;
+      } else {
+        $(".tishi").hide();
+      }
+      var phone = this.baoming
+      var pattern_phone = /^1[3-9][0-9]{9}$/;
+      if (phone == "") {
+        $(".l-p").attr("placeholder", "手机号不能为空");
+        return;
+      } else if (!pattern_phone.test(phone)) {
+        $(".l-p").val("");
+        $(".l-p").attr("placeholder", "手机号码不合法");
+        return;
+      }
+
+      let data = { phone: phone, channel: 2 };
+      this.phone = phone;
 
       let id = this.id;
       let ip = this.ip;
@@ -850,12 +870,12 @@ export default {
       let kid = sessionStorage.getItem("kid");
       let other = sessionStorage.getItem("other");
       let dd = {
-        tel: tel,
+        tel: phone,
         type: 8,
         project: id,
         ip: ip,
         city: city,
-        page: 2,
+        page: 3,
         position: 8,
         token: token,
         kid: kid,
@@ -873,7 +893,7 @@ export default {
             $(".t-b-first").hide();
             $(".t-b-second").show();
             var time = 60;
-            var phone = tel.substr(0, 3) + "****" + tel.substr(7, 11);
+            var tel = phone.substr(0, 3) + "****" + phone.substr(7, 11);
             var fn = function() {
               time--;
               if (time > 0) {
@@ -887,7 +907,7 @@ export default {
             };
             fn();
             var interval = setInterval(fn, 1000);
-            $("#ytel").html(phone);
+            $("#ytel").html(tel);
           }else{
             $('.l-p').val('')
             $(".l-p").attr("placeholder", "报名失败");
@@ -897,10 +917,15 @@ export default {
           console.log(error);
         });
     },
-    yan(code) {
+    yan() {
+      var ma = this.yanz
+      if (!ma) {
+        $('#ma-ll').attr("placeholder", "验证码不能为空");
+        return;
+      }
       let tel = this.baoming;
       let that = this;
-      verification({ phone: tel, code: code, channel: 2 })
+      verification({ phone: tel, code: ma, channel: 2 })
         .then(resp => {
           if (resp.data.code == 200) {
             that.change = false;
@@ -944,31 +969,7 @@ export default {
       that.succ = false;
     });
     // 接口验证码
-    $(".t-b-btn2").on("click", function() {
-      let check = that.check;
-      if (!check) {
-        $(".tishi").show();
-        return;
-      } else {
-        $(".tishi").hide();
-      }
-      var phone = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var pattern_phone = /^1[3-9][0-9]{9}$/;
-      if (phone == "") {
-        $(".l-p").attr("placeholder", "手机号不能为空");
-        return;
-      } else if (!pattern_phone.test(phone)) {
-        $(".l-p").val("");
-        $(".l-p").attr("placeholder", "手机号码不合法");
-        return;
-      }
-
-      that.getmsg(phone);
-    });
+    
     $(".port1").on("click", function() {
       var ma = $(this)
         .prev()

@@ -161,7 +161,8 @@ export default {
         city = 1;
         localStorage.setItem("city", 1);
       }
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
       this.n=localStorage.getItem('cityname')
@@ -215,16 +216,19 @@ export default {
       msg({ phone: t, channel: 2 })
         .then(resp => {
           if (resp.data.code == 200) {
-            let ip = returnCitySN["cip"];
+            let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
             let c = localStorage.getItem("city");
             let p = that.page;
+            let id = this.$route.params.id
             trend_put({
               ip: ip,
               tel: t,
               city: c,
               position: 5,
-              page: 2,
-              type: 9
+              page: 3,
+              type: 9,
+              project: id
             })
               .then(resp => {})
               .catch(error => {

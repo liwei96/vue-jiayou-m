@@ -378,7 +378,8 @@ export default {
       e.target.disableDragging();
     },
     start() {
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];;
       let city = localStorage.getItem("city");
       let token = localStorage.getItem("token");
       $cookies.set("mapwhere", { ip: ip, city: city, token: token });
@@ -534,7 +535,8 @@ export default {
         e.target.previousElementSibling.style.backgroundColor = "#FF6666";
         e.target.parentElement.parentElement.style.zIndex='2'
       }
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       let token = localStorage.getItem("token");
       let that = this;
       mapProject({ ip: ip, id: id, token: token, platform: 2 })
@@ -1067,7 +1069,7 @@ export default {
 }
 
 .project {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   background-color: #fff;
   padding-left: 4%;

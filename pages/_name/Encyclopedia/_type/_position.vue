@@ -457,7 +457,8 @@ export default {
       this.n=this.$route.params.name
       let token=localStorage.getItem('token');
       let city=this.city;
-      let ip=returnCitySN['cip'];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip=ip;
       localStorage.getItem('ip');
       this.load=false

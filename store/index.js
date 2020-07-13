@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 
 Vue.use(Vuex)
@@ -8,6 +9,7 @@ const store = () => new Vuex.Store({
 
   state: {
     ip: '',
+    IP:'',
     token: '',
     call: '',
     city: '',
@@ -17,8 +19,11 @@ const store = () => new Vuex.Store({
     cookie: {}
   },
   mutations: {
-    setip(state, payload) {
-      state.ip = payload.ip
+    setip(state, data) {
+      state.ip = data.ip
+    },
+    setIP(state, data) {
+      state.IP = data.IP
     },
     settoken(state, payload) {
       state.token = payload.token
@@ -43,10 +48,11 @@ const store = () => new Vuex.Store({
     },
   },
   actions: {
-    nuxtServerInit({
+    async nuxtServerInit({
       commit
     }, {
-      req
+      req,
+      app
     }) {
       let cookie = req.headers.cookie;
       if (cookie) {
@@ -132,6 +138,13 @@ const store = () => new Vuex.Store({
           commit('setcity',112)
           break;
       }
+        await axios.get('https://ll.edefang.net/getIp.php').then(res=>{
+          // console.log(res.data.substr(22,14))
+          commit('setIP',{ 
+            IP:res.data.substr(22,14)
+          })
+          this.state.cookie.ip = res.data.substr(22,14)
+        })
     }
   },
 

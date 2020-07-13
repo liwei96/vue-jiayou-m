@@ -95,7 +95,8 @@ export default {
   },
   methods: {
     start() {
-      let ip=returnCitySN['cip'];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip=ip;
       localStorage.getItem('ip');
     },
@@ -176,7 +177,8 @@ export default {
       if(this.isok){
         this.isok=false
         let that = this;
-      let ip=returnCitySN['cip'];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip=ip;
       localStorage.getItem('ip');
       let token = localStorage.getItem("token");

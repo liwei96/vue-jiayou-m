@@ -323,7 +323,8 @@ export default {
       let address = JSON.parse(localStorage.getItem("address"));
       if (!address) {
         let token = localStorage.getItem("token");
-        let ip = returnCitySN["cip"];
+        let ip = ip_arr["ip"];
+        // let ip = returnCitySN["cip"];
         this.ip = ip;
         localStorage.getItem("ip");
         let data = { platform: 2, token: token, ip: ip };

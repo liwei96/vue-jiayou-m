@@ -16,7 +16,8 @@ export default {
       { src: '//libs.baidu.com/jquery/2.0.0/jquery.min.js' },
       // { src: '//cdn.bootcss.com/bootstrap-slider/10.6.1/bootstrap-slider.min.js' },
       { src: '//cdn.bootcdn.net/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js' },
-      { src: '//pv.sohu.com/cityjson?ie=utf-8' },
+      // { src: '//pv.sohu.com/cityjson?ie=utf-8' },
+      { src: '//ll.edefang.net/getIp.php' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -45,7 +46,7 @@ export default {
     { src: '~plugins/vant', ssr: false },
     { src: '~plugins/map', ssr: false },
     { src: '~plugins/swip', ssr: false },
-    { src: '~plugins/axios', ssr: false },
+    { src: '~plugins/axios', ssr: true },
     { src: '~plugins/route', ssr: true },
     // { src: '~plugins/babel', ssr: true },
   ],

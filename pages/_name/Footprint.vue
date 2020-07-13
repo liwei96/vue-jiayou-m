@@ -3,7 +3,7 @@
     <h3>
       <img @click="returnPage" src="~/assets/return.png" />我的足迹
     </h3>
-    <div class="recommen" v-show="false">
+    <div class="recommen">
       <div class="re-con">
         <div class="re-list" v-for="(list ,index) in lists" :key="index">
           <router-link :to="'/'+jkl+'/content/'+list.id">
@@ -30,7 +30,7 @@
               </p>
               <p class="tabs">
                 <strong>{{list.decorate}}</strong>
-                <span>{{list.railway}}</span>
+                <span v-if="list.railway">{{list.railway}}</span>
                 <span id="tag">{{list.tag}}</span>
               </p>
             </div>
@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <div class="nothing">
+    <div class="nothing" >
       <img src="~/assets/footers.png" alt />
       <p>您还没有浏览记录，快去看看楼盘吧~</p>
       <router-link :to="'/'+jkl+'/search'">
@@ -85,79 +85,22 @@ export default {
   },
   head() {
     return {
-      title:  "允家新房-我的足迹",
+      title: "允家新房-我的足迹",
       meta: [
         {
           name: "description",
-          content:  '允家新房'
+          content: "允家新房"
         },
         {
           name: "keywords",
-          content:  '允家新房'
+          content: "允家新房"
         }
       ]
     };
   },
   data() {
     return {
-      lists: [
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          areamax: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          areamax: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          areamax: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          areamax: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        }
-      ],
+      lists: [],
       n: "",
       jkl: "",
       page: 2,
@@ -168,29 +111,31 @@ export default {
     returnPage() {
       // 跳转上一级
       // 这个判断用来解决这种情况，当用户没有上一条路由的历史记录，出现点击返回按钮没有反应时，下面的代码用来判断有没有上一条路由的历史记录   如果没有则返回首页
-      if (window.history.length <= 1) {
-        this.$router.push({ path: "/" });
-        return false;
-      } else {
-        this.$router.go(-1);
-      }
+      this.$router.go(-1);
     },
     start() {
       let that = this;
       this.n = this.$route.params.name;
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
-      if (that.lists.length != 0) {
-        $(".nothing").hide();
-        $(".recommen").show();
-      } else {
+      if (that.lists) {
+        if (!that.lists || that.lists.length == 0) {
+          $(".nothing").show();
+          $(".recommen").hide();
+        } else {
+          $(".nothing").hide();
+          $(".recommen").show();
+        }
+      }else{
         $(".nothing").show();
         $(".recommen").hide();
       }
     },
     getmore() {
       this.ting = false;
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+      // let ip = returnCitySN["cip"];
       let token = localStorage.getItem("token");
       let page = this.page;
       let city = localStorage.getItem("city");

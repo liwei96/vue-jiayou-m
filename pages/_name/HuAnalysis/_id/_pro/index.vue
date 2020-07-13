@@ -222,12 +222,25 @@ export default {
       .then((resp)=>{
         let dd=resp.data
         let data = resp.data.data;
-          if(data.this_one[0]){
-            data.one = data.this_one[0];
-          }else{
+          if(data.this_one[1]){
             data.one = data.this_one[1];
+          }else if(data.this_one[2]){
+            data.one = data.this_one[2];
+          }else if(data.this_one[3]) {
+            data.one = data.this_one[3]
+          }else if(data.this_one[4]) {
+            data.one = data.this_one[4]
+          }else if(data.this_one[5]) {
+            data.one = data.this_one[5]
+          }else if(data.this_one[6]) {
+            data.one = data.this_one[6]
+          }else if(data.this_one[7]) {
+            data.one = data.this_one[7]
+          }else if(data.this_one[8]) {
+            data.one = data.this_one[8]
+          }else if(data.this_one[0]) {
+            data.one = data.this_one[0]
           }
-          
           return dd;
       })
     ])
@@ -332,9 +345,9 @@ export default {
     },
     put() {
       let phone = this.tel;
-      let id = this.pro;
+      let id = this.$route.params.pro;
       let country = localStorage.getItem("city");
-      let ip = this.ip;
+      let ip = ip_arr['ip'];
       let token = localStorage.getItem("token");
       let kid = sessionStorage.getItem("kid");
       let other = sessionStorage.getItem("other");

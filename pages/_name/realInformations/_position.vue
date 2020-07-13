@@ -196,7 +196,8 @@ export default {
   methods: {
     start() {
       this.n = this.$route.params.name;
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       $cookies.set('ip',ip);
       $cookies.set('pinyin',this.n);

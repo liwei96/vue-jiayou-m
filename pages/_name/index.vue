@@ -1271,7 +1271,9 @@ export default {
       let name = this.$route.params.name;
       let token = localStorage.getItem("token");
       $cookies.set("token", token);
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
       $cookies.set("ip", ip);
       localStorage.setItem("ip", ip);

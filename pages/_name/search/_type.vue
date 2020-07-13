@@ -425,7 +425,8 @@ export default {
       this.kk = false;
       localStorage.setItem('city',this.city)
       
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       this.loading = true;
       this.isload = false;
@@ -451,7 +452,8 @@ export default {
         city = 1;
         localStorage.setItem("city", 1);
       }
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
       let token = localStorage.getItem("token");
@@ -468,7 +470,8 @@ export default {
       }
 
       let where = $cookies.get("where");
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
       let token = localStorage.getItem("token");

@@ -266,7 +266,8 @@ export default {
       let id = this.$route.params.id;
       this.id = id;
       this.call=localStorage.getItem('call')
-      let ip=returnCitySN['cip'];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip=ip;
       localStorage.getItem('ip');
       let city = localStorage.getItem("city");

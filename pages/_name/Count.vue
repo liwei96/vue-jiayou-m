@@ -399,7 +399,8 @@ export default {
       let that = this;
       this.n = this.$route.params.name;
       this.call = localStorage.getItem("call");
-      this.ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       count_data()
         .then(resp => {
           let data = resp.data.data;
@@ -430,7 +431,7 @@ export default {
         tel: tel,
         city: city,
         position: 6,
-        page: 2,
+        page: 3,
         type: 6,
         kid: kid,
         other: other

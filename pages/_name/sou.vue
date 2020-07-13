@@ -136,7 +136,8 @@ export default {
       
       this.n = n;
       let that = this;
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
       let data = { token: token, city: city, ip: ip, platform: 2 };

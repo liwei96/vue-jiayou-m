@@ -30,6 +30,17 @@ export default {
     }
   },
   mounted() {
+    resetrem();
+    //切换屏幕 （横屏竖屏）
+    window.addEventListener("orientationchange", resetrem);
+    //resize：屏幕的大小发生改变就触发监听事件resetrem
+    window.addEventListener("resize", resetrem);
+
+    function resetrem() {
+      var html = document.querySelector("html"); //获取到html元素
+      var width = html.getBoundingClientRect().width; //获取屏幕的宽度
+      html.style.fontSize = width / 23.5 + "px";
+    }
     axios.interceptors.request.use(
       function(config) {
         if (config.url == "/front/flow/sign") {
@@ -47,21 +58,14 @@ export default {
       function(error) {}
     );
     this.n = $cookies.get("pinyin");
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?ae7b8b5cafd465396d73f240cbef1973";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
   }
 };
 </script>
 
 <style>
-a:active{
-  font-weight: normal!important;
-  text-decoration: none!important;
+a:active {
+  font-weight: normal !important;
+  text-decoration: none !important;
 }
 #bigbox {
   position: relative;
@@ -161,5 +165,4 @@ body.position-fixed {
   transition: opacity 0.5s;
   animation: big-out 0.5s;
 }
-
 </style>

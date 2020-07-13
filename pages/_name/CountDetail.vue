@@ -102,7 +102,8 @@ export default {
     start() {
       let that = this;
       let msg=$cookies.get('sum');
-      let ip=returnCitySN['cip'];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip=ip;
       localStorage.getItem('ip');
       // let msg=sessionStorage.getItem('sum')

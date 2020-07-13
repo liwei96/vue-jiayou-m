@@ -147,7 +147,7 @@
               </router-link>
             </p>
             <p class="tishi">请勾选用户协议</p>
-            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">立即订阅</button>
+            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="sendmsg">立即订阅</button>
             <p class="w-tit">
               <img src="~/assets/w-call.png" />允家严格保障您的信息安全
             </p>
@@ -250,7 +250,8 @@ export default {
     start() {
       let id = this.$route.params.id;
       this.id = id;
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       let collect = localStorage.getItem(id);
       if (collect == 0) {
@@ -264,8 +265,24 @@ export default {
       localStorage.getItem("ip");
      
     },
-    sendmsg(t) {
-      this.phone = t;
+    sendmsg() {
+      let check = this.checks;
+      if (!check) {
+        $('.tishi').show()
+        return;
+      }else {
+        $('.tishi').hide();
+      }
+      let t = this.baoming
+      let pattern_phone = /^1[3-9][0-9]{9}$/;
+      if (t == "") {
+        $(".l-p").attr("placeholder", "手机号不能为空");
+        return;
+      } else if (!pattern_phone.test(t)) {
+        $(".l-p").val("");
+        $(".l-p").attr("placeholder", "手机号码不合法");
+        return;
+      }
       let that = this;
       msg({ phone: t, channel: 2 })
         .then(resp => {
@@ -273,13 +290,15 @@ export default {
             let ip = that.ip;
             let c = localStorage.getItem("city");
             let p = that.page;
+            let id = this.$route.params.id
             trend_put({
               ip: ip,
               tel: t,
               city: c,
               position: 5,
-              page: 2,
-              type: 9
+              page: 3,
+              type: 9,
+              project: id
             })
               .then(resp => {})
               .catch(error => {
@@ -398,7 +417,6 @@ export default {
         $(".l-p").attr("placeholder", "手机号码不合法");
         return;
       }
-      that.sendmsg(phone);
     });
     $(".port1").on("click", function() {
       var ma = $(this)

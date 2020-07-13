@@ -96,7 +96,8 @@ export default {
     },
     put() {
       let that = this;
-      let Ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       let city = localStorage.getItem("city");
       let time = that.time;
       let token = localStorage.getItem("token");
@@ -126,7 +127,8 @@ export default {
   mounted() {
     $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom:0 });
     this.n = this.$route.params.name;
-    let ip = returnCitySN["cip"];
+    let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
     this.ip = ip;
     localStorage.getItem("ip");
     // let that=this;

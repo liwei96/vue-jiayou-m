@@ -255,7 +255,8 @@ export default {
     },
     again() {
       let tel = this.baoming;
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       let id = this.id;
       let data = { channel: 2, phone: tel, ip: ip };
       msg(data)
@@ -350,7 +351,8 @@ export default {
     },
     send(tel) {
       localStorage.setItem("phone", tel);
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       let id = this.id;
       let data = { channel: 2, phone: tel, ip: ip };
       let kid = sessionStorage.getItem("kid");

@@ -167,7 +167,8 @@ export default {
       let id = this.$route.params.id;
       this.id = id;
       this.project = id;
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       this.call = localStorage.getItem("call");
       localStorage.getItem("ip");
@@ -198,7 +199,7 @@ export default {
               project: id,
               type: 10,
               position: 5,
-              page: 2,
+              page: 3,
               city: country,
               ip: ip,
               kid: kid,
@@ -245,7 +246,7 @@ export default {
         project: project,
         type: 10,
         position: 5,
-        page: 2,
+        page: 3,
         city: country,
         ip: ip
       })

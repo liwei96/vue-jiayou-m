@@ -3,7 +3,7 @@
     <h3>
       <img @click="returnPage" src="~/assets/return.png" />我的收藏
     </h3>
-    <div class="recommen" v-show="false">
+    <div class="recommen">
       <div class="re-con">
         <div class="re-list" v-for="(list ,index) in lists" :key="index">
           <router-link :to="'/'+jkl+'/content/'+list.id">
@@ -101,62 +101,7 @@ export default {
   data() {
     return {
       lists: [
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          areamax: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          areamax: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          areamax: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          areamax: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        }
+        
       ],
       n: "",
       jkl: ""
@@ -175,12 +120,18 @@ export default {
     },
     start() {
       this.n = this.$route.params.name;
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
-      if (this.lists.length != 0) {
-        $(".nothing").hide();
-        $(".recommen").show();
-      } else {
+      if (this.lists) {
+        if (!this.lists || this.lists.length == 0) {
+          $(".nothing").show();
+          $(".recommen").hide();
+        } else {
+          $(".nothing").hide();
+          $(".recommen").show();
+        }
+      }else{
         $(".nothing").show();
         $(".recommen").hide();
       }

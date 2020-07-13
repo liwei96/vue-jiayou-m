@@ -83,7 +83,8 @@ export default {
     start() {
       let id = this.$route.params.id;
       this.id = id;
-      let ip=returnCitySN['cip'];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip=ip;
       localStorage.getItem('ip');
     },
@@ -128,7 +129,8 @@ export default {
     getmore() {
       let id = this.$route.params.id;
       this.ting = false;
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       let token = localStorage.getItem("token");
       let page = this.page;
       let that = this;

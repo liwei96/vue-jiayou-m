@@ -27,7 +27,8 @@ export default {
   methods:{
     start_data() {
           let ll = [];
-          let ip = returnCitySN["cip"];
+          let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
           index_start({ ip: ip, city: 0 }).then(resp => {
             ll = resp.data.city;
             let citys = ll.id;

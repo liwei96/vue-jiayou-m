@@ -300,7 +300,8 @@ export default {
         city = 1;
         localStorage.setItem("city", 1);
       }
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
       let token = localStorage.getItem("token");
@@ -411,7 +412,7 @@ export default {
         tel: tel,
         city: city,
         position: 6,
-        page: 2,
+        page: 3,
         type: 6,
         kid: kid,
         other: other
@@ -546,7 +547,7 @@ export default {
         return;
       }
       $(".port1").attr("data-v", phone);
-      let msg = { page: 2, position: "3", type: 6 };
+      let msg = { page: 3, position: "3", type: 6 };
       let city = localStorage.getItem("city");
       msg.city = city;
       msg.tel = phone;

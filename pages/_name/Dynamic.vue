@@ -176,7 +176,8 @@ export default {
         city = 1;
         localStorage.setItem("city", 1);
       }
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
       this.n = localStorage.getItem("pinyin");
@@ -233,7 +234,7 @@ export default {
         tel: tel,
         city: city,
         position: 6,
-        page: 2,
+        page: 3,
         type: 6,
         kid: kid,
         other: other

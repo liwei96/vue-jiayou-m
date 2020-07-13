@@ -38,7 +38,7 @@ export default {
               tel: tel,
               city: c,
               position: 5,
-              page: 2,
+              page: 3,
               type: 9
             })
               .then(resp => {})
@@ -76,8 +76,9 @@ export default {
         .then(resp => {
           if (resp.data.code == 200) {
             localStorage.setItem("token", resp.data.token);
-            that.$router.push('/'+that.n)
-            // window.location.href = "/";
+            // that.$router.push('/'+that.n)
+            // window.location.href = "/"+that.n;
+            this.$router.go(-1)
           }
         })
         .catch(error => {

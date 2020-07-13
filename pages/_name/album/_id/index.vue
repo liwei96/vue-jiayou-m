@@ -296,7 +296,8 @@ export default {
       let id = this.$route.params.id;
       this.id = id;
       let that = this;
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       this.n=localStorage.getItem('pinyin');
       localStorage.getItem("ip");
@@ -335,13 +336,15 @@ export default {
             let c = localStorage.getItem("city");
             let p = that.page;
             let tel = that.phone;
+            let id = this.$route.params.id
             trend_put({
               ip: ip,
               tel: tel,
               city: c,
               position: 5,
-              page: 2,
-              type: 9
+              page: 3,
+              type: 9,
+              project: id
             })
               .then(resp => {
                 if (resp.data.code == 200) {
@@ -707,7 +710,6 @@ export default {
         $(".l-p").attr("placeholder", "手机号码不合法");
         return;
       }
-      that.sendmsg(phone);
     });
     $(".port1").on("click", function() {
       var ma = $(this)

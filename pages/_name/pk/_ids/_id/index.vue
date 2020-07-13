@@ -129,7 +129,8 @@ export default {
       }
       ids = kk.join(",");
       localStorage.setItem("ids", ids);
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
     },

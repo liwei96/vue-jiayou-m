@@ -37,7 +37,7 @@
                   </router-link>
                 </p>
                 <p class="tishi">请勾选用户协议</p>
-                <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">立即订阅</button>
+                <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="sendmsg">立即订阅</button>
                 <p class="w-tit">
                   <img src="~/assets/w-call.png" />允家严格保障您的信息安全
                 </p>
@@ -182,27 +182,45 @@ export default {
           console.log(error);
         });
     },
-    sendmsg(t) {
-      this.phone = t;
+    sendmsg() {
+      let check = this.checks;
+      if (!check) {
+        $('.tishi').show()
+        return;
+      }else {
+        $('.tishi').hide();
+      }
+      let t = this.baoming
+      let pattern_phone = /^1[3-9][0-9]{9}$/;
+      if (t == "") {
+        $(".l-p").attr("placeholder", "手机号不能为空");
+        return;
+      } else if (!pattern_phone.test(t)) {
+        $(".l-p").val("");
+        $(".l-p").attr("placeholder", "手机号码不合法");
+        return;
+      }
       let that = this;
       msg({ phone: t, channel: 2 })
         .then(resp => {
           if (resp.data.code == 200) {
-            let ip = that.ip;
+            let ip = ip_arr['ip'];
             let c = localStorage.getItem("city");
             let p = that.page;
-            let tel = that.phone;
+            let tel = t;
             let kid = sessionStorage.getItem("kid");
             let other = sessionStorage.getItem("other");
+            let id = this.$route.params.id
             trend_put({
               ip: ip,
               tel: tel,
               city: c,
               position: 5,
-              page: 2,
+              page: 3,
               type: 9,
               kid: kid,
-              other: other
+              other: other,
+              project:id
             })
               .then(resp => {
                 if (resp.data.code == 200) {
@@ -261,24 +279,45 @@ export default {
       AMap.convertFrom(baidu, "baidu", function(status, result) {
         if (result.info === "ok") {
           var lnglats = result.locations; // Array.<LngLat>
-          that.la = lnglats[0].lat;
-          that.ln = lnglats[0].lng;
-        }
-      });
-      let type = this.$route.params.type;
-      this.type = type;
+          let la = lnglats[0].lat;
+          let ln = lnglats[0].lng;
+        
+      let type = that.$route.params.type;
+      that.type = type;
       var map = new AMap.Map("m-container", {
         // eslint-disable-line no-unused-vars
         resizeEnable: true,
+        center: [ln, la],
         zoom: 15
       });
-      let marker = new AMap.Marker({
-        icon:
-          "https://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png",
-        position: [that.ln, that.la],
-        offset: new AMap.Pixel(-13, -30)
-      });
-      marker.setMap(map);
+      let img = require("~/assets/mappro.png");
+      let pro = $cookies.get('name') ? $cookies.get('name') : '楼盘地址'
+      let add = $cookies.get('address') ? $cookies.get('address') : '详细楼盘地址到详情页'
+      let content = `<div
+          style="width:140px;height: 36px;box-shadow:0px 0px 5px 0px rgba(6,0,1,0.1);border-radius:18px;padding-left: 17px;position: relative;background: #fff;">
+          <div style="float: left;width:72%">
+            <h5 style="color: #121212;font-size: 12px;margin:0;margin-top: 4px;margin-bottom: 2px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">${pro}</h5>
+            <p style="color: #919499;font-size: 10px;margin:0;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">${add}</p>
+          </div>
+          <div style="float: left;"><img style="width: 29px;margin-top:3px" src="${img}" alt=""></div>
+          <div
+            style="position: absolute;border:8px solid transparent;border-top-color: #fff;bottom:-16px;left:50%;margin-left: -8px;">
+          </div>
+        </div>`;
+          let marker = new AMap.Marker({
+            content: content,
+            position: that.pois,
+            offset: new AMap.Pixel(-70, -44)
+          });
+          let con =
+            '<div style="width: 24px;height: 24px;border-radius: 50%;background:rgba(71,161,255,0.3);position: relative;"><div style="width: 6px;height: 6px;border-radius: 50%;background:rgba(71,161,255,1);position: absolute;top:50%;left:50%;margin-top: -3px;margin-left: -3px;"></div></div>';
+          let mark = new AMap.Marker({
+            content: con,
+            position: that.pois,
+            offset: new AMap.Pixel(-12, -12)
+          });
+          mark.setMap(map);
+          marker.setMap(map);
       AMap.service(["AMap.PlaceSearch"], function() {
         // eslint-disable-line no-unused-vars
         //构造地点查询类
@@ -292,8 +331,8 @@ export default {
           autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
         });
 
-        var cpoint = [that.ln, that.la]; //中心点坐标
-        var p2 = [that.ln, that.la];
+        var cpoint = [ln, la]; //中心点坐标
+        var p2 = [ln, la];
         var s = AMap.GeometryUtil.distance(cpoint, p2);
         placeSearch.searchNearBy("公交", cpoint, 2000, function(
           status,
@@ -561,6 +600,8 @@ export default {
           });
         });
       });
+      }
+      });
     },
     goback() {
       this.$router.go(-1);
@@ -650,7 +691,6 @@ export default {
         $(".l-p").attr("placeholder", "手机号码不合法");
         return;
       }
-      that.sendmsg(phone);
     });
     $(".port1").on("click", function() {
       var ma = $(this)

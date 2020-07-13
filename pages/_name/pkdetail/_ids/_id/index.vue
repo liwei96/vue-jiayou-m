@@ -406,7 +406,8 @@ export default {
     start() {
       let that = this;
       this.call = localStorage.getItem("call");
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+          // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
       let id = this.$route.params.id;
@@ -443,7 +444,7 @@ export default {
               project: id,
               type: 10,
               position: 5,
-              page: 2,
+              page: 3,
               city: country,
               ip: ip
             })
@@ -472,7 +473,7 @@ export default {
         project: project,
         type: 10,
         position: 5,
-        page: 2,
+        page: 3,
         city: country,
         ip: ip
       })

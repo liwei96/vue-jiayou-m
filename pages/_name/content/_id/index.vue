@@ -45,18 +45,21 @@
       <div class="tuan-msg" v-if="tuan==1">
         <div class="tar">
           <div class="left">
-            <h5>
+            <!-- <h5>
               已售：
               <span>{{group_buy.saled_num}}</span>
-              套&nbsp;&nbsp;距下一返期只差{{group_buy.remain_num}}套
+              套&nbsp;&nbsp;&nbsp;距下一期优惠差{{group_buy.remain_num}}套
             </h5>
-            <p>(每多5套可优惠1000元最高优惠5000元)</p>
+            <p>(每多5套可优惠1000元最高优惠5000元)</p>-->
+            <img src="~/assets/tar-left.png" alt />
           </div>
           <div class="right">
-            <h5>距离活动结束</h5>
+            <h5>距结束仅剩</h5>
             <p>
               {{day}}天
-              <span>{{hour}}:{{min}}:{{second}}</span>
+              <span>{{hour}}</span>:
+              <span>{{min}}</span>:
+              <span>{{second}}</span>
             </p>
           </div>
         </div>
@@ -69,10 +72,34 @@
           <span v-if="building.railway">{{building.railway}}</span>
           <span>{{building.features[0]}}</span>
           <strong v-if="tuan==1">限时优惠</strong>
-          <i class="m-ishou">
+          <div class="build-icons">
+            <div class="icons-left">
+              <img src="~/assets/contrast.png" alt @click="pks($event)" :data-v="id" />
+              PK
+            </div>
+            <div>
+              <img
+                id="fork"
+                src="~/assets/forks.png"
+                alt
+                :data-v="id"
+                @click="collections($event)"
+                v-if="forknum === 0"
+              />
+              <img
+                id="forked"
+                src="~/assets/heart.gif"
+                :data-v="id"
+                @click="collections($event)"
+                v-if="forknum === 1"
+              />
+              收藏
+            </div>
+          </div>
+          <!-- <i class="m-ishou">
             <img src="~/assets/contrast.png" alt />
             <i class="m_shou01" @click="pks($event)" :data-v="id">楼盘PK</i>
-          </i>
+          </i>-->
         </div>
         <ul class="m-jtop">
           <li>
@@ -82,8 +109,10 @@
             <span>参考单价</span>
           </li>
           <li>
-            <p class="lo">{{building.house}}</p>
-            <span>楼盘户型</span>
+            <p class="lo">
+              <span>{{parseInt(building.total_price)}}</span>万起
+            </p>
+            <span>参考总价</span>
           </li>
           <li>
             <p v-if="building.area">
@@ -95,21 +124,21 @@
         <div class="m-ibottom">
           <ul>
             <li>
-              总价&nbsp;:&nbsp;
-              <span class="m-pric">{{parseInt(building.total_price)}}万起</span>
+              户型：
+              <span class="m-pric">{{building.house}}</span>
             </li>
             <li>
-              装修&nbsp;:&nbsp;
+              装修：
               <span>{{building.decorate}}</span>
             </li>
           </ul>
           <ul>
             <li>
-              类型&nbsp;:&nbsp;
+              类型：
               <span class="m-pric">{{building.type}}</span>
             </li>
             <li>
-              开盘&nbsp;:&nbsp;
+              开盘：
               <span>{{building.timeline.first_open_time}}</span>
             </li>
           </ul>
@@ -144,19 +173,20 @@
       <div class="pin">
         <nav>
           <h3>优惠信息</h3>
-          <p v-if="tuan==1">
+          <!-- <p v-if="tuan==1">
             参团活动结束
             <span>{{day}}</span>天
             <span>{{hour}}</span>:
             <span>{{min}}</span>:
             <span>{{second}}</span>
-          </p>
+          </p>-->
+          <button @click="huomsg = true">活动规则</button>
         </nav>
         <div class="top" v-if="tuan==1">
           <img src="~/assets/newtuan-pin.jpg" alt />
           <div class="pin-bao" @click="xiangs(22)" v-if="!newimg">立即参团</div>
           <p class="pin-msg">已有{{group_buy.saled_num}}人加入</p>
-          <img src="~/assets/tuna-hased.png" alt class="hased" v-if="newimg" />
+          <img src="~/assets/tuna-hased.jpg" alt class="hased" v-if="newimg" />
           <div class="bom">
             <div class="trend-con1">
               <div class="swiper-container10">
@@ -174,6 +204,7 @@
         <div class="bomm">
           <div class="pin-bao y1" v-if="!newimg" @click="xiang(28)">抢优惠券</div>
           <p class="pin-msg ym">{{sign.num}}人已抢到</p>
+          <p class="pin-time">有效期：2020.06.15-2020.06.21</p>
           <img src="~/assets/youhui.jpg" alt />
           <div class="bom">
             <div class="trend-con1">
@@ -190,13 +221,34 @@
           </div>
         </div>
       </div>
+      <div class="huo-msg" v-if="huomsg">
+        <div class="msg-con">
+          <h4>活动规则</h4>
+          <img @click="huomsg = false" src="~/assets/w-del.png" alt />
+          <div>
+            <p>1、本次团购活动以分档累计补发的方案执行，通过家园网站成交该项目具体团购费用如下所示：</p>
+            <p>0-5套---------每套1000元</p>
+            <p>6-10套--------每套2000元</p>
+            <p>11-15套-------每套3000元</p>
+            <p>16-20套-------每套4000元</p>
+            <p>21套以上------每套5000元</p>
+            <p>2、结算时间：网签成功后次月20号发放。补发费用待该范围内的最后一套网签成功后次月20号发放</p>
+            <p>3、核算方式：由开发商或代理公司判定为家园平台客户即可享受这个优惠</p>
+            <p>4、结算方式：提供已实名的支付宝账户给与您对接的家园咨询师，规定时间内会将优惠费用打至该账户</p>
+            <p>
+              详细活动方案请致电允家客服电话：
+              <span>400-966-9995</span> 注：活动最终解释权归家园所有
+            </p>
+          </div>
+        </div>
+      </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
-      <div class="top-num">
+      <div class="top-num" v-if="false">
         <img src="~/assets/content-top.png" alt class="content-top" />
         <span>刚需楼盘榜第4名</span>
         <img class="totop" src="~/assets/m-go.png" alt />
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block"></div>
+      <div class="m-line visible-xs-block .visible-sm-block" v-if="false"></div>
       <div class="m-dong visible-xs-block .visible-sm-block">
         <h3 id="m_dong">
           楼盘动态
@@ -213,10 +265,10 @@
             {{nowdong.time}}
             <i>最新</i>
           </span>
-          <h4>{{building.name}}最新房源动态</h4>
+          <h4>最新房源动态</h4>
           <p>{{nowdong.introduce}}</p>
         </div>
-        <div class="m-jia m-d" v-if="tui.length">
+        <div class="m-jia m-d" v-if="tui">
           <span>
             {{tui.time}}
             <i>加推</i>
@@ -226,9 +278,9 @@
         </div>
 
         <div class="t-o o1"></div>
-        <div class="t-o o2" v-if="tui.length"></div>
+        <div class="t-o o2" v-if="tui"></div>
         <div class="t-l l1"></div>
-        <div class="t-l l2" v-if="tui.length"></div>
+        <div class="t-l l2" v-if="tui"></div>
         <div class="dynamic-hd">
           <div class="swiper-dynamic">
             <div class="swiper-wrapper">
@@ -291,7 +343,7 @@
                     {{h.title}}
                     <span>{{h.status}}</span>
                   </h5>
-                  <p class="jian">建面 {{h.area}}&nbsp;&nbsp;&nbsp;朝向 北</p>
+                  <p class="jian">建面 {{h.area}}&nbsp;&nbsp;&nbsp;类型 {{h.type}}</p>
                   <p class="red">
                     约
                     <span>{{h.price}}</span>万起
@@ -308,7 +360,7 @@
       <div class="m-you visible-xs-block .visible-sm-block">
         <img class="m-y-g" src="~/assets/new-yuyue1.png" />
         <button class="p1" data-v="预约看房">预约看房</button>
-        <span>876已领取</span>
+        <span>876人已领取</span>
       </div>
 
       <div class="m-line visible-xs-block .visible-sm-block"></div>
@@ -316,7 +368,7 @@
       <!--对比分析资料 -->
       <div class="m-fen visible-xs-block .visible-sm-block">
         <h3>
-          对比分析资料
+          项目分析资料
           <router-link :to="'/' + jkl + '/analysis/' + id">
             <span class="m-more-fen">
               详细分析
@@ -396,13 +448,13 @@
       <div class="m-line visible-xs-block .visible-sm-block"></div>
       <div class="m-huo visible-xs-block .visible-sm-block">
         <h3>
-          查询真实最新成交价
+          查询最新成交价
           <p>
             已有
             <span>{{searchnum}}</span>人查询
           </p>
         </h3>
-        <div id="chart" style="width:92%;height:250px;margin-left:4%"></div>
+        <div id="chart" style="width:100%;height:250px"></div>
         <div class="table">
           <table>
             <tbody>
@@ -439,48 +491,48 @@
         </h3>
         <p id="tishi" v-if="questions.length==0?true:false">暂无问答，快来提问吧</p>
         <div class="m-d-content">
-          <template v-if="questions.length==0?true:false">
-          <div class="m-w-content" v-for="(q,key) in questions" :key="key">
-            <h4>
-              <span>问</span>
-              <u>{{q.question}}</u>
-            </h4>
-            <p>
-              <span>答</span>
-              <img src="~/assets/people.png" alt />
-              <em class="peoname">杨涛</em>
-              <em class="peowork">允家咨询师</em>
-            </p>
-            <p>
-              <i>
-                {{q.answer.substr(0,19)}}{{q.answer.length>20?'...':''}}
-                <u
-                  v-if="q.answer.length>30"
-                  @click="chan($event)"
-                >展开</u>
-              </i>
-              <i class="sl">{{q.answer}}</i>
-            </p>
-            <span class="time">{{q.time}}</span>
-            <span class="giveup">
-              <img
-                id="answer"
-                src="~/assets/giveup.png"
-                :type="q.my_like"
-                :data-v="q.id"
-                :data-n="q.num"
-                data-y="1"
-                @click="agree($event)"
-              />
-              <span
-                :type="q.my_like"
-                :data-v="q.id"
-                :data-n="q.num"
-                data-y="1"
-                @click="agrees($event)"
-              >有用({{q.num}})</span>
-            </span>
-          </div>
+          <template v-if="questions.length==0?false:true">
+            <div class="m-w-content" v-for="(q,key) in questions" :key="key">
+              <h4>
+                <span>问</span>
+                <u>{{q.question}}</u>
+              </h4>
+              <p>
+                <span>答</span>
+                <img src="~/assets/people.png" alt />
+                <em class="peoname">杨涛</em>
+                <em class="peowork">允家咨询师</em>
+              </p>
+              <p>
+                <i>
+                  {{q.answer.substr(0,19)}}{{q.answer.length>20?'...':''}}
+                  <u
+                    v-if="q.answer.length>19"
+                    @click="chan($event)"
+                  >展开</u>
+                </i>
+                <i class="sl">{{q.answer}}</i>
+              </p>
+              <span class="time">{{q.time}}</span>
+              <span class="giveup">
+                <img
+                  id="answer"
+                  src="~/assets/giveup.png"
+                  :type="q.my_like"
+                  :data-v="q.id"
+                  :data-n="q.num"
+                  data-y="1"
+                  @click="agree($event)"
+                />
+                <span
+                  :type="q.my_like"
+                  :data-v="q.id"
+                  :data-n="q.num"
+                  data-y="1"
+                  @click="agrees($event)"
+                >有用({{q.num ? q.num : 0}})</span>
+              </span>
+            </div>
           </template>
           <button class="question">我要提问</button>
         </div>
@@ -489,9 +541,9 @@
 
       <div class="m-zhou visible-xs-block .visible-sm-block">
         <h3>
-          周边规划
+          周边配套
           <span>
-            详细规划
+            详细配套
             <img src="~/assets/m-go.png" alt />
           </span>
         </h3>
@@ -503,43 +555,43 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide">
                 <div :class="mapnum === 0 ? 'tegood active' : 'tegood'" @click="setmap(0, '地铁')">
-                  地铁({{ditie}})
+                  地铁
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="mapnum === 1 ? 'tegood active' : 'tegood'" @click="setmap(1 ,'公交')">
-                  公交({{gongjiao}})
+                  公交
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="mapnum === 2 ? 'tegood active' : 'tegood'" @click="setmap(2, '教育')">
-                  教育({{jiaoyus}})
+                  教育
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="mapnum === 3 ? 'tegood active' : 'tegood'" @click="setmap(3, '医院')">
-                  医院({{yiyuan}})
+                  医院
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="mapnum === 4 ? 'tegood active' : 'tegood'" @click="setmap(4, '购物')">
-                  购物({{gouwu}})
+                  购物
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="mapnum === 5 ? 'tegood active' : 'tegood'" @click="setmap(5, '美食')">
-                  美食({{meishi}})
+                  美食
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="mapnum === 6 ? 'tegood active' : 'tegood'" @click="setmap(6, '娱乐')">
-                  娱乐({{yule}})
+                  娱乐
                   <i></i>
                 </div>
               </div>
@@ -653,9 +705,9 @@
             </div>
           </li>
         </ul>
-        <router-link :to="'/'+jkl+'/comment/'+id">
-          <button class="m-d-x">我要点评</button>
-        </router-link>
+        <!-- <router-link :to="'/'+jkl+'/comment/'+id"> -->
+        <button class="m-d-x" @click="gocomment">我要点评</button>
+        <!-- </router-link> -->
       </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
       <!-- 同价位、区位 -->
@@ -675,10 +727,10 @@
             <router-link :to="'/'+jkl+'/content/'+list.id">
               <div class="re-con-left">
                 <img :src="list.img" alt />
-                <span>
+                <!-- <span>
                   <i class="iconfont iconyanjing"></i>
                   {{list.num}}
-                </span>
+                </span>-->
               </div>
               <div class="re-con-right">
                 <h5>
@@ -698,7 +750,7 @@
                 <p class="tabs">
                   <span class="strong">{{list.decorate}}</span>
                   <span v-if="list.railway">{{list.railway}}</span>
-                  <span>{{list.tag}}</span>
+                  <span>{{list.features[0]}}</span>
                 </p>
               </div>
             </router-link>
@@ -709,10 +761,10 @@
             <router-link :to="'/'+jkl+'/content/'+list.id">
               <div class="re-con-left">
                 <img :src="list.img" alt />
-                <span>
+                <!-- <span>
                   <i class="iconfont iconyanjing"></i>
                   {{list.num}}
-                </span>
+                </span>-->
               </div>
               <div class="re-con-right">
                 <h5>
@@ -732,7 +784,7 @@
                 <p class="tabs">
                   <span class="strong">{{list.decorate}}</span>
                   <span v-if="list.railway">{{list.railway}}</span>
-                  <span>{{list.tag}}</span>
+                  <span>{{list.features[0]}}</span>
                 </p>
               </div>
             </router-link>
@@ -742,9 +794,25 @@
       <div class="visible-xs-block .visible-sm-block m-ll"></div>
       <!-- 底部悬浮 -->
       <div class="m-botnav visible-xs-block .visible-sm-block">
-        <p id="m_shou">
-          <img id="fork" src="~/assets/forks.png" alt :data-v="id" @click="collections($event)" />
-          <img id="forked" src="~/assets/heart.gif" />收藏
+        <p id="m_shou" @click="gotalk">
+          <!-- <img
+            id="fork"
+            src="~/assets/forks.png"
+            alt
+            :data-v="id"
+            @click="collections($event)"
+            v-if="forknum === 0"
+          />
+          <img
+            id="forked"
+            src="~/assets/heart.gif"
+            :data-v="id"
+            @click="collections($event)"
+            v-if="forknum === 1"
+          />收藏-->
+          <img src="~/assets/talkimg.png" alt />
+          在线咨询
+          <span v-show="wsshow">{{wsnum}}</span>
         </p>
         <a :href="'tel:'+call">
           <button class="m-pho">
@@ -759,6 +827,8 @@
           </p>
         </button>
       </div>
+      <!-- <van-popup v-model="showpop" position="bottom" closeable
+      close-icon="arrow-left" close-icon-position="top-left" close-icon-color="#969699"><talk></talk></van-popup>-->
       <foot-view :pinyin="jkl"></foot-view>
       <div class="visible-xs-block .visible-sm-block">
         <div class="m-p-succ">
@@ -781,7 +851,13 @@
             </div>
             <div class="t-bottom">
               <div class="t-b-first">
-                <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" maxlength="11"/>
+                <input
+                  class="l-p"
+                  type="tel"
+                  placeholder="输入预约手机号码"
+                  v-model="baoming"
+                  maxlength="11"
+                />
                 <p class="w-mg">
                   <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
                   <router-link :to="'/'+jkl+'/server'">
@@ -843,9 +919,26 @@
     <div class="iscookie" v-if="iscookie">
       <p>为了更好的体验，请在浏览器设置中打开cookie</p>
     </div>
+    <div class="pingbox" v-if="shouping" @click="shouping = false"></div>
+    <transition name="change">
+      <div class="shouping" v-if="shouping">
+        <img class="esc" @click="shouping = false" src="~/assets/pingesc.png" alt />
+        <img class="img" src="~/assets/shouping.png" alt />
+        <input type="text" placeholder="请输入您手机号" v-model="baoming" />
+        <button @click="shou">领取优惠</button>
+        <p class="peonum">187人已领取</p>
+        <p class="show-msg">
+          活动说明：领取成功后优惠编码将与您手机号绑定，会有工
+          作人员与您联系，此优惠不与参团优惠叠加使用
+        </p>
+        <p class="zhu">注：活动最终解释权归允家所有</p>
+        <span v-if="warningbtn">{{warning}}</span>
+      </div>
+    </transition>
   </div>
 </template>
 <script>
+// import talk from '@/components/talk.vue'
 import footView from "@/components/Foot.vue";
 import Swiper from "swiper";
 import img1 from "~/assets/lou1.png";
@@ -854,6 +947,7 @@ import "swiper/css/swiper.min.css";
 // import { echarts } from "./static/js/echarts.min.js";
 import axios from "axios";
 import Loading from "@/components/loading.vue";
+import ReconnectingWebSocket from "reconnecting-websocket";
 import {
   content_data,
   ip,
@@ -870,6 +964,7 @@ export default {
   components: {
     "my-loading": Loading,
     "foot-view": footView,
+    // "talk": talk,
     "remote-js": {
       render(createElement) {
         return createElement("script", {
@@ -885,6 +980,7 @@ export default {
     let id = context.params.id;
     let token = context.store.state.cookie.token;
     let ip = context.store.state.cookie.ip;
+    // console.log(ip)
     let jkl = context.params.name;
     let [res1] = await Promise.all([
       context.$axios
@@ -895,81 +991,219 @@ export default {
           token: token
         })
         .then(res => {
-          if (res.data.code === 200) {
-            let data = res.data;
-            data.topimg = data.info.constant.img;
-            let times = [];
-            for (let item of data.info.constant.deals) {
-              times.unshift(item.date);
-            }
-            let prices = [];
-            for (let item of data.info.constant.deals) {
-              prices.unshift(item.money);
-            }
-            data.prices = prices;
-            data.times = times;
-            let trend = data.info.constant.avg_prices;
-            let p1 = [];
-            let p2 = [];
-            let p3 = [];
-            let t = [];
-            for (let item in trend) {
-              p1.unshift((trend[item]["city"] / 10000).toFixed(1));
-              p2.unshift((trend[item]["country"] / 10000).toFixed(1));
-              p3.unshift((trend[item]["project"] / 10000).toFixed(1));
-              t.unshift(trend[item]["time"]);
-            }
-            data.p1 = p1;
-            data.p2 = p2;
-            data.p3 = p3;
-            data.t = t;
-            let date = new Date();
-            let now = date.getTime();
-            if (
-              new Date(
-                data.info.constant.timeline.give_time.replace(/-/g, "/")
-              ).getTime() < now
-            ) {
-              data.jfss = "dactive tegood";
-            } else {
-              data.jfss = "tegood";
-            }
-            if (
-              new Date(
-                data.info.constant.timeline.get_land_time.replace(/-/g, "/")
-              ).getTime() < now
-            ) {
-              data.ndss = "dactive tegood";
-            } else {
-              data.ndss = "tegood";
-            }
-            if (
-              new Date(
-                data.info.constant.timeline.first_open_time.replace(/-/g, "/")
-              ).getTime() < now
-            ) {
-              data.skss = "dactive tegood";
-            } else {
-              data.skss = "tegood";
-            }
-            if (
-              new Date(
-                data.info.constant.timeline.add_push_time.replace(/-/g, "/")
-              ).getTime() < now
-            ) {
-              data.jtss = "dactive tegood";
-            } else {
-              data.jtss = "tegood";
-            }
-            data.nowdong = {}
-            data.tui = {}
-            if(data.info.varialble.dynamics.length !=0) {
-              data.nowdong = data.info.varialble.dynamics[0]
-              if(data.info.varialble.dynamics.length === 2) {
-                data.tui = data.info.varialble.dynamics[1]
+          // console.log(res)
+          if (res) {
+            if (res.data.code === 200) {
+              let data = res.data;
+              data.topimg = data.info.constant.img;
+              let times = [];
+              for (let item of data.info.constant.deals) {
+                times.push(item.date.replace(/-/g, "/").substr(5));
               }
+              let prices = [];
+              for (let item of data.info.constant.deals) {
+                prices.push(item.money);
+              }
+              data.prices = prices;
+              data.times = times;
+              let trend = data.info.constant.avg_prices;
+              let p1 = [];
+              let p2 = [];
+              let p3 = [];
+              let t = [];
+              for (let item in trend) {
+                p1.unshift((trend[item]["city"] / 10000).toFixed(1));
+                p2.unshift((trend[item]["country"] / 10000).toFixed(1));
+                p3.unshift((trend[item]["project"] / 10000).toFixed(1));
+                let d = trend[item]["time"].replace(/-/g, "/");
+                t.unshift(d);
+              }
+              data.p1 = p1;
+              data.p2 = p2;
+              data.p3 = p3;
+              data.t = t;
+              let date = new Date();
+              let now = date.getTime();
+
+              if (
+                new Date(
+                  data.info.constant.timeline.get_land_time.replace(/-/g, "/")
+                ).getTime() < now
+              ) {
+                data.jfss = "tegood";
+                data.ndss = "dactive tegood";
+              } else {
+                data.ndss = "tegood";
+              }
+              if (
+                new Date(
+                  data.info.constant.timeline.add_push_time.replace(/-/g, "/")
+                ).getTime() < now
+              ) {
+                data.jtss = "dactive tegood";
+                data.jfss = "tegood";
+                data.ndss = "tegood";
+                data.skss = "tegood";
+              } else {
+                data.jtss = "tegood";
+              }
+              if (
+                new Date(
+                  data.info.constant.timeline.first_open_time.replace(/-/g, "/")
+                ).getTime() < now
+              ) {
+                data.skss = "dactive tegood";
+                data.jfss = "tegood";
+                data.ndss = "tegood";
+                data.jtss = "tegood";
+              } else {
+                data.skss = "tegood";
+              }
+              if (
+                new Date(
+                  data.info.constant.timeline.give_time.replace(/-/g, "/")
+                ).getTime() < now
+              ) {
+                data.jfss = "dactive tegood";
+                data.jtss = "tegood";
+                data.ndss = "tegood";
+                data.skss = "tegood";
+              } else {
+                data.jfss = "tegood";
+              }
+              data.nowdong = {};
+              data.tui = {};
+              if (data.info.varialble.dynamics.length != 0) {
+                data.nowdong = data.info.varialble.dynamics[0];
+                if (data.info.varialble.dynamics.length === 2) {
+                  data.tui = data.info.varialble.dynamics[1];
+                }
+              }
+              let p = parseInt(data.info.constant.single_price / 10000);
+              data.max = p + 3;
+              if (!data.hasOwnProperty("head")) {
+                data.head.phone = "400-966-9995";
+                data.head.title = "允家新房";
+                data.head.description = "允家新房";
+                data.head.keywords = "允家新房";
+                data.head.open = 0;
+              }
+              return data;
+            } else {
+              context.$axios
+                .post("/api/detail/mobile", {
+                  platform: 2,
+                  id: id,
+                  ip: ip,
+                  token: token
+                })
+                .then(res => {
+                  let data = res.data;
+                  data.topimg = data.info.constant.img;
+                  let times = [];
+                  for (let item of data.info.constant.deals) {
+                    times.push(item.date.replace(/-/g, "/").substr(5));
+                  }
+                  let prices = [];
+                  for (let item of data.info.constant.deals) {
+                    prices.push(item.money);
+                  }
+                  data.prices = prices;
+                  data.times = times;
+                  let trend = data.info.constant.avg_prices;
+                  let p1 = [];
+                  let p2 = [];
+                  let p3 = [];
+                  let t = [];
+                  for (let item in trend) {
+                    p1.unshift((trend[item]["city"] / 10000).toFixed(1));
+                    p2.unshift((trend[item]["country"] / 10000).toFixed(1));
+                    p3.unshift((trend[item]["project"] / 10000).toFixed(1));
+                    let d = trend[item]["time"].replace(/-/g, "/");
+                    t.unshift(d);
+                  }
+                  data.p1 = p1;
+                  data.p2 = p2;
+                  data.p3 = p3;
+                  data.t = t;
+                  let date = new Date();
+                  let now = date.getTime();
+
+                  if (
+                    new Date(
+                      data.info.constant.timeline.get_land_time.replace(
+                        /-/g,
+                        "/"
+                      )
+                    ).getTime() < now
+                  ) {
+                    data.jfss = "tegood";
+                    data.ndss = "dactive tegood";
+                  } else {
+                    data.ndss = "tegood";
+                  }
+                  if (
+                    new Date(
+                      data.info.constant.timeline.add_push_time.replace(
+                        /-/g,
+                        "/"
+                      )
+                    ).getTime() < now
+                  ) {
+                    data.jtss = "dactive tegood";
+                    data.jfss = "tegood";
+                    data.ndss = "tegood";
+                    data.skss = "tegood";
+                  } else {
+                    data.jtss = "tegood";
+                  }
+                  if (
+                    new Date(
+                      data.info.constant.timeline.first_open_time.replace(
+                        /-/g,
+                        "/"
+                      )
+                    ).getTime() < now
+                  ) {
+                    data.skss = "dactive tegood";
+                    data.jfss = "tegood";
+                    data.ndss = "tegood";
+                    data.jtss = "tegood";
+                  } else {
+                    data.skss = "tegood";
+                  }
+                  if (
+                    new Date(
+                      data.info.constant.timeline.give_time.replace(/-/g, "/")
+                    ).getTime() < now
+                  ) {
+                    data.jfss = "dactive tegood";
+                    data.jtss = "tegood";
+                    data.ndss = "tegood";
+                    data.skss = "tegood";
+                  } else {
+                    data.jfss = "tegood";
+                  }
+                  data.nowdong = {};
+                  data.tui = {};
+                  if (data.info.varialble.dynamics.length != 0) {
+                    data.nowdong = data.info.varialble.dynamics[0];
+                    if (data.info.varialble.dynamics.length === 2) {
+                      data.tui = data.info.varialble.dynamics[1];
+                    }
+                  }
+                  let p = parseInt(data.info.constant.single_price / 10000);
+                  data.max = p + 3;
+                  if (!data.hasOwnProperty("head")) {
+                    data.head.phone = "400-966-9995";
+                    data.head.title = "允家新房";
+                    data.head.description = "允家新房";
+                    data.head.keywords = "允家新房";
+                    data.head.open = 0;
+                  }
+                  return data;
+                });
             }
-            return data;
           }
         })
     ]);
@@ -1020,18 +1254,33 @@ export default {
       group_buy: res1.activity.group.info,
       sign: res1.activity.sign,
       open: res1.head.open,
-      topimg: res1.topimg
+      topimg: res1.topimg,
+      max: res1.max,
+      ws: false
     };
   },
   data() {
     return {
-      ditie:'?',
-      gongjiao:'?',
-      jiaoyus:'?',
-      yiyuan:'?',
-      gouwu:'?',
-      meishi:'?',
-      yule:'?',
+      wsnum:'',
+      cons: [],
+      sids: [],
+      ws:{},
+      wsshow:false,
+      showpop: false,
+      oldUrl: "",
+      sp: true,
+      forknum: 0,
+      shouping: false,
+      warning: "请输入手机号",
+      warningbtn: false,
+      max: 0,
+      ditie: "?",
+      gongjiao: "?",
+      jiaoyus: "?",
+      yiyuan: "?",
+      gouwu: "?",
+      meishi: "?",
+      yule: "?",
       sign: {},
       topimg: "",
       ling: true,
@@ -1131,7 +1380,9 @@ export default {
       isnull: false,
       mapname: "地铁",
       pois: [],
-      mapimg: require("~/assets/path.png")
+      mapimg: require("~/assets/path.png"),
+      huomsg: false,
+      ws: false
     };
   },
   head() {
@@ -1149,7 +1400,72 @@ export default {
       ]
     };
   },
+  beforeRouteEnter(to, from, next) {
+    if (from.path.indexOf("talk") == -1 && process.server == false && from.path !=='/') {
+      $cookies.set("old", from.path);
+    }
+    next();
+  },
   methods: {
+    gotalk() {
+      // this.showpop = true
+      let k = $cookies.get("pinyin");
+      if (sessionStorage.getItem(this.building.id)) {
+        sessionStorage.setItem("sid", sessionStorage.getItem(this.building.id));
+      }
+      sessionStorage.setItem("projectid", this.building.id);
+      sessionStorage.setItem("ws" + this.building.id, true);
+      // this.$router.push(`/${k}/talk`);
+      window.location.href=`/${k}/talk`
+    },
+    shou() {
+      let tel = this.baoming;
+      let that = this;
+      var pattern_tel = /^1[3-9][0-9]{9}$/;
+      if (tel == "") {
+        this.warning = "请输入手机号";
+        this.warningbtn = true;
+        setTimeout(() => {
+          that.warningbtn = false;
+        }, 1500);
+        return;
+      } else if (!pattern_tel.test(tel)) {
+        this.warning = "请输入正确的手机号";
+        this.warningbtn = true;
+        setTimeout(() => {
+          that.warningbtn = false;
+        }, 1500);
+        return;
+      }
+      let ip = ip_arr["ip"];
+      let c = localStorage.getItem("city");
+      let p = that.page;
+      let id = that.id;
+      let kid = sessionStorage.getItem("kid");
+      let other = sessionStorage.getItem("other");
+      let normal = {
+        ip: ip,
+        tel: tel,
+        city: c,
+        position: 32,
+        page: 3,
+        type: 9,
+        project: id,
+        kid: kid,
+        other: other,
+        platform: 2
+      };
+      trend_put(normal).then(res => {
+        if (res.data.code == 200) {
+          that.warning = "领取成功";
+          that.warningbtn = true;
+          setTimeout(() => {
+            that.warningbtn = false;
+            that.shouping = false;
+          }, 1500);
+        }
+      });
+    },
     xiang(id) {
       this.position = id;
       $(".m-chang").show();
@@ -1214,22 +1530,25 @@ export default {
       this.over = true;
       this.load = false;
       this.isload = true;
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+      // let ip = returnCitySN["cip"];
       $cookies.set("ip", ip);
-      this.ip = ip;
+      // this.ip = ip;
       let collect = this.collect;
       localStorage.setItem(id, collect);
       if (collect == 0) {
-        $("#fork").show();
-        $(".m-fork").show();
-        $(".fed").hide();
-        $("#forked").hide();
+        this.forknum = 0;
+        // $("#fork").show();
+        // $(".m-fork").show();
+        // $(".fed").hide();
+        // $("#forked").hide();
       } else if (collect == 1) {
-        $("#fork").hide();
-        $("#forked").show();
-        $(".m-fork").hide();
-        $(".fed").show();
-        $("#forked").css("display", "block");
+        this.forknum = 1;
+        // $("#fork").hide();
+        // $("#forked").show();
+        // $(".m-fork").hide();
+        // $(".fed").show();
+        // $("#forked").css("display", "block");
       }
     },
     top() {
@@ -1265,6 +1584,7 @@ export default {
               }
             },
             axisLabel: {
+              interval: 0,
               show: true,
               textStyle: {
                 color: "rgba(153,153,153,1)" //这里用参数代替了
@@ -1305,9 +1625,6 @@ export default {
       var chart = this.$echarts.init(document.getElementById("pic"));
       let that = this;
       var option = {
-        legend: {
-          data: ["AI"]
-        },
         color: ["rgba(77,181,255,1)"],
         backgroundColor: "#fff",
         tooltip: {
@@ -1332,13 +1649,12 @@ export default {
           data: "房价"
         },
         grid: {
-          x: "18px",
+          x: "20px",
           y: "10px",
           x2: "18px",
           y2: "20px"
         },
         calculable: true,
-
         xAxis: [
           {
             axisLabel: {
@@ -1366,7 +1682,7 @@ export default {
             name: "单位：万",
             type: "value",
             scale: true,
-            max: 10,
+            max: that.max,
             min: 0,
             splitNumber: 5,
             axisLine: {
@@ -1418,6 +1734,9 @@ export default {
       let name = this.mapname;
       let that = this;
       let baidu = [that.ln, that.la];
+      let img = require("~/assets/mappro.png");
+      let pro = this.building.name;
+      let add = this.building.address;
       AMap.convertFrom(baidu, "baidu", function(status, result) {
         if (result.info === "ok") {
           var lnglats = result.locations; // Array.<LngLat>
@@ -1428,13 +1747,32 @@ export default {
             zoomEnable: false,
             dragEnable: false
           });
+          let content = `<div
+          style="width:140px;height: 36px;box-shadow:0px 0px 5px 0px rgba(6,0,1,0.1);border-radius:18px;padding-left: 17px;position: relative;background: #fff;">
+          <div style="float: left;width:72%">
+            <h5 style="color: #121212;font-size: 12px;margin:0;margin-top: 4px;margin-bottom: 2px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">${pro}</h5>
+            <p style="color: #919499;font-size: 10px;margin:0;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">${add}</p>
+          </div>
+          <div style="float: left;"><img style="width: 29px;margin-top:3px" src="${img}" alt=""></div>
+          <div
+            style="position: absolute;border:8px solid transparent;border-top-color: #fff;bottom:-16px;left:50%;margin-left: -8px;">
+          </div>
+        </div>`;
           let marker = new AMap.Marker({
-            icon:
-              "https://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png",
+            content: content,
             position: that.pois,
-            offset: new AMap.Pixel(-13, -30)
+            offset: new AMap.Pixel(-70, -44)
           });
+          let con =
+            '<div style="width: 24px;height: 24px;border-radius: 50%;background:rgba(71,161,255,0.3);position: relative;"><div style="width: 6px;height: 6px;border-radius: 50%;background:rgba(71,161,255,1);position: absolute;top:50%;left:50%;margin-top: -3px;margin-left: -3px;"></div></div>';
+          let mark = new AMap.Marker({
+            content: con,
+            position: that.pois,
+            offset: new AMap.Pixel(-12, -12)
+          });
+          mark.setMap(map);
           marker.setMap(map);
+
           AMap.service(["AMap.PlaceSearch"], function() {
             // eslint-disable-line no-unused-vars
             //构造地点查询类
@@ -1445,11 +1783,11 @@ export default {
               citylimit: false, //是否强制限制在设置的城市内搜索
               map: map, // 展现结果的地图实例
               panel: "panel", // 结果列表将在此容器中进行展示。
-              autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
+              autoFitView: false // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
             });
 
             var cpoint = that.pois; //中心点坐标
-            placeSearch.searchNearBy(name, cpoint, 2000, function(
+            placeSearch.searchNearBy(name, cpoint, 1200, function(
               // eslint-disable-line no-unused-vars
               status,
               result
@@ -1459,10 +1797,10 @@ export default {
               let img = that.mapimg;
               if (JSON.stringify(result) == "{}") {
                 that.isnull = true;
-                that.setzhou(name,0)
+                that.setzhou(name, 0);
               } else {
                 that.isnull = false;
-                that.setzhou(name,result.poiList.pois.length)
+                that.setzhou(name, result.poiList.pois.length);
                 $.each(result.poiList.pois, function(i, e) {
                   if (i <= 2) {
                     var p2 = [e.location.lng, e.location.lat];
@@ -1483,35 +1821,36 @@ export default {
         }
       });
     },
-    setzhou (name,num) {
-      let that = this
+    setzhou(name, num) {
+      let that = this;
       switch (name) {
-        case '地铁':
-          that.ditie = num
-          break
-        case '公交':
-          that.gongjiao = num
-          break
-        case '教育':
-          that.jiaoyus = num
-          break
-        case '医院':
-          that.yiyuan = num
-          break
-        case '购物':
-          that.gouwu = num
-          break
-        case '美食':
-          that.meishi = num
-          break
-        case '娱乐':
-          that.yule = num
-          break
+        case "地铁":
+          that.ditie = num;
+          break;
+        case "公交":
+          that.gongjiao = num;
+          break;
+        case "教育":
+          that.jiaoyus = num;
+          break;
+        case "医院":
+          that.yiyuan = num;
+          break;
+        case "购物":
+          that.gouwu = num;
+          break;
+        case "美食":
+          that.meishi = num;
+          break;
+        case "娱乐":
+          that.yule = num;
+          break;
       }
     },
     again() {
       let tel = this.baoming;
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+      // let ip = returnCitySN["cip"];
       let id = this.id;
       let data = { channel: 2, phone: tel, ip: ip };
       msg(data)
@@ -1553,10 +1892,14 @@ export default {
       collection({ project: id, token: token })
         .then(resp => {
           if (resp.data.code == 200) {
-            $("#fork").hide();
-            $("#forked").css("display", "block");
+            if (that.forknum == 0) {
+              that.forknum = 1;
+              $("#forked").css("display", "block");
+            } else {
+              that.forknum = 0;
+            }
           } else {
-            that.$router.push("/" + n + "/login");
+            that.$router.push("/" + that.n + "/login");
           }
         })
         .then(error => {
@@ -1565,7 +1908,9 @@ export default {
     },
     sendmsg(t) {
       let that = this;
-      let ip = returnCitySN["cip"];
+      // let ip = this.ip;
+      // let ip = this.$store.state.cookie.ip;
+      let ip = ip_arr["ip"];
       let tel = that.baoming;
       let c = localStorage.getItem("city");
       let p = that.page;
@@ -1578,7 +1923,7 @@ export default {
         tel: tel,
         city: c,
         position: po,
-        page: 2,
+        page: 3,
         type: 9,
         project: id,
         kid: kid,
@@ -1605,6 +1950,7 @@ export default {
       }
       trend_put(options)
         .then(resp => {
+          // console.log(resp)
           if (resp.data.code == 200) {
             msg({ phone: t, channel: 2, ip: ip })
               .then(resp => {
@@ -1830,10 +2176,21 @@ export default {
       this.$router.push("/" + this.n + "/pk/" + ids + "/" + id);
     },
     goback() {
-      this.$router.go(-1);
+      if (window.history.length <= 1) {
+        this.$router.go(-1);
+        return false;
+      } else {
+        // console.log($cookies.get('old'))
+        if ($cookies.get("old")) {
+          this.$router.push($cookies.get("old"));
+        } else {
+          this.$router.push("/" + this.jkl + "/search");
+        }
+      }
     },
     ready() {
-      let ip = returnCitySN["cip"];
+      let ip = ip_arr["ip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
     },
@@ -1964,8 +2321,7 @@ export default {
         this.tishi("手机号不能为空");
         return;
       } else if (!pattern_phone.test(phone)) {
-        $(".l-p").val("");
-        this.tishi("手机号不能为空");
+        this.tishi("请输入正确手机号");
         return;
       }
       if (this.open == 1) {
@@ -2053,9 +2409,313 @@ export default {
       this.mapnum = id;
       this.mapname = name;
       this.mmap();
+    },
+    gocomment() {
+      if (localStorage.getItem("token")) {
+        this.$router.push("/" + this.jkl + "/comment/" + this.id);
+      } else {
+        this.$router.push("/" + this.jkl + "/login");
+      }
+    },
+    createwebsocket() {
+      try {
+        if ("WebSocket" in window) {
+          this.ws = new ReconnectingWebSocket("ws://39.98.227.114:9501");
+        } else if ("MozWebSocket" in window) {
+          this.ws = new ReconnectingWebSocket("ws://39.98.227.114:9501");
+        }
+        this.init();
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    init() {
+      let that = this;
+      this.ws.onopen = function(event) {
+        let options = {
+          //要发送的数据
+          class: "Info",
+          action: "project",
+          content: {
+            token: localStorage.getItem("wstoken"),
+            Id: that.building.id
+          }
+        };
+        that.ws.send(JSON.stringify(options));
+      };
+      this.ws.onmessage = function(event) {
+        if (event.data != "connect success") {
+          let data = JSON.parse(event.data);
+          if (data.code != 500) {
+            if (data.action == "talk") {
+              that.wsshow = true
+              that.wsnum = Number(that.wsnum) +1
+              sessionStorage.setItem(that.building.id,data.content.id)
+              let name = "小" + data.content.username.substr(0, 1)
+              sessionStorage.setItem('staffname',name)
+              if (that.sids.indexOf(data.content.id) != -1) {
+                var transaction = that.db.transaction("staffmsg", "readwrite");
+                var store = transaction.objectStore("staffmsg");
+                var index = store.index("sid");
+                var search = index.get(data.content.id);
+                var myDate = new Date();
+                let time = myDate.toLocaleTimeString();
+                let timenum = Date.parse(new Date());
+                search.onsuccess = function(e) {
+                  let result = e.target.result;
+                  if (result) {
+                    result.txt = data.content.content;
+                    result.time = time;
+                    result.num = timenum;
+                    result.type = 1;
+                    store.put(result);
+                  }
+                };
+
+                var indexedDB =
+                  window.indexedDB ||
+                  window.webkitIndexedDB ||
+                  window.mozIndexedDB ||
+                  window.msIndexedDB;
+                var db;
+                if (!indexedDB) {
+                  alert("不支持");
+                }
+                let img = data.content.avatar;
+                img = decodeURIComponent(img);
+                let request = indexedDB.open("staff" + data.content.id, 2);
+                request.onsuccess = function(e) {
+                  db = request.result;
+                  let transaction = db.transaction(
+                    "staff" + data.content.id,
+                    "readwrite"
+                  );
+                  let msg = data.content.content;
+                  if (msg.split("face").length !== 0) {
+                    let index = msg.indexOf("face");
+                    while (index != -1) {
+                      var reg = /face\[[\u4e00-\u9fa5_a-zA-Z]+\]/s;
+                      var match = msg.match(reg);
+                      if (match) {
+                        var title = match[0].replace("face", "");
+                      }
+                      for (let val in that.faces) {
+                        if (that.faces[val].con == title) {
+                          let img = require(`~/assets/${val}.gif`);
+                          let h = `<img src="${img}">`;
+                          msg = msg.replace(`face${title}`, h);
+                        }
+                      }
+                      index = msg.indexOf("face", index + 4);
+                    }
+                  }
+                  let store = transaction.objectStore(
+                    "staff" + data.content.id
+                  );
+                  sessionStorage.setItem("lastone", msg);
+                  let addPersonRequest = store.add({
+                    className: "worker",
+                    con: msg,
+                    img: img,
+                    name1: "worker-left",
+                    name2: "worker-right"
+                  });
+                };
+              } else {
+                var transaction = that.db.transaction("staffmsg", "readwrite");
+                var store = transaction.objectStore("staffmsg");
+                let img = data.content.avatar;
+                img = decodeURIComponent(img);
+                var myDate = new Date();
+                let time = myDate.toLocaleTimeString();
+                let timenum = Date.parse(new Date());
+                let staff = {};
+                staff.name = "小" + data.content.username.substr(0, 1);
+                staff.sid = data.content.id;
+                staff.img = img;
+                staff.time = time;
+                staff.buildname = sessionStorage.getItem("buildname");
+                staff.projectid = sessionStorage.getItem("projectid");
+                staff.txt = data.content.content;
+                staff.type = 1;
+                staff.num = timenum;
+                let otheradd = store.add(staff);
+                otheradd.onsuccess = function() {
+                  var index =
+                    window.indexedDB ||
+                    window.webkitIndexedDB ||
+                    window.mozIndexedDB ||
+                    window.msIndexedDB;
+                  let req = index.open("staff" + data.content.id, 2);
+                  req.onupgradeneeded = function(e) {
+                    let db = e.target.result;
+                    if (
+                      !db.objectStoreNames.contains("staff" + data.content.id)
+                    ) {
+                      let objectStore = db.createObjectStore(
+                        "staff" + data.content.id,
+                        {
+                          keyPath: "id",
+                          autoIncrement: true
+                        }
+                      );
+                      objectStore.createIndex("classname", "classname", {
+                        unique: true
+                      });
+                      objectStore.createIndex("con", "con", {
+                        unique: false
+                      });
+                      objectStore.createIndex("img", "img", {
+                        unique: false
+                      });
+                      objectStore.createIndex("name1", "name1", {
+                        unique: false
+                      });
+                      objectStore.createIndex("name2", "name2", {
+                        unique: false
+                      });
+                    }
+                  };
+                  req.onsuccess = function(e) {
+                    let db = req.result;
+                    let tran = db.transaction(
+                      "staff" + data.content.id,
+                      "readwrite"
+                    );
+                    let store = tran.objectStore("staff" + data.content.id);
+
+                    let addPersonRequest = store.add({
+                      className: "worker",
+                      con: data.content.content,
+                      img: img,
+                      name1: "worker-left",
+                      name2: "worker-right"
+                    });
+                    addPersonRequest.onsuccess = function() {
+                      that.wsstart();
+                    };
+                  };
+                };
+              }
+            } 
+          }
+        }
+      };
+    },
+    send(msg) {
+      let token = localStorage.getItem("wstoken");
+      let sid = sessionStorage.getItem(sessionStorage.getItem("projectid"))
+        ? sessionStorage.getItem("sid")
+        : 0;
+      let id = sessionStorage.getItem("projectid");
+      let actions = {
+        //要发送的数据
+        class: "Chat",
+        action: "send",
+        content: { staff_id: sid, msg: msg, token: token, project: id }
+      };
+      sessionStorage.setItem("lastone", msg);
+      let dd = JSON.stringify(actions);
+      this.ws.send(dd);
+    },
+    getpro(id) {
+      let options = {
+        //要发送的数据
+        class: "Info",
+        action: "project",
+        content: {
+          token: localStorage.getItem("wstoken"),
+          Id: id
+        }
+      };
+      this.ws.send(JSON.stringify(options));
+    },
+    wsstart() {
+      let that = this;
+      for (let val in that.faces) {
+        that.faces[val] = {
+          img: require(`~/assets/${val}.gif`),
+          con: that.faces[val]
+        };
+      }
+      this.sids = [];
+
+      var indexedDB =
+        window.indexedDB ||
+        window.webkitIndexedDB ||
+        window.mozIndexedDB ||
+        window.msIndexedDB;
+      var db;
+      if (!indexedDB) {
+        alert("不支持");
+      }
+      let request = indexedDB.open("staffmsg", 2);
+      request.onupgradeneeded = function(e) {
+        db = e.target.result;
+        if (!db.objectStoreNames.contains("staffmsg")) {
+          var objectStore = db.createObjectStore("staffmsg", {
+            keyPath: "id",
+            autoIncrement: true
+          });
+          objectStore.createIndex("sid", "sid", {
+            unique: true
+          });
+          objectStore.createIndex("con", "con", {
+            unique: false
+          });
+          objectStore.createIndex("img", "img", {
+            unique: false
+          });
+          objectStore.createIndex("name", "name", {
+            unique: false
+          });
+          objectStore.createIndex("time", "time", {
+            unique: false
+          });
+          objectStore.createIndex("buildname", "buildname", {
+            unique: false
+          });
+        }
+      };
+      request.onsuccess = function(e) {
+        db = request.result;
+        that.db = request.result;
+        var transaction = db.transaction("staffmsg", "readwrite");
+        var store = transaction.objectStore("staffmsg");
+        // 取出所有数据
+        var all = store.getAll();
+        all.onsuccess = function() {
+          that.cons = all.result;
+          for (let val of that.cons) {
+            that.sids.push(val.sid);
+          }
+        };
+      };
+      request.onerror = function(e) {
+        console.log("false");
+      };
     }
   },
   mounted() {
+    this.wsstart();
+    this.createwebsocket();
+    setTimeout(() => {
+      if (!sessionStorage.getItem("ws" + this.building.id)) {
+        this.wsshow = true;
+      }
+    }, 7000);
+    $cookies.set("name", this.building.name);
+    $cookies.set("address", this.building.address);
+    this.staffname = sessionStorage.getItem("staffname");
+    let that = this;
+    setTimeout(() => {
+      that.shouping = true;
+    }, 2000);
+    setTimeout(() => {
+      if (this.sp) {
+        that.shouping = false;
+      }
+    }, 20000);
     $(".huo-more").on("click", function() {
       $(this).hide();
       $(".table").css("height", "auto");
@@ -2065,27 +2725,32 @@ export default {
       spaceBetween: 10,
       observer: true,
       slidesOffsetAfter: 12,
+      resistanceRatio: 0.1,
       slidesOffsetBefore: 14
     });
     var swiper05 = new Swiper(".swiper-dynamic", {
       slidesPerView: 3.8,
       spaceBetween: 0,
       observer: true,
-      slidesOffsetAfter: 12,
-      slidesOffsetBefore: 14
+      slidesOffsetBefore: 20,
+      resistanceRatio: 0.1,
+      slidesOffsetAfter: -10
     });
     var swiper06 = new Swiper(".swiper-house", {
-      slidesPerView: 2,
+      slidesPerView: 2.08,
       spaceBetween: 10,
       observer: true,
-      slidesOffsetAfter: 12,
+      slidesOffsetAfter: 2,
+      resistanceRatio: 0.1,
       slidesOffsetBefore: 14
     });
     var swiper07 = new Swiper(".swiper-pk", {
       slidesPerView: 2.4,
       spaceBetween: 10,
       observer: true,
-      slidesOffsetAfter: 1
+      resistanceRatio: 0.1,
+      slidesOffsetAfter: 1,
+      slidesOffsetBefore: 14
     });
     if (navigator.cookieEnabled != true) {
       this.load = false;
@@ -2104,9 +2769,9 @@ export default {
       width: "100%",
       marginBottom: "56px"
     });
-    let that = this;
     that.baoming = localStorage.getItem("phone");
     let id = this.$route.params.id;
+    localStorage.setItem("projectid", id);
     this.id = id;
     this.$nextTick(() => {
       this.start();
@@ -2253,6 +2918,7 @@ export default {
       spaceBetween: 20,
       observer: true, //修改swiper自己或子元素时，自动初始化swiper
       observeParents: true, //修改swiper的父元素时，自动初始化swiper
+      resistanceRatio: 0.1,
       pagination: {
         el: ".swiper-pagination2"
       }
@@ -2790,6 +3456,11 @@ export default {
     topimgs(val) {
       this.top();
     },
+    baoming(val) {
+      if (val) {
+        this.sp = false;
+      }
+    },
     times(val) {
       this.drawline();
     },
@@ -2819,6 +3490,7 @@ export default {
   },
   destroyed() {
     localStorage.removeItem("map");
+    // this.ws.close();
   }
 };
 </script>
@@ -2856,6 +3528,105 @@ body {
   left: 10vw;
   top: 45vh;
 }
+/* 首屏弹框 */
+.pingbox {
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  z-index: 100000;
+}
+.shouping {
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  z-index: 21474836470;
+  text-align: center;
+  top: 20%;
+}
+.shouping .esc {
+  position: absolute;
+  width: 2.333333rem;
+  top: -10%;
+  right: 5%;
+}
+.shouping .img {
+  width: 80%;
+}
+.shouping input {
+  width: 70%;
+  height: 2.75rem;
+  border-radius: 0.625rem;
+  position: absolute;
+  top: 65%;
+  left: 15%;
+  border: 0;
+  padding-left: 0.8rem;
+  color: #999999;
+  font-size: 1rem;
+}
+.shouping button {
+  width: 24%;
+  height: 2.75rem;
+  border-radius: 0.625rem;
+  text-align: center;
+  line-height: 2rem;
+  position: absolute;
+  top: 65%;
+  right: 15%;
+  background: linear-gradient(
+    0deg,
+    rgba(255, 198, 22, 1),
+    rgba(255, 235, 83, 1)
+  );
+  box-shadow: 0px 0.5px 0.5px 0px rgba(6, 0, 1, 0.1);
+  border: 0;
+  font-size: 0.9375rem;
+  color: #ff3922;
+}
+.shouping .peonum {
+  position: absolute;
+  top: 78%;
+  right: 4.25rem;
+  color: #ffdeda;
+  font-size: 0.6875rem;
+  line-height: 0.933333rem;
+}
+.shouping .show-msg {
+  color: #ffb2a6;
+  font-size: 0.625rem;
+  position: absolute;
+  width: 70%;
+  left: 15%;
+  top: 84%;
+  line-height: 0.8125rem;
+}
+.shouping .zhu {
+  position: absolute;
+  color: #ffb2a6;
+  font-size: 0.625rem;
+  width: 100%;
+  text-align: center;
+  top: 94%;
+}
+.shouping span {
+  display: block;
+  width: 11.333333rem;
+  height: 4rem;
+  border-radius: 0.4rem;
+  position: absolute;
+  left: 50%;
+  margin-left: -5.666667rem;
+  top: 50%;
+  margin-top: -2rem;
+  z-index: 231313213;
+  background: rgba(0, 0, 0, 0.8);
+  text-align: center;
+  line-height: 4rem;
+  color: #cdcdcd;
+}
+
 .swp {
   position: fixed;
   left: 18%;
@@ -2926,14 +3697,14 @@ body {
 }
 .tuan-qiang .q-con h6 {
   color: #333333;
-  font-size: 17px;
+  font-size: 1.0625rem;
   font-weight: bold;
-  margin-bottom: 10px;
-  margin-top: 5px;
+  margin-bottom: 9px;
+  margin-top: 7px;
 }
 .tuan-qiang .q-con p {
   color: #4d4d4d;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 .tuan-qiang .q-right button {
   width: 64px;
@@ -2946,16 +3717,16 @@ body {
   box-shadow: 0px 2px 7.5px 0px rgba(255, 36, 0, 0.2);
   border-radius: 12.5px;
   color: #fff;
-  font-size: 13px;
+  font-size: 0.8125rem;
   text-align: center;
   line-height: 25px;
-  margin-bottom: 8px;
+  margin-bottom: 9px;
   border: 0;
-  margin-top: 5px;
+  margin-top: 8px;
 }
 .tuan-qiang .q-right p {
   color: #fe582f;
-  font-size: 12px;
+  font-size: 0.75rem;
   text-align: center;
 }
 .zao {
@@ -2974,7 +3745,7 @@ body {
 }
 .tishi {
   color: #cdcdcd;
-  font-size: 16px;
+  font-size: 1rem;
   display: none;
   position: absolute;
   width: 170px;
@@ -3019,7 +3790,7 @@ body {
 
 .m-imgs ul li {
   color: #999999;
-  font-size: 14px;
+  font-size: 0.875rem;
   display: inline-block;
   position: relative;
   margin-left: 6%;
@@ -3030,7 +3801,7 @@ body {
 
 .m-imgs ul li.m-active {
   color: #333333;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .m-imgs ul li.m-active i {
@@ -3062,12 +3833,16 @@ body {
   margin-left: 4%;
 }
 
+.swiper-dynamic {
+  margin-right: -4%;
+}
+
 .m-huo .m-btns button {
   width: 92%;
   height: 44px;
   background-color: #edf5f9;
   color: #3dabef;
-  font-size: 16px;
+  font-size: 1rem;
   text-align: center;
   line-height: 44px;
   margin-left: 4%;
@@ -3088,12 +3863,29 @@ body {
 }
 .m-incro .m-ic-icons strong {
   color: #fe582f;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 400;
-  padding: 2px 4px;
+  padding: 2px 4px 1px 4px;
   /* border: 0.5px solid #fe582f; */
   border-radius: 2px;
   background-color: #ffede5;
+}
+.m-incro .m-ic-icons .build-icons {
+  position: absolute;
+  right: 2%;
+  top: 0%;
+  display: flex;
+  color: #999999;
+  font-size: 0.6875rem;
+  text-align: center;
+}
+.m-incro .m-ic-icons .build-icons .icons-left {
+  border-right: 0.5px solid #d9d9d9;
+}
+.m-incro .m-ic-icons .build-icons img {
+  width: 1.375rem;
+  display: block;
+  margin: 0 0.875rem 0.125rem 0.875rem;
 }
 /* 改版1.2css */
 /* 留言 */
@@ -3109,29 +3901,30 @@ body {
   width: 86%;
   position: fixed;
   left: 7%;
-  top: 220px;
+  top: 24%;
   border-radius: 12px;
   z-index: 1001;
+  background-color: #fff;
 }
 
 .weiter .t-top {
   width: 100%;
   background-color: #fff;
   border-radius: 12px 12px 0 0;
-  padding-top: 39px;
+  padding-top: 42px;
 }
 
 .weiter .t-top h6 {
-  color: #3a3c49;
-  font-size: 20px;
+  color: #323233;
+  font-size: 1.25rem;
   text-align: center;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
   font-weight: bold;
 }
 
 .weiter .t-top p {
   color: #787980;
-  font-size: 15px;
+  font-size: 1rem;
   margin: 0 18px;
 }
 
@@ -3155,7 +3948,7 @@ body {
 }
 .weiter .t-bottom .t-b-first .w-tit {
   color: #a8a8ab;
-  font-size: 12px;
+  font-size: 0.75rem;
   padding-left: 7%;
   padding-top: 8px;
 }
@@ -3166,21 +3959,21 @@ body {
 }
 
 .weiter .t-bottom .t-b-first .w-mg {
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 .weiter .t-bottom .t-b-first .w-mg a {
   color: #498de1;
 }
 
 .weiter .t-bottom .t-b-first input {
-  width: 85%;
+  width: 87.69%;
   height: 55px;
   border: 1.5px solid #c6c6cc;
-  margin-top: 30px;
+  margin-top: 32px;
   margin-bottom: 10px;
-  margin-left: 7.52%;
+  margin-left: 6.15%;
   padding-left: 5%;
-  font-size: 15px;
+  font-size: 0.9375rem;
   border-radius: 6px;
 }
 
@@ -3188,8 +3981,8 @@ body {
   width: 10px;
   height: 10px;
   margin: 0;
-  margin-left: 7.5%;
-  margin-bottom: 35px;
+  margin-left: 6.15%;
+  margin-bottom: 37px;
   background-color: #fff;
   border: 1px solid #c9c9c9;
   border-radius: 2px;
@@ -3206,15 +3999,15 @@ body {
 }
 
 .weiter .t-bottom .t-b-first button {
-  width: 85%;
+  width: 87.69%;
   height: 44px;
   border: 0;
   border-radius: 6px;
   color: #fff;
-  font-size: 16px;
+  font-size: 1rem;
   text-align: center;
   line-height: 40px;
-  margin-left: 7.5%;
+  margin-left: 6.15%;
   box-shadow: 0px 2.5px 6px 0px rgba(78, 169, 255, 0.3);
 }
 
@@ -3243,7 +4036,7 @@ body {
 .weiter .t-bottom .t-b-second p {
   margin-top: 10px;
   color: #808080;
-  font-size: 12px;
+  font-size: 0.75rem;
   width: 85%;
   margin-left: 7.5%;
   margin-bottom: 10px;
@@ -3270,7 +4063,7 @@ body {
     rgba(76, 181, 255, 1)
   );
   color: #fff;
-  font-size: 16px;
+  font-size: 1rem;
   text-align: center;
   line-height: 40px;
   border: 0;
@@ -3283,7 +4076,7 @@ body {
 .weiter .t-bottom .t-b-second .t-b-scode {
   border: 0;
   color: #40a2f4;
-  font-size: 13px;
+  font-size: 0.8125rem;
   position: absolute;
   right: 10%;
   top: 54%;
@@ -3323,7 +4116,7 @@ body {
 
 .m-o-succ p {
   color: #666666;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 23px;
   font-weight: 500;
   margin-bottom: 32px;
@@ -3338,7 +4131,7 @@ body {
     rgba(76, 181, 255, 1)
   );
   color: #fff;
-  font-size: 16px;
+  font-size: 1rem;
   text-align: center;
   line-height: 40px;
   border: 0px;
@@ -3398,11 +4191,11 @@ body {
   width: 13.3333%;
   background: rgba(0, 0, 0, 0.8);
   height: 20px;
-  font-size: 10px;
+  font-size: 0.625rem;
   color: #fff;
-  line-height: 20px;
+  line-height: 1.25rem;
   text-align: center;
-  border-radius: 10px;
+  border-radius: 0.625rem;
   opacity: 0.6;
   position: absolute;
   right: 4%;
@@ -3427,71 +4220,91 @@ body {
 .tar .left {
   width: 70%;
   height: 50px;
-  background: linear-gradient(
-    -90deg,
-    rgba(255, 1, 91, 1),
-    rgba(255, 69, 29, 1)
-  );
+  background: linear-gradient(90deg, rgba(255, 1, 91, 1), rgba(255, 69, 29, 1));
 }
-
+.tar .left img {
+  width: 100%;
+}
 .tar .left h5 {
   color: #fff;
-  font-size: 15px;
+  font-size: 0.9375rem;
   margin-left: 14px;
-  margin-top: 7px;
-  margin-bottom: 3px;
+  margin-top: 9px;
+  margin-bottom: 5px;
 }
 .tar .left h5 span {
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 .tar .left p {
   margin-left: 14px;
   color: #ffcacd;
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 .tar .right {
   height: 50px;
   width: 30%;
-  background: rgba(255, 228, 177, 1);
-  padding-left: 14px;
+  background: rgba(255, 233, 214, 1);
+  text-align: center;
 }
 .tar .right h5 {
   color: #ff3e24;
-  font-size: 14px;
-  margin-bottom: 6px;
-  padding-top: 4px;
+  font-size: 0.8125rem;
+  margin-bottom: 3px;
+  padding-top: 10px;
+  margin-left: 2px;
 }
 .tar .right p {
   color: #ff3e24;
+  font-size: 0.625rem;
 }
 .tar .right span {
-  font-size: 14px;
-  color: #ff3e24;
-  margin-left: 2px;
+  font-size: 0.625rem;
+  color: #fff;
+  display: inline-block;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 0.125rem;
+  text-align: center;
+  line-height: 0.875rem;
+  background-color: #ff3e24;
+  margin: 0 0.125rem;
 }
 .pin {
-  padding: 20px 0 10px 0;
+  padding: 0 0 8px 0;
   position: relative;
 }
 .pin nav {
-  padding: 0 4%;
+  padding: 1.5625rem 0 0 4%;
   overflow: hidden;
   margin-bottom: 24px;
 }
 .pin nav h3 {
   float: left;
   color: #121212;
-  font-size: 17px;
+  font-size: 1.0625rem;
   font-weight: bold;
+}
+.pin nav button {
+  border: 0;
+  background-color: #ffebe1;
+  color: #f14329;
+  font-size: 0.75rem;
+  text-align: center;
+  line-height: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.75rem 0 0 0.75rem;
+  float: right;
+  width: 4.1875rem;
+  margin-top: -2px;
 }
 .pin nav p {
   float: right;
   color: #323232;
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 .pin nav p span {
   color: black;
-  font-size: 11px;
+  font-size: 0.6875rem;
   display: inline-block;
   width: 16px;
   height: 16px;
@@ -3500,7 +4313,7 @@ body {
   background: #f1f1f1;
   border-radius: 2px;
   text-align: center;
-  line-height: 14px;
+  line-height: 16px;
 }
 .pin-bao {
   position: absolute;
@@ -3513,22 +4326,32 @@ body {
   );
   border-radius: 13px;
   color: #ef2b31;
-  font-size: 13px;
+  font-size: 0.8125rem;
   text-align: center;
-  line-height: 26px;
+  line-height: 28px;
   right: 8%;
-  top: 13%;
+  top: 14%;
 }
 .pin .pin-msg {
   position: absolute;
   right: 8%;
   top: 45%;
   color: #ffd4ce;
-  font-size: 12px;
+  font-size: 0.75rem;
+}
+.pin .pin-time {
+  position: absolute;
+  color: #ffeae5;
+  font-size: 0.625rem;
+  top: 49%;
+  left: 22%;
 }
 .pin .top,
 .pin .bomm {
   position: relative;
+}
+.pin .top {
+  margin-bottom: 4px;
 }
 .pin .y1 {
   top: 14%;
@@ -3538,18 +4361,62 @@ body {
 }
 .pin img {
   width: 92%;
-  margin-bottom: 10px;
+  margin-bottom: 9px;
   margin-left: 4%;
 }
 .pin .bom {
   padding: 0 4%;
+}
+.huo-msg {
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  z-index: 300;
+}
+.huo-msg .msg-con {
+  width: 86%;
+  position: fixed;
+  top: 25vh;
+  left: 7%;
+  border-radius: 0.75rem;
+  padding: 1.5625rem;
+  background-color: #fff;
+  z-index: 300;
+}
+.huo-msg .msg-con div {
+  max-height: 280px;
+  overflow-x: auto;
+}
+.huo-msg h4 {
+  color: #2f3133;
+  font-size: 1.25rem;
+  text-align: center;
+  margin-bottom: 1.25rem;
+  font-weight: bold;
+}
+.huo-msg p {
+  color: #626466;
+  font-size: 0.8125rem;
+  line-height: 1.1875rem;
+  margin-bottom: 0.625rem;
+}
+.huo-msg p span {
+  font-weight: bold;
+}
+.huo-msg img {
+  width: 1rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
 .top-num {
   width: 100%;
   height: 50px;
   line-height: 50px;
   color: #646466;
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 .top-num img {
   margin-bottom: 3px;
@@ -3574,7 +4441,7 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
   height: 20px;
-  font-size: 12px;
+  font-size: 0.625rem;
   color: #ff5650;
 }
 .trend-con1 .swiper-container10 {
@@ -3589,7 +4456,7 @@ body {
 .pin .bom p {
   float: right;
   color: #646466;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 .pin .bom p span {
   color: #fe582f;
