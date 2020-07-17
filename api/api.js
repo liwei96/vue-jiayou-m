@@ -19,6 +19,9 @@ axios.interceptors.request.use(function (config) {
     config.data.kid = kid
     config.data.other = other
     config.data.sign = $cookies.get('validate.jy8006.com')
+    if(sessionStorage.getItem('scid')){
+      config.data.source = 2
+    }
   }
   if (config.url == '/front/flow/send') {
     config.data.sign = $cookies.get('validate.jy8006.com')
@@ -477,5 +480,29 @@ export const tuandata = (msg) => {
     method: 'post',
     url: '/api/group_buy/info',
     data: msg
+  })
+}
+
+export const getsdk = (msg) => {
+  return axios.request({
+    method: 'post',
+    url: '/api/weichat/get_sign_package',
+    data:{url:msg}
+  })
+}
+
+export const getsid = () => {
+  return axios.request({
+    method: 'get',
+    url: '/front/user/getcode',
+    params:{url:'/front/user/get_user_info',slient:1}
+  })
+}
+
+export const putmap = (msg) => {
+  return axios.request({
+    method: 'post',
+    url: '/front/share/click_time',
+    data:msg
   })
 }

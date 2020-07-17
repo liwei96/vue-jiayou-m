@@ -1,8 +1,9 @@
 <template>
   <div class="EncyclopediaArticles">
     <h3>
-      <img class="goback" src="~/assets/return.png" @click="goback" />{{title}}
-      <img class="con-img" src="~/assets/ency-img.png">
+      <img class="goback" src="~/assets/return.png" @click="goback" />
+      {{title}}
+      <img class="con-img" src="~/assets/ency-img.png" />
     </h3>
     <div class="con">
       <h2>{{tit}}</h2>
@@ -12,7 +13,6 @@
         &nbsp;&nbsp;&nbsp;&nbsp;阅读:{{num}}
       </p>
       <div class="tit">
-        
         <!-- <img :src="img" alt /> -->
         <p v-html="con">{{con}}</p>
       </div>
@@ -65,9 +65,8 @@
         <h4>人气推荐</h4>
         <ul class="lists">
           <li v-for="(list,key) in recommands" :key="key" :data-v="list.id">
-            
-              <div class="list">
-                <router-link :to="'/'+jkl+'/encyclopediaArticle/'+list.position+'/'+list.id">
+            <div class="list">
+              <router-link :to="'/'+jkl+'/encyclopediaArticle/'+list.position+'/'+list.id">
                 <div class="left">
                   <h5>{{list.title}}</h5>
                   <p>{{list.source?list.source:'允家新房'}} &nbsp;{{list.time}}</p>
@@ -75,9 +74,8 @@
                 <div class="right">
                   <img :src="list.img" alt />
                 </div>
-                </router-link>
-              </div>
-            
+              </router-link>
+            </div>
           </li>
         </ul>
       </div>
@@ -94,7 +92,7 @@
           <p>
             <img src="~/assets/linshi.png" />允家严格保障您的信息安全
           </p>
-          <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming"/>
+          <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
           <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">立即订阅</button>
         </div>
         <div class="t-b-second">
@@ -119,73 +117,73 @@
       <p id="o_p">已成功订阅最新动态，我们会第一时间通过短信通知您！</p>
       <button id="o_btn">确定</button>
     </div>
-    <transition name="fade">
-      <load v-if="load"></load>
-    </transition>
     <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
 import footView from "@/components/Foot.vue";
 import Loading from "@/components/loading";
+// import wx from 'weixin-js-sdk'
 import {
   encyclopediaarticle_data,
   ip,
   encyclopediaarticle_agree,
   msg,
   verification,
-  trend_put
+  trend_put,
+  getsdk
 } from "~/api/api";
 export default {
   name: "EncyclopediaArticles",
   components: {
     load: Loading,
-    'foot-view':footView
+    "foot-view": footView
   },
-  async asyncData (context) {
-   let ip=context.store.state.cookie.ip;
+  async asyncData(context) {
+    let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
-    let token=context.store.state.cookie.token;
-    let id=context.params.id;
-    let t=context.params.position;
-    let jkl=context.store.state.cookie.pinyin;
-    let [res]= await Promise.all([
-      context.$axios.post('/api/article/detail',{
-        ip: ip,
-        city: city,
-        id: id,
-        platform: 2,
-        position: t,
-        token:token
-      })
-      .then((resp)=>{
+    let token = context.store.state.cookie.token;
+    let id = context.params.id;
+    let t = context.params.position;
+    let jkl = context.store.state.cookie.pinyin;
+    let [res] = await Promise.all([
+      context.$axios
+        .post("/api/article/detail", {
+          ip: ip,
+          city: city,
+          id: id,
+          platform: 2,
+          position: t,
+          token: token
+        })
+        .then(resp => {
           let data = resp.data;
           return data;
-      })
-    ])
-    return{
-      jkl:jkl,
-          building : res.data.project,
-          tit : res.data.title,
-          img : res.data.img,
-          dis : res.data.description,
-          con : res.data.content,
-          num : res.data.visit_count,
-          like : res.data.like_count,
-          recommands : res.data.recommands,
-          type:res.data.source_type,
-          source:res.data.source,
-          time:res.data.time,
-          title:res.data.position_name,
-          keywords:res.header.keywords,
-          description:res.header.description,
-          youlike:res.data.your_like
-    }
+        })
+    ]);
+    return {
+      jkl: jkl,
+      building: res.data.project,
+      tit: res.data.title,
+      img: res.data.img,
+      dis: res.data.description,
+      con: res.data.content,
+      num: res.data.visit_count,
+      like: res.data.like_count,
+      recommands: res.data.recommands,
+      type: res.data.source_type,
+      source: res.data.source,
+      time: res.data.time,
+      title: res.data.position_name,
+      keywords: res.header.keywords,
+      description: res.header.description,
+      youlike: res.data.your_like
+    };
   },
-  head(){
-    return{
-      title:this.tit,
-      meta:[
+  head() {
+    return {
+      title: this.tit,
+      meta: [
         {
           name: "description",
           content: this.dis
@@ -195,14 +193,13 @@ export default {
           content: this.keywords
         }
       ]
-
-    }
+    };
   },
   data() {
     return {
-      baoming:'',
-      like:0,
-      jkl:'',
+      baoming: "",
+      like: 0,
+      jkl: "",
       lists: [
         {
           tit: "房地产行业集中度进一步提高百强 房企市场份额升",
@@ -246,66 +243,70 @@ export default {
       pro: "",
       phone: "",
       recommands: [],
-      type:'',
-      n:'',
-      call:'',
-      source:'',
-      count:'',
-      time:'',
-      title:'',
-      load:true,
-      keywords:'',
-      description:'',
-      youlike:''
-    }
+      type: "",
+      n: "",
+      call: "",
+      source: "",
+      count: "",
+      time: "",
+      title: "",
+      load: true,
+      keywords: "",
+      description: "",
+      youlike: ""
+    };
   },
   methods: {
     start() {
-      this.n=this.$route.params.name
+      this.n = this.$route.params.name;
       let that = this;
       let id = this.$route.params.id;
       this.id = id;
-      this.call=localStorage.getItem('call')
+      this.call = localStorage.getItem("call");
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
-      this.ip=ip;
-      localStorage.getItem('ip');
+      // let ip = returnCitySN["cip"];
+      this.ip = ip;
+      localStorage.getItem("ip");
       let city = localStorage.getItem("city");
-      let token=localStorage.getItem('token');
-      let t=this.$route.params.position;
-      this.load=false
+      let token = localStorage.getItem("token");
+      let t = this.$route.params.position;
+      this.load = false;
     },
     agree(e) {
       let id = this.id;
       let ip = this.ip;
       let token = localStorage.getItem("token");
       let that = this;
-      let ll=e.target.getAttribute('data-v');
-      if(token){
-        encyclopediaarticle_agree({ ip: ip, id: id, platform: 2, token: token,type:3 })
-        .then(resp => {
-          if (resp.data.code == 500) {
-            that.$router.push('/'+that.n+"/login")
-          } else {
-            if(ll==0){
-              that.youlike=1
-              that.like = that.like + 1;
-              $("#nn").html(that.like);
-            }else{
-              that.youlike=0;
-              that.like = that.like - 1>0?that.like - 1:0;
-              $("#nn").html(that.like);
-            }
-            
-          }
+      let ll = e.target.getAttribute("data-v");
+      if (token) {
+        encyclopediaarticle_agree({
+          ip: ip,
+          id: id,
+          platform: 2,
+          token: token,
+          type: 3
         })
-        .catch(error => {
-          console.log(error);
-        });
-      }else{
-        that.$router.push('/'+that.n+"/login")
+          .then(resp => {
+            if (resp.data.code == 500) {
+              that.$router.push("/" + that.n + "/login");
+            } else {
+              if (ll == 0) {
+                that.youlike = 1;
+                that.like = that.like + 1;
+                $("#nn").html(that.like);
+              } else {
+                that.youlike = 0;
+                that.like = that.like - 1 > 0 ? that.like - 1 : 0;
+                $("#nn").html(that.like);
+              }
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } else {
+        that.$router.push("/" + that.n + "/login");
       }
-      
     },
     sendmsg(p) {
       this.phone = p;
@@ -330,8 +331,8 @@ export default {
             fn();
             var interval = setInterval(fn, 1000);
             $("#ytel").html(tel);
-          }else{
-            $('.l-p').val('')
+          } else {
+            $(".l-p").val("");
             $(".l-p").attr("placeholder", "报名失败");
           }
         })
@@ -366,8 +367,8 @@ export default {
               .catch(error => {
                 console.log(error);
               });
-          }else{
-            $("#ma-ll").val('');
+          } else {
+            $("#ma-ll").val("");
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
@@ -375,11 +376,84 @@ export default {
           console.log(error);
         });
     },
-    goback(){
-      this.$router.go(-1)
+    goback() {
+      if (window.history.length <= 1) {
+        this.$router.push({ path: "/" });
+        return false;
+      } else {
+        this.$router.go(-1);
+      }
+    },
+    get() {
+      let url = encodeURIComponent(window.location.href);
+      const jsApiList = [
+        "onMenuShareAppMessage",
+        "onMenuShareTimeline",
+        "onMenuShareQQ",
+        "onMenuShareWeibo",
+        "updateAppMessageShareData",
+        "updateTimelineShareData"
+      ];
+      getsdk(url).then(res => {
+        console.log(res);
+        let that = this;
+        wx.config({
+          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: res.data.data.appId, // 必填，公众号的唯一标识
+          timestamp: res.data.data.timestamp, // 必填，生成签名的时间戳
+          nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
+          signature: res.data.data.signature, // 必填，签名
+          jsApiList: jsApiList // 必填，需要使用的JS接口列表
+        });
+        wx.ready(function() {
+          if (wx.onMenuShareAppMessage) {
+            wx.onMenuShareAppMessage({
+              title: that.tit, // 分享标题
+              desc: that.dis, // 分享描述
+              link: window.location.href, // 分享链接
+              imgUrl: that.img, // 分享图标
+              type: "", // 分享类型,music、video或link，不填默认为link
+              dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
+              success: function() {
+                // 用户确认分享后执行的回调函数
+                // alert('1.01')
+              },
+              cancel: function() {
+                // 用户取消分享后执行的回调函数
+              }
+            });
+          } else {
+            wx.updateAppMessageShareData({
+              title: that.tit, // 分享标题
+              desc: that.dis, // 分享描述
+              link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: that.img, // 分享图标
+              success: function() {
+                // 设置成功
+                // alert('1.40')
+              }
+            });
+            wx.updateTimelineShareData({
+              title: that.tit, // 分享标题
+              link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: that.img, // 分享图标
+              success: function() {
+                // 设置成功
+              }
+            });
+          }
+        });
+        wx.error(res=>{
+          alert(res)
+        })
+      });
     }
   },
   mounted() {
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.match(/MicroMessenger/i) == "micromessenger") {
+      this.get();
+    }
     let that = this;
     this.start();
     $(".appointment").on("click", function() {
@@ -442,26 +516,24 @@ export default {
       $(".m-o-succ").hide();
       $(".m-chang").hide();
     });
-    
   },
-  watch:{
-    '$route'(){
+  watch: {
+    $route() {
       this.$router.go(0);
     },
-    keywords(val){
-      const keywordsEl = document.createElement('meta')
-        keywordsEl.content = this.keywords;
-        keywordsEl.name = "keywords"
+    keywords(val) {
+      const keywordsEl = document.createElement("meta");
+      keywordsEl.content = this.keywords;
+      keywordsEl.name = "keywords";
 
-        const descriptionEl = document.createElement('meta')
-        descriptionEl.content = this.description;
-        descriptionEl.name = "description"
+      const descriptionEl = document.createElement("meta");
+      descriptionEl.content = this.description;
+      descriptionEl.name = "description";
 
-        document.head.appendChild(keywordsEl)
-        document.head.appendChild(descriptionEl)
+      document.head.appendChild(keywordsEl);
+      document.head.appendChild(descriptionEl);
     }
   }
-  
 };
 </script>
 <style scoped>
@@ -481,12 +553,12 @@ h3 {
   position: relative;
   font-size: 16px;
   position: fixed;
-  top:0;
+  top: 0;
   width: 100%;
   z-index: 2;
   background-color: #fff;
-  -webkit-box-shadow: 0 0 3px 0 rgba(0,0,0,.05);
-    box-shadow: 0 0 3px 0 rgba(0,0,0,.05);
+  -webkit-box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.05);
 }
 h3 img.goback {
   position: absolute;
@@ -495,11 +567,11 @@ h3 img.goback {
   left: 5.33%;
 }
 h3 img.con-img {
-  width: 12%
+  width: 12%;
 }
 .con {
   padding: 0 4%;
-  margin-top:44px
+  margin-top: 44px;
 }
 .con h2 {
   color: #2e3033;
@@ -527,8 +599,8 @@ h3 img.con-img {
   font-size: 16px;
   line-height: 30px;
 }
-.tit p >>>img {
-  width: 100%!important;
+.tit p >>> img {
+  width: 100% !important;
   border-radius: 6px;
   margin-top: 15px;
   margin-bottom: 15px;

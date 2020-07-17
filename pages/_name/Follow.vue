@@ -18,51 +18,109 @@
 </template>
 <script>
 import footView from "@/components/Foot.vue";
+// import wx from "weixin-js-sdk";
+import { getsdk } from "~/api/api";
 export default {
   name: "Follow",
-  asyncData (context) {
+  asyncData(context) {
     let jkl = context.store.state.cookie.pinyin;
     return {
-      jkl:jkl
-    }
+      jkl: jkl
+    };
   },
   components: {
     "foot-view": footView
   },
-  data(){
+  data() {
     return {
-      imgs:'http://test.jy8006.com/_nuxt/img/4525797.png',
-      jkl:''
-    }
+      imgs: "http://test.jy8006.com/_nuxt/img/4525797.png",
+      jkl: ""
+    };
   },
   head() {
     return {
-      title:  "允家新房-关注公众号",
+      title: "允家新房-关注公众号",
       meta: [
         {
           name: "description",
-          content:  '允家新房'
+          content: "允家新房"
         },
         {
           name: "keywords",
-          content:  '允家新房'
+          content: "允家新房"
         }
       ]
     };
   },
-  methods:{
-    goback(){
-      this.$router.go(-1)
+  methods: {
+    goback() {
+      this.$router.go(-1);
     },
-    down(){
+    down() {
       var alink = document.createElement("a");
       alink.href = this.imgs;
       alink.download = "pic"; //图片名
       alink.click();
+    },
+    get() {
+      let url = encodeURIComponent(window.location.href);
+      const jsApiList = [
+        "onMenuShareAppMessage",
+        "onMenuShareTimeline",
+        "onMenuShareQQ",
+        "onMenuShareWeibo"
+      ];
+      getsdk(url).then(res => {
+        console.log(res);
+        wx.config({
+          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: res.data.data.appId, // 必填，公众号的唯一标识
+          timestamp: res.data.data.timestamp, // 必填，生成签名的时间戳
+          nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
+          signature: res.data.data.signature, // 必填，签名
+          jsApiList: jsApiList // 必填，需要使用的JS接口列表
+        });
+        wx.checkJsApi({
+          jsApiList: ["chooseImage"], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+          success: function(res) {
+            // 以键值对的形式返回，可用的api值true，不可用为false
+            // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+            console.log(res);
+          }
+        });
+        wx.ready(function() {
+          wx.onMenuShareTimeline({
+            title: dataForWeixin.title,
+            link: dataForWeixin.linkurl,
+            imgUrl: dataForWeixin.img,
+            trigger: function trigger(res) {
+              alert("用户点击分享到朋友圈");
+            },
+            success: function success(res) {
+              alert("已分享");
+            },
+            cancel: function cancel(res) {
+              alert("已取消");
+            },
+            fail: function fail(res) {
+              alert(JSON.stringify(res));
+            }
+          });
+        });
+      });
     }
   },
-  mounted(){
-    $("#Foot").css({ position: "relative", bottom: "0", width: "100%",marginBottom:0 });
+  mounted() {
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.match(/MicroMessenger/i) == "micromessenger") {
+      this.get();
+    }
+    $("#Foot").css({
+      position: "relative",
+      bottom: "0",
+      width: "100%",
+      marginBottom: 0
+    });
   }
 };
 </script>

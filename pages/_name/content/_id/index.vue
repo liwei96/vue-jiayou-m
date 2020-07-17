@@ -30,7 +30,7 @@
         </div>
       </div>
       <transition name="fade">
-        <div class="fixs" v-if="fx">
+        <div class="fixs" v-show="fx">
           <img src="~/assets/return.png" alt @click="goback" />
           <ul>
             <li
@@ -42,7 +42,7 @@
           </ul>
         </div>
       </transition>
-      <div class="tuan-msg" v-if="tuan==1">
+      <div class="tuan-msg" v-show="tuan==1">
         <div class="tar">
           <div class="left">
             <!-- <h5>
@@ -66,13 +66,14 @@
       </div>
       <div class="m-incro visible-xs-block .visible-sm-block">
         <h3>{{building.name}}</h3>
+
         <div class="m-ic-icons">
           <span class="m-zai">{{building.status}}</span>
           <span class="m-jing">{{building.decorate}}</span>
-          <span v-if="building.railway">{{building.railway}}</span>
+          <span v-show="building.railway">{{building.railway}}</span>
           <span>{{building.features[0]}}</span>
-          <strong v-if="tuan==1">限时优惠</strong>
-          <div class="build-icons">
+          <strong v-show="tuan==1">限时优惠</strong>
+          <div class="build-icons" v-show="!iswx">
             <div class="icons-left">
               <img src="~/assets/contrast.png" alt @click="pks($event)" :data-v="id" />
               PK
@@ -84,17 +85,21 @@
                 alt
                 :data-v="id"
                 @click="collections($event)"
-                v-if="forknum === 0"
+                v-show="forknum === 0"
               />
               <img
                 id="forked"
                 src="~/assets/heart.gif"
                 :data-v="id"
                 @click="collections($event)"
-                v-if="forknum === 1"
+                v-show="forknum === 1"
               />
               收藏
             </div>
+          </div>
+          <div class="wxshare" v-show="iswx">
+            <img src="~/assets/wxshare.png" alt />
+            分享
           </div>
           <!-- <i class="m-ishou">
             <img src="~/assets/contrast.png" alt />
@@ -115,7 +120,7 @@
             <span>参考总价</span>
           </li>
           <li>
-            <p v-if="building.area">
+            <p v-show="building.area">
               <span>{{building.area}}</span>/m²
             </p>
             <span>建筑面积</span>
@@ -173,7 +178,7 @@
       <div class="pin">
         <nav>
           <h3>优惠信息</h3>
-          <!-- <p v-if="tuan==1">
+          <!-- <p v-show="tuan==1">
             参团活动结束
             <span>{{day}}</span>天
             <span>{{hour}}</span>:
@@ -182,11 +187,11 @@
           </p>-->
           <button @click="huomsg = true">活动规则</button>
         </nav>
-        <div class="top" v-if="tuan==1">
+        <div class="top" v-show="tuan==1">
           <img src="~/assets/newtuan-pin.jpg" alt />
-          <div class="pin-bao" @click="xiangs(22)" v-if="!newimg">立即参团</div>
+          <div class="pin-bao" @click="xiangs(22)" v-show="!newimg">立即参团</div>
           <p class="pin-msg">已有{{group_buy.saled_num}}人加入</p>
-          <img src="~/assets/tuna-hased.jpg" alt class="hased" v-if="newimg" />
+          <img src="~/assets/tuna-hased.jpg" alt class="hased" v-show="newimg" />
           <div class="bom">
             <div class="trend-con1">
               <div class="swiper-container10">
@@ -202,7 +207,7 @@
           </div>
         </div>
         <div class="bomm">
-          <div class="pin-bao y1" v-if="!newimg" @click="xiang(28)">抢优惠券</div>
+          <div class="pin-bao y1" v-show="!newimg" @click="xiang(28)">抢优惠券</div>
           <p class="pin-msg ym">{{sign.num}}人已抢到</p>
           <p class="pin-time">有效期：2020.06.15-2020.06.21</p>
           <img src="~/assets/youhui.jpg" alt />
@@ -221,7 +226,7 @@
           </div>
         </div>
       </div>
-      <div class="huo-msg" v-if="huomsg">
+      <div class="huo-msg" v-show="huomsg">
         <div class="msg-con">
           <h4>活动规则</h4>
           <img @click="huomsg = false" src="~/assets/w-del.png" alt />
@@ -243,12 +248,12 @@
         </div>
       </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
-      <div class="top-num" v-if="false">
+      <div class="top-num" v-show="false">
         <img src="~/assets/content-top.png" alt class="content-top" />
         <span>刚需楼盘榜第4名</span>
         <img class="totop" src="~/assets/m-go.png" alt />
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block" v-if="false"></div>
+      <div class="m-line visible-xs-block .visible-sm-block" v-show="false"></div>
       <div class="m-dong visible-xs-block .visible-sm-block">
         <h3 id="m_dong">
           楼盘动态
@@ -268,7 +273,7 @@
           <h4>最新房源动态</h4>
           <p>{{nowdong.introduce}}</p>
         </div>
-        <div class="m-jia m-d" v-if="tui">
+        <div class="m-jia m-d" v-show="tui">
           <span>
             {{tui.time}}
             <i>加推</i>
@@ -278,9 +283,9 @@
         </div>
 
         <div class="t-o o1"></div>
-        <div class="t-o o2" v-if="tui"></div>
+        <div class="t-o o2" v-show="tui"></div>
         <div class="t-l l1"></div>
-        <div class="t-l l2" v-if="tui"></div>
+        <div class="t-l l2" v-show="tui"></div>
         <div class="dynamic-hd">
           <div class="swiper-dynamic">
             <div class="swiper-wrapper">
@@ -319,9 +324,9 @@
         <button class="p1" data-v="订阅最新动态">获取最新动态</button>
       </div>
 
-      <div class="m-line visible-xs-block .visible-sm-block" v-if="hu"></div>
+      <div class="m-line visible-xs-block .visible-sm-block" v-show="hu"></div>
 
-      <div class="m-hu visible-xs-block .visible-sm-block" v-if="hu">
+      <div class="m-hu visible-xs-block .visible-sm-block" v-show="hu">
         <h3>
           主力户型
           <router-link :to="'/' + jkl + '/morehus/' + id">
@@ -408,8 +413,8 @@
         </div>
         <button class="p1" data-v="获取楼盘分析资料">获取楼盘分析资料</button>
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block" v-if="tuan==1"></div>
-      <div class="tuan-qiang" v-if="tuan==1">
+      <div class="m-line visible-xs-block .visible-sm-block" v-show="tuan==1"></div>
+      <div class="tuan-qiang" v-show="tuan==1">
         <img src="~/assets/tuan-qiang.png" alt />
         <div class="q-con">
           <h6>省钱买好房拼团享优惠</h6>
@@ -436,7 +441,7 @@
           <p class="ling-ssd">
             <i>
               2.电子地图、快捷分享、多人收益
-              <em v-if="ling">...</em>
+              <em v-show="ling">...</em>
             </i>
             <i>3.高效率看房、更多楼盘三维对比</i>
             <i>4.提供精准的价格、商业分析</i>
@@ -489,9 +494,9 @@
             </span>
           </router-link>
         </h3>
-        <p id="tishi" v-if="questions.length==0?true:false">暂无问答，快来提问吧</p>
+        <p id="tishi" v-show="questions.length==0?true:false">暂无问答，快来提问吧</p>
         <div class="m-d-content">
-          <template v-if="questions.length==0?false:true">
+          <template v-show="questions.length==0?false:true">
             <div class="m-w-content" v-for="(q,key) in questions" :key="key">
               <h4>
                 <span>问</span>
@@ -507,7 +512,7 @@
                 <i>
                   {{q.answer.substr(0,19)}}{{q.answer.length>20?'...':''}}
                   <u
-                    v-if="q.answer.length>19"
+                    v-show="q.answer.length>19"
                     @click="chan($event)"
                   >展开</u>
                 </i>
@@ -599,7 +604,7 @@
           </div>
           <div class="map-con">
             <ul class="con"></ul>
-            <p class="msg" v-if="isnull">附近没有{{mapname}}，您可以看看其他信息</p>
+            <p class="msg" v-show="isnull">附近没有{{mapname}}，您可以看看其他信息</p>
           </div>
         </div>
         <button class="p1" data-v="获取详细周边配套">获取详细周边配套</button>
@@ -639,7 +644,7 @@
                 <h5>{{c.name}}</h5>
                 <p class="llk">
                   {{c.country}}&nbsp;&nbsp;
-                  <span v-if="c.area">{{c.area}}m²</span>
+                  <span v-show="c.area">{{c.area}}m²</span>
                 </p>
                 <p class="red">{{parseInt(c.price)}}元/m²</p>
                 <button @click="pkhref(c.id)">加入对比</button>
@@ -660,7 +665,7 @@
             </span>
           </router-link>
         </h4>
-        <p id="tishi" v-if="comments.length==0?true:false">暂无点评，快来点评吧</p>
+        <p id="tishi" v-show="comments.length==0?true:false">暂无点评，快来点评吧</p>
         <ul>
           <li v-for="(v,key) in comments" :key="key">
             <div class="left">
@@ -699,7 +704,7 @@
                   :readonly="read"
                 />
                 <span>{{v.time}}</span>
-                <strong :data-v="v.id" @click="del($event)" v-if="tel==v.mobile">删除</strong>
+                <strong :data-v="v.id" @click="del($event)" v-show="tel==v.mobile">删除</strong>
               </div>
               <p class="txt">{{v.content}}</p>
             </div>
@@ -745,11 +750,11 @@
                   |
                   <span>{{list.city.substr(0,2)}}-{{list.country.substr(0,2)}}</span>
                   |
-                  <span v-if="list.area">{{list.area}}m²</span>
+                  <span v-show="list.area">{{list.area}}m²</span>
                 </p>
                 <p class="tabs">
                   <span class="strong">{{list.decorate}}</span>
-                  <span v-if="list.railway">{{list.railway}}</span>
+                  <span v-show="list.railway">{{list.railway}}</span>
                   <span>{{list.features[0]}}</span>
                 </p>
               </div>
@@ -779,11 +784,11 @@
                   |
                   <span>{{list.city.substr(0,2)}}-{{list.country.substr(0,2)}}</span>
                   |
-                  <span v-if="list.area">{{list.area}}m²</span>
+                  <span v-show="list.area">{{list.area}}m²</span>
                 </p>
                 <p class="tabs">
                   <span class="strong">{{list.decorate}}</span>
-                  <span v-if="list.railway">{{list.railway}}</span>
+                  <span v-show="list.railway">{{list.railway}}</span>
                   <span>{{list.features[0]}}</span>
                 </p>
               </div>
@@ -792,8 +797,22 @@
         </div>
       </div>
       <div class="visible-xs-block .visible-sm-block m-ll"></div>
+      <!-- 微信环境的浏览记录 -->
+      <div class="wxlu" v-if="iswxsid">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" v-for="(item,key) in share.visitors" :key="key">
+            <div class="wxlu-con">
+              <img :src="item.head_img?item.head_img:'~/assets/head_icon.png.png'" alt />
+              <div class="wxlumsg">
+                <h5>{{item.nickname?item.nickname:'匿名'}}</h5>
+                <p>{{item.min}}分钟前浏览</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- 底部悬浮 -->
-      <div class="m-botnav visible-xs-block .visible-sm-block">
+      <div class="m-botnav visible-xs-block .visible-sm-block" v-if="!iswxsid">
         <p id="m_shou" @click="gotalk">
           <!-- <img
             id="fork"
@@ -801,14 +820,14 @@
             alt
             :data-v="id"
             @click="collections($event)"
-            v-if="forknum === 0"
+            v-show="forknum === 0"
           />
           <img
             id="forked"
             src="~/assets/heart.gif"
             :data-v="id"
             @click="collections($event)"
-            v-if="forknum === 1"
+            v-show="forknum === 1"
           />收藏-->
           <img src="~/assets/talkimg.png" alt />
           在线咨询
@@ -826,6 +845,27 @@
             <img src="~/assets/promsg.png" />预约看房
           </p>
         </button>
+      </div>
+      <div class="wxwork" v-if="iswxsid">
+        <div class="wximg" @click="gotalk">
+          <img :src="share.staff.head_img" alt />
+          <p>咨询</p>
+          <span v-show="wsshow">{{wsnum}}</span>
+        </div>
+        <div class="wxmsg">
+          <h5>{{share.staff.name}}</h5>
+          <p>咨询分析师</p>
+        </div>
+        <button class="wxyue p1" data-v="预约看房">
+          <img src="~/assets/wxtime.png" alt />
+          预约看房
+        </button>
+        <a :href="'tel:'+share.staff.tel">
+          <button class="wxtel">
+            <img src="~/assets/wxtel.png" alt />
+            电话咨询
+          </button>
+        </a>
       </div>
       <!-- <van-popup v-model="showpop" position="bottom" closeable
       close-icon="arrow-left" close-icon-position="top-left" close-icon-color="#969699"><talk></talk></van-popup>-->
@@ -903,7 +943,7 @@
       <div id="panel" style="display:none;"></div>
     </div>
 
-    <div class="swp" v-if="tu">
+    <div class="swp" v-show="tu">
       <slide-verify
         :l="20"
         :r="5"
@@ -916,12 +956,12 @@
         :slider-text="text"
       ></slide-verify>
     </div>
-    <div class="iscookie" v-if="iscookie">
+    <div class="iscookie" v-show="iscookie">
       <p>为了更好的体验，请在浏览器设置中打开cookie</p>
     </div>
-    <div class="pingbox" v-if="shouping" @click="shouping = false"></div>
+    <div class="pingbox" v-show="shouping" @click="shouping = false"></div>
     <transition name="change">
-      <div class="shouping" v-if="shouping">
+      <div class="shouping" v-show="shouping">
         <img class="esc" @click="shouping = false" src="~/assets/pingesc.png" alt />
         <img class="img" src="~/assets/shouping.png" alt />
         <input type="text" placeholder="请输入您手机号" v-model="baoming" />
@@ -932,7 +972,7 @@
           作人员与您联系，此优惠不与参团优惠叠加使用
         </p>
         <p class="zhu">注：活动最终解释权归允家所有</p>
-        <span v-if="warningbtn">{{warning}}</span>
+        <span v-show="warningbtn">{{warning}}</span>
       </div>
     </transition>
   </div>
@@ -957,7 +997,10 @@ import {
   trend_put,
   PK,
   encyclopediaarticle_agree,
-  comment_del
+  comment_del,
+  getsdk,
+  getsid,
+  putmap
 } from "~/api/api";
 export default {
   name: "Content",
@@ -980,232 +1023,126 @@ export default {
     let id = context.params.id;
     let token = context.store.state.cookie.token;
     let ip = context.store.state.cookie.ip;
-    // console.log(ip)
+    let data = {
+      platform: 2,
+      id: id,
+      ip: ip,
+      token: token
+    };
+    // let url = context.route.fullPath;
+    // url = url.split("?")[1];
+    // if (url && url.indexOf("scid") !== -1) {
+    //   let sid = url.split("=")[1];
+    //   data.scid = sid;
+    // }else if(context.store.state.cookie.scid){
+    //   data.scid = context.store.state.cookie.scid
+    // }
+    // console.log(data)
     let jkl = context.params.name;
     let [res1] = await Promise.all([
-      context.$axios
-        .post("/api/detail/mobile", {
-          platform: 2,
-          id: id,
-          ip: ip,
-          token: token
-        })
-        .then(res => {
-          // console.log(res)
-          if (res) {
-            if (res.data.code === 200) {
-              let data = res.data;
-              data.topimg = data.info.constant.img;
-              let times = [];
-              for (let item of data.info.constant.deals) {
-                times.push(item.date.replace(/-/g, "/").substr(5));
-              }
-              let prices = [];
-              for (let item of data.info.constant.deals) {
-                prices.push(item.money);
-              }
-              data.prices = prices;
-              data.times = times;
-              let trend = data.info.constant.avg_prices;
-              let p1 = [];
-              let p2 = [];
-              let p3 = [];
-              let t = [];
-              for (let item in trend) {
-                p1.unshift((trend[item]["city"] / 10000).toFixed(1));
-                p2.unshift((trend[item]["country"] / 10000).toFixed(1));
-                p3.unshift((trend[item]["project"] / 10000).toFixed(1));
-                let d = trend[item]["time"].replace(/-/g, "/");
-                t.unshift(d);
-              }
-              data.p1 = p1;
-              data.p2 = p2;
-              data.p3 = p3;
-              data.t = t;
-              let date = new Date();
-              let now = date.getTime();
-
-              if (
-                new Date(
-                  data.info.constant.timeline.get_land_time.replace(/-/g, "/")
-                ).getTime() < now
-              ) {
-                data.jfss = "tegood";
-                data.ndss = "dactive tegood";
-              } else {
-                data.ndss = "tegood";
-              }
-              if (
-                new Date(
-                  data.info.constant.timeline.add_push_time.replace(/-/g, "/")
-                ).getTime() < now
-              ) {
-                data.jtss = "dactive tegood";
-                data.jfss = "tegood";
-                data.ndss = "tegood";
-                data.skss = "tegood";
-              } else {
-                data.jtss = "tegood";
-              }
-              if (
-                new Date(
-                  data.info.constant.timeline.first_open_time.replace(/-/g, "/")
-                ).getTime() < now
-              ) {
-                data.skss = "dactive tegood";
-                data.jfss = "tegood";
-                data.ndss = "tegood";
-                data.jtss = "tegood";
-              } else {
-                data.skss = "tegood";
-              }
-              if (
-                new Date(
-                  data.info.constant.timeline.give_time.replace(/-/g, "/")
-                ).getTime() < now
-              ) {
-                data.jfss = "dactive tegood";
-                data.jtss = "tegood";
-                data.ndss = "tegood";
-                data.skss = "tegood";
-              } else {
-                data.jfss = "tegood";
-              }
-              data.nowdong = {};
-              data.tui = {};
-              if (data.info.varialble.dynamics.length != 0) {
-                data.nowdong = data.info.varialble.dynamics[0];
-                if (data.info.varialble.dynamics.length === 2) {
-                  data.tui = data.info.varialble.dynamics[1];
-                }
-              }
-              let p = parseInt(data.info.constant.single_price / 10000);
-              data.max = p + 3;
-              if (!data.hasOwnProperty("head")) {
-                data.head.phone = "400-966-9995";
-                data.head.title = "允家新房";
-                data.head.description = "允家新房";
-                data.head.keywords = "允家新房";
-                data.head.open = 0;
-              }
-              return data;
-            } else {
-              context.$axios
-                .post("/api/detail/mobile", {
-                  platform: 2,
-                  id: id,
-                  ip: ip,
-                  token: token
-                })
-                .then(res => {
-                  let data = res.data;
-                  data.topimg = data.info.constant.img;
-                  let times = [];
-                  for (let item of data.info.constant.deals) {
-                    times.push(item.date.replace(/-/g, "/").substr(5));
-                  }
-                  let prices = [];
-                  for (let item of data.info.constant.deals) {
-                    prices.push(item.money);
-                  }
-                  data.prices = prices;
-                  data.times = times;
-                  let trend = data.info.constant.avg_prices;
-                  let p1 = [];
-                  let p2 = [];
-                  let p3 = [];
-                  let t = [];
-                  for (let item in trend) {
-                    p1.unshift((trend[item]["city"] / 10000).toFixed(1));
-                    p2.unshift((trend[item]["country"] / 10000).toFixed(1));
-                    p3.unshift((trend[item]["project"] / 10000).toFixed(1));
-                    let d = trend[item]["time"].replace(/-/g, "/");
-                    t.unshift(d);
-                  }
-                  data.p1 = p1;
-                  data.p2 = p2;
-                  data.p3 = p3;
-                  data.t = t;
-                  let date = new Date();
-                  let now = date.getTime();
-
-                  if (
-                    new Date(
-                      data.info.constant.timeline.get_land_time.replace(
-                        /-/g,
-                        "/"
-                      )
-                    ).getTime() < now
-                  ) {
-                    data.jfss = "tegood";
-                    data.ndss = "dactive tegood";
-                  } else {
-                    data.ndss = "tegood";
-                  }
-                  if (
-                    new Date(
-                      data.info.constant.timeline.add_push_time.replace(
-                        /-/g,
-                        "/"
-                      )
-                    ).getTime() < now
-                  ) {
-                    data.jtss = "dactive tegood";
-                    data.jfss = "tegood";
-                    data.ndss = "tegood";
-                    data.skss = "tegood";
-                  } else {
-                    data.jtss = "tegood";
-                  }
-                  if (
-                    new Date(
-                      data.info.constant.timeline.first_open_time.replace(
-                        /-/g,
-                        "/"
-                      )
-                    ).getTime() < now
-                  ) {
-                    data.skss = "dactive tegood";
-                    data.jfss = "tegood";
-                    data.ndss = "tegood";
-                    data.jtss = "tegood";
-                  } else {
-                    data.skss = "tegood";
-                  }
-                  if (
-                    new Date(
-                      data.info.constant.timeline.give_time.replace(/-/g, "/")
-                    ).getTime() < now
-                  ) {
-                    data.jfss = "dactive tegood";
-                    data.jtss = "tegood";
-                    data.ndss = "tegood";
-                    data.skss = "tegood";
-                  } else {
-                    data.jfss = "tegood";
-                  }
-                  data.nowdong = {};
-                  data.tui = {};
-                  if (data.info.varialble.dynamics.length != 0) {
-                    data.nowdong = data.info.varialble.dynamics[0];
-                    if (data.info.varialble.dynamics.length === 2) {
-                      data.tui = data.info.varialble.dynamics[1];
-                    }
-                  }
-                  let p = parseInt(data.info.constant.single_price / 10000);
-                  data.max = p + 3;
-                  if (!data.hasOwnProperty("head")) {
-                    data.head.phone = "400-966-9995";
-                    data.head.title = "允家新房";
-                    data.head.description = "允家新房";
-                    data.head.keywords = "允家新房";
-                    data.head.open = 0;
-                  }
-                  return data;
-                });
+      context.$axios.post("/api/detail/mobile", data).then(res => {
+        // console.log(res)
+        if (res) {
+          if (res.data.code === 200) {
+            let data = res.data;
+            data.topimg = data.info.constant.img;
+            let times = [];
+            for (let item of data.info.constant.deals) {
+              times.push(item.date.replace(/-/g, "/").substr(5));
             }
-          }
-        })
+            let prices = [];
+            for (let item of data.info.constant.deals) {
+              prices.push(item.money);
+            }
+            data.prices = prices;
+            data.times = times;
+            let trend = data.info.constant.avg_prices;
+            let p1 = [];
+            let p2 = [];
+            let p3 = [];
+            let t = [];
+            for (let item in trend) {
+              p1.unshift((trend[item]["city"] / 10000).toFixed(1));
+              p2.unshift((trend[item]["country"] / 10000).toFixed(1));
+              p3.unshift((trend[item]["project"] / 10000).toFixed(1));
+              let d = trend[item]["time"].replace(/-/g, "/");
+              t.unshift(d);
+            }
+            data.p1 = p1;
+            data.p2 = p2;
+            data.p3 = p3;
+            data.t = t;
+            let date = new Date();
+            let now = date.getTime();
+
+            if (
+              new Date(
+                data.info.constant.timeline.get_land_time.replace(/-/g, "/")
+              ).getTime() < now
+            ) {
+              data.jfss = "tegood";
+              data.ndss = "dactive tegood";
+            } else {
+              data.ndss = "tegood";
+            }
+            if (
+              new Date(
+                data.info.constant.timeline.add_push_time.replace(/-/g, "/")
+              ).getTime() < now
+            ) {
+              data.jtss = "dactive tegood";
+              data.jfss = "tegood";
+              data.ndss = "tegood";
+              data.skss = "tegood";
+            } else {
+              data.jtss = "tegood";
+            }
+            if (
+              new Date(
+                data.info.constant.timeline.first_open_time.replace(/-/g, "/")
+              ).getTime() < now
+            ) {
+              data.skss = "dactive tegood";
+              data.jfss = "tegood";
+              data.ndss = "tegood";
+              data.jtss = "tegood";
+            } else {
+              data.skss = "tegood";
+            }
+            if (
+              new Date(
+                data.info.constant.timeline.give_time.replace(/-/g, "/")
+              ).getTime() < now
+            ) {
+              data.jfss = "dactive tegood";
+              data.jtss = "tegood";
+              data.ndss = "tegood";
+              data.skss = "tegood";
+            } else {
+              data.jfss = "tegood";
+            }
+            data.nowdong = {};
+            data.tui = {};
+            if (data.info.varialble.dynamics.length != 0) {
+              data.nowdong = data.info.varialble.dynamics[0];
+              if (data.info.varialble.dynamics.length === 2) {
+                data.tui = data.info.varialble.dynamics[1];
+              }
+            }
+            let p = parseInt(data.info.constant.single_price / 10000);
+            data.max = p + 3;
+            if (!data.hasOwnProperty("head")) {
+              data.head.phone = "400-966-9995";
+              data.head.title = "允家新房";
+              data.head.description = "允家新房";
+              data.head.keywords = "允家新房";
+              data.head.open = 0;
+            }
+
+            return data;
+          } 
+        }
+      })
     ]);
     return {
       jkl: jkl,
@@ -1256,16 +1193,28 @@ export default {
       open: res1.head.open,
       topimg: res1.topimg,
       max: res1.max,
-      ws: false
+      ws: false,
+      share: res1.share_info
     };
   },
   data() {
     return {
-      wsnum:'',
+      wxlat:'',
+      wxlng:'',
+      share: {
+        staff:{
+          tel:123,
+          name:'456',
+          head_img:'456'
+        }
+      },
+      iswxsid: false,
+      iswx: false,
+      wsnum: "",
       cons: [],
       sids: [],
-      ws:{},
-      wsshow:false,
+      ws: {},
+      wsshow: false,
       showpop: false,
       oldUrl: "",
       sp: true,
@@ -1401,7 +1350,11 @@ export default {
     };
   },
   beforeRouteEnter(to, from, next) {
-    if (from.path.indexOf("talk") == -1 && process.server == false && from.path !=='/') {
+    if (
+      from.path.indexOf("talk") == -1 &&
+      process.server == false &&
+      from.path !== "/"
+    ) {
       $cookies.set("old", from.path);
     }
     next();
@@ -1416,7 +1369,7 @@ export default {
       sessionStorage.setItem("projectid", this.building.id);
       sessionStorage.setItem("ws" + this.building.id, true);
       // this.$router.push(`/${k}/talk`);
-      window.location.href=`/${k}/talk`
+      window.location.href = `/${k}/talk`;
     },
     shou() {
       let tel = this.baoming;
@@ -2448,11 +2401,11 @@ export default {
           let data = JSON.parse(event.data);
           if (data.code != 500) {
             if (data.action == "talk") {
-              that.wsshow = true
-              that.wsnum = Number(that.wsnum) +1
-              sessionStorage.setItem(that.building.id,data.content.id)
-              let name = "小" + data.content.username.substr(0, 1)
-              sessionStorage.setItem('staffname',name)
+              that.wsshow = true;
+              that.wsnum = Number(that.wsnum) + 1;
+              sessionStorage.setItem(that.building.id, data.content.id);
+              let name = "小" + data.content.username.substr(0, 1);
+              sessionStorage.setItem("staffname", name);
               if (that.sids.indexOf(data.content.id) != -1) {
                 var transaction = that.db.transaction("staffmsg", "readwrite");
                 var store = transaction.objectStore("staffmsg");
@@ -2597,7 +2550,7 @@ export default {
                   };
                 };
               }
-            } 
+            }
           }
         }
       };
@@ -2694,9 +2647,131 @@ export default {
       request.onerror = function(e) {
         console.log("false");
       };
+    },
+    get() {
+      let that = this;
+      let url = encodeURIComponent(window.location.href);
+      const jsApiList = [
+        "onMenuShareAppMessage",
+        "onMenuShareTimeline",
+        "onMenuShareQQ",
+        "onMenuShareWeibo",
+        "updateAppMessageShareData",
+        "updateTimelineShareData",
+        "getLocation"
+      ];
+
+      getsdk(url).then(res => {
+        // console.log(res);
+        let that = this;
+        wx.config({
+          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: res.data.data.appId, // 必填，公众号的唯一标识
+          timestamp: res.data.data.timestamp, // 必填，生成签名的时间戳
+          nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
+          signature: res.data.data.signature, // 必填，签名
+          jsApiList: jsApiList // 必填，需要使用的JS接口列表
+        });
+        wx.ready(function() {
+          if (wx.onMenuShareAppMessage) {
+            wx.onMenuShareAppMessage({
+              title: that.title, // 分享标题
+              desc: that.keywords, // 分享描述
+              link: window.location.href, // 分享链接
+              imgUrl: that.building.img, // 分享图标
+              type: "", // 分享类型,music、video或link，不填默认为link
+              dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
+              success: function() {
+                // 用户确认分享后执行的回调函数
+                alert('1.01')
+              },
+              cancel: function() {
+                // 用户取消分享后执行的回调函数
+              }
+            });
+          } else {
+            wx.updateAppMessageShareData({
+              title: that.title, // 分享标题
+              desc: that.keywords, // 分享描述
+              link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: that.building.img, // 分享图标
+              success: function() {
+                // 设置成功
+                alert('1.40')
+              }
+            });
+            wx.updateTimelineShareData({
+              title: that.title, // 分享标题
+              link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: that.building.img, // 分享图标
+              success: function() {
+                // 设置成功
+              }
+            });
+          }
+          wx.getLocation({
+            type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+            success: function(res) {
+              that.wxlat = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+              that.wxlng = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+              putmap({lat:res.latitude,long:res.longitude}).then(res=>{
+                console.log(res)
+              })
+            }
+          });
+        });
+        wx.error(res => {
+          alert(res);
+        });
+      });
     }
   },
+  // beforeMount() {
+  //   let that = this;
+  //   var ua = navigator.userAgent.toLowerCase();
+  //   if (ua.match(/MicroMessenger/i) == "micromessenger") {
+  //     if (localStorage.getItem("gowx")) {
+  //       let url = window.location.href;
+  //       url = url.split("?")[1];
+  //       if (url && url.indexOf("staff_id") !== -1) {
+  //         let sid = url.split("=")[1];
+  //         window.location.href = `http://ll.edefang.net/front/share/config?staff=${sid}&project=${that.building.id}`;
+          
+  //       } else if (url && url.indexOf("scid") !== -1) {
+  //         let sid = url.split("=")[1];
+  //         sessionStorage.setItem("wxscid", sid);
+  //         $cookies.set('scid',sid)
+  //         if(!sessionStorage.getItem('wxscid')){
+  //           window.location.href = `http://ll.edefang.net/front/user/getcode_front?scid=${sid}`;
+  //         }else{
+  //           that.iswx = true;
+  //           that.iswxsid = true;
+  //         }
+  //       } else {
+  //         window.location.href = `http://ll.edefang.net/front/user/getcode_transfer?silent=0&id=${that.building.id}`;
+  //       }
+  //     } else {
+  //       localStorage.setItem("gowx", 1);
+  //       window.location.href = `http://ll.edefang.net/front/user/getcode_transfer?silent=0&id=${that.building.id}`;
+  //     }
+  //   }
+  // },
   mounted() {
+    let that = this;
+    // var ua = navigator.userAgent.toLowerCase();
+    // if (ua.match(/MicroMessenger/i) == "micromessenger") {
+    //   this.get();
+    //   if (that.share) {
+    //     for (let val of that.share.visitors) {
+    //       let time = new Date(val.read_time).getTime();
+    //       let now = new Date().getTime();
+    //       let min = Math.floor(((now - time) / 1000 / 60) % 60);
+    //       console.log(time, now, min);
+    //       val.min = min;
+    //     }
+    //   }
+    // }
+    console.log(this.share);
     this.wsstart();
     this.createwebsocket();
     setTimeout(() => {
@@ -2704,10 +2779,11 @@ export default {
         this.wsshow = true;
       }
     }, 7000);
+
     $cookies.set("name", this.building.name);
     $cookies.set("address", this.building.address);
     this.staffname = sessionStorage.getItem("staffname");
-    let that = this;
+
     setTimeout(() => {
       that.shouping = true;
     }, 2000);
@@ -2923,6 +2999,20 @@ export default {
         el: ".swiper-pagination2"
       }
     });
+    /*微信浏览记录轮播*/
+    this.$nextTick(function(){
+      var swiper = new Swiper(".wxlu", {
+        // eslint-disable-line no-unused-vars
+        spaceBetween: 20,
+        observer: true, //修改swiper自己或子元素时，自动初始化swiper
+        observeParents: true, //修改swiper的父元素时，自动初始化swiper
+        resistanceRatio: 0.1,
+        loop:true,
+        autoplay: true
+      });
+    })
+      
+
     /*推荐楼盘轮播*/
     var swiper = new Swiper(".swiper-box", {
       // eslint-disable-line no-unused-vars
@@ -3887,6 +3977,22 @@ body {
   display: block;
   margin: 0 0.875rem 0.125rem 0.875rem;
 }
+.m-incro .m-ic-icons .wxshare {
+  width: 3.75rem;
+  height: 1.625rem;
+  border-radius: 0.8125rem 0px 0px 0.8125rem;
+  background-color: #ecf9ff;
+  color: #3eacf0;
+  font-size: 0.875rem;
+  text-align: center;
+  line-height: 1.625rem;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.m-incro .m-ic-icons .wxshare img {
+  width: 1rem;
+}
 /* 改版1.2css */
 /* 留言 */
 .m-xuan img {
@@ -4460,5 +4566,127 @@ body {
 }
 .pin .bom p span {
   color: #fe582f;
+}
+.wxwork {
+  width: 100%;
+  height: 3.75rem;
+  background-color: #fff;
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  z-index: 999;
+}
+.wxwork .wximg {
+  position: relative;
+  margin-left: 0.9375rem;
+}
+.wxwork .wximg img {
+  width: 2.5rem;
+  border-radius: 50%;
+}
+.wxwork .wximg p {
+  width: 2.25rem;
+  height: 0.8125rem;
+  background: linear-gradient(
+    0deg,
+    rgba(247, 214, 126, 1),
+    rgba(254, 233, 173, 1)
+  );
+  border-radius: 0.375rem;
+  color: #8b6232;
+  font-size: 0.625rem;
+  text-align: center;
+  line-height: 0.8125rem;
+  text-align: center;
+  position: absolute;
+  bottom: -0.125rem;
+  left: 0.125rem;
+}
+.wxwork .wximg span {
+  width: 0.8125rem;
+  height: 0.8125rem;
+  border-radius: 50%;
+  background-color: #f34f4f;
+  color: #fff;
+  font-size: 0.625rem;
+  text-align: center;
+  line-height: 0.8125rem;
+  position: absolute;
+  display: block;
+  top: 0;
+  right: 0;
+}
+.wxwork .wxmsg {
+  margin: 0 0.75rem 0 0.375rem;
+}
+.wxwork .wxmsg h5 {
+  color: #222324;
+  font-size: 1rem;
+  margin-bottom: 0.3125rem;
+  margin-top: 0.25rem;
+}
+.wxwork .wxmsg p {
+  color: #696a6d;
+  font-size: 0.6875rem;
+}
+.wxwork button {
+  width: 6.875rem;
+  height: 2.5rem;
+  border-radius: 0.1875rem;
+  text-align: center;
+  line-height: 2.5rem;
+  font-size: 0.9375rem;
+  border: 0;
+}
+.wxwork button img {
+  width: 0.9rem;
+}
+.wxwork .wxyue {
+  background: linear-gradient(
+    0deg,
+    rgba(247, 214, 126, 1),
+    rgba(254, 233, 173, 1)
+  );
+  color: #8b6232;
+  margin-right: 0.625rem;
+}
+.wxwork .wxtel {
+  background: linear-gradient(
+    0deg,
+    rgba(45, 47, 49, 1),
+    rgba(153, 153, 153, 1)
+  );
+  color: #fce5a0;
+}
+.wxlu {
+  position: fixed;
+  width: 100%;
+  bottom: 6rem;
+  z-index: 200;
+}
+.wxlu .wxlu-con {
+  width: 8.75rem;
+  height: 2.5rem;
+  background: rgba(255, 248, 237, 0.9);
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  margin-left: 4%;
+}
+.wxlu .wxlu-con img {
+  width: 2.125rem;
+  border-radius: 50%;
+  margin-right: 0.4375rem;
+  margin-left: 0.25rem;
+}
+.wxlu .wxlu-con .wxlumsg h5 {
+  color: #725e46;
+  font-size: 0.9375rem;
+  margin-bottom: 0.125rem;
+}
+.wxlu-con .wxlumsg p {
+  color: #9e815f;
+  font-size: 0.75rem;
 }
 </style>
