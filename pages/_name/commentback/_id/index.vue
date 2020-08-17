@@ -92,6 +92,11 @@ export default {
   padding: 0;
   margin: 0;
 }
+#Foot {
+  width:100%;
+  position: fixed!important;
+  bottom: 0!important
+}
 h3 {
   color: #333333;
   text-align: center;

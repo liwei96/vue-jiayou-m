@@ -44,7 +44,7 @@
       </div>
     </div>
     <div class="sou" v-if="ll">
-      <ul>
+      <!-- <ul v-if="false">
         <li
           v-for="(item,key) in bbs"
           :key="key"
@@ -52,32 +52,47 @@
           :data-v="item.id"
           @click="aa($event)"
         >{{item.name}}</li>
+      </ul> -->
+      <ul>
+        <li v-for="(item,key) in lists" :key="key" @click="aa(item.id)">
+          <p class="name">
+            <span>{{item.name}}</span>
+            <i>{{item.city}}</i>
+          </p>
+          <p class="where" v-html="item.where"></p>
+        </li>
       </ul>
     </div>
-    <foot-view :pinyin="jkl"></foot-view>
+    <!-- <foot-view :pinyin="jkl"></foot-view> -->
     <transition name="fade">
       <load v-if="isload"></load>
     </transition>
   </div>
 </template>
 <script>
-import { ip, sou_data, sou } from "~/api/api";
+import { ip, sou_data, sou, souname } from "~/api/api";
 import Loadings from "@/components/loading";
 import footView from "@/components/Foot.vue";
 export default {
   name: "Sou",
   components: {
     load: Loadings,
-    "foot-view" : footView
+    "foot-view": footView,
   },
-  async asyncData (context) {
-   let ip=context.store.state.cookie.ip;
+  async asyncData(context) {
+    let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
-    let token=context.store.state.cookie.token;
-    let jkl=context.store.state.cookie.pinyin;
-    let [res]= await Promise.all([
-      context.$axios.post('/api/project/quick_search',{ token: token, city: city, ip: ip, platform: 2 })
-      .then((resp)=>{
+    let token = context.store.state.cookie.token;
+    let jkl = context.store.state.cookie.pinyin;
+    let [res] = await Promise.all([
+      context.$axios
+        .post("/api/project/quick_search", {
+          token: token,
+          city: city,
+          ip: ip,
+          platform: 2,
+        })
+        .then((resp) => {
           let data = resp.data.data;
           let hot_id = [];
           let names = [];
@@ -91,28 +106,28 @@ export default {
             te_id.push(item);
             te.push(data.feature[item]);
           }
-          data.te=te;
-          data.te_id=te_id;
-          data.names=names;
-          data.hot_id=hot_id;
+          data.te = te;
+          data.te_id = te_id;
+          data.names = names;
+          data.hot_id = hot_id;
           return data;
-      })
-    ])
-    return{
-          tes : res.te,
-          te_id : res.te_id,
-          names : res.names,
-          hot_id : res.hot_id,
-          jkl:jkl,
-          title:res.title,
-          description:res.description,
-          keywords:res.keywords
-    }
+        }),
+    ]);
+    return {
+      tes: res.te,
+      te_id: res.te_id,
+      names: res.names,
+      hot_id: res.hot_id,
+      jkl: jkl,
+      title: res.title,
+      description: res.description,
+      keywords: res.keywords,
+    };
   },
   data() {
     return {
       n: "",
-      jkl:'',
+      jkl: "",
       names: ["世茂天辰", "千岛湖嘉苑·千岛湖壹号", "千岛湖嘉苑"],
       ip: "",
       hot_id: [],
@@ -122,10 +137,11 @@ export default {
       name: "",
       builds: [],
       bbs: [],
-      ll:false,
-      title:'',
-      description:'',
-      keywords:''
+      ll: false,
+      title: "",
+      description: "",
+      keywords: "",
+      lists:[]
     };
   },
   methods: {
@@ -133,20 +149,20 @@ export default {
       let token = localStorage.getItem("token");
       let city = localStorage.getItem("city");
       let n = this.$route.params.name;
-      
+
       this.n = n;
       let that = this;
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
       let data = { token: token, city: city, ip: ip, platform: 2 };
-      this.isload=false
+      this.isload = false;
       sou({ city: city })
-        .then(resp => {
+        .then((resp) => {
           that.builds = resp.data.data;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -161,56 +177,64 @@ export default {
       let dd = [];
       let name = this.name;
       if (!name) {
-        this.ll=false
+        this.ll = false;
       } else {
-        this.ll=true;
-        for (let val of data) {
-          if (val["name"].indexOf(name) != -1) {
-            dd.push(val);
-          }
-        }
-        this.bbs = dd;
+        this.ll = true;
+        // for (let val of data) {
+        //   if (val["name"].indexOf(name) != -1) {
+        //     dd.push(val);
+        //   }
+        // }
+        // this.bbs = dd;
+        souname(name).then((res) => {
+          console.log(res);
+          this.lists = res.data.data
+        });
       }
     },
-    aa(e) {
-      let id = e.target.getAttribute("data-v");
+    aa(id) {
       this.$router.push("/" + this.n + "/content/" + id);
       // window.location.href='/'+this.n+"/content/"+id
     },
     goback() {
       this.$router.go(-1);
-    }
+    },
   },
   head() {
     return {
-      title: this.title || '允家新房-楼盘搜索',
+      title: this.title || "允家新房-楼盘搜索",
       meta: [
         {
           name: "description",
-          content: this.description || '允家新房'
+          content: this.description || "允家新房",
         },
         {
           name: "keywords",
-          content: this.keywords || '允家新房'
-        }
-      ]
+          content: this.keywords || "允家新房",
+        },
+      ],
     };
   },
   mounted() {
-    $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom:0 });
+    $("#Foot").css({
+      position: "fixed",
+      bottom: "0",
+      width: "100%",
+      marginBottom: 0,
+    });
     let that = this;
     this.start();
   },
   computed: {
     count() {
       return this.$store.state.count;
-    }
+    },
   },
   watch: {
-    name: function() {
+    name: function () {
       this.sou();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -238,14 +262,32 @@ li {
 }
 .sou ul {
   padding: 0 4%;
-  min-height: 600px;
+  height: 37rem;
+  overflow: auto;
 }
 .sou ul li {
-  color: #333333;
-  font-size: 15px;
   padding-bottom: 18px;
   padding-top: 16px;
   border-bottom: 0.5px solid #f2f4f7;
+}
+.sou ul li .name {
+  color: #424345;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: .5rem;
+}
+.sou ul li .name i {
+  font-style: normal;
+  font-size: .75rem;
+  color: #9D9FA6;
+}
+.sou ul li .where {
+  color: #2A2A2B;
+  font-size: .875rem;
+}
+.sou ul li .where >>> em {
+  font-style: normal;
+  color:#AFB1B3
 }
 .sou ul >>> li:hover {
   background-color: #ccc;

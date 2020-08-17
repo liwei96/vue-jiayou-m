@@ -5,20 +5,112 @@
     </no-ssr>
     <div class="container-fluid m">
       <div class="m-title visible-xs-block .visible-sm-block">
-        <img src="~/assets/return.png" alt @click="goback" />
+        <img class="back" src="~/assets/return.png" alt @click="goback" />
         <h3>周边详情</h3>
+        <img src="~/assets/mapcai.png" alt class="cai" @click="taggle" />
+        <ul class="cailist" v-if="list">
+          <li class="cmn">
+            <router-link :to="'/'+jkl">
+              <span></span>
+              <img src="~/assets/barhome.png" />
+              <p>首 页</p>
+            </router-link>
+          </li>
+          <li>
+            <router-link :to="'/'+jkl+'/search'">
+              <img src="~/assets/barsearch.png" />
+              <p>楼盘查询</p>
+            </router-link>
+          </li>
+          <li>
+            <router-link :to="'/'+jkl+'/myhome'">
+              <img src="~/assets/barsearch.png" />
+              <p>个人中心</p>
+            </router-link>
+          </li>
+          <li>
+            <router-link :to="'/'+jkl+'/encyclopedia/before/56'">
+              <img src="~/assets/barke.png" />
+              <p>买房百科</p>
+            </router-link>
+          </li>
+          <li>
+            <router-link :to="'/'+jkl+'/realinformations/46'">
+              <img src="~/assets/barxun.png" />
+              <p>房产资讯</p>
+            </router-link>
+          </li>
+        </ul>
       </div>
       <no-ssr>
-        <div class="m-continer" id="m-container"></div>
+        <div class="mapbox">
+          <div class="m-continer" id="m-container"></div>
+          <p class="tel">
+            <a :href="'tel:'+call">
+              <p>电话</p>
+              <p>咨询</p>
+            </a>
+          </p>
+          <p class="yue p1" data-v="预约看房" @click="show">
+            <span>预约</span>
+            <span>看房</span>
+          </p>
+        </div>
       </no-ssr>
-      <ul id="list">
-        <li :class="type==1?'m-active':''">交通</li>
-        <li :class="type==2?'m-active':''">教育</li>
-        <li :class="type==3?'m-active':''">医疗</li>
-        <li :class="type==4?'m-active':''">生活</li>
-      </ul>
+      <div class="m-z-icons">
+        <div class="swiper-map">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div :class="mapnum === 0 ? 'tegood active' : 'tegood'" @click="setmap(0, '地铁')">
+                地铁
+                <i></i>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div :class="mapnum === 1 ? 'tegood active' : 'tegood'" @click="setmap(1 ,'公交')">
+                公交
+                <i></i>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div :class="mapnum === 2 ? 'tegood active' : 'tegood'" @click="setmap(2, '教育')">
+                教育
+                <i></i>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div :class="mapnum === 3 ? 'tegood active' : 'tegood'" @click="setmap(3, '医院')">
+                医院
+                <i></i>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div :class="mapnum === 4 ? 'tegood active' : 'tegood'" @click="setmap(4, '购物')">
+                购物
+                <i></i>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div :class="mapnum === 5 ? 'tegood active' : 'tegood'" @click="setmap(5, '美食')">
+                美食
+                <i></i>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div :class="mapnum === 6 ? 'tegood active' : 'tegood'" @click="setmap(6, '娱乐')">
+                娱乐
+                <i></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="map-con">
+          <ul class="con"></ul>
+          <p class="msg" v-show="isnull">附近没有{{mapname}}，您可以看看其他信息</p>
+        </div>
+      </div>
       <div id="panel" style="display: none;"></div>
-      <div class="m-l-content"></div>
+      <div class="m-container"></div>
       <div class="visible-xs-block .visible-sm-block">
         <transition name="change">
           <div class="weiter ts" v-if="change">
@@ -47,7 +139,7 @@
                   验证码已发送到
                   <span id="ytel">187****4376</span>，请注意查看
                 </p>
-                <input type="text" placeholder="请输入验证码" id="ma-ll"/>
+                <input type="text" placeholder="请输入验证码" id="ma-ll" />
                 <button class="port1">确定</button>
                 <input type="hidden" id="building_name" value />
                 <input type="hidden" value />
@@ -72,36 +164,27 @@
         </div>
       </div>
     </div>
-    <div class="m-botnav">
-      <p id="m_shou" data-_v="{$data.id}">
-        <img id="fork" src="~/assets/forks.png" alt :data-v="id" @click="collection($event)" />
-        <img id="forked" src="~/assets/heart.gif" />收藏
+    <!-- <div id="Footer">
+      <p>杭州易得房科技有限公司版权所有 电话：400-966-9995</p>
+      <p>
+        <img src="~/assets/f-logo.png" />网络经营许可证：
+        <a href="http://www.beian.miit.gov.cn/">
+          <span>浙ICP备18057005号</span>
+        </a>
       </p>
-      <a :href="'tel:'+call">
-        <button class="m-pho">
-          <p class="ph1">
-            <img src="~/assets/phicon.png" alt />电话咨询
-          </p>
-        </button>
-      </a>
-      <button class="m-y p1" data-v="预约看房">
-        <p class="ph1">
-          <img src="~/assets/promsg.png" />预约看房
-        </p>
-      </button>
-    </div>
-    <foot-view :pinyin="jkl"></foot-view>
+    </div>-->
   </div>
 </template>
 <script>
-import footView from "@/components/Foot.vue";
+import Swiper from "swiper";
+import "swiper/css/swiper.min.css";
 import {
   ip,
   periphery_data,
   msg,
   trend_put,
   verification,
-  collection
+  collection,
 } from "~/api/api";
 export default {
   name: "Periphery",
@@ -109,35 +192,34 @@ export default {
     "remote-js": {
       render(createElement) {
         return createElement("script", {
-          attrs: { type: "text/javascript", src: this.src }
+          attrs: { type: "text/javascript", src: this.src },
         });
       },
       props: {
-        src: { type: String, required: true }
-      }
+        src: { type: String, required: true },
+      },
     },
-    "foot-view": footView
   },
   async asyncData(context) {
     let jkl = context.store.state.cookie.pinyin;
     return {
       jkl: jkl,
-      checks: false
+      checks: false,
     };
   },
   head() {
     return {
-      title:  "允家新房-周边详情",
+      title: "允家新房-周边详情",
       meta: [
         {
           name: "description",
-          content:  '允家新房'
+          content: "允家新房",
         },
         {
           name: "keywords",
-          content:  '允家新房'
-        }
-      ]
+          content: "允家新房",
+        },
+      ],
     };
   },
   data() {
@@ -154,10 +236,139 @@ export default {
       type: "",
       id: "",
       checks: "",
-      jkl: ""
+      jkl: "",
+      mapnum: 0,
+      mapname: "地铁",
+      isnull: false,
+      list: false,
+      timename: {},
+      isover: true,
     };
   },
   methods: {
+    setmap(id, name) {
+      this.mapnum = id;
+      this.mapname = name;
+      this.mmap();
+    },
+    mmap() {
+      this.over = false;
+      let name = this.mapname;
+      let that = this;
+      let baidu = [that.ln, that.la];
+      let img = require("~/assets/mappro.png");
+      let pro = $cookies.get("name") ? $cookies.get("name") : "楼盘地址";
+      let add = $cookies.get("address")
+        ? $cookies.get("address")
+        : "详细楼盘地址到详情页";
+      AMap.convertFrom(baidu, "baidu", function (status, result) {
+        if (result.info === "ok") {
+          var lnglats = result.locations; // Array.<LngLat>
+          that.pois = [lnglats[0].lng, lnglats[0].lat];
+          var map = new AMap.Map("m-container", {
+            zoom: 14, //初始化地图层级
+            center: that.pois, //初始化地图中心点
+            zoomEnable: false,
+            dragEnable: false,
+          });
+          let content = `<div
+          style="width:140px;height: 36px;box-shadow:0px 0px 5px 0px rgba(6,0,1,0.1);border-radius:18px;padding-left: 17px;position: relative;background: #fff;">
+          <div style="float: left;width:72%">
+            <h5 style="color: #121212;font-size: 12px;margin:0;margin-top: 4px;margin-bottom: 2px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">${pro}</h5>
+            <p style="color: #919499;font-size: 10px;margin:0;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">${add}</p>
+          </div>
+          <div style="float: left;"><img style="width: 29px;margin-top:3px" src="${img}" alt=""></div>
+          <div
+            style="position: absolute;border:8px solid transparent;border-top-color: #fff;bottom:-16px;left:50%;margin-left: -8px;">
+          </div>
+        </div>`;
+          let marker = new AMap.Marker({
+            content: content,
+            position: that.pois,
+            offset: new AMap.Pixel(-70, -44),
+          });
+          let con =
+            '<div style="width: 24px;height: 24px;border-radius: 50%;background:rgba(71,161,255,0.3);position: relative;"><div style="width: 6px;height: 6px;border-radius: 50%;background:rgba(71,161,255,1);position: absolute;top:50%;left:50%;margin-top: -3px;margin-left: -3px;"></div></div>';
+          let mark = new AMap.Marker({
+            content: con,
+            position: that.pois,
+            offset: new AMap.Pixel(-12, -12),
+          });
+          mark.setMap(map);
+          marker.setMap(map);
+
+          AMap.service(["AMap.PlaceSearch"], function () {
+            // eslint-disable-line no-unused-vars
+            //构造地点查询类
+            var placeSearch = new AMap.PlaceSearch({
+              pageSize: 10, // 单页显示结果条数
+              pageIndex: 1, // 页码
+              city: "", // 兴趣点城市
+              citylimit: false, //是否强制限制在设置的城市内搜索
+              map: map, // 展现结果的地图实例
+              panel: "panel", // 结果列表将在此容器中进行展示。
+              autoFitView: false, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
+            });
+
+            var cpoint = that.pois; //中心点坐标
+            placeSearch.searchNearBy(name, cpoint, 1200, function (
+              // eslint-disable-line no-unused-vars
+              status,
+              result
+            ) {
+              var ht = "";
+              // console.log(ht)
+              let img = require("~/assets/path.png");
+              if (JSON.stringify(result) == "{}") {
+                that.isnull = true;
+                that.setzhou(name, 0);
+              } else {
+                that.isnull = false;
+                that.setzhou(name, result.poiList.pois.length);
+                $.each(result.poiList.pois, function (i, e) {
+                  var p2 = [e.location.lng, e.location.lat];
+                  var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
+                  s = s.toFixed(1);
+                  ht += `
+                    <li>
+                      <h5>${e.name}</h5>
+                      <p>${e.address} <span><img src="${img}">${s}km</span></p>
+                    </li>
+                    `;
+                });
+              }
+              $(".con").html(ht);
+            });
+          });
+        }
+      });
+    },
+    setzhou(name, num) {
+      let that = this;
+      switch (name) {
+        case "地铁":
+          that.ditie = num;
+          break;
+        case "公交":
+          that.gongjiao = num;
+          break;
+        case "教育":
+          that.jiaoyus = num;
+          break;
+        case "医院":
+          that.yiyuan = num;
+          break;
+        case "购物":
+          that.gouwu = num;
+          break;
+        case "美食":
+          that.meishi = num;
+          break;
+        case "娱乐":
+          that.yule = num;
+          break;
+      }
+    },
     start() {
       let id = this.$route.params.id;
       this.id = id;
@@ -173,24 +384,24 @@ export default {
       this.call = localStorage.getItem("call");
       let IP = localStorage.getItem("ip");
       periphery_data({ ip: IP, platform: 2, id: id })
-        .then(resp => {
+        .then((resp) => {
           let data = resp.data.data;
           that.la = data.latitude;
           that.ln = data.longitude;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     sendmsg() {
       let check = this.checks;
       if (!check) {
-        $('.tishi').show()
+        $(".tishi").show();
         return;
-      }else {
-        $('.tishi').hide();
+      } else {
+        $(".tishi").hide();
       }
-      let t = this.baoming
+      let t = this.baoming;
       let pattern_phone = /^1[3-9][0-9]{9}$/;
       if (t == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -202,15 +413,15 @@ export default {
       }
       let that = this;
       msg({ phone: t, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
-            let ip = ip_arr['ip'];
+            let ip = ip_arr["ip"];
             let c = localStorage.getItem("city");
             let p = that.page;
             let tel = t;
             let kid = sessionStorage.getItem("kid");
             let other = sessionStorage.getItem("other");
-            let id = this.$route.params.id
+            let id = this.$route.params.id;
             trend_put({
               ip: ip,
               tel: tel,
@@ -220,20 +431,20 @@ export default {
               type: 9,
               kid: kid,
               other: other,
-              project:id
+              project: id,
             })
-              .then(resp => {
+              .then((resp) => {
                 if (resp.data.code == 200) {
                 }
               })
-              .catch(error => {
+              .catch((error) => {
                 console.log(error);
               });
             $(".t-b-first").hide();
             $(".t-b-second").show();
             var time = 60;
             tel = t.substr(0, 3) + "****" + t.substr(7, 11);
-            var fn = function() {
+            var fn = function () {
               time--;
               if (time > 0) {
                 $(".t-b-scode").html("重新发送" + time + "s");
@@ -247,12 +458,12 @@ export default {
             fn();
             var interval = setInterval(fn, 1000);
             $("#ytel").html(tel);
-          }else{
-            $('.l-p').val('')
+          } else {
+            $(".l-p").val("");
             $(".l-p").attr("placeholder", "报名失败");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -260,40 +471,42 @@ export default {
       let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             that.change = false;
             that.succ = true;
-          }else{
-            $("#ma-ll").val('');
+          } else {
+            $("#ma-ll").val("");
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     zhou() {
       let that = this;
       let baidu = [that.ln, that.la];
-      AMap.convertFrom(baidu, "baidu", function(status, result) {
+      AMap.convertFrom(baidu, "baidu", function (status, result) {
         if (result.info === "ok") {
           var lnglats = result.locations; // Array.<LngLat>
           let la = lnglats[0].lat;
           let ln = lnglats[0].lng;
-        
-      let type = that.$route.params.type;
-      that.type = type;
-      var map = new AMap.Map("m-container", {
-        // eslint-disable-line no-unused-vars
-        resizeEnable: true,
-        center: [ln, la],
-        zoom: 15
-      });
-      let img = require("~/assets/mappro.png");
-      let pro = $cookies.get('name') ? $cookies.get('name') : '楼盘地址'
-      let add = $cookies.get('address') ? $cookies.get('address') : '详细楼盘地址到详情页'
-      let content = `<div
+
+          let type = that.$route.params.type;
+          that.type = type;
+          var map = new AMap.Map("m-container", {
+            // eslint-disable-line no-unused-vars
+            resizeEnable: true,
+            center: [ln, la],
+            zoom: 15,
+          });
+          let img = require("~/assets/mappro.png");
+          let pro = $cookies.get("name") ? $cookies.get("name") : "楼盘地址";
+          let add = $cookies.get("address")
+            ? $cookies.get("address")
+            : "详细楼盘地址到详情页";
+          let content = `<div
           style="width:140px;height: 36px;box-shadow:0px 0px 5px 0px rgba(6,0,1,0.1);border-radius:18px;padding-left: 17px;position: relative;background: #fff;">
           <div style="float: left;width:72%">
             <h5 style="color: #121212;font-size: 12px;margin:0;margin-top: 4px;margin-bottom: 2px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">${pro}</h5>
@@ -307,300 +520,300 @@ export default {
           let marker = new AMap.Marker({
             content: content,
             position: that.pois,
-            offset: new AMap.Pixel(-70, -44)
+            offset: new AMap.Pixel(-70, -44),
           });
           let con =
             '<div style="width: 24px;height: 24px;border-radius: 50%;background:rgba(71,161,255,0.3);position: relative;"><div style="width: 6px;height: 6px;border-radius: 50%;background:rgba(71,161,255,1);position: absolute;top:50%;left:50%;margin-top: -3px;margin-left: -3px;"></div></div>';
           let mark = new AMap.Marker({
             content: con,
             position: that.pois,
-            offset: new AMap.Pixel(-12, -12)
+            offset: new AMap.Pixel(-12, -12),
           });
           mark.setMap(map);
           marker.setMap(map);
-      AMap.service(["AMap.PlaceSearch"], function() {
-        // eslint-disable-line no-unused-vars
-        //构造地点查询类
-        var placeSearch = new AMap.PlaceSearch({
-          pageSize: 10, // 单页显示结果条数
-          pageIndex: 1, // 页码
-          city: "", // 兴趣点城市
-          citylimit: false, //是否强制限制在设置的城市内搜索
-          map: map, // 展现结果的地图实例
-          panel: "panel", // 结果列表将在此容器中进行展示。
-          autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
-        });
+          AMap.service(["AMap.PlaceSearch"], function () {
+            // eslint-disable-line no-unused-vars
+            //构造地点查询类
+            var placeSearch = new AMap.PlaceSearch({
+              pageSize: 10, // 单页显示结果条数
+              pageIndex: 1, // 页码
+              city: "", // 兴趣点城市
+              citylimit: false, //是否强制限制在设置的城市内搜索
+              map: map, // 展现结果的地图实例
+              panel: "panel", // 结果列表将在此容器中进行展示。
+              autoFitView: true, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
+            });
 
-        var cpoint = [ln, la]; //中心点坐标
-        var p2 = [ln, la];
-        var s = AMap.GeometryUtil.distance(cpoint, p2);
-        placeSearch.searchNearBy("公交", cpoint, 2000, function(
-          status,
-          result
-        ) {
-          // console.log(result);
-        });
-
-        $(document).ready(function() {
-          // 生活的周边查询
-          function moren() {
-            placeSearch.searchNearBy("购物", cpoint, 2000, function(
-              // eslint-disable-line no-unused-vars
+            var cpoint = [ln, la]; //中心点坐标
+            var p2 = [ln, la];
+            var s = AMap.GeometryUtil.distance(cpoint, p2);
+            placeSearch.searchNearBy("公交", cpoint, 2000, function (
               status,
               result
             ) {
-              var ht = '<p class="m-type">购物</p>';
-              // console.log(ht)
               // console.log(result);
-              $.each(result.poiList.pois, function(i, e) {
-                // console.log(e);
-                var p2 = [e.location.lng, e.location.lat];
-                var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
-                s = s.toFixed(1);
-                ht += `
-                    <div class="m-te">
-                        <h5 class="m-name">${e.name}</h5>
-                        <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
-                    </div>
-                    `;
-              });
-              $(".m-l-content").html(ht);
             });
-            placeSearch.searchNearBy("美食", cpoint, 2000, function(
-              // eslint-disable-line no-unused-vars
-              status,
-              result
-            ) {
-              var html = $(".m-l-content").html();
-              var ht = '<p class="m-type">美食</p>';
-              $.each(result.poiList.pois, function(i, e) {
-                // console.log(e);
-                var p2 = [e.location.lng, e.location.lat];
-                var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
-                s = s.toFixed(1);
-                ht += `
-                    <div class="m-te">
-                        <h5 class="m-name">${e.name}</h5>
-                        <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
-                    </div>
-                    `;
-              });
-              html += ht;
-              $(".m-l-content").html(html);
-            });
-            placeSearch.searchNearBy("超市", cpoint, 2000, function(
-              // eslint-disable-line no-unused-vars
-              status,
-              result
-            ) {
-              var html = $(".m-l-content").html();
-              var ht = '<p class="m-type">超市</p>';
-              $.each(result.poiList.pois, function(i, e) {
-                // console.log(e);
-                var p2 = [e.location.lng, e.location.lat];
-                var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
-                s = s.toFixed(1);
-                ht += `
-                    <div class="m-te">
-                        <h5 class="m-name">${e.name}</h5>
-                        <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
-                    </div>
-                    `;
-              });
-              html += ht;
-              $(".m-l-content").html(html);
-            });
-          }
-          if (type == 4) {
-            moren();
-          } else if (type == 1) {
-            placeSearch.searchNearBy("地铁", cpoint, 2000, function(
-              // eslint-disable-line no-unused-vars
-              status,
-              result
-            ) {
-              var html = "";
-              var ht = '<p class="m-type">地铁</p>';
-              $.each(result.poiList.pois, function(i, e) {
-                var p2 = [e.location.lng, e.location.lat];
-                var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
-                s = s.toFixed(1);
-                // console.log(e);
-                ht += `
-                        <div class="m-te">
-                            <h5 class="m-name">${e.name}</h5>
-                            <p class="m-area">${e.address}</p>
-                            <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
-                        </div>
-                        `;
-              });
-              html += ht;
-              // console.log(html)
-              $(".m-l-content").html(html);
-            });
-            placeSearch.searchNearBy("公交", cpoint, 2000, function(
-              // eslint-disable-line no-unused-vars
-              status,
-              result
-            ) {
-              var html = $(".m-l-content").html();
-              var ht = '<p class="m-type">公交</p>';
-              $.each(result.poiList.pois, function(i, e) {
-                var p2 = [e.location.lng, e.location.lat];
-                var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
-                s = s.toFixed(1);
-                ht += `
-                        <div class="m-te">
-                            <h5 class="m-name">${e.name}</h5>
-                            <p class="m-area">${e.address}</p>
-                            <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
-                        </div>
-                        `;
-              });
-              html += ht;
-              $(".m-l-content").html(html);
-            });
-          } else if (type == 3) {
-            placeSearch.searchNearBy("医院", cpoint, 2000, function(
-              // eslint-disable-line no-unused-vars
-              status,
-              result
-            ) {
-              var ht = '<p class="m-type">医院</p>';
-              $.each(result.poiList.pois, function(i, e) {
-                var p2 = [e.location.lng, e.location.lat];
-                var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
-                s = s.toFixed(1);
-                ht += `
-                        <div class="m-te">
-                            <h5 class="m-name">${e.name}</h5>
-                            <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
-                        </div>
-                        `;
-              });
-              $(".m-l-content").html(ht);
-            });
-          } else {
-            placeSearch.searchNearBy("学校", cpoint, 2000, function(
-              // eslint-disable-line no-unused-vars
-              status,
-              result
-            ) {
-              var ht = '<p class="m-type">学校</p>';
-              $.each(result.poiList.pois, function(i, e) {
-                var p2 = [e.location.lng, e.location.lat];
-                var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
-                s = s.toFixed(1);
-                ht += `
-                        <div class="m-te">
-                            <h5 class="m-name">${e.name}</h5>
-                            <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
-                        </div>
-                        `;
-              });
-              $(".m-l-content").html(ht);
-            });
-          }
 
-          $("#list li").on("click", function() {
-            $(this)
-              .addClass("m-active")
-              .siblings("li")
-              .removeClass("m-active");
-            if ($(this).text() == "生活") {
-              moren();
-            } else if ($(this).text() == "交通") {
-              placeSearch.searchNearBy("地铁", cpoint, 2000, function(
-                // eslint-disable-line no-unused-vars
-                status,
-                result
-              ) {
-                var html = "";
-                var ht = '<p class="m-type">地铁</p>';
-                $.each(result.poiList.pois, function(i, e) {
-                  var p2 = [e.location.lng, e.location.lat];
-                  var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
-                  s = s.toFixed(1);
-                  // console.log(e);
-                  ht += `
+            $(document).ready(function () {
+              // 生活的周边查询
+              function moren() {
+                placeSearch.searchNearBy("购物", cpoint, 2000, function (
+                  // eslint-disable-line no-unused-vars
+                  status,
+                  result
+                ) {
+                  var ht = '<p class="m-type">购物</p>';
+                  // console.log(ht)
+                  // console.log(result);
+                  $.each(result.poiList.pois, function (i, e) {
+                    // console.log(e);
+                    var p2 = [e.location.lng, e.location.lat];
+                    var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
+                    s = s.toFixed(1);
+                    ht += `
+                    <div class="m-te">
+                        <h5 class="m-name">${e.name}</h5>
+                        <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
+                    </div>
+                    `;
+                  });
+                  $(".m-l-content").html(ht);
+                });
+                placeSearch.searchNearBy("美食", cpoint, 2000, function (
+                  // eslint-disable-line no-unused-vars
+                  status,
+                  result
+                ) {
+                  var html = $(".m-l-content").html();
+                  var ht = '<p class="m-type">美食</p>';
+                  $.each(result.poiList.pois, function (i, e) {
+                    // console.log(e);
+                    var p2 = [e.location.lng, e.location.lat];
+                    var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
+                    s = s.toFixed(1);
+                    ht += `
+                    <div class="m-te">
+                        <h5 class="m-name">${e.name}</h5>
+                        <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
+                    </div>
+                    `;
+                  });
+                  html += ht;
+                  $(".m-l-content").html(html);
+                });
+                placeSearch.searchNearBy("超市", cpoint, 2000, function (
+                  // eslint-disable-line no-unused-vars
+                  status,
+                  result
+                ) {
+                  var html = $(".m-l-content").html();
+                  var ht = '<p class="m-type">超市</p>';
+                  $.each(result.poiList.pois, function (i, e) {
+                    // console.log(e);
+                    var p2 = [e.location.lng, e.location.lat];
+                    var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
+                    s = s.toFixed(1);
+                    ht += `
+                    <div class="m-te">
+                        <h5 class="m-name">${e.name}</h5>
+                        <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
+                    </div>
+                    `;
+                  });
+                  html += ht;
+                  $(".m-l-content").html(html);
+                });
+              }
+              if (type == 4) {
+                moren();
+              } else if (type == 1) {
+                placeSearch.searchNearBy("地铁", cpoint, 2000, function (
+                  // eslint-disable-line no-unused-vars
+                  status,
+                  result
+                ) {
+                  var html = "";
+                  var ht = '<p class="m-type">地铁</p>';
+                  $.each(result.poiList.pois, function (i, e) {
+                    var p2 = [e.location.lng, e.location.lat];
+                    var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
+                    s = s.toFixed(1);
+                    // console.log(e);
+                    ht += `
                         <div class="m-te">
                             <h5 class="m-name">${e.name}</h5>
                             <p class="m-area">${e.address}</p>
                             <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
                         </div>
                         `;
+                  });
+                  html += ht;
+                  // console.log(html)
+                  $(".m-l-content").html(html);
                 });
-                html += ht;
-                // console.log(html)
-                $(".m-l-content").html(html);
-              });
-              placeSearch.searchNearBy("公交", cpoint, 2000, function(
-                // eslint-disable-line no-unused-vars
-                status,
-                result
-              ) {
-                var html = $(".m-l-content").html();
-                var ht = '<p class="m-type">公交</p>';
-                $.each(result.poiList.pois, function(i, e) {
-                  var p2 = [e.location.lng, e.location.lat];
-                  var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
-                  s = s.toFixed(1);
-                  ht += `
+                placeSearch.searchNearBy("公交", cpoint, 2000, function (
+                  // eslint-disable-line no-unused-vars
+                  status,
+                  result
+                ) {
+                  var html = $(".m-l-content").html();
+                  var ht = '<p class="m-type">公交</p>';
+                  $.each(result.poiList.pois, function (i, e) {
+                    var p2 = [e.location.lng, e.location.lat];
+                    var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
+                    s = s.toFixed(1);
+                    ht += `
                         <div class="m-te">
                             <h5 class="m-name">${e.name}</h5>
                             <p class="m-area">${e.address}</p>
                             <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
                         </div>
                         `;
+                  });
+                  html += ht;
+                  $(".m-l-content").html(html);
                 });
-                html += ht;
-                $(".m-l-content").html(html);
-              });
-            } else if ($(this).text() == "医疗") {
-              placeSearch.searchNearBy("医院", cpoint, 2000, function(
-                // eslint-disable-line no-unused-vars
-                status,
-                result
-              ) {
-                var ht = '<p class="m-type">医院</p>';
-                $.each(result.poiList.pois, function(i, e) {
-                  var p2 = [e.location.lng, e.location.lat];
-                  var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
-                  s = s.toFixed(1);
-                  ht += `
+              } else if (type == 3) {
+                placeSearch.searchNearBy("医院", cpoint, 2000, function (
+                  // eslint-disable-line no-unused-vars
+                  status,
+                  result
+                ) {
+                  var ht = '<p class="m-type">医院</p>';
+                  $.each(result.poiList.pois, function (i, e) {
+                    var p2 = [e.location.lng, e.location.lat];
+                    var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
+                    s = s.toFixed(1);
+                    ht += `
                         <div class="m-te">
                             <h5 class="m-name">${e.name}</h5>
                             <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
                         </div>
                         `;
+                  });
+                  $(".m-l-content").html(ht);
                 });
-                $(".m-l-content").html(ht);
-              });
-            } else if ($(this).text() == "教育") {
-              placeSearch.searchNearBy("教育", cpoint, 2000, function(
-                // eslint-disable-line no-unused-vars
-                status,
-                result
-              ) {
-                var ht = '<p class="m-type">教育</p>';
-                $.each(result.poiList.pois, function(i, e) {
-                  var p2 = [e.location.lng, e.location.lat];
-                  var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
-                  s = s.toFixed(1);
-                  ht += `
+              } else {
+                placeSearch.searchNearBy("学校", cpoint, 2000, function (
+                  // eslint-disable-line no-unused-vars
+                  status,
+                  result
+                ) {
+                  var ht = '<p class="m-type">学校</p>';
+                  $.each(result.poiList.pois, function (i, e) {
+                    var p2 = [e.location.lng, e.location.lat];
+                    var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
+                    s = s.toFixed(1);
+                    ht += `
                         <div class="m-te">
                             <h5 class="m-name">${e.name}</h5>
                             <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
                         </div>
                         `;
+                  });
+                  $(".m-l-content").html(ht);
                 });
-                $(".m-l-content").html(ht);
+              }
+
+              $("#list li").on("click", function () {
+                $(this)
+                  .addClass("m-active")
+                  .siblings("li")
+                  .removeClass("m-active");
+                if ($(this).text() == "生活") {
+                  moren();
+                } else if ($(this).text() == "交通") {
+                  placeSearch.searchNearBy("地铁", cpoint, 2000, function (
+                    // eslint-disable-line no-unused-vars
+                    status,
+                    result
+                  ) {
+                    var html = "";
+                    var ht = '<p class="m-type">地铁</p>';
+                    $.each(result.poiList.pois, function (i, e) {
+                      var p2 = [e.location.lng, e.location.lat];
+                      var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
+                      s = s.toFixed(1);
+                      // console.log(e);
+                      ht += `
+                        <div class="m-te">
+                            <h5 class="m-name">${e.name}</h5>
+                            <p class="m-area">${e.address}</p>
+                            <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
+                        </div>
+                        `;
+                    });
+                    html += ht;
+                    // console.log(html)
+                    $(".m-l-content").html(html);
+                  });
+                  placeSearch.searchNearBy("公交", cpoint, 2000, function (
+                    // eslint-disable-line no-unused-vars
+                    status,
+                    result
+                  ) {
+                    var html = $(".m-l-content").html();
+                    var ht = '<p class="m-type">公交</p>';
+                    $.each(result.poiList.pois, function (i, e) {
+                      var p2 = [e.location.lng, e.location.lat];
+                      var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
+                      s = s.toFixed(1);
+                      ht += `
+                        <div class="m-te">
+                            <h5 class="m-name">${e.name}</h5>
+                            <p class="m-area">${e.address}</p>
+                            <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
+                        </div>
+                        `;
+                    });
+                    html += ht;
+                    $(".m-l-content").html(html);
+                  });
+                } else if ($(this).text() == "医疗") {
+                  placeSearch.searchNearBy("医院", cpoint, 2000, function (
+                    // eslint-disable-line no-unused-vars
+                    status,
+                    result
+                  ) {
+                    var ht = '<p class="m-type">医院</p>';
+                    $.each(result.poiList.pois, function (i, e) {
+                      var p2 = [e.location.lng, e.location.lat];
+                      var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
+                      s = s.toFixed(1);
+                      ht += `
+                        <div class="m-te">
+                            <h5 class="m-name">${e.name}</h5>
+                            <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
+                        </div>
+                        `;
+                    });
+                    $(".m-l-content").html(ht);
+                  });
+                } else if ($(this).text() == "教育") {
+                  placeSearch.searchNearBy("教育", cpoint, 2000, function (
+                    // eslint-disable-line no-unused-vars
+                    status,
+                    result
+                  ) {
+                    var ht = '<p class="m-type">教育</p>';
+                    $.each(result.poiList.pois, function (i, e) {
+                      var p2 = [e.location.lng, e.location.lat];
+                      var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
+                      s = s.toFixed(1);
+                      ht += `
+                        <div class="m-te">
+                            <h5 class="m-name">${e.name}</h5>
+                            <p class="m-ju"><img src="~/assets/path.png" alt="">${s}km</p>
+                        </div>
+                        `;
+                    });
+                    $(".m-l-content").html(ht);
+                  });
+                }
               });
-            }
+            });
           });
-        });
-      });
-      }
+        }
       });
     },
     goback() {
@@ -614,7 +827,7 @@ export default {
       }
       let that = this;
       collection({ project: id, token: token })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             $("#fork").hide();
             $("#forked").css("display", "block");
@@ -623,41 +836,52 @@ export default {
             // window.location.href = "/login";
           }
         })
-        .then(error => {
+        .then((error) => {
           console.log(error);
         });
-    }
+    },
+    show() {
+      this.change = true;
+      $(".m-chang").show();
+    },
+    taggle() {
+      if (this.list) {
+        this.list = false;
+      } else {
+        this.list = true;
+      }
+    },
   },
   mounted() {
     this.baoming = localStorage.getItem("phone");
     let that = this;
     this.start();
-
-    $(".p1").on("click", function() {
-      window.type = $(this).attr("data-v");
-      if (type == "预约看房") {
-        $(".weiter .t-top h6").html(type);
-        $(".weiter .t-top p").html(
-          "一键预约看房免费小车上门接送，可带家人一起参观多个热门楼盘 "
-        );
-      }
+    var swiper08 = new Swiper(".swiper-map", {
+      slidesPerView: 4.8,
+      spaceBetween: 10,
+      observer: true,
+      slidesOffsetAfter: 12,
+      resistanceRatio: 0.1,
+      slidesOffsetBefore: 14,
+    });
+    $(".p1").on("click", function () {
       that.change = true;
       $(".m-chang").show();
     });
 
-    $("#w-esc").on("click", function() {
+    $("#w-esc").on("click", function () {
       $(".m-chang").hide();
       $(".weiter").hide();
       $(".m-o-succ").hide();
     });
-    $(".m-chang").on("click", function() {
+    $(".m-chang").on("click", function () {
       console.log(123);
       that.change = false;
       that.succ = false;
       $(".m-chang").hide();
     });
 
-    $(".t-b-btn2").on("click", function() {
+    $(".t-b-btn2").on("click", function () {
       let check = that.checks;
       console.log(check);
       if (!check) {
@@ -666,22 +890,9 @@ export default {
       } else {
         $(".tishi").hide();
       }
-      var phone = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var type = $(this)
-        .parent()
-        .parent()
-        .prev()
-        .find("h6")
-        .html();
-      var building_name = $(this)
-        .parent()
-        .next()
-        .find("#building_name")
-        .val();
+      var phone = $(this).prev().prev().prev().val();
+      var type = $(this).parent().parent().prev().find("h6").html();
+      var building_name = $(this).parent().next().find("#building_name").val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -692,33 +903,36 @@ export default {
         return;
       }
     });
-    $(".port1").on("click", function() {
-      var ma = $(this)
-        .prev()
-        .val();
+    $(".port1").on("click", function () {
+      var ma = $(this).prev().val();
       if (!ma) {
-        $(this)
-          .prev()
-          .attr("placeholder", "验证码不能为空");
+        $(this).prev().attr("placeholder", "验证码不能为空");
         return;
       }
       that.check(ma);
     });
-    $("#o_btn").on("click", function() {
+    $("#o_btn").on("click", function () {
       that.succ = false;
       $(".m-chang").hide();
     });
-    $(".o-esc").on("click", function() {
+    $(".o-esc").on("click", function () {
       that.succ = false;
       $(".m-chang").hide();
     });
   },
   watch: {},
   updated() {
-    setTimeout(() => {
-      this.zhou();
-    }, 500);
-  }
+    if (this.isover) {
+      this.isover = false;
+      this.timename = setTimeout(() => {
+        // this.zhou();
+        this.mmap();
+      }, 500);
+    }
+  },
+  beforeDestroy() {
+    clearTimeout(this.timename);
+  },
 };
 </script>
 
@@ -758,11 +972,17 @@ li {
   line-height: 44px;
   border-bottom: 1px solid #f2f2f2;
 }
-.m-title img {
+.m-title .back {
   position: absolute;
   width: 5%;
   margin-top: 14px;
   left: 5.3333%;
+}
+.m-title .cai {
+  position: absolute;
+  width: 5%;
+  top: 14px;
+  right: 5.33%;
 }
 .m-title h3 {
   color: #333333;
@@ -771,9 +991,47 @@ li {
   font-weight: bold;
   line-height: 44px;
 }
-
+.m-title .cailist {
+  width: 9.375rem;
+  background: rgba(41, 41, 41, 0.9);
+  position: absolute;
+  top: 2.5rem;
+  border-radius: 0.375rem;
+  z-index: 20000;
+  right: 4%;
+}
+.m-title .cailist li {
+  position: relative;
+  color: #e6e6e6;
+  font-size: 0.9375rem;
+  line-height: 3.125rem;
+}
+.m-title .cailist li a {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.m-title .cailist li.cmn span {
+  display: block;
+  border: 0.4375rem solid transparent;
+  border-bottom-color: rgba(41, 41, 41, 0.9);
+  position: absolute;
+  top: -0.875rem;
+  right: 0.625rem;
+}
+.m-title .cailist li p {
+  border-bottom: 0.5px solid #545454;
+  flex: 1;
+}
+.m-title .cailist li img {
+  width: 1.125rem;
+  margin: 0;
+  margin-left: 1.625rem;
+  margin-right: 0.875rem;
+  height: 1.125rem;
+}
 .m-continer {
-  height: 300px;
+  height: 30rem;
 }
 
 /* tab栏 */
@@ -1190,5 +1448,133 @@ li {
   font-size: 10px;
   margin: 0;
   padding: 0;
+}
+.m-z-icons {
+  margin-bottom: 24px;
+  margin-top: 1rem;
+}
+
+.m-z-icons .swiper-map {
+  padding-bottom: 10px;
+  border-bottom: 0.5px solid #f4f4f4;
+  overflow: hidden;
+}
+
+.m-z-icons .swiper-map .tegood {
+  font-size: 0.9375rem;
+  height: 23px;
+  color: #4c4c4c;
+}
+
+.m-z-icons .swiper-map .active {
+  color: #3dabef;
+  position: relative;
+}
+
+.m-z-icons .swiper-map .active i {
+  display: block;
+  position: absolute;
+  width: 25px;
+  height: 2px;
+  background-color: #3dabef;
+  bottom: -1px;
+  left: 2px;
+}
+
+.m-z-icons .map-con .msg {
+  height: 11.875rem;
+  width: 100%;
+  line-height: 11.875rem;
+  text-align: center;
+}
+.m-z-icons .map-con ul {
+  max-height: 11.875rem;
+  overflow-y: auto;
+}
+
+.m-z-icons .map-con >>> li {
+  margin-top: 18px;
+  padding: 0 4%;
+}
+
+.m-z-icons .map-con >>> li h5 {
+  color: #191919;
+  font-size: 1rem;
+  margin-bottom: 6px;
+  margin-top: 12px;
+}
+
+.m-z-icons .map-con >>> li p {
+  color: #999999;
+  font-size: 0.8125rem;
+}
+
+.m-z-icons .map-con >>> li p span {
+  float: right;
+}
+
+.m-z-icons .map-con >>> li p span img {
+  width: 14px;
+  margin-right: 2px;
+  margin-bottom: 2px;
+}
+.mapbox {
+  width: 100%;
+  height: 30rem;
+  position: relative;
+}
+.tel {
+  position: absolute;
+  right: 0.9375rem;
+  bottom: 5rem;
+  width: 2.875rem;
+  height: 2.875rem;
+  border-radius: 50%;
+  text-align: center;
+  background-color: #fff;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.15);
+  padding-top: 0.4375rem;
+}
+.tel a {
+  color: #333333;
+  font-size: 0.75rem;
+  word-wrap: break-word;
+}
+.yue {
+  position: absolute;
+  right: 0.9375rem;
+  bottom: 0.9375rem;
+  width: 2.875rem;
+  height: 2.875rem;
+  border-radius: 50%;
+  text-align: center;
+  background-color: #fff;
+  padding-top: 0.4375rem;
+  color: #333333;
+  font-size: 0.75rem;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.15);
+}
+.yue span {
+  display: block;
+}
+#Footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+}
+#Footer p {
+  color: #929aa7;
+  font-size: 12px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+#Footer p img {
+  width: 6%;
+  margin-right: 2%;
+}
+#Footer p a {
+  color: #6a7b97;
+  text-decoration: underline;
 }
 </style>

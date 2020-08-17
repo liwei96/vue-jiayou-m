@@ -40,7 +40,7 @@ export default {
 </script>
 <style scoped>
 #Foot{
-    height: 110px;
+    height: 6.875rem;
     background-color: #F2F3F5;
     padding-top:11px;
     max-width: 450px;

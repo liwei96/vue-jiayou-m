@@ -19,9 +19,13 @@ axios.interceptors.request.use(function (config) {
     config.data.kid = kid
     config.data.other = other
     config.data.sign = $cookies.get('validate.jy8006.com')
-    if(sessionStorage.getItem('scid')){
-      config.data.source = 2
+    if(sessionStorage.getItem('ip')){
+      config.data.ip = sessionStorage.getItem('ip')
     }
+    // if(sessionStorage.getItem('wxstaff')){
+    //   config.data.source = '微信分享2'
+    //   config.data.staff_id = sessionStorage.getItem('wxstaff')
+    // }
   }
   if (config.url == '/front/flow/send') {
     config.data.sign = $cookies.get('validate.jy8006.com')
@@ -504,5 +508,37 @@ export const putmap = (msg) => {
     method: 'post',
     url: '/front/share/click_time',
     data:msg
+  })
+}
+
+
+export const getiptest = () => {
+  return axios.request({
+    method: 'get',
+    url: '/iptest',
+  })
+}
+
+export const getquestions = (msg) => {
+  return axios.request({
+    method: 'get',
+    url: '/question/page',
+    params:msg
+  })
+}
+
+export const question = (msg) => {
+  return axios.request({
+    method: 'get',
+    url: '/mobile/question/detail',
+    params:msg
+  })
+}
+
+export const souname = (name) => {
+  return axios.request({
+    method: 'get',
+    url: '/api/project/e_search',
+    params:{'name':name}
   })
 }

@@ -93,7 +93,7 @@ export default {
   },
   methods: {
     put() {
-      if (localStorage.getItem("token") == null) {
+      if (!localStorage.getItem("token")) {
         let n = localStorage.getItem("pinyin");
         this.$router.push("/" + n + "/login");
         // window.location.href="/login"
@@ -116,7 +116,13 @@ export default {
         comment_put(where)
           .then(resp => {
             if (resp.data.code == 200) {
-              this.$router.go(-1);
+              if(sessionStorage.getItem('comment')){
+                let id = sessionStorage.getItem('comment').split('/')[3]
+                let n = localStorage.getItem("pinyin");
+                this.$router.push(`/${n}/content/${id}`)
+              }else{
+                this.$router.go(-1);
+              }
             }
           })
           .catch(error => {
@@ -135,7 +141,7 @@ export default {
     }
   },
   mounted() {
-    
+    console.log(sessionStorage.getItem('comment').split('/')[3])
     jQuery.fn.ratingStars = function(e) {
       var r = {
           selectors: {

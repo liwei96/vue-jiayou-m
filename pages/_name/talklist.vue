@@ -502,6 +502,7 @@ h3 .all-esc {
   margin-bottom: 0.5rem;
   position: relative;
   padding-top: 0.25rem;
+  min-height: 1.3125rem;
 }
 .conlist li .con h5 span {
   display: block;

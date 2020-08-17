@@ -114,7 +114,7 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" id="ma-ll"/>
+            <input type="text" placeholder="请输入验证码" id="ma-ll" />
             <button class="port1">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -153,9 +153,9 @@ export default {
           city: city,
           ip: ip,
           token: token,
-          platform: 2
+          platform: 2,
         })
-        .then(resp => {
+        .then((resp) => {
           let trend = resp.data.data.price_trends;
           let data = resp.data.data;
           if (Number(trend.current.rate) > 0) {
@@ -184,7 +184,7 @@ export default {
           data.mounth = m;
           data.price = p;
           return data;
-        })
+        }),
     ]);
     return {
       trend_mounth: res.price_trends.current.time,
@@ -200,11 +200,11 @@ export default {
       checks: true,
       title: res.title,
       description: res.description,
-      keywords: res.keywords
+      keywords: res.keywords,
     };
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
   data() {
     return {
@@ -227,7 +227,7 @@ export default {
           areamax: "99",
           zhuangxiu: "精装",
           ditie: "地铁沿线",
-          tese: "繁华地段"
+          tese: "繁华地段",
         },
         {
           name: "绿地华家池印",
@@ -241,7 +241,7 @@ export default {
           areamax: "99",
           zhuangxiu: "精装",
           ditie: "地铁沿线",
-          tese: "繁华地段"
+          tese: "繁华地段",
         },
         {
           name: "绿地华家池印",
@@ -255,7 +255,7 @@ export default {
           areamax: "99",
           zhuangxiu: "精装",
           ditie: "地铁沿线",
-          tese: "繁华地段"
+          tese: "繁华地段",
         },
         {
           name: "绿地华家池印",
@@ -269,8 +269,8 @@ export default {
           areamax: "99",
           zhuangxiu: "精装",
           ditie: "地铁沿线",
-          tese: "繁华地段"
-        }
+          tese: "繁华地段",
+        },
       ],
       trend_mounth: "9",
       trend_price: "28907",
@@ -286,11 +286,11 @@ export default {
       yb: "",
       title: "",
       description: "",
-      keywords: ""
+      keywords: "",
     };
   },
   methods: {
-    method1: function() {
+    method1: function () {
       echarts();
     },
     start_data() {
@@ -301,7 +301,7 @@ export default {
         localStorage.setItem("city", 1);
       }
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
       let token = localStorage.getItem("token");
@@ -313,7 +313,7 @@ export default {
         backgroundColor: "#fff",
         tooltip: {
           trigger: "axis",
-          formatter: function(params) {
+          formatter: function (params) {
             // console.log(params);
             return (
               params[0].name +
@@ -322,16 +322,16 @@ export default {
               params[0].data +
               "(万)"
             );
-          }
+          },
         },
         legend: {
-          data: "房价"
+          data: "房价",
         },
         grid: {
           x: "26px",
           y: "10px",
           x2: "18px",
-          y2: "20px"
+          y2: "20px",
         },
         calculable: true,
 
@@ -339,22 +339,22 @@ export default {
           {
             axisLabel: {
               rotate: 40,
-              interval: 0
+              interval: 0,
             },
             axisLine: {
               lineStyle: {
-                color: "#919499"
-              }
+                color: "#919499",
+              },
             },
             boundaryGap: false,
-            data: (function() {
+            data: (function () {
               var list = that.mounth;
               return list;
             })(),
             axisLabel: {
-              rotate: 0
-            }
-          }
+              rotate: 0,
+            },
+          },
         ],
         yAxis: [
           {
@@ -365,17 +365,17 @@ export default {
             splitNumber: 5,
             axisLine: {
               lineStyle: {
-                color: "#919499"
+                color: "#919499",
               },
-              show: false
+              show: false,
             },
             splitLine: {
               shwo: true,
               lineStyle: {
-                type: "dashed"
-              }
-            }
-          }
+                type: "dashed",
+              },
+            },
+          },
         ],
         series: [
           {
@@ -384,19 +384,19 @@ export default {
             symbol: "none",
             smooth: 0.9,
             color: ["#40A2F4"],
-            data: that.price
-          }
-        ]
+            data: that.price,
+          },
+        ],
       };
       // console.log(option.xAxis[0].data);
       chart.setOption(option);
     },
     put(msg) {
       trend_put(msg)
-        .then(resp => {
+        .then((resp) => {
           return resp.code;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -415,19 +415,19 @@ export default {
         page: 3,
         type: 6,
         kid: kid,
-        other: other
+        other: other,
       })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             msg(data)
-              .then(resp => {
+              .then((resp) => {
                 let code = resp.data.code;
                 if (code == 200) {
                   $(".t-b-first").hide();
                   $(".t-b-second").show();
                   var time = 60;
                   var phone = tel.substr(0, 3) + "****" + tel.substr(7, 11);
-                  var fn = function() {
+                  var fn = function () {
                     time--;
                     if (time > 0) {
                       $(".t-b-scode").html("重新发送" + time + "s");
@@ -443,15 +443,15 @@ export default {
                   $("#ytel").html(phone);
                 }
               })
-              .catch(error => {
+              .catch((error) => {
                 console.log(error);
               });
-          }else{
-            $('.l-p').val('')
+          } else {
+            $(".l-p").val("");
             $(".l-p").attr("placeholder", "报名失败");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -459,22 +459,22 @@ export default {
       let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: e, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             that.change = false;
             that.succ = true;
-          }else{
-            $("#ma-ll").val('');
+          } else {
+            $("#ma-ll").val("");
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     goback() {
       this.$router.go(-1);
-    }
+    },
   },
   head() {
     return {
@@ -482,13 +482,13 @@ export default {
       meta: [
         {
           name: "description",
-          content: this.description || "允家新房"
+          content: this.description || "允家新房",
         },
         {
           name: "keywords",
-          content: this.keywords || "允家新房"
-        }
-      ]
+          content: this.keywords || "允家新房",
+        },
+      ],
     };
   },
   mounted() {
@@ -500,29 +500,29 @@ export default {
     if (cityname) {
       this.cityname = cityname;
     }
-    $("#sea").on("click", function() {
+    $("#sea").on("click", function () {
       that.$router.push("/" + that.n + "/search");
       // window.location.href = "/search";
     });
-    $(".city").on("click", function() {
+    $(".city").on("click", function () {
       that.$router.push("/" + that.n + "/address");
       // window.location.href = "/address";
     });
-    $("#w-esc").on("click", function() {
+    $("#w-esc").on("click", function () {
       $(".m-chang").hide();
       that.change = false;
     });
-    $("#btn").on("click", function() {
+    $("#btn").on("click", function () {
       $(".m-chang").show();
       that.change = true;
     });
-    $(".m-chang").on("click", function() {
+    $(".m-chang").on("click", function () {
       $(".m-chang").hide();
       that.change = false;
       that.succ = false;
     });
     // 接口验证码
-    $(".t-b-btn2").on("click", function() {
+    $(".t-b-btn2").on("click", function () {
       let check = that.checks;
       console.log(check);
       if (!check) {
@@ -532,11 +532,7 @@ export default {
         $(".tishi").hide();
       }
 
-      var phone = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .val();
+      var phone = $(this).prev().prev().prev().val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -553,23 +549,19 @@ export default {
       msg.tel = phone;
       that.send(phone);
     });
-    $(".port1").on("click", function() {
-      var ma = $(this)
-        .prev()
-        .val();
+    $(".port1").on("click", function () {
+      var ma = $(this).prev().val();
       if (!ma) {
-        $(this)
-          .prev()
-          .attr("placeholder", "验证码不能为空");
+        $(this).prev().attr("placeholder", "验证码不能为空");
         return;
       }
       that.yan(ma);
     });
-    $("#o_btn").on("click", function() {
+    $("#o_btn").on("click", function () {
       that.succ = false;
       $(".m-chang").hide();
     });
-    $(".o-esc").on("click", function() {
+    $(".o-esc").on("click", function () {
       that.succ = false;
       $(".m-chang").hide();
     });
@@ -588,7 +580,7 @@ export default {
     mounth(val) {
       this.drawline();
     },
-    nowHeight: function() {
+    nowHeight: function () {
       if (this.defaultHeight != this.nowHeight) {
         $(".weiter").css("top", "100px");
         $("#nav-list").css("top", "42%");
@@ -596,8 +588,8 @@ export default {
         $(".weiter").css("top", "220px");
         $("#nav-list").css("top", "21%");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

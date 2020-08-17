@@ -15,40 +15,58 @@
   </div>
 </template>
 <script>
-import { msg, login, ip,trend_put } from "~/api/api";
+import { msg, login, ip, trend_put, help_put } from "~/api/api";
 export default {
   name: "Login",
   data() {
     return {
       ip: "",
-      n:''
+      n: "",
     };
   },
   methods: {
     send(tel) {
-      let ip = this.ip;
+      let ip = ip_arr["ip"];
       let data = { channel: 2, phone: tel, ip: ip };
+      let that = this;
+      this.tel = tel;
+      let city = this.$store.state.city;
+      let kid = sessionStorage.getItem("kid");
+      let other = sessionStorage.getItem("other");
+      help_put({
+        ip: ip,
+        tel: tel,
+        city: city,
+        position: 83,
+        page: 3,
+        type: 6,
+        kid: kid,
+        source:'线上推广2',
+        other: other,
+      }).then((res) => {
+        console.log(res);
+      });
       msg(data)
-        .then(resp => {
+        .then((resp) => {
           let code = resp.data.code;
           if (code == 200) {
-            let c = localStorage.getItem("city");
-            trend_put({
-              ip: ip,
-              tel: tel,
-              city: c,
-              position: 5,
-              page: 3,
-              type: 9
-            })
-              .then(resp => {})
-              .catch(error => {
-                console.log(error);
-              });
+            // let c = localStorage.getItem("city");
+            // trend_put({
+            //   ip: ip,
+            //   tel: tel,
+            //   city: c,
+            //   position: 5,
+            //   page: 3,
+            //   type: 9,
+            // })
+            //   .then((resp) => {})
+            //   .catch((error) => {
+            //     console.log(error);
+            //   });
             var time = 60;
-            localStorage.setItem('phone',tel)
+            localStorage.setItem("phone", tel);
             var phone = tel.substr(0, 3) + "****" + tel.substr(7, 11);
-            var fn = function() {
+            var fn = function () {
               time--;
               if (time > 0) {
                 $("#ma").html("重新发送" + time + "s");
@@ -64,60 +82,64 @@ export default {
             $("#ytel").html(phone);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     sure(data) {
-      data.ip = this.ip;
+      data.ip = ip_arr["ip"];
       data.channel = 2;
-      let that=this;
+
       login(data)
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
+            $cookies.set("token", resp.data.token);
             localStorage.setItem("token", resp.data.token);
             // that.$router.push('/'+that.n)
             // window.location.href = "/"+that.n;
-            this.$router.go(-1)
+            if (sessionStorage.getItem("comment")) {
+              this.$router.push(sessionStorage.getItem("comment"));
+            } else {
+              this.$router.go(-1);
+            }
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     getip() {
-      this.n=this.$route.params.name
+      this.n = this.$route.params.name;
       ip()
-        .then(resp => {
+        .then((resp) => {
           this.ip = resp.data.data[0].origip;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
-    goback(){
-      this.$router.go(-1)
-    }
+    goback() {
+      this.$router.go(-1);
+    },
   },
   head() {
     return {
-      title:  "允家新房-手机快捷登录",
+      title: "允家新房-手机快捷登录",
       meta: [
         {
           name: "description",
-          content:  '允家新房'
+          content: "允家新房",
         },
         {
           name: "keywords",
-          content:  '允家新房'
-        }
-      ]
+          content: "允家新房",
+        },
+      ],
     };
   },
   mounted() {
-    this.getip();
     let that = this;
-    $("#ma").on("click", function() {
+    $("#ma").on("click", function () {
       var phone = $("#tel").val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
@@ -130,7 +152,7 @@ export default {
       }
       that.send(phone);
     });
-    $("#log").on("click", function() {
+    $("#log").on("click", function () {
       var phone = $("#tel").val();
       var ma = $("#code").val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
@@ -146,12 +168,12 @@ export default {
         $("#code").attr("placeholder", "验证码不能为空");
         return;
       }
-      let p=phone.substr(0,3)+'****'+phone.substr(7,11);
-      localStorage.setItem('tel',p);
+      let p = phone.substr(0, 3) + "****" + phone.substr(7, 11);
+      localStorage.setItem("tel", p);
       let data = { phone: phone, code: ma };
       that.sure(data);
     });
-  }
+  },
 };
 </script>
 <style scoped>

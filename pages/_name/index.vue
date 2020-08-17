@@ -21,34 +21,34 @@
         <nav class="m-na">
           <ul>
             <li>
-              <router-link :to="'/'+pinyin+'/search'">
+              <nuxt-link :to="'/'+pinyin+'/search'">
                 <img src="~/assets/new-search.png" alt="楼盘查询" />
                 <p>楼盘查询</p>
-              </router-link>
+              </nuxt-link>
             </li>
             <li>
-              <router-link :to="'/'+pinyin+'/encyclopedia/before/56'">
+              <nuxt-link :to="'/'+pinyin+'/encyclopedia/before/56'">
                 <img src="~/assets/new-wiki.png" alt="买房百科" />
                 <p>买房百科</p>
-              </router-link>
+              </nuxt-link>
             </li>
             <li>
-              <router-link :to="'/'+pinyin+'/realinformations/46'">
+              <nuxt-link :to="'/'+pinyin+'/realinformations/46'">
                 <img src="~/assets/new-zixun.png" alt="房产资讯" />
                 <p>房产资讯</p>
-              </router-link>
+              </nuxt-link>
             </li>
             <li>
-              <router-link :to="'/'+pinyin+'/count'">
+              <nuxt-link :to="'/'+pinyin+'/count'">
                 <img src="~/assets/new-compact.png" alt="房贷计算" />
                 <p>房贷计算</p>
-              </router-link>
+              </nuxt-link>
             </li>
             <li>
-              <router-link :to="'/'+pinyin+'/map'">
+              <nuxt-link :to="'/'+pinyin+'/map'">
                 <img src="~/assets/new-map.png" alt="地图找房" />
                 <p>地图找房</p>
-              </router-link>
+              </nuxt-link>
             </li>
           </ul>
         </nav>
@@ -68,9 +68,9 @@
               </div>
             </div>
           </div>
-          <router-link :to="'/' + pinyin + '/realinformations/46'">
+          <nuxt-link :to="'/' + pinyin + '/realinformations/46'">
             <button id="encyclopedia">更多</button>
-          </router-link>
+          </nuxt-link>
         </div>
       </div>
       <div class="line"></div>
@@ -79,12 +79,12 @@
         <h2>
           房价趋势
           <img class="cur-img" src="~/assets/indexprice.png" alt />
-          <router-link :to="'/' + pinyin + '/trend'">
+          <nuxt-link :to="'/' + pinyin + '/trend'">
             <span id="trend">
               查看详情
               <img src="~/assets/m-go.png" alt />
             </span>
-          </router-link>
+          </nuxt-link>
         </h2>
         <div class="drift-con">
           <div class="drift-list">
@@ -112,50 +112,50 @@
           <div class="swiper-wrapper">
             <div class="swiper-slide">
               <div class="tegood">
-                <router-link :to="'/'+pinyin+'/top/1'">
+                <nuxt-link :to="'/'+pinyin+'/top/1'">
                   <h6>刚需楼盘</h6>
                   <p>您最需要的好楼盘</p>
                   <div class="show-img">
                     <img :src="rigid_demand1" alt />
                     <img :src="rigid_demand2" alt />
                   </div>
-                </router-link>
+                </nuxt-link>
               </div>
             </div>
             <div class="swiper-slide">
               <div class="tegood">
-                <router-link :to="'/'+pinyin+'/top/2'">
+                <nuxt-link :to="'/'+pinyin+'/top/2'">
                   <h6>投资地产</h6>
                   <p>有投资价值的好楼盘</p>
                   <div class="show-img">
                     <img :src="invest1" alt />
                     <img :src="invest2" alt />
                   </div>
-                </router-link>
+                </nuxt-link>
               </div>
             </div>
             <div class="swiper-slide">
               <div class="tegood">
-                <router-link :to="'/'+pinyin+'/top/3'">
+                <nuxt-link :to="'/'+pinyin+'/top/3'">
                   <h6>改善住宅</h6>
                   <p>提高生活品质的好楼盘</p>
                   <div class="show-img">
                     <img :src="improve1" alt />
                     <img :src="improve2" alt />
                   </div>
-                </router-link>
+                </nuxt-link>
               </div>
             </div>
             <div class="swiper-slide">
               <div class="tegood">
-                <router-link :to="'/'+pinyin+'/top/4'">
+                <nuxt-link :to="'/'+pinyin+'/top/4'">
                   <h6>现房地产</h6>
                   <p>即买即住的好楼盘</p>
                   <div class="show-img">
                     <img :src="existing1" alt />
                     <img :src="existing2" alt />
                   </div>
-                </router-link>
+                </nuxt-link>
               </div>
             </div>
           </div>
@@ -174,10 +174,10 @@
             <div class="swiper-box">
               <div class="swiper-wrapper hot-fang">
                 <div class="swiper-slide" v-for="(hot,key) in hots" :key="hot.id">
-                  <router-link :to="'/'+pinyin+'/content/'+hot.id">
+                  <nuxt-link :to="'/'+pinyin+'/content/'+hot.id">
                     <div class="hua">
                       <div class="hf-pic">
-                        <img :src="hot.img" alt />
+                        <img :src="hot.img" :alt="hot.name" :title="hot.name" />
                         <span>TOP{{key+1}}</span>
                         <p>
                           <img src="~/assets/weight.png" alt />
@@ -196,7 +196,7 @@
                         <h6>{{parseInt(hot.single_price)}}元/m²起</h6>
                       </div>
                     </div>
-                  </router-link>
+                  </nuxt-link>
                 </div>
               </div>
             </div>
@@ -205,10 +205,10 @@
             <div class="swiper-box-tui">
               <div class="swiper-wrapper hot-fang">
                 <div class="swiper-slide" v-for="(hot,key) in tuis" :key="hot.id">
-                  <router-link :to="'/'+pinyin+'/content/'+hot.id">
+                  <nuxt-link :to="'/'+pinyin+'/content/'+hot.id">
                     <div class="hua">
                       <div class="hf-pic">
-                        <img :src="hot.img" alt />
+                        <img :src="hot.img" :alt="hot.name" :title="hot.name" />
                         <span>TOP{{key+1}}</span>
                         <p>
                           <img src="~/assets/indexhot.png" alt />
@@ -227,7 +227,7 @@
                         <h6>{{parseInt(hot.single_price)}}元/m²起</h6>
                       </div>
                     </div>
-                  </router-link>
+                  </nuxt-link>
                 </div>
               </div>
             </div>
@@ -236,10 +236,10 @@
             <div class="swiper-box2">
               <div class="swiper-wrapper hot-fang">
                 <div class="swiper-slide" v-for="(hot,key) in nows" :key="hot.id">
-                  <router-link :to="'/'+pinyin+'/content/'+hot.id">
+                  <nuxt-link :to="'/'+pinyin+'/content/'+hot.id">
                     <div class="hua">
                       <div class="hf-pic">
-                        <img :src="hot.img" alt />
+                        <img :src="hot.img" :alt="hot.name" :title="hot.name" />
                         <span>TOP{{key+1}}</span>
                         <p>
                           <img src="~/assets/indexsuc.png" alt />
@@ -258,7 +258,7 @@
                         <h6>{{parseInt(hot.single_price)}}元/m²起</h6>
                       </div>
                     </div>
-                  </router-link>
+                  </nuxt-link>
                 </div>
               </div>
             </div>
@@ -270,13 +270,13 @@
       <div class="m-dong" v-if="dong">
         <h3>
           楼盘动态
-          <router-link :to="'/' + pinyin + '/dynamic'">
+          <nuxt-link :to="'/' + pinyin + '/dynamic'">
             <span class="m-d-more" id="dynamic">
               共
               <i>{{dong.num}}</i>条
               <img src="~/assets/m-go.png" alt />
             </span>
-          </router-link>
+          </nuxt-link>
         </h3>
         <ul class="dong-t">
           <li>
@@ -298,7 +298,7 @@
               :data-t="left_info.position"
               @click.self="ency($event)"
             >
-              <router-link
+              <nuxt-link
                 :to="'/'+pinyin+'/encyclopediaArticle/'+left_info.position+'/'+left_info.id"
               >
                 <h2
@@ -312,7 +312,7 @@
                   :data-t="left_info.position"
                   @click.self="ency($event)"
                 >{{left_info.description}}</p>
-              </router-link>
+              </nuxt-link>
             </div>
             <div class="lou_dong_right">
               <div
@@ -322,7 +322,7 @@
                 :data-t="right_info1.position"
                 @click.self="ency($event)"
               >
-                <router-link
+                <nuxt-link
                   :to="'/'+pinyin+'/encyclopediaArticle/'+right_info1.position+'/'+right_info1.id"
                 >
                   <h2
@@ -336,7 +336,7 @@
                     :data-t="right_info1.position"
                     @click.self="ency($event)"
                   >{{right_info1.description}}</p>
-                </router-link>
+                </nuxt-link>
               </div>
               <div
                 v-if="right_info2"
@@ -345,7 +345,7 @@
                 :data-t="right_info2.position"
                 @click.self="ency($event)"
               >
-                <router-link
+                <nuxt-link
                   :to="'/'+pinyin+'/encyclopediaArticle/'+right_info2.position+'/'+right_info2.id"
                 >
                   <h2
@@ -358,7 +358,7 @@
                     :data-t="right_info2.position"
                     @click.self="ency($event)"
                   >{{right_info2.description}}</p>
-                </router-link>
+                </nuxt-link>
               </div>
             </div>
           </div>
@@ -430,7 +430,7 @@
       <!-- 房产导购 -->
       <ul class="lists s1" v-show="s1">
         <li v-for="s in s1_con" :key="s.id">
-          <router-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
+          <nuxt-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
             <div class="list">
               <div class="left">
                 <h5>{{s.title}}</h5>
@@ -440,13 +440,13 @@
                 <img :src="s.img" alt />
               </div>
             </div>
-          </router-link>
+          </nuxt-link>
         </li>
       </ul>
       <!-- 百科 -->
       <ul class="lists s2" v-show="s2">
         <li v-for="s in s2_con" :key="s.id">
-          <router-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
+          <nuxt-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
             <div class="list">
               <div class="left">
                 <h5>{{s.title}}</h5>
@@ -456,13 +456,13 @@
                 <img :src="s.img" alt />
               </div>
             </div>
-          </router-link>
+          </nuxt-link>
         </li>
       </ul>
       <!-- 本地楼市 -->
       <ul class="lists s3" v-show="s3">
         <li v-for="s in s3_con" :key="s.id">
-          <router-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
+          <nuxt-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
             <div class="list">
               <div class="left">
                 <h5>{{s.title}}</h5>
@@ -472,13 +472,13 @@
                 <img :src="s.img" alt />
               </div>
             </div>
-          </router-link>
+          </nuxt-link>
         </li>
       </ul>
       <!-- 资讯 -->
       <ul class="lists s4" v-show="s4">
         <li v-for="s in s4_con" :key="s.id">
-          <router-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
+          <nuxt-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
             <div class="list">
               <div class="left">
                 <h5>{{s.title}}</h5>
@@ -488,13 +488,13 @@
                 <img :src="s.img" alt />
               </div>
             </div>
-          </router-link>
+          </nuxt-link>
         </li>
       </ul>
       <!-- 热点新闻 -->
       <ul class="lists s5" v-show="s5">
         <li v-for="s in s5_con" :key="s.id">
-          <router-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
+          <nuxt-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
             <div class="list">
               <div class="left">
                 <h5>{{s.title}}</h5>
@@ -504,13 +504,13 @@
                 <img :src="s.img" alt />
               </div>
             </div>
-          </router-link>
+          </nuxt-link>
         </li>
       </ul>
       <!-- 成交报告 -->
       <ul class="lists s6" v-show="s6">
         <li v-for="s in s6_con" :key="s.id">
-          <router-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
+          <nuxt-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
             <div class="list">
               <div class="left">
                 <h5>{{s.title}}</h5>
@@ -520,13 +520,13 @@
                 <img :src="s.img" alt />
               </div>
             </div>
-          </router-link>
+          </nuxt-link>
         </li>
       </ul>
       <!-- 土拍 -->
       <ul class="lists s7" v-show="s7">
         <li v-for="s in s7_con" :key="s.id">
-          <router-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
+          <nuxt-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
             <div class="list">
               <div class="left">
                 <h5>{{s.title}}</h5>
@@ -536,7 +536,7 @@
                 <img :src="s.img" alt />
               </div>
             </div>
-          </router-link>
+          </nuxt-link>
         </li>
       </ul>
     </div>
@@ -545,21 +545,25 @@
     <div class="wen">
       <h4>
         楼盘问答
-        <router-link :to="'/' + pinyin + '/questions'">
+        <nuxt-link :to="'/' + pinyin + '/questions'">
           <span id="question">
             更多问答
             <img src="~/assets/m-go.png" alt />
           </span>
-        </router-link>
+        </nuxt-link>
       </h4>
       <div class="wen-list" v-for="(q,key) in questions" :key="key">
-        <h5>
-          <span>问</span>
-          {{q.question}}
-        </h5>
+        <nuxt-link :to="'/'+pinyin+'/questions/'+q.id">
+          <h5>
+            <span>问</span>
+            {{q.question}}
+          </h5>
+        </nuxt-link>
         <span class="answer">答</span>
-        <p class="wen-con">{{q.answer}}</p>
-        <i class="wen-list-more" @click="getwens($event)">展开</i>
+        <p class="wen-con">
+          <span>{{q.answer}}</span>
+          <i class="wen-list-more" @click="getwens(q.id)" v-if="q.answer.length>50">[全文]</i>
+        </p>
         <p>
           <span class="wen-time">{{q.time}}</span>
           <span class="Fabulous">
@@ -586,9 +590,9 @@
     <div class="line"></div>
     <!-- 帮我找房 -->
     <div class="help">
-      <router-link :to="'/'+pinyin+'/help'">
+      <nuxt-link :to="'/'+pinyin+'/help'">
         <img src="~/assets/m-help.jpg" alt />
-      </router-link>
+      </nuxt-link>
     </div>
     <div class="line"></div>
     <!-- 推荐楼盘 -->
@@ -602,9 +606,9 @@
       </h4>
       <div class="re-con">
         <div class="re-list" v-for="b in buildings" :key="b.id">
-          <router-link :to="'/'+pinyin+'/content/'+b.id">
+          <nuxt-link :to="'/'+pinyin+'/content/'+b.id">
             <div class="re-con-left">
-              <img :src="b.img" alt />
+              <img :src="b.img" :alt="b.name" :title="b.name" />
               <span>
                 <i class="iconfont iconyanjing"></i>
                 {{b.num}}
@@ -633,7 +637,7 @@
                 <span>{{b.type}}</span>
               </p>
             </div>
-          </router-link>
+          </nuxt-link>
         </div>
       </div>
       <button class="more-res">查看更多房源</button>
@@ -655,9 +659,8 @@ export default {
   name: "Index",
   components: {
     load: Loadings,
-    "foot-view": footView
+    "foot-view": footView,
   },
-
   async asyncData(context) {
     let name = context.params.name;
     let ip = context.store.state.cookie.ip;
@@ -674,14 +677,13 @@ export default {
           city: city,
           platform: 2,
           token: token,
-          ip: ip
+          ip: ip,
         })
-        .then(resp => {
+        .then((resp) => {
           let data = resp.data.data;
           let back = resp.data;
           let tel = data.phone;
           context.store.commit("setcall", { call: tel });
-
           if (Number(data.price_trend.rate) > 0) {
             data.price_trend.rate = "下跌" + data.price_trend.rate;
           } else {
@@ -698,15 +700,21 @@ export default {
 
           if (data.features.existing.length != 0) {
             data.existing1 = data.features.existing[0].img;
-            data.existing2 = data.features.existing[1].img;
+            if (data.features.existing[1]) {
+              data.existing2 = data.features.existing[1].img;
+            }
           }
           if (data.features.invest.length != 0) {
             data.invest1 = data.features.invest[0].img;
-            data.invest2 = data.features.invest[1].img;
+            if (data.features.invest[1]) {
+              data.invest2 = data.features.invest[1].img;
+            }
           }
           if (data.features.rigid_demand.length != 0) {
             data.rigid_demand1 = data.features.rigid_demand[0].img;
-            data.rigid_demand2 = data.features.rigid_demand[1].img;
+            if (data.features.rigid_demand[1]) {
+              data.rigid_demand2 = data.features.rigid_demand[1].img;
+            }
           }
           if (data.features.improve.length != 0) {
             data.improve1 = data.features.improve[0].img;
@@ -723,11 +731,11 @@ export default {
             data.dong.num = data.dynaminc.dynamic_list_count;
           }
           data.left_info =
-            data.article.focus_1.length > 0 ? data.article.focus_1[0] : '';
+            data.article.focus_1.length > 0 ? data.article.focus_1[0] : "";
           data.right_info1 =
-            data.article.focus_2.length > 0 ? data.article.focus_2[0] : '';
+            data.article.focus_2.length > 0 ? data.article.focus_2[0] : "";
           data.right_info2 =
-            data.article.focus_3.length > 0 ? data.article.focus_3[0] : '';
+            data.article.focus_3.length > 0 ? data.article.focus_3[0] : "";
 
           for (let item of data.recommand.data) {
             if (item.railway) {
@@ -736,7 +744,7 @@ export default {
           }
           back.data = data;
           return back;
-        })
+        }),
     ]);
     return {
       trend_price: res.data.price_trend.price,
@@ -775,7 +783,7 @@ export default {
       pinyin: res.city.pinyin,
       tel: res.data.phone,
       cityname: res.city.name,
-      city: res.city.id
+      city: res.city.id,
     };
   },
   data() {
@@ -784,190 +792,33 @@ export default {
       lll: false,
       isload: true,
       pinyin: "",
-      trends: [
-        "That open was light. After also shall first rule third every place spirit light. Beginning together their hath, winged firmament.",
-        "That creature his bring waters female morning place Give bearing in isnt from. Without his fowl void bearing. Blessed give.",
-        "And also. Firmament and Give. Sea replenish gathered give in for whose tree their a said multiply abundantly give years."
-      ],
+      trends: [],
       trend_price: "28907",
       trend_mounth: "9",
       trend_down: "1.04",
       trend_up: "2.07",
-      hots: [
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        }
-      ],
-      tuis: [
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        }
-      ],
-      nows: [
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州",
-          area_min: "62",
-          areamax: "99"
-        }
-      ],
+      hots: [],
+      tuis: [],
+      nows: [],
       dong: {
         num: "2036",
         tit: "德信杭州之翼",
         msg:
           "中交财富中心7.20已盛大加推3号楼，现推出特价商铺6套，双地铁口，准现铺，面积81-191平~.",
-        time: "2019-04-08"
+        time: "2019-04-08",
       },
       left_info: {
         title: "中交财富中心7.20已",
         description: "最新土拍成交资讯，地块成交情况~.",
-        id: "32"
+        id: "32",
       },
       right_info1: {
         title: "中国房地产行业集中",
-        description: "超高层地标建筑于上海浦东崛起~."
+        description: "超高层地标建筑于上海浦东崛起~.",
       },
       right_info2: {
         title: "杭州浙港国际中心周",
-        description: "超高层地标建筑于上海浦东崛起~."
+        description: "超高层地标建筑于上海浦东崛起~.",
       },
       s1: true,
       s2: false,
@@ -976,199 +827,15 @@ export default {
       s5: false,
       s6: false,
       s7: false,
-      s1_con: [
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        }
-      ],
-      s2_con: [
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        }
-      ],
-      s3_con: [
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        }
-      ],
-      s4_con: [
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        }
-      ],
-      s5_con: [
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        }
-      ],
-      s6_con: [
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        }
-      ],
-      s7_con: [
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          img: require("~/assets/lou1.png"),
-          time: "2020-01-06"
-        }
-      ],
-      questions: [
-        {
-          tit: "现在外地人在杭州买房需要什么条件",
-          msg: "纳税或社保连年，需要连续足额缴存24个月~.",
-          time: "2020-01-08",
-          num: 12,
-          id: 30
-        },
-        {
-          tit: "现在外地人在杭州买房需要什么条件",
-          msg: "纳税或社保连年，需要连续足额缴存24个月~.",
-          time: "2020-01-08",
-          num: 12,
-          id: 30
-        }
-      ],
-      buildings: [
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          areamax: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          areamax: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          areamax: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        },
-        {
-          name: "绿地华家池印",
-          img: require("~/assets/lou1.png"),
-          num: "32323",
-          isshou: "在售",
-          price: "32000",
-          city: "杭州市",
-          area: "萧山区",
-          area_min: "62",
-          areamax: "99",
-          zhuangxiu: "精装",
-          ditie: "地铁沿线",
-          tese: "繁华地段"
-        }
-      ],
+      s1_con: [],
+      s2_con: [],
+      s3_con: [],
+      s4_con: [],
+      s5_con: [],
+      s6_con: [],
+      s7_con: [],
+      questions: [],
+      buildings: [],
       invest1: "",
       invest2: "",
       rigid_demand1: "",
@@ -1182,7 +849,7 @@ export default {
       ip: "",
       count: 123,
       tel: "",
-      city: 0
+      city: 0,
     };
   },
   head() {
@@ -1191,20 +858,20 @@ export default {
       meta: [
         {
           name: "description",
-          content: this.description
+          content: this.description,
         },
         {
           name: "keywords",
-          content: this.keywords
-        }
-      ]
+          content: this.keywords,
+        },
+      ],
     };
   },
   methods: {
-    method1: function() {
+    method1: function () {
       newsticker();
     },
-    s1s: function() {
+    s1s: function () {
       this.s1 = true;
       this.s2 = false;
       this.s3 = false;
@@ -1213,7 +880,7 @@ export default {
       this.s6 = false;
       this.s7 = false;
     },
-    s2s: function() {
+    s2s: function () {
       this.s1 = false;
       this.s2 = true;
       this.s3 = false;
@@ -1222,7 +889,7 @@ export default {
       this.s6 = false;
       this.s7 = false;
     },
-    s3s: function() {
+    s3s: function () {
       this.s1 = false;
       this.s2 = false;
       this.s3 = true;
@@ -1231,7 +898,7 @@ export default {
       this.s6 = false;
       this.s7 = false;
     },
-    s4s: function() {
+    s4s: function () {
       this.s1 = false;
       this.s2 = false;
       this.s3 = false;
@@ -1240,7 +907,7 @@ export default {
       this.s6 = false;
       this.s7 = false;
     },
-    s5s: function() {
+    s5s: function () {
       this.s1 = false;
       this.s2 = false;
       this.s3 = false;
@@ -1249,7 +916,7 @@ export default {
       this.s6 = false;
       this.s7 = false;
     },
-    s6s: function() {
+    s6s: function () {
       this.s1 = false;
       this.s2 = false;
       this.s3 = false;
@@ -1258,7 +925,7 @@ export default {
       this.s6 = true;
       this.s7 = false;
     },
-    s7s: function() {
+    s7s: function () {
       this.s1 = false;
       this.s2 = false;
       this.s3 = false;
@@ -1272,7 +939,7 @@ export default {
       let token = localStorage.getItem("token");
       $cookies.set("token", token);
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       // let ip = returnCitySN["cip"];
       this.ip = ip;
       $cookies.set("ip", ip);
@@ -1306,9 +973,9 @@ export default {
         id: id,
         platform: 2,
         token: token,
-        type: 1
+        type: 1,
       })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 500) {
             that.$router.push("/" + that.pinyin + "/login");
             // window.location.href = "/login";
@@ -1330,7 +997,7 @@ export default {
             }
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -1347,9 +1014,9 @@ export default {
         id: id,
         platform: 2,
         token: token,
-        type: 1
+        type: 1,
       })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 500) {
             that.$router.push("/" + that.pinyin + "/login");
             // window.location.href = "/login";
@@ -1371,7 +1038,7 @@ export default {
             }
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -1383,19 +1050,19 @@ export default {
       );
     },
     gosearch() {
-      this.$router.push("/" + pinyin + "/search");
+      this.$router.push("/" + this.pinyin + "/search");
     },
     gobaike() {
-      this.$router.push("/" + pinyin + "/encyclopedia");
+      this.$router.push("/" + this.pinyin + "/encyclopedia");
     },
     gozixun() {
-      this.$router.push("/" + pinyin + "/realinformations");
+      this.$router.push("/" + this.pinyin + "/realinformations");
     },
     gojisuan() {
-      this.$router.push("/" + pinyin + "/count");
+      this.$router.push("/" + this.pinyin + "/count");
     },
     gotop() {
-      this.$router.push("/" + pinyin + "/top");
+      this.$router.push("/" + this.pinyin + "/top");
     },
     scroll() {
       let Y = window.scrollY;
@@ -1405,11 +1072,9 @@ export default {
         this.lll = true;
       }
     },
-    getwens(e) {
-      let n = e.target;
-      n.style.display = "none";
-      n.previousElementSibling.style.whiteSpace = "inherit";
-    }
+    getwens(id) {
+      this.$router.push(`/${this.pinyin}/questions/${id}`);
+    },
   },
   mounted() {
     let h = $(".Index").height();
@@ -1436,59 +1101,53 @@ export default {
       direction: "vertical", // 垂直切换选项
       autoplay: true,
       observer: true, //修改swiper自己或子元素时，自动初始化swiper
-      observeParents: true //修改swiper的父元素时，自动初始化swiper
+      observeParents: true, //修改swiper的父元素时，自动初始化swiper
     });
     var swiper05 = new Swiper(".swiper-container", {
       slidesPerView: 2.5,
       spaceBetween: 10,
       observer: true,
-      slidesOffsetAfter: 12
+      slidesOffsetAfter: 12,
     });
     var swiper01 = new Swiper(".swiper-box", {
       slidesPerView: 2.5,
       spaceBetween: 12,
       observer: true,
-      slidesOffsetAfter: 15
+      slidesOffsetAfter: 15,
     });
     var swiper02 = new Swiper(".swiper-box-tui", {
       slidesPerView: 2.5,
       spaceBetween: 12,
       observer: true,
       observeParents: true,
-      slidesOffsetAfter: 15
+      slidesOffsetAfter: 15,
     });
     var swiper03 = new Swiper(".swiper-box2", {
       slidesPerView: 2.5,
       spaceBetween: 12,
       observer: true,
       observeParents: true,
-      slidesOffsetAfter: 15
+      slidesOffsetAfter: 15,
     });
 
     //选项卡
-    $("#menu li").click(function() {
+    $("#menu li").click(function () {
       $(this).addClass("active");
-      $(this)
-        .siblings()
-        .removeClass("active");
-      $(".panel")
-        .siblings()
-        .removeClass("active");
-      $(".panel")
-        .eq($(this).index())
-        .addClass("active");
+      $(this).siblings().removeClass("active");
+      $(".panel").siblings().removeClass("active");
+      $(".panel").eq($(this).index()).addClass("active");
     });
 
     // 路由
-    $(".mine").on("click", function() {
+    $(".mine").on("click", function () {
       that.$router.push("/" + that.pinyin + "/myhome");
       // window.location.href = '/'+that.pinyin+"/myhome";
     });
-    $("#sea").on("click", function() {
+    $("#sea").on("click", function () {
       that.$router.push("/" + that.pinyin + "/sou");
       // window.location.href = '/'+that.pinyin+"/sou";
     });
-    $(".city").on("click", function() {
+    $(".city").on("click", function () {
       that.$router.push("/" + that.pinyin + "/address");
       // window.location.href = '/'+that.pinyin+"/address";
     });
@@ -1498,12 +1157,12 @@ export default {
       slidesPerView: 4.5,
       spaceBetween: 1,
       pagination: {
-        clickable: true
+        clickable: true,
       },
       observer: true,
-      observeParents: true
+      observeParents: true,
     });
-    $(".tegood p").on("click", function() {
+    $(".tegood p").on("click", function () {
       $(this)
         .addClass("active")
         .parent()
@@ -1513,14 +1172,14 @@ export default {
         .find("p")
         .removeClass("active");
     });
-    $(".more-res").on("click", function() {
+    $(".more-res").on("click", function () {
       that.$router.push("/" + that.pinyin + "/search");
       // window.location.href = '/'+that.pinyin+"/search";
     });
 
     window.addEventListener("scroll", this.scroll);
   },
-  watch: {}
+  watch: {},
 };
 </script>
 
@@ -2277,6 +1936,7 @@ li {
 }
 .wen .wen-list:nth-of-type(2) {
   border: 0;
+  margin-bottom: 0;
 }
 .wen .wen-list h5 {
   color: #2e3033;
@@ -2303,19 +1963,32 @@ li {
 .wen .wen-list .wen-con {
   color: #919499;
   font-size: 15px;
-  width: 86.95%;
+  width: 97%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   margin-bottom: 16px;
   position: relative;
+  background-color: #f7f7f7;
+  padding: 0.9375rem;
+}
+.wen .wen-list .wen-con span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 .wen .wen-list .wen-list-more {
   position: absolute;
   right: 4%;
   font-style: normal;
-  color: #919499;
-  top: 40px;
+  color: #628bb9;
+  bottom: 0.9375rem;
+  font-size: 0.625rem;
 }
 .wen .wen-list span.answer {
   width: 17px;

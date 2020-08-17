@@ -210,9 +210,6 @@
       
     </div>
     <foot-view :pinyin="jkl"></foot-view>
-    <transition name="fade">
-      <load-view v-if="load"></load-view>
-    </transition>
   </div>
 </template>
 <script>

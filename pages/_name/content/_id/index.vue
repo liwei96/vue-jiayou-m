@@ -1,5 +1,5 @@
 <template>
-  <div class="Content">
+  <div class="Content" id="conll">
     <no-ssr>
       <remote-js src="https://webapi.amap.com/maps?v=1.4.14&key=729ac4d779c7e625bc11bd5ba3ff3112"></remote-js>
     </no-ssr>
@@ -17,7 +17,7 @@
         <div class="zao"></div>
 
         <div class="m-luns">
-          <img :src="topimg" alt />
+          <img :src="topimg?topimg:defaultimg" :alt="building.name" :title="building.name" />
           <!-- <div class="swiper-top">
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="(img,key) in topimgs" :key="key">
@@ -97,7 +97,7 @@
               收藏
             </div>
           </div>
-          <div class="wxshare" v-show="iswx">
+          <div class="wxshare" v-show="iswx" @click="goshare">
             <img src="~/assets/wxshare.png" alt />
             分享
           </div>
@@ -147,12 +147,12 @@
               <span>{{building.timeline.first_open_time}}</span>
             </li>
           </ul>
-          <router-link :to="'/' + jkl + '/detail/' + id">
+          <nuxt-link :to="'/' + jkl + '/detail/' + id">
             <p id="moreinfro">
               详情
               <img src="~/assets/m-go.png" alt />
             </p>
-          </router-link>
+          </nuxt-link>
         </div>
         <div class="go-map">
           <!-- <img class="map-address" src="~/assets/blackaddress.png" alt /> -->
@@ -171,9 +171,15 @@
       </div>
 
       <div class="m-image visible-xs-block .visible-sm-block">
-        <a data-agl-cvt="2" :href="'tel:'+call">
+        <a data-agl-cvt="2" :href="'tel:'+call" v-show="!iswxsid">
           <img src="~/assets/mj-tell.png" alt />
         </a>
+        <div class="wxtel" v-show="iswxsid">
+          <a :href="share.staff?'tel:'+share.staff.tel:''">
+            <p>{{share.staff?share.staff.tel:''}}</p>
+            <img src="~/assets/wxtel.jpg" alt />
+          </a>
+        </div>
       </div>
       <div class="pin">
         <nav>
@@ -209,7 +215,7 @@
         <div class="bomm">
           <div class="pin-bao y1" v-show="!newimg" @click="xiang(28)">抢优惠券</div>
           <p class="pin-msg ym">{{sign.num}}人已抢到</p>
-          <p class="pin-time">有效期：2020.06.15-2020.06.21</p>
+          <p class="pin-time">有效期：{{starttime}}-{{endtime}}</p>
           <img src="~/assets/youhui.jpg" alt />
           <div class="bom">
             <div class="trend-con1">
@@ -257,12 +263,12 @@
       <div class="m-dong visible-xs-block .visible-sm-block">
         <h3 id="m_dong">
           楼盘动态
-          <router-link :to="'/' + jkl + '/contentdynamic/' + id">
+          <nuxt-link :to="'/' + jkl + '/contentdynamic/' + id">
             <span>
               共{{ds}}条
               <img src="~/assets/m-go.png" alt />
             </span>
-          </router-link>
+          </nuxt-link>
         </h3>
 
         <div class="m-tai m-d">
@@ -329,20 +335,20 @@
       <div class="m-hu visible-xs-block .visible-sm-block" v-show="hu">
         <h3>
           主力户型
-          <router-link :to="'/' + jkl + '/morehus/' + id">
+          <nuxt-link :to="'/' + jkl + '/morehus/' + id">
             <span class="m-h-more">
               更多户型
               <img src="~/assets/m-go.png" alt />
             </span>
-          </router-link>
+          </nuxt-link>
         </h3>
         <div class="swiper-house">
           <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="(h,key) in hu" :key="key">
               <div class="tegood">
-                <router-link :to="'/'+jkl+'/HuAnalysis/'+h.id+'/'+building.id">
+                <nuxt-link :to="'/'+jkl+'/HuAnalysis/'+h.id+'/'+building.id">
                   <div class="top">
-                    <img :src="h.small" alt />
+                    <img :src="h.small?h.small:defaultimg" :alt="building.name+'户型图'" :title="building.name+'户型图'" />
                   </div>
                   <h5>
                     {{h.title}}
@@ -353,7 +359,7 @@
                     约
                     <span>{{h.price}}</span>万起
                   </p>
-                </router-link>
+                </nuxt-link>
                 <button class="p1" data-v="咨询详细户型">咨询详细户型</button>
               </div>
             </div>
@@ -374,19 +380,19 @@
       <div class="m-fen visible-xs-block .visible-sm-block">
         <h3>
           项目分析资料
-          <router-link :to="'/' + jkl + '/analysis/' + id">
+          <nuxt-link :to="'/' + jkl + '/analysis/' + id">
             <span class="m-more-fen">
               详细分析
               <img class="xiang-img" src="~/assets/m-go.png" alt />
             </span>
-          </router-link>
+          </nuxt-link>
         </h3>
 
         <!--对比分析资料 -->
         <div class="dui-zi">
           <div class="swiper-wrapper">
             <div class="swiper-slide dui-box">
-              <router-link :to="'/'+jkl+'/analysis/'+id">
+              <nuxt-link :to="'/'+jkl+'/analysis/'+id">
                 <div class="tou-con">
                   <h4>投资分析</h4>
                   <p v-for="(v,key) in invest" :key="key">{{key+1}}、{{v}}</p>
@@ -394,10 +400,10 @@
                 <div class="tou-img">
                   <img src="~/assets/pc-db.png" alt />
                 </div>
-              </router-link>
+              </nuxt-link>
             </div>
             <div class="swiper-slide dui-box">
-              <router-link :to="'/'+jkl+'/analysis/'+id">
+              <nuxt-link :to="'/'+jkl+'/analysis/'+id">
                 <div class="tou-con">
                   <h4>宜居分析</h4>
                   <p v-for="(v,key) in live" :key="key">{{key+1}}、{{v}}</p>
@@ -405,7 +411,7 @@
                 <div class="tou-img">
                   <img src="~/assets/yiju.png" alt />
                 </div>
-              </router-link>
+              </nuxt-link>
             </div>
           </div>
           <!-- Add Pagination -->
@@ -414,7 +420,7 @@
         <button class="p1" data-v="获取楼盘分析资料">获取楼盘分析资料</button>
       </div>
       <div class="m-line visible-xs-block .visible-sm-block" v-show="tuan==1"></div>
-      <div class="tuan-qiang" v-show="tuan==1">
+      <!-- <div class="tuan-qiang" v-show="tuan==1">
         <img src="~/assets/tuan-qiang.png" alt />
         <div class="q-con">
           <h6>省钱买好房拼团享优惠</h6>
@@ -425,7 +431,7 @@
           <p>{{group_buy.snatched_num}}已抢</p>
         </div>
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block"></div>
+      <div class="m-line visible-xs-block .visible-sm-block"></div>-->
       <div class="m-ling visible-xs-block .visible-sm-block">
         <h3>
           领取免费地图
@@ -487,21 +493,23 @@
       <div class="m-dai visible-xs-block .visible-sm-block">
         <h3>
           楼盘问答
-          <router-link :to="'/' + jkl + '/question/' + id">
+          <nuxt-link :to="'/' + jkl + '/question/' + id">
             <span>
               更多问答
               <img src="~/assets/m-go.png" alt />
             </span>
-          </router-link>
+          </nuxt-link>
         </h3>
         <p id="tishi" v-show="questions.length==0?true:false">暂无问答，快来提问吧</p>
         <div class="m-d-content">
           <template v-show="questions.length==0?false:true">
             <div class="m-w-content" v-for="(q,key) in questions" :key="key">
-              <h4>
-                <span>问</span>
-                <u>{{q.question}}</u>
-              </h4>
+              <nuxt-link :to="'/'+jkl+'/questions/'+q.id">
+                <h4>
+                  <span>问</span>
+                  <u>{{q.question}}</u>
+                </h4>
+              </nuxt-link>
               <p>
                 <span>答</span>
                 <img src="~/assets/people.png" alt />
@@ -513,7 +521,7 @@
                   {{q.answer.substr(0,19)}}{{q.answer.length>20?'...':''}}
                   <u
                     v-show="q.answer.length>19"
-                    @click="chan($event)"
+                    @click="chan(q.id)"
                   >展开</u>
                 </i>
                 <i class="sl">{{q.answer}}</i>
@@ -522,20 +530,20 @@
               <span class="giveup">
                 <img
                   id="answer"
-                  src="~/assets/giveup.png"
+                  :src="q.my_like == 0 ? beforeck : cked"
                   :type="q.my_like"
                   :data-v="q.id"
-                  :data-n="q.num"
+                  :data-n="q.like_num"
                   data-y="1"
                   @click="agree($event)"
                 />
                 <span
                   :type="q.my_like"
                   :data-v="q.id"
-                  :data-n="q.num"
+                  :data-n="q.like_num"
                   data-y="1"
                   @click="agrees($event)"
-                >有用({{q.num ? q.num : 0}})</span>
+                >有用({{q.like_num ? q.like_num : 0}})</span>
               </span>
             </div>
           </template>
@@ -552,9 +560,9 @@
             <img src="~/assets/m-go.png" alt />
           </span>
         </h3>
-        <router-link :to="'/' + jkl + '/Periphery/' + id + '/1'">
+        <nuxt-link :to="'/' + jkl + '/Periphery/' + id + '/1'">
           <div class="m-continer" id="m-container"></div>
-        </router-link>
+        </nuxt-link>
         <div class="m-z-icons">
           <div class="swiper-map">
             <div class="swiper-wrapper">
@@ -638,7 +646,7 @@
             <div class="swiper-slide" v-for="(c,key) in compares" :key="key">
               <div class="tegood">
                 <div class="img">
-                  <img :src="c.img" alt />
+                  <img v-lazy="c.img?c.img:defaultimg" :alt="c.name" :title="c.name" />
                   <p>相似楼盘</p>
                 </div>
                 <h5>{{c.name}}</h5>
@@ -655,15 +663,15 @@
       </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
       <!-- 楼盘点评 -->
-      <div class="m-dian visible-xs-block .visible-sm-block">
+      <div class="m-dian visible-xs-block .visible-sm-block" id="dianping">
         <h4>
           楼盘点评
-          <router-link :to="'/' + jkl + '/morecomments/' + id">
+          <nuxt-link :to="'/' + jkl + '/morecomments/' + id">
             <span id="m_d_more">
               更多评论
               <img src="~/assets/m-go.png" alt />
             </span>
-          </router-link>
+          </nuxt-link>
         </h4>
         <p id="tishi" v-show="comments.length==0?true:false">暂无点评，快来点评吧</p>
         <ul>
@@ -683,7 +691,7 @@
                     :data-n="v.like_num"
                     @click="agree($event)"
                     data-y="2"
-                    src="~/assets/click.png"
+                    :src="v.my_like == 0 ? beforeck : cked"
                   />
                   <span
                     :data-v="v.id"
@@ -691,7 +699,7 @@
                     :data-n="v.like_num"
                     data-y="2"
                     @click="agrees($event)"
-                  >{{v.like_num}}</span>
+                  >有用({{v.like_num}})</span>
                 </p>
               </h6>
               <div class="btn">
@@ -710,9 +718,9 @@
             </div>
           </li>
         </ul>
-        <!-- <router-link :to="'/'+jkl+'/comment/'+id"> -->
+        <!-- <nuxt-link :to="'/'+jkl+'/comment/'+id"> -->
         <button class="m-d-x" @click="gocomment">我要点评</button>
-        <!-- </router-link> -->
+        <!-- </nuxt-link> -->
       </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
       <!-- 同价位、区位 -->
@@ -729,9 +737,9 @@
         </div>
         <div class="re-con r1" v-show="n1">
           <div class="re-list" v-for="(list,key) in same_price" :key="key">
-            <router-link :to="'/'+jkl+'/content/'+list.id">
+            <nuxt-link :to="'/'+jkl+'/content/'+list.id">
               <div class="re-con-left">
-                <img :src="list.img" alt />
+                <img v-lazy="list.img?list.img:defaultimg" :alt="list.name" :title="list.name" />
                 <!-- <span>
                   <i class="iconfont iconyanjing"></i>
                   {{list.num}}
@@ -758,14 +766,14 @@
                   <span>{{list.features[0]}}</span>
                 </p>
               </div>
-            </router-link>
+            </nuxt-link>
           </div>
         </div>
         <div class="re-con r2" v-show="n2">
           <div class="re-list" v-for="(list,key) in same_area" :key="key">
-            <router-link :to="'/'+jkl+'/content/'+list.id">
+            <nuxt-link :to="'/'+jkl+'/content/'+list.id">
               <div class="re-con-left">
-                <img :src="list.img" alt />
+                <img v-lazy="list.img?list.img:defaultimg" :alt="list.name" :title="list.name" />
                 <!-- <span>
                   <i class="iconfont iconyanjing"></i>
                   {{list.num}}
@@ -792,27 +800,27 @@
                   <span>{{list.features[0]}}</span>
                 </p>
               </div>
-            </router-link>
+            </nuxt-link>
           </div>
         </div>
       </div>
       <div class="visible-xs-block .visible-sm-block m-ll"></div>
       <!-- 微信环境的浏览记录 -->
-      <div class="wxlu" v-if="iswxsid">
+      <div class="wxlu" v-show="iswxsid">
         <div class="swiper-wrapper">
           <div class="swiper-slide" v-for="(item,key) in share.visitors" :key="key">
             <div class="wxlu-con">
-              <img :src="item.head_img?item.head_img:'~/assets/head_icon.png.png'" alt />
+              <img :src="item.head_img?item.head_img:wximage" alt />
               <div class="wxlumsg">
                 <h5>{{item.nickname?item.nickname:'匿名'}}</h5>
-                <p>{{item.min}}分钟前浏览</p>
+                <p>{{item.min?item.min:5}}分钟前浏览</p>
               </div>
             </div>
           </div>
         </div>
       </div>
       <!-- 底部悬浮 -->
-      <div class="m-botnav visible-xs-block .visible-sm-block" v-if="!iswxsid">
+      <div class="m-botnav visible-xs-block .visible-sm-block" v-show="!iswxsid">
         <p id="m_shou" @click="gotalk">
           <!-- <img
             id="fork"
@@ -846,21 +854,21 @@
           </p>
         </button>
       </div>
-      <div class="wxwork" v-if="iswxsid">
+      <div class="wxwork" v-show="iswxsid">
         <div class="wximg" @click="gotalk">
-          <img :src="share.staff.head_img" alt />
+          <img :src="share.staff?share.staff.head_img:nolmalimg" alt />
           <p>咨询</p>
           <span v-show="wsshow">{{wsnum}}</span>
         </div>
         <div class="wxmsg">
-          <h5>{{share.staff.name}}</h5>
+          <h5>{{share.staff?share.staff.name:''}}</h5>
           <p>咨询分析师</p>
         </div>
         <button class="wxyue p1" data-v="预约看房">
           <img src="~/assets/wxtime.png" alt />
           预约看房
         </button>
-        <a :href="'tel:'+share.staff.tel">
+        <a :href="share.staff?'tel:'+share.staff.tel:''">
           <button class="wxtel">
             <img src="~/assets/wxtel.png" alt />
             电话咨询
@@ -900,9 +908,9 @@
                 />
                 <p class="w-mg">
                   <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
-                  <router-link :to="'/'+jkl+'/server'">
+                  <nuxt-link :to="'/'+jkl+'/server'">
                     <a href="javasript:;">《允家新房用户协议》</a>
-                  </router-link>
+                  </nuxt-link>
                 </p>
 
                 <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="dingyue">立即订阅</button>
@@ -963,7 +971,7 @@
     <transition name="change">
       <div class="shouping" v-show="shouping">
         <img class="esc" @click="shouping = false" src="~/assets/pingesc.png" alt />
-        <img class="img" src="~/assets/shouping.png" alt />
+        <img class="img" v-lazy="shoupingimg" alt />
         <input type="text" placeholder="请输入您手机号" v-model="baoming" />
         <button @click="shou">领取优惠</button>
         <p class="peonum">187人已领取</p>
@@ -981,8 +989,6 @@
 // import talk from '@/components/talk.vue'
 import footView from "@/components/Foot.vue";
 import Swiper from "swiper";
-import img1 from "~/assets/lou1.png";
-import img2 from "~/assets/lou2.png";
 import "swiper/css/swiper.min.css";
 // import { echarts } from "./static/js/echarts.min.js";
 import axios from "axios";
@@ -1000,7 +1006,7 @@ import {
   comment_del,
   getsdk,
   getsid,
-  putmap
+  putmap,
 } from "~/api/api";
 export default {
   name: "Content",
@@ -1011,37 +1017,47 @@ export default {
     "remote-js": {
       render(createElement) {
         return createElement("script", {
-          attrs: { type: "text/javascript", src: this.src }
+          attrs: { type: "text/javascript", src: this.src },
         });
       },
       props: {
-        src: { type: String, required: true }
-      }
-    }
+        src: { type: String, required: true },
+      },
+    },
   },
   async asyncData(context) {
     let id = context.params.id;
     let token = context.store.state.cookie.token;
+    if (!token) {
+      token = null;
+    }
     let ip = context.store.state.cookie.ip;
+    if (!ip) {
+      ip = null;
+    }
     let data = {
       platform: 2,
       id: id,
       ip: ip,
-      token: token
+      token: token,
     };
-    // let url = context.route.fullPath;
-    // url = url.split("?")[1];
-    // if (url && url.indexOf("scid") !== -1) {
-    //   let sid = url.split("=")[1];
-    //   data.scid = sid;
-    // }else if(context.store.state.cookie.scid){
-    //   data.scid = context.store.state.cookie.scid
-    // }
-    // console.log(data)
+    let url = context.route.fullPath;
+    if (url) {
+      url = url.split("?")[1];
+      if (url && url.indexOf("scid") !== -1) {
+        let sid = url.split("=")[1];
+        data.scid = sid;
+      } else if (
+        context.store.state.cookie &&
+        context.store.state.cookie.scid
+      ) {
+        data.scid = context.store.state.cookie.scid;
+      }
+    }
+
     let jkl = context.params.name;
     let [res1] = await Promise.all([
-      context.$axios.post("/api/detail/mobile", data).then(res => {
-        // console.log(res)
+      context.$axios.post("/api/detail/mobile", data).then((res) => {
         if (res) {
           if (res.data.code === 200) {
             let data = res.data;
@@ -1131,6 +1147,7 @@ export default {
             }
             let p = parseInt(data.info.constant.single_price / 10000);
             data.max = p + 3;
+            
             if (!data.hasOwnProperty("head")) {
               data.head.phone = "400-966-9995";
               data.head.title = "允家新房";
@@ -1138,11 +1155,21 @@ export default {
               data.head.keywords = "允家新房";
               data.head.open = 0;
             }
-
+            if (Object.keys(data.share_info).length == 0) {
+              data.share_info = {
+                staff: {
+                  tel: 123,
+                  name: "456",
+                  head_img: require("~/assets/jiapeo.png"),
+                },
+                visitors: [],
+              };
+            }
+            
             return data;
-          } 
+          }
         }
-      })
+      }),
     ]);
     return {
       jkl: jkl,
@@ -1194,19 +1221,20 @@ export default {
       topimg: res1.topimg,
       max: res1.max,
       ws: false,
-      share: res1.share_info
+      share: res1.share_info,
     };
   },
   data() {
     return {
-      wxlat:'',
-      wxlng:'',
+      last_log_id: "",
+      wxlat: "",
+      wxlng: "",
       share: {
-        staff:{
-          tel:123,
-          name:'456',
-          head_img:'456'
-        }
+        staff: {
+          tel: 123,
+          name: "456",
+          head_img: require("~/assets/jiapeo.png"),
+        },
       },
       iswxsid: false,
       iswx: false,
@@ -1234,7 +1262,9 @@ export default {
       topimg: "",
       ling: true,
       mapnum: 0,
-      imgs: [img1, img2],
+      imgs: [require('~/assets/lou1.png'), require('~/assets/lou2.png')],
+      img1:require('~/assets/lou1.png'),
+      img2:require('~/assets/lou2.png'),
       li: 0,
       warn: false,
       baoming: "",
@@ -1331,7 +1361,92 @@ export default {
       pois: [],
       mapimg: require("~/assets/path.png"),
       huomsg: false,
-      ws: false
+      ws: false,
+      faces: [
+        "[微笑]",
+        "[嘻嘻]",
+        "[哈哈]",
+        "[可爱]",
+        "[可怜]",
+        "[挖鼻]",
+        "[吃惊]",
+        "[害羞]",
+        "[挤眼]",
+        "[闭嘴]",
+        "[鄙视]",
+        "[爱你]",
+        "[泪]",
+        "[偷笑]",
+        "[亲亲]",
+        "[生病]",
+        "[太开心]",
+        "[白眼]",
+        "[右哼哼]",
+        "[左哼哼]",
+        "[嘘]",
+        "[衰]",
+        "[委屈]",
+        "[吐]",
+        "[哈欠]",
+        "[抱抱]",
+        "[怒]",
+        "[疑问]",
+        "[馋嘴]",
+        "[拜拜]",
+        "[思考]",
+        "[汗]",
+        "[困]",
+        "[睡]",
+        "[钱]",
+        "[失望]",
+        "[酷]",
+        "[色]",
+        "[哼]",
+        "[鼓掌]",
+        "[晕]",
+        "[悲伤]",
+        "[抓狂]",
+        "[黑线]",
+        "[阴险]",
+        "[怒骂]",
+        "[互粉]",
+        "[心]",
+        "[伤心]",
+        "[猪头]",
+        "[熊猫]",
+        "[兔子]",
+        "[ok]",
+        "[耶]",
+        "[good]",
+        "[NO]",
+        "[赞]",
+        "[来]",
+        "[弱]",
+        "[草泥马]",
+        "[神马]",
+        "[囧]",
+        "[浮云]",
+        "[给力]",
+        "[围观]",
+        "[威武]",
+        "[奥特曼]",
+        "[礼物]",
+        "[钟]",
+        "[话筒]",
+        "[蜡烛]",
+        "[蛋糕]",
+      ],
+      isagree: true,
+      isagrees: true,
+      beforeck: require("~/assets/giveup.png"),
+      cked: require("~/assets/clicked.png"),
+      starttime: "",
+      endtime: "",
+      wximage:require('~/assets/head_icon.png.png'),
+      nolmalimg:require("~/assets/jiapeo.png"),
+      timename:{},
+      defaultimg:require('~/assets/default.jpg'),
+      shoupingimg: require('~/assets/shouping.png')
     };
   },
   head() {
@@ -1340,13 +1455,13 @@ export default {
       meta: [
         {
           name: "description",
-          content: this.description
+          content: this.description,
         },
         {
           name: "keywords",
-          content: this.keywords
-        }
-      ]
+          content: this.keywords,
+        },
+      ],
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -1396,19 +1511,41 @@ export default {
       let id = that.id;
       let kid = sessionStorage.getItem("kid");
       let other = sessionStorage.getItem("other");
-      let normal = {
-        ip: ip,
-        tel: tel,
-        city: c,
-        position: 32,
-        page: 3,
-        type: 9,
-        project: id,
-        kid: kid,
-        other: other,
-        platform: 2
-      };
-      trend_put(normal).then(res => {
+      let url = window.location.href;
+      url = url.split("?")[1];
+      let op = {};
+      if (url && url.indexOf("scid") !== -1) {
+        let wx = {
+          platform: 2,
+          city: c,
+          ip: ip,
+          tel: tel,
+          position: 32,
+          page: 3,
+          project: id,
+          source: "微信分享2",
+          kid: kid,
+          staff_id: that.share.staff.sid,
+          other: other,
+        };
+        op = wx;
+      } else {
+        let normal = {
+          ip: ip,
+          tel: tel,
+          city: c,
+          position: 32,
+          page: 3,
+          type: 9,
+          project: id,
+          kid: kid,
+          other: other,
+          platform: 2,
+        };
+        op = wx;
+      }
+
+      trend_put(op).then((res) => {
         if (res.data.code == 200) {
           that.warning = "领取成功";
           that.warningbtn = true;
@@ -1439,7 +1576,7 @@ export default {
       );
       $("#dingxue").html("立即抢券");
     },
-    method1: function() {
+    method1: function () {
       echarts();
       ratingStar();
     },
@@ -1522,7 +1659,7 @@ export default {
       var options = {
         //定义一个标题
         legend: {
-          data: ["AI"]
+          data: ["AI"],
         },
         color: ["rgba(77,181,255,1)"],
         //X轴设置
@@ -1533,43 +1670,43 @@ export default {
             axisLine: {
               lineStyle: {
                 color: "rgba(153,153,153,1)",
-                fontSize: "10px"
-              }
+                fontSize: "10px",
+              },
             },
             axisLabel: {
               interval: 0,
               show: true,
               textStyle: {
-                color: "rgba(153,153,153,1)" //这里用参数代替了
-              }
-            }
-          }
+                color: "rgba(153,153,153,1)", //这里用参数代替了
+              },
+            },
+          },
         ],
-
         yAxis: [
           {
             name: "单位：万",
+            scale: true,
             axisLabel: {
               show: true,
               textStyle: {
-                color: "rgba(153,153,153,1)" //这里用参数代替了
-              }
+                color: "rgba(153,153,153,1)", //这里用参数代替了
+              },
             },
             axisLine: {
               lineStyle: {
-                color: "rgba(153,153,153,1)"
-              }
-            }
-          }
+                color: "rgba(153,153,153,1)",
+              },
+            },
+          },
         ],
         series: [
           {
             name: "销量",
             data: that.prices,
             type: "bar",
-            barWidth: 18
-          }
-        ]
+            barWidth: 18,
+          },
+        ],
       };
       myChart.setOption(options);
     },
@@ -1582,7 +1719,7 @@ export default {
         backgroundColor: "#fff",
         tooltip: {
           trigger: "axis",
-          formatter: function(params) {
+          formatter: function (params) {
             return (
               params[0].seriesName +
               params[0].data +
@@ -1596,39 +1733,39 @@ export default {
               params[2].data +
               "万"
             );
-          }
+          },
         },
         legend: {
-          data: "房价"
+          data: "房价",
         },
         grid: {
           x: "20px",
           y: "10px",
           x2: "18px",
-          y2: "20px"
+          y2: "20px",
         },
         calculable: true,
         xAxis: [
           {
             axisLabel: {
               rotate: 30,
-              interval: 0
+              interval: 0,
             },
             axisLine: {
               lineStyle: {
-                color: "#919499"
-              }
+                color: "#919499",
+              },
             },
 
             boundaryGap: false,
-            data: (function() {
+            data: (function () {
               var list = that.trend_time;
               return list;
             })(),
             axisLabel: {
-              rotate: 0
-            }
-          }
+              rotate: 0,
+            },
+          },
         ],
         yAxis: [
           {
@@ -1640,18 +1777,18 @@ export default {
             splitNumber: 5,
             axisLine: {
               lineStyle: {
-                color: "#919499"
+                color: "#919499",
               },
               show: false,
-              formatter: "{value}万"
+              formatter: "{value}万",
             },
             splitLine: {
               shwo: true,
               lineStyle: {
-                type: "dashed"
-              }
-            }
-          }
+                type: "dashed",
+              },
+            },
+          },
         ],
         series: [
           {
@@ -1660,7 +1797,7 @@ export default {
             symbol: "none",
             smooth: 0.2,
             color: ["#40A2F4"],
-            data: that.trend_price3
+            data: that.trend_price3,
           },
           {
             name: that.building.country_name + "&nbsp;&nbsp;均价",
@@ -1668,7 +1805,7 @@ export default {
             symbol: "none",
             smooth: 0.2,
             color: ["#29CC72"],
-            data: that.trend_price2
+            data: that.trend_price2,
           },
           {
             name: that.building.city_name + "&nbsp;&nbsp;均价",
@@ -1676,9 +1813,9 @@ export default {
             symbol: "none",
             smooth: 0.2,
             color: ["#A3AACC"],
-            data: that.trend_price1
-          }
-        ]
+            data: that.trend_price1,
+          },
+        ],
       };
       chart.setOption(option);
     },
@@ -1690,7 +1827,7 @@ export default {
       let img = require("~/assets/mappro.png");
       let pro = this.building.name;
       let add = this.building.address;
-      AMap.convertFrom(baidu, "baidu", function(status, result) {
+      AMap.convertFrom(baidu, "baidu", function (status, result) {
         if (result.info === "ok") {
           var lnglats = result.locations; // Array.<LngLat>
           that.pois = [lnglats[0].lng, lnglats[0].lat];
@@ -1698,7 +1835,7 @@ export default {
             zoom: 14, //初始化地图层级
             center: that.pois, //初始化地图中心点
             zoomEnable: false,
-            dragEnable: false
+            dragEnable: false,
           });
           let content = `<div
           style="width:140px;height: 36px;box-shadow:0px 0px 5px 0px rgba(6,0,1,0.1);border-radius:18px;padding-left: 17px;position: relative;background: #fff;">
@@ -1714,19 +1851,19 @@ export default {
           let marker = new AMap.Marker({
             content: content,
             position: that.pois,
-            offset: new AMap.Pixel(-70, -44)
+            offset: new AMap.Pixel(-70, -44),
           });
           let con =
             '<div style="width: 24px;height: 24px;border-radius: 50%;background:rgba(71,161,255,0.3);position: relative;"><div style="width: 6px;height: 6px;border-radius: 50%;background:rgba(71,161,255,1);position: absolute;top:50%;left:50%;margin-top: -3px;margin-left: -3px;"></div></div>';
           let mark = new AMap.Marker({
             content: con,
             position: that.pois,
-            offset: new AMap.Pixel(-12, -12)
+            offset: new AMap.Pixel(-12, -12),
           });
           mark.setMap(map);
           marker.setMap(map);
 
-          AMap.service(["AMap.PlaceSearch"], function() {
+          AMap.service(["AMap.PlaceSearch"], function () {
             // eslint-disable-line no-unused-vars
             //构造地点查询类
             var placeSearch = new AMap.PlaceSearch({
@@ -1736,11 +1873,11 @@ export default {
               citylimit: false, //是否强制限制在设置的城市内搜索
               map: map, // 展现结果的地图实例
               panel: "panel", // 结果列表将在此容器中进行展示。
-              autoFitView: false // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
+              autoFitView: false, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
             });
 
             var cpoint = that.pois; //中心点坐标
-            placeSearch.searchNearBy(name, cpoint, 1200, function(
+            placeSearch.searchNearBy(name, cpoint, 1200, function (
               // eslint-disable-line no-unused-vars
               status,
               result
@@ -1754,7 +1891,7 @@ export default {
               } else {
                 that.isnull = false;
                 that.setzhou(name, result.poiList.pois.length);
-                $.each(result.poiList.pois, function(i, e) {
+                $.each(result.poiList.pois, function (i, e) {
                   if (i <= 2) {
                     var p2 = [e.location.lng, e.location.lat];
                     var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
@@ -1807,7 +1944,7 @@ export default {
       let id = this.id;
       let data = { channel: 2, phone: tel, ip: ip };
       msg(data)
-        .then(resp => {
+        .then((resp) => {
           let code = resp.data.code;
           if (code == 200) {
             let city = localStorage.getItem("city");
@@ -1816,7 +1953,7 @@ export default {
               localStorage.setItem("city", 1);
             }
             var time = 60;
-            var fn = function() {
+            var fn = function () {
               time--;
               if (time > 0) {
                 $(".t-b-scode").html("重新发送" + time + "s");
@@ -1831,7 +1968,7 @@ export default {
             var interval = setInterval(fn, 1000);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -1843,7 +1980,7 @@ export default {
       }
       let that = this;
       collection({ project: id, token: token })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             if (that.forknum == 0) {
               that.forknum = 1;
@@ -1855,7 +1992,7 @@ export default {
             that.$router.push("/" + that.n + "/login");
           }
         })
-        .then(error => {
+        .then((error) => {
           console.log(error);
         });
     },
@@ -1881,7 +2018,7 @@ export default {
         project: id,
         kid: kid,
         other: other,
-        platform: 2
+        platform: 2,
       };
       let tuan = {
         platform: 2,
@@ -1893,27 +2030,47 @@ export default {
         project: id,
         remark: "团购2",
         kid: kid,
-        other: other
+        other: other,
       };
       let options = {};
-      if (this.ones == 1) {
-        options = tuan;
+      let url = window.location.href;
+      url = url.split("?")[1];
+      if (url && url.indexOf("scid") !== -1) {
+        let wx = {
+          platform: 2,
+          city: c,
+          ip: ip,
+          tel: tel,
+          position: po,
+          page: 3,
+          project: id,
+          source: "微信分享2",
+          kid: kid,
+          staff_id: that.share.staff.sid,
+          other: other,
+        };
+        options = wx;
       } else {
-        options = normal;
+        if (this.ones == 1) {
+          options = tuan;
+        } else {
+          options = normal;
+        }
       }
+
       trend_put(options)
-        .then(resp => {
+        .then((resp) => {
           // console.log(resp)
           if (resp.data.code == 200) {
             msg({ phone: t, channel: 2, ip: ip })
-              .then(resp => {
+              .then((resp) => {
                 if (resp.data.code == 200) {
                   $(".t-b-first").hide();
                   $(".t-b-second").show();
 
                   var time = 60;
                   var tels = t.substr(0, 3) + "****" + t.substr(7, 11);
-                  var fn = function() {
+                  var fn = function () {
                     time--;
                     if (time > 0) {
                       $(".t-b-scode").html("重新发送" + time + "s");
@@ -1929,7 +2086,7 @@ export default {
                   $("#ytel").html(tels);
                 }
               })
-              .catch(error => {
+              .catch((error) => {
                 console.log(error);
               });
           } else {
@@ -1937,7 +2094,7 @@ export default {
             $(".l-p").attr("placeholder", "报名失败");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -1950,7 +2107,7 @@ export default {
       let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             if (this.ones == 1) {
               this.li = 1;
@@ -1966,7 +2123,7 @@ export default {
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -1984,7 +2141,7 @@ export default {
       } else {
         this.warn = true;
         let that = this;
-        setTimeout(function() {
+        setTimeout(function () {
           that.warn = false;
         }, 1500);
       }
@@ -1996,13 +2153,13 @@ export default {
         this.$router.push("/" + this.n + "/login");
       }
       collection({ project: id, token: token })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             $(".fk").hide();
             $(".fed").css("display", "block");
           }
         })
-        .then(error => {
+        .then((error) => {
           console.log(error);
         });
     },
@@ -2015,88 +2172,96 @@ export default {
       }
     },
     agree(e) {
-      // console.log(e.target)
-      let img = require("~/assets/clicked.png");
-      let id = e.target.getAttribute("data-v");
-      let ip = this.ip;
-      let token = localStorage.getItem("token");
-      let that = this;
-      let num = e.target.getAttribute("data-n");
-      let y = e.target.getAttribute("data-y");
-      encyclopediaarticle_agree({
-        ip: ip,
-        id: id,
-        platform: 2,
-        token: token,
-        type: y
-      })
-        .then(resp => {
-          if (resp.data.code == 500) {
-            that.$router.push("/" + that.pinyin + "/login");
-            // window.location.href = "/login";
-          } else {
-            let type = e.target.getAttribute("type");
-            let click = require("~/assets/noclick.png");
-            if (type == 0) {
-              num = parseInt(num) + 1;
-              e.target.setAttribute("data-n", num);
-              e.target.setAttribute("type", 1);
-              e.target.setAttribute("src", img);
-              e.target.nextElementSibling.innerHTML = `有用(${num})`;
-            } else {
-              num = parseInt(num) - 1;
-              e.target.setAttribute("data-n", num);
-              e.target.setAttribute("type", 0);
-              e.target.setAttribute("src", click);
-              e.target.nextElementSibling.innerHTML = `有用(${num})`;
-            }
-          }
+      if (this.isagree) {
+        this.isagree = false;
+        // console.log(e.target)
+        let img = require("~/assets/clicked.png");
+        let id = e.target.getAttribute("data-v");
+        let ip = this.ip;
+        let token = localStorage.getItem("token");
+        let that = this;
+        let num = e.target.getAttribute("data-n");
+        let y = e.target.getAttribute("data-y");
+        encyclopediaarticle_agree({
+          ip: ip,
+          id: id,
+          platform: 2,
+          token: token,
+          type: y,
         })
-        .catch(error => {
-          console.log(error);
-        });
+          .then((resp) => {
+            if (resp.data.code == 500) {
+              that.$router.push("/" + that.pinyin + "/login");
+              // window.location.href = "/login";
+            } else {
+              let type = e.target.getAttribute("type");
+              let click = require("~/assets/noclick.png");
+              if (type == 0) {
+                num = parseInt(num) + 1;
+                e.target.setAttribute("data-n", num);
+                e.target.setAttribute("type", 1);
+                e.target.setAttribute("src", img);
+                e.target.nextElementSibling.innerHTML = `有用(${num})`;
+              } else {
+                num = parseInt(num) - 1;
+                e.target.setAttribute("data-n", num);
+                e.target.setAttribute("type", 0);
+                e.target.setAttribute("src", click);
+                e.target.nextElementSibling.innerHTML = `有用(${num})`;
+              }
+              that.isagree = true;
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
     agrees(e) {
-      // console.log(e.target)
-      let img = require("~/assets/clicked.png");
-      let id = e.target.getAttribute("data-v");
-      let ip = this.ip;
-      let token = localStorage.getItem("token");
-      let that = this;
-      let num = e.target.getAttribute("data-n");
-      let y = e.target.getAttribute("data-y");
-      encyclopediaarticle_agree({
-        ip: ip,
-        id: id,
-        platform: 2,
-        token: token,
-        type: y
-      })
-        .then(resp => {
-          if (resp.data.code == 500) {
-            that.$router.push("/" + that.pinyin + "/login");
-            // window.location.href = "/login";
-          } else {
-            let type = e.target.getAttribute("type");
-            let click = require("~/assets/noclick.png");
-            if (type == 0) {
-              num = parseInt(num) + 1;
-              e.target.setAttribute("data-n", num);
-              e.target.setAttribute("type", 1);
-              e.target.previousElementSibling.setAttribute("src", img);
-              e.target.innerHTML = `有用(${num})`;
-            } else {
-              num = parseInt(num) - 1;
-              e.target.setAttribute("data-n", num);
-              e.target.setAttribute("type", 0);
-              e.target.previousElementSibling.setAttribute("src", click);
-              e.target.innerHTML = `有用(${num})`;
-            }
-          }
+      if (this.isagrees) {
+        this.isagrees = false;
+        // console.log(e.target)
+        let img = require("~/assets/clicked.png");
+        let id = e.target.getAttribute("data-v");
+        let ip = this.ip;
+        let token = localStorage.getItem("token");
+        let that = this;
+        let num = e.target.getAttribute("data-n");
+        let y = e.target.getAttribute("data-y");
+        encyclopediaarticle_agree({
+          ip: ip,
+          id: id,
+          platform: 2,
+          token: token,
+          type: y,
         })
-        .catch(error => {
-          console.log(error);
-        });
+          .then((resp) => {
+            if (resp.data.code == 500) {
+              that.$router.push("/" + that.pinyin + "/login");
+              // window.location.href = "/login";
+            } else {
+              let type = e.target.getAttribute("type");
+              let click = require("~/assets/noclick.png");
+              if (type == 0) {
+                num = parseInt(num) + 1;
+                e.target.setAttribute("data-n", num);
+                e.target.setAttribute("type", 1);
+                e.target.previousElementSibling.setAttribute("src", img);
+                e.target.innerHTML = `有用(${num})`;
+              } else {
+                num = parseInt(num) - 1;
+                e.target.setAttribute("data-n", num);
+                e.target.setAttribute("type", 0);
+                e.target.previousElementSibling.setAttribute("src", click);
+                e.target.innerHTML = `有用(${num})`;
+              }
+              that.isagrees = true;
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
     del(e) {
       let id = e.target.getAttribute("data-v");
@@ -2106,12 +2271,12 @@ export default {
       } else {
         let token = localStorage.getItem("token");
         comment_del({ token: token, id: id })
-          .then(resp => {
+          .then((resp) => {
             if (resp.data.code == 200) {
               location.reload();
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
           });
       }
@@ -2159,7 +2324,8 @@ export default {
     shenghuo() {
       this.$router.push("/" + this.n + "/Periphery/" + this.id + "/4");
     },
-    chan(e) {
+    chan(id) {
+      this.$router.push(`/${this.jkl}/questions/${id}`);
       let dd = e.target;
       dd.parentNode.style.display = "none";
       dd.parentNode.nextElementSibling.style.display = "block";
@@ -2193,14 +2359,14 @@ export default {
         let Y = window.scrollY;
         if (key == 0) {
           if (Y > 100) {
-            var timer = setInterval(function() {
+            var timer = setInterval(function () {
               window.scrollBy(0, -10);
               if (window.scrollY <= 100) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function() {
+            var timer = setInterval(function () {
               window.scrollBy(0, 10);
               if (window.scrollY >= 100) {
                 clearInterval(timer);
@@ -2209,14 +2375,14 @@ export default {
           }
         } else if (key == 1) {
           if (Y > 1100) {
-            var timer = setInterval(function() {
+            var timer = setInterval(function () {
               window.scrollBy(0, -10);
               if (window.scrollY <= 1100) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function() {
+            var timer = setInterval(function () {
               window.scrollBy(0, 10);
               if (window.scrollY >= 1100) {
                 clearInterval(timer);
@@ -2225,14 +2391,14 @@ export default {
           }
         } else if (key == 2) {
           if (Y > 2700) {
-            var timer = setInterval(function() {
+            var timer = setInterval(function () {
               window.scrollBy(0, -10);
               if (window.scrollY <= 2700) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function() {
+            var timer = setInterval(function () {
               window.scrollBy(0, 10);
               if (window.scrollY >= 2700) {
                 clearInterval(timer);
@@ -2241,14 +2407,14 @@ export default {
           }
         } else if (key == 3) {
           if (Y > 3200) {
-            var timer = setInterval(function() {
+            var timer = setInterval(function () {
               window.scrollBy(0, -10);
               if (window.scrollY <= 3200) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function() {
+            var timer = setInterval(function () {
               window.scrollBy(0, 10);
               if (window.scrollY >= 3200) {
                 clearInterval(timer);
@@ -2367,6 +2533,7 @@ export default {
       if (localStorage.getItem("token")) {
         this.$router.push("/" + this.jkl + "/comment/" + this.id);
       } else {
+        sessionStorage.setItem("comment", `/${this.jkl}/comment/${this.id}`);
         this.$router.push("/" + this.jkl + "/login");
       }
     },
@@ -2384,19 +2551,19 @@ export default {
     },
     init() {
       let that = this;
-      this.ws.onopen = function(event) {
+      this.ws.onopen = function (event) {
         let options = {
           //要发送的数据
           class: "Info",
           action: "project",
           content: {
             token: localStorage.getItem("wstoken"),
-            Id: that.building.id
-          }
+            Id: that.building.id,
+          },
         };
         that.ws.send(JSON.stringify(options));
       };
-      this.ws.onmessage = function(event) {
+      this.ws.onmessage = function (event) {
         if (event.data != "connect success") {
           let data = JSON.parse(event.data);
           if (data.code != 500) {
@@ -2414,7 +2581,7 @@ export default {
                 var myDate = new Date();
                 let time = myDate.toLocaleTimeString();
                 let timenum = Date.parse(new Date());
-                search.onsuccess = function(e) {
+                search.onsuccess = function (e) {
                   let result = e.target.result;
                   if (result) {
                     result.txt = data.content.content;
@@ -2437,7 +2604,7 @@ export default {
                 let img = data.content.avatar;
                 img = decodeURIComponent(img);
                 let request = indexedDB.open("staff" + data.content.id, 2);
-                request.onsuccess = function(e) {
+                request.onsuccess = function (e) {
                   db = request.result;
                   let transaction = db.transaction(
                     "staff" + data.content.id,
@@ -2471,7 +2638,7 @@ export default {
                     con: msg,
                     img: img,
                     name1: "worker-left",
-                    name2: "worker-right"
+                    name2: "worker-right",
                   });
                 };
               } else {
@@ -2493,14 +2660,14 @@ export default {
                 staff.type = 1;
                 staff.num = timenum;
                 let otheradd = store.add(staff);
-                otheradd.onsuccess = function() {
+                otheradd.onsuccess = function () {
                   var index =
                     window.indexedDB ||
                     window.webkitIndexedDB ||
                     window.mozIndexedDB ||
                     window.msIndexedDB;
                   let req = index.open("staff" + data.content.id, 2);
-                  req.onupgradeneeded = function(e) {
+                  req.onupgradeneeded = function (e) {
                     let db = e.target.result;
                     if (
                       !db.objectStoreNames.contains("staff" + data.content.id)
@@ -2509,27 +2676,27 @@ export default {
                         "staff" + data.content.id,
                         {
                           keyPath: "id",
-                          autoIncrement: true
+                          autoIncrement: true,
                         }
                       );
                       objectStore.createIndex("classname", "classname", {
-                        unique: true
+                        unique: true,
                       });
                       objectStore.createIndex("con", "con", {
-                        unique: false
+                        unique: false,
                       });
                       objectStore.createIndex("img", "img", {
-                        unique: false
+                        unique: false,
                       });
                       objectStore.createIndex("name1", "name1", {
-                        unique: false
+                        unique: false,
                       });
                       objectStore.createIndex("name2", "name2", {
-                        unique: false
+                        unique: false,
                       });
                     }
                   };
-                  req.onsuccess = function(e) {
+                  req.onsuccess = function (e) {
                     let db = req.result;
                     let tran = db.transaction(
                       "staff" + data.content.id,
@@ -2542,9 +2709,9 @@ export default {
                       con: data.content.content,
                       img: img,
                       name1: "worker-left",
-                      name2: "worker-right"
+                      name2: "worker-right",
                     });
-                    addPersonRequest.onsuccess = function() {
+                    addPersonRequest.onsuccess = function () {
                       that.wsstart();
                     };
                   };
@@ -2565,7 +2732,7 @@ export default {
         //要发送的数据
         class: "Chat",
         action: "send",
-        content: { staff_id: sid, msg: msg, token: token, project: id }
+        content: { staff_id: sid, msg: msg, token: token, project: id },
       };
       sessionStorage.setItem("lastone", msg);
       let dd = JSON.stringify(actions);
@@ -2578,8 +2745,8 @@ export default {
         action: "project",
         content: {
           token: localStorage.getItem("wstoken"),
-          Id: id
-        }
+          Id: id,
+        },
       };
       this.ws.send(JSON.stringify(options));
     },
@@ -2588,7 +2755,7 @@ export default {
       for (let val in that.faces) {
         that.faces[val] = {
           img: require(`~/assets/${val}.gif`),
-          con: that.faces[val]
+          con: that.faces[val],
         };
       }
       this.sids = [];
@@ -2603,48 +2770,48 @@ export default {
         alert("不支持");
       }
       let request = indexedDB.open("staffmsg", 2);
-      request.onupgradeneeded = function(e) {
+      request.onupgradeneeded = function (e) {
         db = e.target.result;
         if (!db.objectStoreNames.contains("staffmsg")) {
           var objectStore = db.createObjectStore("staffmsg", {
             keyPath: "id",
-            autoIncrement: true
+            autoIncrement: true,
           });
           objectStore.createIndex("sid", "sid", {
-            unique: true
+            unique: true,
           });
           objectStore.createIndex("con", "con", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("img", "img", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("name", "name", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("time", "time", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("buildname", "buildname", {
-            unique: false
+            unique: false,
           });
         }
       };
-      request.onsuccess = function(e) {
+      request.onsuccess = function (e) {
         db = request.result;
         that.db = request.result;
         var transaction = db.transaction("staffmsg", "readwrite");
         var store = transaction.objectStore("staffmsg");
         // 取出所有数据
         var all = store.getAll();
-        all.onsuccess = function() {
+        all.onsuccess = function () {
           that.cons = all.result;
           for (let val of that.cons) {
             that.sids.push(val.sid);
           }
         };
       };
-      request.onerror = function(e) {
+      request.onerror = function (e) {
         console.log("false");
       };
     },
@@ -2658,10 +2825,10 @@ export default {
         "onMenuShareWeibo",
         "updateAppMessageShareData",
         "updateTimelineShareData",
-        "getLocation"
+        "getLocation",
       ];
 
-      getsdk(url).then(res => {
+      getsdk(url).then((res) => {
         // console.log(res);
         let that = this;
         wx.config({
@@ -2670,108 +2837,250 @@ export default {
           timestamp: res.data.data.timestamp, // 必填，生成签名的时间戳
           nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
           signature: res.data.data.signature, // 必填，签名
-          jsApiList: jsApiList // 必填，需要使用的JS接口列表
+          jsApiList: jsApiList, // 必填，需要使用的JS接口列表
         });
-        wx.ready(function() {
-          if (wx.onMenuShareAppMessage) {
-            wx.onMenuShareAppMessage({
-              title: that.title, // 分享标题
-              desc: that.keywords, // 分享描述
-              link: window.location.href, // 分享链接
-              imgUrl: that.building.img, // 分享图标
-              type: "", // 分享类型,music、video或link，不填默认为link
-              dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
-              success: function() {
-                // 用户确认分享后执行的回调函数
-                alert('1.01')
-              },
-              cancel: function() {
-                // 用户取消分享后执行的回调函数
-              }
-            });
-          } else {
-            wx.updateAppMessageShareData({
-              title: that.title, // 分享标题
-              desc: that.keywords, // 分享描述
-              link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: that.building.img, // 分享图标
-              success: function() {
-                // 设置成功
-                alert('1.40')
-              }
-            });
-            wx.updateTimelineShareData({
-              title: that.title, // 分享标题
-              link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: that.building.img, // 分享图标
-              success: function() {
-                // 设置成功
-              }
-            });
-          }
-          wx.getLocation({
-            type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-            success: function(res) {
-              that.wxlat = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-              that.wxlng = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-              putmap({lat:res.latitude,long:res.longitude}).then(res=>{
-                console.log(res)
-              })
+        wx.ready(function () {
+          if (that.iswxsid) {
+            if (wx.onMenuShareAppMessage) {
+              wx.onMenuShareAppMessage({
+                title: that.share.config.title, // 分享标题
+                desc: that.share.config.description, // 分享描述
+                link: window.location.href, // 分享链接
+                imgUrl: that.share.config.img, // 分享图标
+                type: "", // 分享类型,music、video或link，不填默认为link
+                dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                  // 用户确认分享后执行的回调函数
+                  // alert('1.01')
+                },
+                cancel: function () {
+                  // 用户取消分享后执行的回调函数
+                },
+              });
+              wx.onMenuShareTimeline({
+                title: that.share.config.title, // 分享标题
+                link: window.location.href, // 分享链接
+                imgUrl: that.share.config.img, // 分享图标
+                success: function () {
+                  // 用户点击了分享后执行的回调函数
+                },
+              });
+            } else {
+              wx.updateAppMessageShareData({
+                title: that.share.config.title, // 分享标题
+                desc: that.share.config.description, // 分享描述
+                link: window.location.href, // 分享链接
+                imgUrl: that.share.config.img, // 分享图标
+                success: function () {
+                  // 设置成功
+                  // alert('1.40')
+                },
+              });
+              wx.updateTimelineShareData({
+                title: that.share.config.title, // 分享标题
+                link: window.location.href, // 分享链接
+                imgUrl: that.share.config.img, // 分享图标
+                success: function () {
+                  // 设置成功
+                },
+              });
             }
-          });
+            if (that.iswxsid) {
+              wx.getLocation({
+                type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                success: function (res) {
+                  that.wxlat = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                  that.wxlng = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                  let url = window.location.href;
+                  url = url.split("?")[1];
+                  url = url.split("&")[1];
+                  if (url) {
+                    let id = url.split("=")[1];
+                    putmap({
+                      lat: res.latitude,
+                      long: res.longitude,
+                      id: id,
+                    }).then((res) => {
+                      console.log(res);
+                    });
+                  }
+                },
+              });
+            }
+          } else {
+            if (wx.onMenuShareAppMessage) {
+              wx.onMenuShareAppMessage({
+                title: that.title, // 分享标题
+                desc: that.keywords, // 分享描述
+                link: window.location.href, // 分享链接
+                imgUrl: that.building.img, // 分享图标
+                type: "", // 分享类型,music、video或link，不填默认为link
+                dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                  // 用户确认分享后执行的回调函数
+                  // alert('1.01')
+                },
+                cancel: function () {
+                  // 用户取消分享后执行的回调函数
+                },
+              });
+            } else {
+              wx.updateAppMessageShareData({
+                title: that.title, // 分享标题
+                desc: that.keywords, // 分享描述
+                link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: that.building.img, // 分享图标
+                success: function () {
+                  // 设置成功
+                  // alert('1.40')
+                },
+              });
+              wx.updateTimelineShareData({
+                title: that.title, // 分享标题
+                link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: that.building.img, // 分享图标
+                success: function () {
+                  // 设置成功
+                },
+              });
+            }
+          }
         });
-        wx.error(res => {
-          alert(res);
+        wx.error((res) => {
+          // alert(res);
         });
       });
+    },
+    goshare() {
+      let that = this;
+      let sid = sessionStorage.getItem("wxstaff");
+      window.location.href = `http://ll.edefang.net/front/share/config?staff=${sid}&project=${that.building.id}`;
+    },
+    settime() {
+      var now = new Date(); //当前日期
+      var nowDayOfWeek = now.getDay(); //今天本周的第几天
+      var nowDay = now.getDate(); //当前日
+      var nowMonth = now.getMonth(); //当前月
+      var nowYear = now.getYear(); //当前年
+      nowYear += nowYear < 2000 ? 1900 : 0; //
+      let weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek);
+      this.starttime = this.formatDate(weekStartDate);
+      let weekEndDate = new Date(
+        nowYear,
+        nowMonth,
+        nowDay + (6 - nowDayOfWeek)
+      );
+      this.endtime = this.formatDate(weekEndDate);
+      // console.log(this.starttime, this.endtime);
+    },
+    formatDate(date) {
+      var myyear = date.getFullYear();
+      var mymonth = date.getMonth() + 1;
+      var myweekday = date.getDate();
+      if (mymonth < 10) {
+        mymonth = "0" + mymonth;
+      }
+      if (myweekday < 10) {
+        myweekday = "0" + myweekday;
+      }
+      return myyear + "-" + mymonth + "-" + myweekday;
+    },
+  },
+  beforeMount() {
+    let that = this;
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.match(/MicroMessenger/i) == "micromessenger") {
+      let url = window.location.href;
+      url = url.split("?")[1];
+      if (url && url.indexOf("scid") !== -1) {
+        let sid = url.split("=")[1];
+
+        $cookies.set("scid", sid);
+        that.iswx = false;
+        that.iswxsid = true;
+        if (!sessionStorage.getItem("wxscid")) {
+          window.location.href = `http://ll.edefang.net/front/user/getcode_front?scid=${sid}`;
+          sessionStorage.setItem("wxscid", sid);
+        }
+      } else {
+        if (localStorage.getItem("gowx")) {
+          if (url && url.indexOf("staff_id") !== -1) {
+            let sid = url.split("=")[1];
+            sessionStorage.setItem("wxstaff", sid);
+            if (sid) {
+              that.iswx = true;
+            }
+          } else if (url && url.indexOf("scid") !== -1) {
+            let sid = url.split("=")[1];
+            sessionStorage.setItem("wxscid", sid);
+            $cookies.set("scid", sid);
+            if (!sessionStorage.getItem("wxscid")) {
+              window.location.href = `http://ll.edefang.net/front/user/getcode_front?scid=${sid}`;
+            } else {
+              that.iswx = false;
+              that.iswxsid = true;
+              sessionStorage.setItem(
+                "wxurl",
+                window.location.href.split("?")[1]
+              );
+              sessionStorage.setItem(that.building.id, that.share.staff.sid);
+              sessionStorage.setItem("staffname", that.share.staff.name);
+              sessionStorage.setItem(
+                "staff" + that.share.staff.sid,
+                that.share.staff.head_img
+              );
+            }
+          } else {
+            window.location.href = `http://ll.edefang.net/front/user/getcode_transfer?silent=0&id=${that.building.id}`;
+          }
+        } else {
+          localStorage.setItem("gowx", 1);
+          window.location.href = `http://ll.edefang.net/front/user/getcode_transfer?silent=0&id=${that.building.id}`;
+        }
+      }
     }
   },
-  // beforeMount() {
-  //   let that = this;
-  //   var ua = navigator.userAgent.toLowerCase();
-  //   if (ua.match(/MicroMessenger/i) == "micromessenger") {
-  //     if (localStorage.getItem("gowx")) {
-  //       let url = window.location.href;
-  //       url = url.split("?")[1];
-  //       if (url && url.indexOf("staff_id") !== -1) {
-  //         let sid = url.split("=")[1];
-  //         window.location.href = `http://ll.edefang.net/front/share/config?staff=${sid}&project=${that.building.id}`;
-          
-  //       } else if (url && url.indexOf("scid") !== -1) {
-  //         let sid = url.split("=")[1];
-  //         sessionStorage.setItem("wxscid", sid);
-  //         $cookies.set('scid',sid)
-  //         if(!sessionStorage.getItem('wxscid')){
-  //           window.location.href = `http://ll.edefang.net/front/user/getcode_front?scid=${sid}`;
-  //         }else{
-  //           that.iswx = true;
-  //           that.iswxsid = true;
-  //         }
-  //       } else {
-  //         window.location.href = `http://ll.edefang.net/front/user/getcode_transfer?silent=0&id=${that.building.id}`;
-  //       }
-  //     } else {
-  //       localStorage.setItem("gowx", 1);
-  //       window.location.href = `http://ll.edefang.net/front/user/getcode_transfer?silent=0&id=${that.building.id}`;
-  //     }
-  //   }
-  // },
   mounted() {
+    this.settime();
+    this.$nextTick(() => {
+      if (sessionStorage.getItem("comment")) {
+        setTimeout(() => {
+          $("body,html").animate(
+            { scrollTop: $("#dianping").offset().top },
+            500
+          );
+          sessionStorage.removeItem("comment");
+        }, 500);
+      }
+    });
     let that = this;
-    // var ua = navigator.userAgent.toLowerCase();
-    // if (ua.match(/MicroMessenger/i) == "micromessenger") {
-    //   this.get();
-    //   if (that.share) {
-    //     for (let val of that.share.visitors) {
-    //       let time = new Date(val.read_time).getTime();
-    //       let now = new Date().getTime();
-    //       let min = Math.floor(((now - time) / 1000 / 60) % 60);
-    //       console.log(time, now, min);
-    //       val.min = min;
-    //     }
-    //   }
-    // }
-    console.log(this.share);
+    sessionStorage.setItem("ip", ip_arr["ip"]);
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.match(/MicroMessenger/i) == "micromessenger") {
+      this.get();
+      console.log(this.share);
+      if (Object.keys(that.share).length !== 0) {
+        let ci = that.share.visitors;
+        if (ci) {
+          for (let val of ci) {
+            let time = new Date(val.read_time).getTime();
+            let now = new Date().getTime();
+            let min = Math.floor(((now - time) / 1000 / 60) % 60);
+            val.min = min;
+          }
+        }
+      } else {
+        that.share = {
+          staff: {
+            tel: 123,
+            name: "456",
+            head_img: require("~/assets/jiapeo.png"),
+          },
+          visitors: [],
+        };
+      }
+    }
+
     this.wsstart();
     this.createwebsocket();
     setTimeout(() => {
@@ -2783,16 +3092,19 @@ export default {
     $cookies.set("name", this.building.name);
     $cookies.set("address", this.building.address);
     this.staffname = sessionStorage.getItem("staffname");
+    if (!sessionStorage.getItem(that.building.id + "kk")) {
+      setTimeout(() => {
+        sessionStorage.setItem(that.building.id + "kk", 1);
+        that.shouping = true;
+      }, 2000);
+      setTimeout(() => {
+        if (this.sp) {
+          that.shouping = false;
+        }
+      }, 20000);
+    }
 
-    setTimeout(() => {
-      that.shouping = true;
-    }, 2000);
-    setTimeout(() => {
-      if (this.sp) {
-        that.shouping = false;
-      }
-    }, 20000);
-    $(".huo-more").on("click", function() {
+    $(".huo-more").on("click", function () {
       $(this).hide();
       $(".table").css("height", "auto");
     });
@@ -2802,7 +3114,7 @@ export default {
       observer: true,
       slidesOffsetAfter: 12,
       resistanceRatio: 0.1,
-      slidesOffsetBefore: 14
+      slidesOffsetBefore: 14,
     });
     var swiper05 = new Swiper(".swiper-dynamic", {
       slidesPerView: 3.8,
@@ -2810,7 +3122,7 @@ export default {
       observer: true,
       slidesOffsetBefore: 20,
       resistanceRatio: 0.1,
-      slidesOffsetAfter: -10
+      slidesOffsetAfter: -10,
     });
     var swiper06 = new Swiper(".swiper-house", {
       slidesPerView: 2.08,
@@ -2818,7 +3130,7 @@ export default {
       observer: true,
       slidesOffsetAfter: 2,
       resistanceRatio: 0.1,
-      slidesOffsetBefore: 14
+      slidesOffsetBefore: 14,
     });
     var swiper07 = new Swiper(".swiper-pk", {
       slidesPerView: 2.4,
@@ -2826,7 +3138,7 @@ export default {
       observer: true,
       resistanceRatio: 0.1,
       slidesOffsetAfter: 1,
-      slidesOffsetBefore: 14
+      slidesOffsetBefore: 14,
     });
     if (navigator.cookieEnabled != true) {
       this.load = false;
@@ -2843,7 +3155,7 @@ export default {
       position: "relative",
       bottom: "0",
       width: "100%",
-      marginBottom: "56px"
+      marginBottom: "56px",
     });
     that.baoming = localStorage.getItem("phone");
     let id = this.$route.params.id;
@@ -2864,18 +3176,15 @@ export default {
       })();
     };
 
-    $(".go-map").on("click", function() {
+    $(".go-map").on("click", function () {
       that.$router.push("/" + that.n + "/Periphery/" + that.id + "/1");
     });
     //同价位楼盘
-    $(".m-nav p").on("click", function() {
+    $(".m-nav p").on("click", function () {
       let txt = $(this).text();
-      $(this)
-        .addClass("n-active")
-        .siblings("p")
-        .removeClass("n-active");
+      $(this).addClass("n-active").siblings("p").removeClass("n-active");
     });
-    jQuery.fn.ratingStars = function(e) {
+    jQuery.fn.ratingStars = function (e) {
       var r = {
           selectors: {
             starsSelector: ".rating-stars",
@@ -2883,35 +3192,29 @@ export default {
             starActiveClass: "is--active",
             starHoverClass: "is--hover",
             starNoHoverClass: "is--no-hover",
-            targetFormElementSelector: ".rating-value"
-          }
+            targetFormElementSelector: ".rating-value",
+          },
         },
         t = $.extend({}, r, e),
         s = {
-          init: function(e) {
+          init: function (e) {
             s.registerEvents(e), s.loadDefaultValue(e);
           },
-          loadDefaultValue: function(e) {
-            var r = $(e)
-                .children(t.selectors.targetFormElementSelector)
-                .val(),
+          loadDefaultValue: function (e) {
+            var r = $(e).children(t.selectors.targetFormElementSelector).val(),
               s = 0;
             $.each(
-              $(e)
-                .children(t.starsSelector)
-                .children(t.starSelector),
-              function(e, a) {
+              $(e).children(t.starsSelector).children(t.starSelector),
+              function (e, a) {
                 s <= r - 1 && $(a).addClass(t.selectors.starActiveClass), s++;
               }
             );
           },
-          registerEvents: function(e) {
+          registerEvents: function (e) {
             var r = this;
             $.each(
-              $(e)
-                .children(t.starsSelector)
-                .children(t.starSelector),
-              function(t, s) {
+              $(e).children(t.starsSelector).children(t.starSelector),
+              function (t, s) {
                 $(s).on("mouseenter", $.proxy(r.onStarEnter, r, s, e)),
                   $(s).on("mouseleave", $.proxy(r.onStarLeave, r, s, e)),
                   $(s).on(
@@ -2921,14 +3224,12 @@ export default {
               }
             );
           },
-          onStarEnter: function(e, r) {
+          onStarEnter: function (e, r) {
             var s = $(e).index(),
               a = 0;
             $.each(
-              $(r)
-                .children(t.starsSelector)
-                .children(t.starSelector),
-              function(e, r) {
+              $(r).children(t.starsSelector).children(t.starSelector),
+              function (e, r) {
                 a <= s
                   ? $(r).addClass(t.selectors.starHoverClass)
                   : $(r).addClass(t.selectors.starNoHoverClass),
@@ -2937,7 +3238,7 @@ export default {
             ),
               $(r).trigger("ratingOnEnter", { ratingValue: s + 1 });
           },
-          onStarLeave: function(e, r) {
+          onStarLeave: function (e, r) {
             var s = $(e).index();
             $(r)
               .children(t.starsSelector)
@@ -2949,7 +3250,7 @@ export default {
                 .removeClass(t.selectors.starNoHoverClass),
               $(r).trigger("ratingOnLeave", { ratingValue: s + 1 });
           },
-          onStarSelected: function(e, r) {
+          onStarSelected: function (e, r) {
             var s = $(e).index();
             $(r)
               .children(t.starsSelector)
@@ -2957,10 +3258,8 @@ export default {
               .removeClass(t.selectors.starActiveClass);
             var a = 0;
             $.each(
-              $(r)
-                .children(t.starsSelector)
-                .children(t.starSelector),
-              function(e, r) {
+              $(r).children(t.starsSelector).children(t.starSelector),
+              function (e, r) {
                 a <= s && $(r).addClass(t.selectors.starActiveClass), a++;
               }
             ),
@@ -2968,13 +3267,13 @@ export default {
                 .children(t.selectors.targetFormElementSelector)
                 .val(s + 1),
               $(r).trigger("ratingChanged", { ratingValue: s + 1 });
-          }
+          },
         };
-      return this.each(function() {
+      return this.each(function () {
         s.init($(this));
       });
     };
-    $(".question").on("click", function() {
+    $(".question").on("click", function () {
       let token = localStorage.getItem("token");
       if (token) {
         that.$router.push("/" + that.jkl + "/leavequestion/" + that.id);
@@ -2986,7 +3285,7 @@ export default {
       direction: "vertical", // 垂直切换选项
       autoplay: true,
       observer: true, //修改swiper自己或子元素时，自动初始化swiper
-      observeParents: true //修改swiper的父元素时，自动初始化swiper
+      observeParents: true, //修改swiper的父元素时，自动初始化swiper
     });
     /*对比分析资料轮播*/
     var swiper = new Swiper(".dui-zi", {
@@ -2996,22 +3295,21 @@ export default {
       observeParents: true, //修改swiper的父元素时，自动初始化swiper
       resistanceRatio: 0.1,
       pagination: {
-        el: ".swiper-pagination2"
-      }
+        el: ".swiper-pagination2",
+      },
     });
     /*微信浏览记录轮播*/
-    this.$nextTick(function(){
+    this.$nextTick(function () {
       var swiper = new Swiper(".wxlu", {
         // eslint-disable-line no-unused-vars
         spaceBetween: 20,
         observer: true, //修改swiper自己或子元素时，自动初始化swiper
         observeParents: true, //修改swiper的父元素时，自动初始化swiper
         resistanceRatio: 0.1,
-        loop:true,
-        autoplay: true
+        loop: true,
+        autoplay: true,
       });
-    })
-      
+    });
 
     /*推荐楼盘轮播*/
     var swiper = new Swiper(".swiper-box", {
@@ -3019,7 +3317,7 @@ export default {
       slidesPerView: 1.8,
       spaceBetween: 30,
       observer: true, //修改swiper自己或子元素时，自动初始化swiper
-      observeParents: true //修改swiper的父元素时，自动初始化swiper
+      observeParents: true, //修改swiper的父元素时，自动初始化swiper
     });
 
     var swiper = new Swiper(".swiper-top", {
@@ -3030,51 +3328,37 @@ export default {
       observeParents: true, //修改swiper的父元素时，自动初始化swiper
       pagination: {
         el: ".swiper-pagination",
-        clickable: true
+        clickable: true,
       },
-      resistanceRatio: 0.1
+      resistanceRatio: 0.1,
     });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
       var h = $(".h-c-c").height();
       $(".h-c-i img").css("height", h + "px");
 
       var cnm = 1;
 
-      $(".p-c-exc").on("click", function() {
+      $(".p-c-exc").on("click", function () {
         $(".m-p-succ").hide();
         $(".m-chang").hide();
       });
-      $("#m_sc_esc").on("click", function() {
+      $("#m_sc_esc").on("click", function () {
         $("#m_sc_box").hide();
         $(".m-chang").hide();
       });
-      $(".m-c-content input").focus(function() {
+      $(".m-c-content input").focus(function () {
         $(".m-c-content").css("margin-top", "80px");
       });
-      $(".m-c-content input").blur(function() {
+      $(".m-c-content input").blur(function () {
         $(".m-c-content").css("margin-top", "170px");
       });
       // 验证码
-      $(".m-c-btn").on("click", function() {
-        var tel = $(this)
-          .prev()
-          .prev()
-          .prev()
-          .prev()
-          .prev()
-          .prev()
-          .val();
+      $(".m-c-btn").on("click", function () {
+        var tel = $(this).prev().prev().prev().prev().prev().prev().val();
         var pattern_tel = /^1[3-9][0-9]{9}$/;
         if (tel == "") {
-          $(this)
-            .prev()
-            .prev()
-            .prev()
-            .prev()
-            .prev()
-            .prev()
-            .val("");
+          $(this).prev().prev().prev().prev().prev().prev().val("");
           $(this)
             .prev()
             .prev()
@@ -3085,14 +3369,7 @@ export default {
             .attr("placeholder", "手机号码不能为空");
           return;
         } else if (!pattern_tel.test(tel)) {
-          $(this)
-            .prev()
-            .prev()
-            .prev()
-            .prev()
-            .prev()
-            .prev()
-            .val("");
+          $(this).prev().prev().prev().prev().prev().prev().val("");
           $(this)
             .prev()
             .prev()
@@ -3105,104 +3382,86 @@ export default {
         }
       });
 
-      $(".tophome").on("click", function() {
+      $(".tophome").on("click", function () {
         that.$router.push("/" + that.n);
       });
 
-      $(".m-listen").on("click", function() {
+      $(".m-listen").on("click", function () {
         $(".m-chang").show();
         $("#m_a_box").show(300);
       });
-      $("#m_a_esc").on("click", function() {
+      $("#m_a_esc").on("click", function () {
         $(".m-chang").hide();
         $("#m_a_box").hide();
       });
 
-      $("#m_want").on("click", function() {
+      $("#m_want").on("click", function () {
         $(".m-chang").show();
         $("#m_sc_box").show(150);
       });
 
-      $("#m_look").on("click", function() {
+      $("#m_look").on("click", function () {
         $(".m-chang").show();
         $("#m_y_box").show(300);
       });
-      $("#m_fen").on("click", function() {
+      $("#m_fen").on("click", function () {
         $(".m-chang").show();
         $("#m_f_box").show(300);
       });
-      $(".m-y").on("click", function() {
+      $(".m-y").on("click", function () {
         $(".m-chang").show();
         $("#m_y_box").show(300);
       });
-      $("#m_f_esc").on("click", function() {
+      $("#m_f_esc").on("click", function () {
         $(".m-chang").hide();
         $("#m_f_box").hide();
       });
     });
 
     // 点击顶部图片跳转
-    $(".zao").on("click", function() {
+    $(".zao").on("click", function () {
       that.$router.push("/" + that.n + "/album/" + that.id);
     });
     // 周边规划跳转
-    $(".m-zhou h3 span").on("click", function() {
+    $(".m-zhou h3 span").on("click", function () {
       that.$router.push("/" + that.n + "/Periphery/" + that.id + "/1");
     });
 
-    document.addEventListener("touchmove", function(e) {
+    document.addEventListener("touchmove", function (e) {
       var h = document.body.scrollTop;
       if (h >= 2279) {
-        $(".m-3")
-          .addClass("m-active")
-          .siblings("span")
-          .removeClass("m-active");
+        $(".m-3").addClass("m-active").siblings("span").removeClass("m-active");
       } else if (h >= 1538) {
-        $(".m-2")
-          .addClass("m-active")
-          .siblings("span")
-          .removeClass("m-active");
+        $(".m-2").addClass("m-active").siblings("span").removeClass("m-active");
       } else if (h >= 170) {
         $(".m-tnav").show();
-        $(".m-1")
-          .addClass("m-active")
-          .siblings("span")
-          .removeClass("m-active");
+        $(".m-1").addClass("m-active").siblings("span").removeClass("m-active");
       } else {
         $(".m-tnav").hide();
       }
     });
 
-    $(".m-1").on("click", function() {
+    $(".m-1").on("click", function () {
       document.body.scrollTop = 170;
-      $(".m-1")
-        .addClass("m-active")
-        .siblings("span")
-        .removeClass("m-active");
+      $(".m-1").addClass("m-active").siblings("span").removeClass("m-active");
     });
-    $(".m-2").on("click", function() {
+    $(".m-2").on("click", function () {
       document.body.scrollTop = 1538;
-      $(".m-2")
-        .addClass("m-active")
-        .siblings("span")
-        .removeClass("m-active");
+      $(".m-2").addClass("m-active").siblings("span").removeClass("m-active");
     });
-    $(".m-3").on("click", function() {
+    $(".m-3").on("click", function () {
       document.body.scrollTop = 2279;
-      $(".m-3")
-        .addClass("m-active")
-        .siblings("span")
-        .removeClass("m-active");
+      $(".m-3").addClass("m-active").siblings("span").removeClass("m-active");
     });
-    $(".m-bian").on("click", function() {
+    $(".m-bian").on("click", function () {
       $("#m_c_box").show(150);
       $(".m-chang").show();
     });
-    $("#m_c_esc").on("click", function() {
+    $("#m_c_esc").on("click", function () {
       $("#m_c_box").hide();
       $(".m-chang").hide();
     });
-    $(".m-chang").on("click", function() {
+    $(".m-chang").on("click", function () {
       $(".m-p-succ").hide();
       $(".m-chang").hide();
       $("#m_c_box").hide();
@@ -3228,7 +3487,7 @@ export default {
       that.tu = false;
     });
 
-    $(".p1").on("click", function() {
+    $(".p1").on("click", function () {
       window.type = $(this).attr("data-v");
 
       if (type == "最新变价通知") {
@@ -3317,10 +3576,8 @@ export default {
       that.change = true;
     });
 
-    $(".t-b-scode").on("click", function() {
-      var phone = $(this)
-        .prev()
-        .val();
+    $(".t-b-scode").on("click", function () {
+      var phone = $(this).prev().val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -3332,7 +3589,7 @@ export default {
       }
 
       var time = 60;
-      var fn = function() {
+      var fn = function () {
         time--;
         if (time > 0) {
           $(".t-b-scode").html("重发" + time + "s");
@@ -3346,43 +3603,31 @@ export default {
       fn();
       var interval = setInterval(fn, 1000);
       var data = {
-        phone: phone
+        phone: phone,
       };
-      $.post(
-        "{:url('home/user/login')}",
-        data,
-        function(res) {
-          if (res.code == 100) {
-            alert("发送成功");
-          } else {
-            alert(res.msg);
-          }
-        },
-        "json"
-      );
     });
 
-    $("#s_esc").on("click", function() {
+    $("#s_esc").on("click", function () {
       $(".succ").hide();
       $(".zhao").hide();
     });
-    $(".s-btn").on("click", function() {
+    $(".s-btn").on("click", function () {
       $(".succ").hide();
       $(".zhao").hide();
     });
-    $("#find").on("click", function() {
+    $("#find").on("click", function () {
       $("#bname").submit();
     });
 
-    $("#a-esc").on("click", function() {
+    $("#a-esc").on("click", function () {
       $(".addre").hide();
       $(".zhao").hide();
     });
-    $("#l-esc").on("click", function() {
+    $("#l-esc").on("click", function () {
       $(".login").hide();
       $(".zhao").hide();
     });
-    $(".zhao").on("click", function() {
+    $(".zhao").on("click", function () {
       $(this).hide();
       $(".login").hide();
       $(".weiter").hide();
@@ -3392,15 +3637,12 @@ export default {
       $("#mpanel5").hide();
       $(".ts").css("z-index", "20001");
     });
-    $(".register").on("click", function() {
+    $(".register").on("click", function () {
       $(".zhao").show();
       $(".login").show(150);
     });
-    $(".m-get").on("click", function() {
-      var phone = $(this)
-        .prev()
-        .prev()
-        .val();
+    $(".m-get").on("click", function () {
+      var phone = $(this).prev().prev().val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -3412,7 +3654,7 @@ export default {
       }
 
       var time = 60;
-      var fn = function() {
+      var fn = function () {
         time--;
         if (time > 0) {
           $(".m-get").html("重新发送" + time + "s");
@@ -3426,61 +3668,34 @@ export default {
       fn();
       var interval = setInterval(fn, 1000);
       var data = {
-        phone: phone
+        phone: phone,
       };
-      $.post(
-        "{:url('home/user/login')}",
-        data,
-        function(res) {
-          if (res.code == 100) {
-            alert("发送成功");
-          } else {
-            alert(res.msg);
-          }
-        },
-        "json"
-      );
     });
 
     // 验证码
-    $(".m-getcode").on("click", function() {
-      var tel = $(this)
-        .prev()
-        .val();
+    $(".m-getcode").on("click", function () {
+      var tel = $(this).prev().val();
 
       var pattern_tel = /^1[3-9][0-9]{9}$/;
       if (tel == "") {
-        $(this)
-          .prev()
-          .val("");
-        $(this)
-          .prev()
-          .attr("placeholder", "手机号码不能为空");
+        $(this).prev().val("");
+        $(this).prev().attr("placeholder", "手机号码不能为空");
         return;
       } else if (!pattern_tel.test(tel)) {
-        $(this)
-          .prev()
-          .val("");
-        $(this)
-          .prev()
-          .attr("placeholder", "手机号码不合法");
+        $(this).prev().val("");
+        $(this).prev().attr("placeholder", "手机号码不合法");
         return;
       }
-      var type = $(this)
-        .next()
-        .val();
-      var building_name = $(this)
-        .next()
-        .next()
-        .val();
+      var type = $(this).next().val();
+      var building_name = $(this).next().next().val();
       var data = {
         phone: tel,
         type: type,
-        building_name: building_name
+        building_name: building_name,
       };
-      $.post("{:url('home/content/port1')}", data, function(res) {}, "json");
+      $.post("{:url('home/content/port1')}", data, function (res) {}, "json");
       var time = 3;
-      var fn = function() {
+      var fn = function () {
         time--;
         if (time > 0) {
           $(".m-getcode").html("重新发送" + time + "s");
@@ -3495,45 +3710,39 @@ export default {
       var interval = setInterval(fn, 1000);
     });
 
-    $("#o_btn").on("click", function() {
+    $("#o_btn").on("click", function () {
       that.succ = false;
       $(".m-chang").hide();
     });
-    $(".o-esc").on("click", function() {
+    $(".o-esc").on("click", function () {
       that.succ = false;
       $(".m-chang").hide();
     });
 
     //楼盘问答---查看全文
     var flag = true;
-    $(".m-w-all").click(function() {
+    $(".m-w-all").click(function () {
       if (flag == true) {
-        $(this)
-          .prev()
-          .children("i")
-          .css({
-            "-webkit-line-clamp": "inherit"
-          });
+        $(this).prev().children("i").css({
+          "-webkit-line-clamp": "inherit",
+        });
         $(this).html("点击收起");
         flag = false;
       } else {
-        $(this)
-          .prev()
-          .children("i")
-          .css({
-            "-webkit-line-clamp": "3"
-          });
+        $(this).prev().children("i").css({
+          "-webkit-line-clamp": "3",
+        });
         $(this).html("查看全文");
         flag = true;
       }
     });
     //点击按钮出现hover
-    $(function() {
+    $(function () {
       function changeColor(id, class1, class2) {
-        $("#" + id).on("touchstart", function() {
+        $("#" + id).on("touchstart", function () {
           $(this).attr("class", class1);
         });
-        $("#" + id).on("touchend", function() {
+        $("#" + id).on("touchend", function () {
           $(this).attr("class", class2);
         });
       }
@@ -3558,7 +3767,7 @@ export default {
       this.priceline();
     },
 
-    nowHeight: function() {
+    nowHeight: function () {
       if (this.defaultHeight != this.nowHeight) {
         $(".weiter").css("top", "100px");
       } else {
@@ -3567,21 +3776,22 @@ export default {
     },
     $route() {
       this.$router.go(0);
-    }
+    },
   },
   updated() {
     if (this.over) {
       this.$nextTick(() => {
-        setTimeout(() => {
+        this.timename = setTimeout(() => {
           this.mmap();
-        }, 600);
+        }, 400);
       });
     }
   },
   destroyed() {
+    clearTimeout(this.timename)
     localStorage.removeItem("map");
-    // this.ws.close();
-  }
+    this.ws.close();
+  },
 };
 </script>
 <style scoped>
@@ -4584,6 +4794,7 @@ body {
 .wxwork .wximg img {
   width: 2.5rem;
   border-radius: 50%;
+  height: 2.5rem;
 }
 .wxwork .wximg p {
   width: 2.25rem;
@@ -4688,5 +4899,15 @@ body {
 .wxlu-con .wxlumsg p {
   color: #9e815f;
   font-size: 0.75rem;
+}
+.wxtel {
+  position: relative;
+}
+.wxtel p {
+  color: #333333;
+  font-size: 1.5rem;
+  position: absolute;
+  left: 9%;
+  top: 5%;
 }
 </style>

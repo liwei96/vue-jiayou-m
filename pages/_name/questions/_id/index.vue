@@ -1,6 +1,7 @@
 <template>
-  <div class="Question">
-    <h3>
+  <div id="question_id">
+    <div class="h-con">
+      <h3>
       <img class="back" src="~/assets/return.png" @click="goback" />
       <img class="logo" src="~/assets/content-logo.png" alt />
       <img src="~/assets/mapcai.png" alt class="cai" @click="taggle" />
@@ -38,57 +39,92 @@
         </li>
       </ul>
     </h3>
-    <ul>
-      <li v-for="(item,key) in lists" :key="key">
-       
-        <h4>
-          <router-link :to="`/${jkl}/questions/${item.id}`">
-            <u>
-              <span>问</span>
-              {{item.question}}
-            </u>
-          </router-link>
-        </h4>
-        <div class="answer-peo">
-          <p class="peo-title">答</p>
-          <img :src="item.staff.head_img" alt />
-          <div class="peo-msg">
-            <h6>
-              {{item.staff.name}}
-              <span>专业解答</span>
-            </h6>
-            <p>
-              最近咨询
-              <span>{{item.staff.ServeNum}}人</span>
+    <div class="all">
+      <h4>
+        <span>问</span>
+        {{question.question}}
+      </h4>
+      <div class="pro">
+        <router-link :to="`/${jkl}/content/${building.id}`">
+          <div class="pro-left">
+            <img :src="building.img" alt />
+          </div>
+          <div class="pro-msg">
+            <h5>
+              {{building.name}}
+              <span>{{building.status}}</span>
+            </h5>
+            <p class="price">
+              <span>{{building.price}}</span>
+              <i>元/m²</i>起
+            </p>
+            <p
+              class="info"
+            >住宅 | {{building.city}}-{{building.country.substr(0,2)}} | {{building.area}}m²</p>
+            <p class="type">
+              <span class="zhuang">{{building.decorate}}</span>
+              <span class="type-icon" v-for="(item,key) in building.feature" :key="key">{{item}}</span>
             </p>
           </div>
-          <button @click="show">免费咨询</button>
-        </div>
-        <div class="answer" v-if="item.answer">
-          <router-link :to="`/${jkl}/questions/${item.id}`">
-            <p>
-              {{item.answer.substr(0,42)}}
-              <i v-if="item.answer.length>42">...</i>
-            </p>
-          </router-link>
-          <span v-if="item.answer.length>42" @click="go(item.id)">[全文]</span>
-        </div>
-        <!-- <div class="answer">
-          <span>答</span>
-          <p>{{item.answer}}</p>
-        </div>-->
-      </li>
-    </ul>
-    <div class="bottom">
-      <button id="btn">我要提问</button>
+        </router-link>
+      </div>
     </div>
+    <div class="line"></div>
+    <div class="answer">
+      <div class="answer-title">
+        <p class="title-tit">答</p>
+        <img :src="staff.head_img" alt />
+        <div class="answer-msg">
+          <h6>
+            {{staff.name}}
+            <span>专业解答</span>
+          </h6>
+          <p>
+            最近咨询
+            <span>{{staff.ServeNum}}人</span>
+          </p>
+        </div>
+        <button @click="show">免费咨询</button>
+      </div>
+      <p class="answer-con">{{question.answer}}</p>
+      <div class="answer-time">
+        <span class="time">{{question.time.substr(0,10)}}</span>
+        <p>
+          <img
+            :src="question.my_like == 0 ? beforeck : cked"
+            alt
+            @click="agree($event)"
+            :data-v="question.id"
+            :data-n="question.like_num"
+            data-y="2"
+            :type="question.my_like"
+          />
+          <span>有用({{question.like_num}})</span>
+        </p>
+      </div>
+    </div>
+    <div class="line"></div>
+    <div class="other">
+      <h5>相关楼盘问答</h5>
+      <ul>
+        <li v-for="(item,key) in other" :key="key">
+          <router-link :to="'/'+jkl+'/questions/'+item.id">
+            <span>问</span>
+            {{item.question}}
+          </router-link>
+        </li>
+      </ul>
+      <button @click="gomore">查看{{cityname}}全部楼盘问答</button>
+    </div>
+    </div>
+    
     <foot-view :pinyin="jkl"></foot-view>
-    <!-- 弹框 -->
+
     <transition name="change">
       <div class="weiter ts" v-show="change">
         <div class="t-top">
           <h6>咨询服务</h6>
-          <p>立即报名，专业人员为你解惑!</p>
+          <p>立即报名，专业人员为你解惑</p>
           <img id="w-esc" src="~/assets/w-del.png" alt @click="close1" />
         </div>
         <div class="t-bottom">
@@ -134,30 +170,25 @@
   </div>
 </template>
 <script>
-import footView from "@/components/Foot.vue";
 import {
-  ip,
-  question_data,
-  encyclopediaarticle_agree,
-  getquestions,
+  question,
   trend_put,
   msg,
+  encyclopediaarticle_agree,
   verification,
 } from "~/api/api";
+import footView from "@/components/Foot.vue";
 export default {
-  name: "Question",
   async asyncData(context) {
-    let ip = context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
-    let token = context.store.state.cookie.token;
     let jkl = context.store.state.cookie.pinyin;
+    let id = context.route.params.id;
+    let token = context.store.state.cookie.token;
     let [res] = await Promise.all([
       context.$axios
-        .get("/question/page", {
+        .get("/mobile/question/detail", {
           params: {
-            page: 1,
-            limit: 10,
-            // city: city,
+            id: id,
+            token: token,
           },
         })
         .then((resp) => {
@@ -166,184 +197,63 @@ export default {
         }),
     ]);
     return {
-      lists: res.data,
+      staff: res.common.staff,
+      building: res.building,
+      question: res.question,
+      other: res.relevant,
       jkl: jkl,
       title: res.common.header.title,
       description: res.common.header.description,
       keywords: res.common.header.keywords,
     };
   },
-  components: {
-    "foot-view": footView,
-  },
   data() {
     return {
-      lists: [],
-      ip: "",
-      id: "",
-      n: "",
-      page: 2,
-      isok: true,
-      jkl: "",
-      title: "",
-      description: "",
-      keywords: "",
       list: false,
-      baoming: "",
-      checks: true,
-      succ: false,
+      jkl: "",
+      staff: {},
+      building: {},
+      other: [],
+      question: {},
       change: false,
+      succ: false,
       zhe: false,
+      baoming: "",
       ma: "",
+      checks: true,
+      cityname: "杭州",
+      beforeck: require("~/assets/giveup.png"),
+      cked: require("~/assets/clicked.png"),
     };
   },
   head() {
     return {
-      title: this.title || "允家新房-楼盘问答",
+      title: this.title || `${this.question.question}_允家新房`,
       meta: [
         {
           name: "description",
-          content: this.description || "允家新房",
+          content: this.description || `${this.question.question}`,
         },
         {
           name: "keywords",
-          content: this.keywords || "允家新房",
+          content: this.keywords || `${this.question.question}`,
         },
       ],
     };
   },
+  components: {
+    "foot-view": footView,
+  },
   methods: {
-    start() {
-      let ip = ip_arr["ip"];
-      // let ip = returnCitySN["cip"];
-      this.ip = ip;
-      localStorage.getItem("ip");
-    },
-    agree(e) {
-      // console.log(e.target)
-      let img = require("~/assets/clicked.png");
-      let id = e.target.getAttribute("data-v");
-      let ip = this.ip;
-      let token = localStorage.getItem("token");
-      let that = this;
-      let num = e.target.getAttribute("data-n");
-      encyclopediaarticle_agree({
-        ip: ip,
-        id: id,
-        platform: 2,
-        token: token,
-        type: 1,
-      })
-        .then((resp) => {
-          if (resp.data.code == 500) {
-            that.$router.push("/" + that.pinyin + "/login");
-            // window.location.href = "/login";
-          } else {
-            let type = e.target.getAttribute("type");
-            let click = require("~/assets/noclick.png");
-            if (type == 0) {
-              num = parseInt(num) + 1;
-              e.target.setAttribute("data-n", num);
-              e.target.setAttribute("type", 1);
-              e.target.setAttribute("src", img);
-              e.target.nextElementSibling.innerHTML = `有用(${num})`;
-            } else {
-              num = parseInt(num) - 1;
-              e.target.setAttribute("data-n", num);
-              e.target.setAttribute("type", 0);
-              e.target.setAttribute("src", click);
-              e.target.nextElementSibling.innerHTML = `有用(${num})`;
-            }
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    agrees(e) {
-      // console.log(e.target)
-      let img = require("~/assets/clicked.png");
-      let id = e.target.getAttribute("data-v");
-      let ip = this.ip;
-      let token = localStorage.getItem("token");
-      let that = this;
-      let num = e.target.getAttribute("data-n");
-      encyclopediaarticle_agree({
-        ip: ip,
-        id: id,
-        platform: 2,
-        token: token,
-        type: 1,
-      })
-        .then((resp) => {
-          if (resp.data.code == 500) {
-            that.$router.push("/" + that.pinyin + "/login");
-            // window.location.href = "/login";
-          } else {
-            let type = e.target.getAttribute("type");
-            let click = require("~/assets/noclick.png");
-            if (type == 0) {
-              num = parseInt(num) + 1;
-              e.target.setAttribute("data-n", num);
-              e.target.setAttribute("type", 1);
-              e.target.previousElementSibling.setAttribute("src", img);
-              e.target.innerHTML = `有用(${num})`;
-            } else {
-              num = parseInt(num) - 1;
-              e.target.setAttribute("data-n", num);
-              e.target.setAttribute("type", 0);
-              e.target.previousElementSibling.setAttribute("src", click);
-              e.target.innerHTML = `有用(${num})`;
-            }
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    goback() {
-      this.$router.go(-1);
-    },
-    getmore() {
-      if (this.isok) {
-        this.isok = false;
-        let that = this;
-        let ip = ip_arr["ip"];
-        // let ip = returnCitySN["cip"];
-        this.ip = ip;
-        localStorage.getItem("ip");
-        let token = localStorage.getItem("token");
-        let city = localStorage.getItem("city");
-        getquestions({
-          page: that.page,
-          limit: 10,
-        })
-          .then((resp) => {
-            let l = resp.data.data;
-            that.lists = that.lists.concat(l);
-            that.page += 1;
-            that.isok = true;
-            console.log(resp);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    },
-    scroll() {
-      var scrollTop = window.scrollY;
-      var scrollHeight = window.screen.availHeight;
-      var windowHeight = document.body.scrollHeight;
-      if (scrollTop + scrollHeight >= windowHeight) {
-        this.getmore();
-      }
-    },
     taggle() {
       if (this.list) {
         this.list = false;
       } else {
         this.list = true;
       }
+    },
+    goback() {
+      this.$router.go(-1);
     },
     send() {
       let that = this;
@@ -368,18 +278,20 @@ export default {
       let ip = this.ip;
       let data = { channel: 2, phone: tel, ip: ip };
       this.tel = tel;
+      let id = this.building.id;
       let city = this.$store.state.city;
       let kid = sessionStorage.getItem("kid");
       let other = sessionStorage.getItem("other");
       trend_put({
         ip: ip,
         tel: tel,
-        city: city,
         position: 51,
+        id: id,
         page: 3,
         type: 6,
         kid: kid,
         other: other,
+        city: city,
       })
         .then((resp) => {
           if (resp.data.code == 200) {
@@ -465,29 +377,53 @@ export default {
       this.change = false;
       this.succ = false;
     },
-    go(id) {
-      let pin = this.jkl;
-      this.$router.push(`/${pin}/questions/${id}`);
+    agree(e) {
+      // console.log(e.target)
+      let img = require("~/assets/clicked.png");
+      let id = e.target.getAttribute("data-v");
+      let ip = this.ip;
+      let token = localStorage.getItem("token");
+      let that = this;
+      let num = e.target.getAttribute("data-n");
+      encyclopediaarticle_agree({
+        ip: ip,
+        id: id,
+        platform: 2,
+        token: token,
+        type: 1,
+      })
+        .then((resp) => {
+          if (resp.data.code == 500) {
+            that.$router.push("/" + that.pinyin + "/login");
+            // window.location.href = "/login";
+          } else {
+            let type = e.target.getAttribute("type");
+            let click = require("~/assets/noclick.png");
+            if (type == 0) {
+              num = parseInt(num) + 1;
+              e.target.setAttribute("data-n", num);
+              e.target.setAttribute("type", 1);
+              e.target.setAttribute("src", img);
+              e.target.nextElementSibling.innerHTML = `有用(${num})`;
+            } else {
+              num = parseInt(num) - 1;
+              e.target.setAttribute("data-n", num);
+              e.target.setAttribute("type", 0);
+              e.target.setAttribute("src", click);
+              e.target.nextElementSibling.innerHTML = `有用(${num})`;
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    gomore() {
+      this.$router.push(`/${this.jkl}/questions`);
     },
   },
   mounted() {
-    this.start();
-    let that = this;
-    $("#btn").on("click", function () {
-      let kk = localStorage.getItem("pinyin");
-      let token = localStorage.getItem("token");
-      if (token) {
-        that.$router.push("/" + kk + "/leavequestions");
-        // window.location.href = "/leavequestion/" + that.id;
-      } else {
-        that.$router.push("/" + kk + "/login");
-        // window.location.href = "/login";
-      }
-    });
-    window.addEventListener("scroll", this.scroll);
-  },
-  beforeDestroy() {
-    window.removeEventListener("scroll", this.scroll);
+    this.cityname = localStorage.getItem("cityname");
   },
 };
 </script>
@@ -496,11 +432,9 @@ export default {
   padding: 0;
   margin: 0;
 }
-body {
-  padding-bottom: 10px;
-}
-li {
-  list-style: none;
+
+.h-con {
+  min-height: 100vh;
 }
 h3 {
   color: #333333;
@@ -526,144 +460,6 @@ h3 .back {
 h3 .logo {
   width: 2.875rem;
 }
-ul {
-  padding: 0 4%;
-  margin-bottom: 80px;
-  margin-top: 44px;
-}
-ul li {
-  border-bottom: 0.5px solid #f3f5fb;
-}
-ul li h4 {
-  font-size: 0.9375rem;
-  margin-bottom: 20px;
-  padding-top: 20px;
-  line-height: 1.375rem;
-}
-ul li h4 a {
-  color: #2f3133;
-}
-ul li h4 span {
-  width: 16px;
-  height: 16px;
-  border-radius: 5px 0 5px 0;
-  background-color: #ff7839;
-  text-align: center;
-  line-height: 16px;
-  color: #fff;
-  font-size: 12px;
-  margin-right: 12px;
-  float: left;
-}
-ul li h4 u {
-  width: 100%;
-  display: inline-block;
-  text-decoration: none;
-}
-ul li .answer-peo {
-  margin-bottom: 1.125rem;
-  display: flex;
-  align-items: center;
-}
-ul li .answer-peo .peo-title {
-  width: 1rem;
-  height: 1rem;
-  border-radius: 5px 0 5px 0;
-  background-color: #40a2f4;
-  text-align: center;
-  line-height: 1rem;
-  color: #fff;
-  font-size: 0.75rem;
-  margin-right: 12px;
-}
-ul li .answer-peo img {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  margin-left: 0.375rem;
-  margin-right: 0.5625rem;
-}
-ul li .answer-peo .peo-msg h6 {
-  color: #121212;
-  font-size: 0.9375rem;
-  margin-bottom: 0.25rem;
-}
-ul li .answer-peo .peo-msg h6 span {
-  color: #fff;
-  font-size: 0.625rem;
-  background-color: #ffc654;
-  text-align: center;
-  line-height: 0.875rem;
-  display: inline-block;
-  height: 0.875rem;
-  margin-left: 0.1875rem;
-  border-radius: 0.125rem;
-}
-ul li .answer-peo .peo-msg p {
-  color: #969799;
-  font-size: 0.75rem;
-}
-ul li .answer-peo .peo-msg p span {
-  color: #ff6a48;
-}
-ul li .answer-peo button {
-  width: 4.375rem;
-  height: 1.625rem;
-  border-radius: 0.8125rem;
-  text-align: center;
-  line-height: 1.625rem;
-  color: #fff;
-  font-size: 0.75rem;
-  background-color: #40a2f4;
-  border: 0;
-  margin-left: auto;
-}
-
-ul li .answer {
-  margin-bottom: 1.25rem;
-  width: 100%;
-  background-color: #f7f7f7;
-  padding: 0.9375rem;
-  position: relative;
-  border-radius: .125rem;
-}
-ul li .answer p {
-  color: #626466;
-  font-size: 0.875rem;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-}
-ul li .answer span {
-  color: #628bb9;
-  font-size: 0.875rem;
-  position: absolute;
-  right: 0.5rem;
-  bottom: 0.9375rem;
-}
-
-#btn {
-  width: 92%;
-  margin-left: 4%;
-  background-color: #ebf3fa;
-  text-align: center;
-  line-height: 40px;
-  height: 40px;
-  border-radius: 4px;
-  color: #40a2f4;
-  font-size: 16px;
-  border: 0;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-.bottom {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  padding-top: 20px;
-  background-color: #fff;
-}
 h3 .cai {
   position: absolute;
   width: 1.375rem;
@@ -674,7 +470,7 @@ h3 .cailist {
   width: 9.375rem;
   background: rgba(41, 41, 41, 0.9);
   position: absolute;
-  top: 0;
+  top: 3.25rem;
   border-radius: 0.375rem;
   z-index: 20000;
   right: 4%;
@@ -688,9 +484,9 @@ h3 .cailist li {
 }
 h3 .cailist li a {
   width: 100%;
-  color: #e6e6e6;
   display: flex;
   align-items: center;
+  color: #e6e6e6;
 }
 h3 .cailist li.cmn span {
   display: block;
@@ -711,6 +507,235 @@ h3 .cailist li img {
   margin-right: 0.875rem;
   height: 1.125rem;
 }
+.all {
+  padding: 0 4%;
+  padding-bottom: 1.25rem;
+}
+.all h4 {
+  margin-top: 4rem;
+  color: #2f3133;
+  font-size: 1rem;
+  line-height: 1.375rem;
+  margin-bottom: 1rem;
+}
+.all h4 span {
+  display: inline-block;
+  width: 0.9375rem;
+  height: 0.9375rem;
+  border-radius: 0.3125rem 0px 0.3125rem 0px;
+  background-color: #ff7839;
+  text-align: center;
+  line-height: 0.9375rem;
+  font-size: 0.625rem;
+  color: #fff;
+  margin-right: 0.625rem;
+}
+.all .pro {
+  width: 100%;
+  height: 6.5rem;
+  box-shadow: 0px 0px 18px 1px rgba(0, 0, 0, 0.03);
+  padding: 0.75rem;
+}
+.all .pro a {
+  width: 100%;
+  display: flex;
+}
+.all .pro .pro-left {
+  margin-right: 0.75rem;
+}
+.all .pro .pro-left img {
+  width: 6.875rem;
+  height: 5rem;
+  border-radius: 0.1875rem;
+}
+.all .pro .pro-msg {
+  flex: 1;
+}
+.all .pro .pro-msg h5 {
+  color: #626466;
+  font-size: 1rem;
+  margin-bottom: 0.125rem;
+  font-weight: bold;
+}
+.all .pro .pro-msg h5 span {
+  background-color: #e9f7ea;
+  width: 2.25rem;
+  height: 1.0625rem;
+  text-align: center;
+  line-height: 1.0625rem;
+  display: block;
+  float: right;
+  color: #20c657;
+  font-size: 0.6875rem;
+  border-radius: 0.125rem;
+}
+.all .pro .pro-msg .price {
+  color: #626466;
+  font-size: 0.75rem;
+  margin-bottom: 0.125rem;
+}
+.all .pro .pro-msg .price span {
+  color: #fe582f;
+  font-size: 0.9375rem;
+  font-weight: bold;
+}
+.all .pro .pro-msg .price i {
+  color: #fe582f;
+  font-style: normal;
+}
+.all .pro .pro-msg .info {
+  color: #626466;
+  font-size: 0.75rem;
+  margin-bottom: 0.125rem;
+}
+.all .pro .pro-msg .type span {
+  padding: 0.1875rem 0.3125rem;
+  border-radius: 0.125rem;
+  font-size: 0.75rem;
+  color: #626466;
+  margin-right: 0.375rem;
+}
+.all .pro .pro-msg .type .zhuang {
+  background-color: #f0f5f9;
+  color: #5aabe5;
+}
+.line {
+  width: 100%;
+  height: 0.625rem;
+  background-color: #f7f7f7;
+}
+.answer {
+  padding: 1.125rem 4% 1rem 4%;
+}
+.answer .answer-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+.answer .answer-title .title-tit {
+  width: 0.9375rem;
+  height: 0.9375rem;
+  border-radius: 0.3125rem 0px 0.3125rem 0px;
+  background-color: #40a2f4;
+  color: #fff;
+  font-size: 0.625rem;
+  text-align: center;
+  line-height: 0.9375rem;
+}
+.answer .answer-title img {
+  width: 2rem;
+  margin-left: 0.375rem;
+  margin-right: 0.5625rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+.answer .answer-title .answer-msg h6 {
+  color: #121212;
+  font-size: 0.9375rem;
+  margin-bottom: 0.25rem;
+}
+.answer .answer-title .answer-msg h6 span {
+  padding: 0.125rem 0.1875rem;
+  background-color: #ffc654;
+  font-size: 0.625rem;
+  color: #fff;
+  margin-left: 0.25rem;
+  border-radius: 0.125rem;
+}
+.answer .answer-title .answer-msg p {
+  color: #969799;
+  font-size: 0.75rem;
+}
+.answer .answer-title .answer-msg p span {
+  color: #ff6a48;
+}
+.answer .answer-title button {
+  width: 4.375rem;
+  height: 1.625rem;
+  border-radius: 0.8125rem;
+  text-align: center;
+  line-height: 1.625rem;
+  color: #fff;
+  font-size: 0.75rem;
+  background-color: #40a2f4;
+  border: 0;
+  margin-left: auto;
+}
+.answer .answer-con {
+  width: 100%;
+  padding: 0.9375rem;
+  border-radius: 0.375rem;
+  background-color: #f7f7f7;
+  color: #626466;
+  font-size: 0.875rem;
+  line-height: 1.5625rem;
+  margin-bottom: 1.25rem;
+}
+.answer .answer-time {
+  overflow: hidden;
+}
+.answer .answer-time span.time {
+  color: #969799;
+  font-size: 0.75rem;
+  float: left;
+}
+.answer .answer-time p {
+  float: right;
+  color: #969799;
+  font-size: 0.6875rem;
+  line-height: 1.0625rem;
+}
+.answer .answer-time p img {
+  width: 1rem;
+  margin-bottom: 0.25rem;
+  margin-right: 0.15rem;
+}
+.other {
+  padding: 1.125rem 4% 1.5625rem 4%;
+}
+.other h5 {
+  color: #101214;
+  font-size: 1.0625rem;
+  margin-bottom: 1.375rem;
+}
+.other ul li {
+  margin-bottom: 1.5rem;
+  color: #2f3133;
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+}
+.other ul li a {
+  color: #2f3133;
+}
+.other ul li span {
+  width: 0.9375rem;
+  height: 0.9375rem;
+  text-align: center;
+  line-height: 0.9375rem;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 133, 60, 1),
+    rgba(255, 67, 47, 1)
+  );
+  color: #fff;
+  font-size: 0.625rem;
+  display: inline-block;
+  border-radius: 0.3125rem 0px 0.3125rem 0px;
+  margin-right: 0.375rem;
+  margin-bottom: 0.125rem;
+}
+.other button {
+  background-color: #ebf3fa;
+  height: 2.25rem;
+  width: 100%;
+  border-radius: 0.125rem;
+  text-align: center;
+  line-height: 2.25rem;
+  border: 0;
+  color: #40a2f4;
+  font-size: 0.9375rem;
+}
+
 .weiter {
   width: 80%;
   position: fixed;

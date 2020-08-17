@@ -158,7 +158,7 @@ export default {
         "[钟]",
         "[话筒]",
         "[蜡烛]",
-        "[蛋糕]"
+        "[蛋糕]",
       ],
       request: {},
       cons: [],
@@ -174,7 +174,7 @@ export default {
         "首付大概是多少？",
         "现在有优惠吗？",
         "请问是毛坯还是精装？",
-        "什么时候可以看房？"
+        "什么时候可以看房？",
       ],
       isover: true,
       txt: "",
@@ -182,7 +182,7 @@ export default {
       id: "",
       img: require("~/assets/workerman.png"),
       timeover: false,
-      timeout: ""
+      timeout: "",
     };
   },
   head() {
@@ -191,13 +191,13 @@ export default {
       meta: [
         {
           name: "description",
-          content: this.description || "允家新房-允家咨询师"
+          content: this.description || "允家新房-允家咨询师",
         },
         {
           name: "keywords",
-          content: this.keywords || "允家新房-允家咨询师"
-        }
-      ]
+          content: this.keywords || "允家新房-允家咨询师",
+        },
+      ],
     };
   },
   methods: {
@@ -245,9 +245,9 @@ export default {
             con: msg,
             img: img,
             name1: "user-right",
-            name2: "user-left"
+            name2: "user-left",
           });
-          addPersonRequest.onsuccess = function(e) {
+          addPersonRequest.onsuccess = function (e) {
             console.log(e.target.result);
           };
           // }
@@ -328,7 +328,7 @@ export default {
     init() {
       let that = this;
       //连接成功建立的回调方法
-      this.ws.onopen = function(event) {
+      this.ws.onopen = function (event) {
         // console.log(event)
         if (!localStorage.getItem("wskey")) {
           let key = that.suiJiNum(7);
@@ -339,7 +339,7 @@ export default {
             //要发送的数据
             class: "Connect",
             action: "register",
-            content: { sign: sign }
+            content: { sign: sign },
           };
           that.ws.send(JSON.stringify(actions));
           // console.log(key);
@@ -347,7 +347,7 @@ export default {
         let peomsg = {
           //要发送的数据
           class: "Staff",
-          action: "online_staffs"
+          action: "online_staffs",
         };
         if (localStorage.getItem("wskey")) {
           that.ws.send(JSON.stringify(peomsg));
@@ -357,7 +357,7 @@ export default {
       };
 
       //接收到消息的回调方法
-      this.ws.onmessage = function(event) {
+      this.ws.onmessage = function (event) {
         // console.log("ws:收到一条消息", event.data);
         if (event.data != "connect success") {
           let data = JSON.parse(event.data);
@@ -409,9 +409,9 @@ export default {
                     con: msg,
                     img: img,
                     name1: "worker-left",
-                    name2: "worker-right"
+                    name2: "worker-right",
                   });
-                  addPersonRequest.onsuccess = function(e) {
+                  addPersonRequest.onsuccess = function (e) {
                     console.log(e.target.result);
                   };
                   dv.scrollIntoView();
@@ -425,46 +425,46 @@ export default {
                     window.mozIndexedDB ||
                     window.msIndexedDB;
                   let request = indexedDB.open("staffmsg", 2);
-                  request.onupgradeneeded = function(e) {
+                  request.onupgradeneeded = function (e) {
                     let db = e.target.result;
                     if (!db.objectStoreNames.contains("staffmsg")) {
                       var objectStore = db.createObjectStore("staffmsg", {
                         keyPath: "id",
-                        autoIncrement: true
+                        autoIncrement: true,
                       });
                       objectStore.createIndex("sid", "sid", {
-                        unique: true
+                        unique: true,
                       });
                       objectStore.createIndex("con", "con", {
-                        unique: false
+                        unique: false,
                       });
                       objectStore.createIndex("img", "img", {
-                        unique: false
+                        unique: false,
                       });
                       objectStore.createIndex("name", "name", {
-                        unique: false
+                        unique: false,
                       });
                       objectStore.createIndex("time", "time", {
-                        unique: false
+                        unique: false,
                       });
                       objectStore.createIndex("buildname", "buildname", {
-                        unique: false
+                        unique: false,
                       });
                       objectStore.createIndex("projectid", "projectid", {
-                        unique: false
+                        unique: false,
                       });
                       objectStore.createIndex("txt", "txt", {
-                        unique: false
+                        unique: false,
                       });
                       objectStore.createIndex("type", "type", {
-                        unique: false
+                        unique: false,
                       });
                       objectStore.createIndex("num", "num", {
-                        unique: false
+                        unique: false,
                       });
                     }
                   };
-                  request.onsuccess = function(e) {
+                  request.onsuccess = function (e) {
                     let db = request.result;
                     let transaction = db.transaction("staffmsg", "readwrite");
                     let store = transaction.objectStore("staffmsg");
@@ -472,7 +472,7 @@ export default {
                     var search = index.get(data.content.id);
                     let img = data.content.avatar;
                     img = decodeURIComponent(img);
-                    search.onsuccess = function(e) {
+                    search.onsuccess = function (e) {
                       let result = e.target.result;
                       if (result) {
                         let time = new Date().toLocaleTimeString();
@@ -483,14 +483,14 @@ export default {
                         result.time = time;
                         result.num = timenum;
                         let response = store.put(result);
-                        response.onsuccess = function() {
+                        response.onsuccess = function () {
                           var index =
                             window.indexedDB ||
                             window.webkitIndexedDB ||
                             window.mozIndexedDB ||
                             window.msIndexedDB;
                           let req = index.open("staff" + data.content.id, 2);
-                          req.onupgradeneeded = function(e) {
+                          req.onupgradeneeded = function (e) {
                             let db = e.target.result;
                             if (
                               !db.objectStoreNames.contains(
@@ -501,32 +501,32 @@ export default {
                                 "staff" + data.content.id,
                                 {
                                   keyPath: "id",
-                                  autoIncrement: true
+                                  autoIncrement: true,
                                 }
                               );
                               objectStore.createIndex(
                                 "classname",
                                 "classname",
                                 {
-                                  unique: true
+                                  unique: true,
                                 }
                               );
                               objectStore.createIndex("con", "con", {
-                                unique: false
+                                unique: false,
                               });
                               objectStore.createIndex("img", "img", {
-                                unique: false
+                                unique: false,
                               });
                               objectStore.createIndex("name1", "name1", {
-                                unique: false
+                                unique: false,
                               });
                               objectStore.createIndex("name2", "name2", {
-                                unique: false
+                                unique: false,
                               });
                             }
                             console.log("store is created");
                           };
-                          req.onsuccess = function(e) {
+                          req.onsuccess = function (e) {
                             let db = req.result;
                             let tran = db.transaction(
                               "staff" + data.content.id,
@@ -559,11 +559,11 @@ export default {
                               con: msg,
                               img: img,
                               name1: "worker-left",
-                              name2: "worker-right"
+                              name2: "worker-right",
                             });
                           };
                         };
-                        response.onerror = function(e) {
+                        response.onerror = function (e) {
                           console.log("数据更新失败");
                         };
                       } else {
@@ -584,14 +584,14 @@ export default {
                         staff.num = timenum;
 
                         let otheradd = store.add(staff);
-                        otheradd.onsuccess = function() {
+                        otheradd.onsuccess = function () {
                           var index =
                             window.indexedDB ||
                             window.webkitIndexedDB ||
                             window.mozIndexedDB ||
                             window.msIndexedDB;
                           let req = index.open("staff" + data.content.id, 2);
-                          req.onupgradeneeded = function(e) {
+                          req.onupgradeneeded = function (e) {
                             let db = e.target.result;
                             if (
                               !db.objectStoreNames.contains(
@@ -602,32 +602,32 @@ export default {
                                 "staff" + data.content.id,
                                 {
                                   keyPath: "id",
-                                  autoIncrement: true
+                                  autoIncrement: true,
                                 }
                               );
                               objectStore.createIndex(
                                 "classname",
                                 "classname",
                                 {
-                                  unique: true
+                                  unique: true,
                                 }
                               );
                               objectStore.createIndex("con", "con", {
-                                unique: false
+                                unique: false,
                               });
                               objectStore.createIndex("img", "img", {
-                                unique: false
+                                unique: false,
                               });
                               objectStore.createIndex("name1", "name1", {
-                                unique: false
+                                unique: false,
                               });
                               objectStore.createIndex("name2", "name2", {
-                                unique: false
+                                unique: false,
                               });
                             }
                             console.log("store is created");
                           };
-                          req.onsuccess = function(e) {
+                          req.onsuccess = function (e) {
                             let db = req.result;
                             let tran = db.transaction(
                               "staff" + data.content.id,
@@ -642,7 +642,7 @@ export default {
                               con: data.content.content,
                               img: img,
                               name1: "worker-left",
-                              name2: "worker-right"
+                              name2: "worker-right",
                             });
                           };
                         };
@@ -703,8 +703,8 @@ export default {
                     action: "distribute",
                     content: {
                       token: localStorage.getItem("wstoken"),
-                      project: localStorage.getItem("projectid")
-                    }
+                      project: localStorage.getItem("projectid"),
+                    },
                   };
                 } else {
                   actions = {
@@ -713,11 +713,13 @@ export default {
                     action: "distribute",
                     content: {
                       token: localStorage.getItem("wstoken"),
-                      city: localStorage.getItem("city")
-                    }
+                      city: localStorage.getItem("city"),
+                    },
                   };
                 }
-                that.ws.send(JSON.stringify(actions));
+                if (!sessionStorage.getItem("scid")) {
+                  that.ws.send(JSON.stringify(actions));
+                }
               }
             } else if (data.action == "online_staffs") {
               // $cookies.set("staffs", data.content);
@@ -757,8 +759,8 @@ export default {
                     action: "distribute",
                     content: {
                       token: localStorage.getItem("wstoken"),
-                      project: localStorage.getItem("projectid")
-                    }
+                      project: localStorage.getItem("projectid"),
+                    },
                   };
                 } else {
                   actions = {
@@ -767,8 +769,8 @@ export default {
                     action: "distribute",
                     content: {
                       token: localStorage.getItem("wstoken"),
-                      city: localStorage.getItem("city")
-                    }
+                      city: localStorage.getItem("city"),
+                    },
                   };
                 }
                 that.ws.send(JSON.stringify(actions));
@@ -847,7 +849,7 @@ export default {
               //要发送的数据
               class: "Connect",
               action: "register",
-              content: { sign: sign }
+              content: { sign: sign },
             };
             that.ws.send(JSON.stringify(actions));
           }
@@ -891,7 +893,7 @@ export default {
       this.lockReconnect = true;
       tt && clearTimeout(tt);
       let that = this;
-      tt = setTimeout(function() {
+      tt = setTimeout(function () {
         console.log("重连中...");
         that.lockReconnect = false;
         that.createwebsocket();
@@ -900,14 +902,14 @@ export default {
     send(msg) {
       let token = localStorage.getItem("wstoken");
       let sid = sessionStorage.getItem(sessionStorage.getItem("projectid"))
-        ? sessionStorage.getItem("sid")
+        ? sessionStorage.getItem(sessionStorage.getItem("projectid"))
         : 0;
       let id = sessionStorage.getItem("projectid");
       let actions = {
         //要发送的数据
         class: "Chat",
         action: "send",
-        content: { staff_id: sid, msg: msg, token: token, project: id }
+        content: { staff_id: sid, msg: msg, token: token, project: id },
       };
       sessionStorage.setItem("lastone", msg);
       let dd = JSON.stringify(actions);
@@ -961,8 +963,8 @@ export default {
         action: "project",
         content: {
           token: localStorage.getItem("wstoken"),
-          Id: sessionStorage.getItem("projectid")
-        }
+          Id: sessionStorage.getItem("projectid"),
+        },
       };
       this.ws.send(JSON.stringify(options));
     },
@@ -972,7 +974,18 @@ export default {
       let k = $cookies.get("pinyin");
       this.pinyin = k;
       this.id = id;
-      this.$router.push(`/${k}/content/${id}`);
+      if (sessionStorage.getItem("reconnect")) {
+        window.location.href = sessionStorage.getItem("reconnect")+'?token='+localStorage.getItem('wstoken');
+      } else {
+        if (sessionStorage.getItem("wxurl")) {
+          let kk = sessionStorage.getItem("wxurl");
+          this.$router.push(`/${k}/content/${id}?${kk}`);
+        } else {
+          // this.$router.push(`/${k}/content/${id}`);
+          window.location.href=`/${k}/content/${id}`
+        }
+      }
+
       // window.location.href = `/${k}/content/${id}`;
     },
     golist() {
@@ -993,42 +1006,42 @@ export default {
       }
       let request = indexedDB.open("staff" + id, 2);
       this.request = request;
-      request.onupgradeneeded = function(e) {
+      request.onupgradeneeded = function (e) {
         db = e.target.result;
         if (!db.objectStoreNames.contains("staff" + id)) {
           let objectStore = db.createObjectStore("staff" + id, {
             keyPath: "id",
-            autoIncrement: true
+            autoIncrement: true,
           });
           objectStore.createIndex("classname", "classname", {
-            unique: true
+            unique: true,
           });
           objectStore.createIndex("con", "con", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("img", "img", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("name1", "name1", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("name2", "name2", {
-            unique: false
+            unique: false,
           });
         }
         console.log("store is created");
       };
-      request.onsuccess = function(e) {
+      request.onsuccess = function (e) {
         db = request.result;
         let transaction = db.transaction("staff" + id, "readwrite");
         let store = transaction.objectStore("staff" + id);
         // 取出所有数据
         let all = store.getAll();
-        all.onsuccess = function() {
+        all.onsuccess = function () {
           that.cons = all.result;
         };
       };
-      request.onerror = function(e) {
+      request.onerror = function (e) {
         console.log("false");
       };
     },
@@ -1046,7 +1059,7 @@ export default {
       } else {
         sessionStorage.setItem("clearnum", 1);
       }
-    }
+    },
   },
   updated() {
     let dds = document.getElementsByClassName("alltxt");
@@ -1056,6 +1069,16 @@ export default {
     }
   },
   mounted() {
+    let url = window.location.href;
+    url = url.split("?")[1];
+    if (url && url.indexOf("reconnect") != -1) {
+      console.log(decodeURIComponent(url.split("=")[1]));
+      let arr = decodeURIComponent(url.split("=")[1]).split("?");
+      sessionStorage.setItem("reconnect", arr[0]);
+      console.log(arr[1]);
+      sessionStorage.setItem("projectid", arr[1].split("&")[0].split("=")[1]);
+      sessionStorage.setItem("bulidname", arr[1].split("&")[1].split("=")[1]);
+    }
     let that = this;
     that.t2 = true;
     this.timeout = setTimeout(() => {
@@ -1076,7 +1099,7 @@ export default {
         //         </div>`;
         // $(".con").append(dv);
         // dv.scrollIntoView();
-        that.send("你好");
+        that.send("客户已上线");
       }
     }, 10000);
     this.pinyin = $cookies.get("pinyin");
@@ -1101,7 +1124,7 @@ export default {
     for (let val in that.faces) {
       that.faces[val] = {
         img: require(`~/assets/${val}.gif`),
-        con: that.faces[val]
+        con: that.faces[val],
       };
     }
     setTimeout(() => {
@@ -1109,11 +1132,11 @@ export default {
         that.getpro();
       }
     }, 300);
-    document.getElementById("upload").addEventListener("change", function(e) {
+    document.getElementById("upload").addEventListener("change", function (e) {
       var file = event.currentTarget.files[0];
       if ((file.size / 1000).toFixed(0) < 2000) {
         let r = new FileReader(); //本地预览
-        r.onload = function(e) {
+        r.onload = function (e) {
           var imgFile = e.target.result; //或e.target都是一样的
           let img = require("~/assets/talkpeo.png");
           let dv = document.createElement("div");
@@ -1134,7 +1157,7 @@ export default {
             con: `<img src=${imgFile}>`,
             img: img,
             name1: "user-right",
-            name2: "user-left"
+            name2: "user-left",
           });
 
           that.send(`img[${imgFile}]`);
@@ -1142,7 +1165,7 @@ export default {
         let base = r.readAsDataURL(file);
       } else {
         that.tishi = true;
-        setTimeout(function() {
+        setTimeout(function () {
           that.tishi = false;
         }, 1500);
       }
@@ -1165,29 +1188,29 @@ export default {
       timeout: 5000,
       timeoutObj: null,
       serverTimeoutObj: null,
-      reset: function() {
+      reset: function () {
         clearTimeout(this.timeoutObj);
         clearTimeout(this.serverTimeoutObj);
         return this;
       },
-      start: function() {
+      start: function () {
         var self = this;
         this.timeoutObj && clearTimeout(this.timeoutObj);
         this.serverTimeoutObj && clearTimeout(this.serverTimeoutObj);
-        this.timeoutObj = setTimeout(function() {
+        this.timeoutObj = setTimeout(function () {
           //这里发送一个心跳，后端收到后，返回一个心跳消息，
           //onmessage拿到返回的心跳就说明连接正常
           if (that.isover) {
             that.ws.send("PING");
             // console.log("ping");
-            self.serverTimeoutObj = setTimeout(function() {
+            self.serverTimeoutObj = setTimeout(function () {
               // 如果超过一定时间还没重置，说明后端主动断开了
               // console.log("关闭服务");
               // that.reconnect(); //如果onclose会执行reconnect，我们执行 websocket.close()就行了.如果直接执行 reconnect 会触发onclose导致重连两次
             }, self.timeout);
           }
         }, this.timeout);
-      }
+      },
     };
 
     this.createwebsocket();
@@ -1204,34 +1227,34 @@ export default {
       let request = indexedDB.open("staff" + id, 2);
       that.request = request;
       console.log(request, that.request);
-      request.onupgradeneeded = function(e) {
+      request.onupgradeneeded = function (e) {
         db = e.target.result;
         that.db = db;
         console.log(that.db);
         if (!db.objectStoreNames.contains("staff" + id)) {
           var objectStore = db.createObjectStore("staff" + id, {
             keyPath: "id",
-            autoIncrement: true
+            autoIncrement: true,
           });
           objectStore.createIndex("classname", "classname", {
-            unique: true
+            unique: true,
           });
           objectStore.createIndex("con", "con", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("img", "img", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("name1", "name1", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("name2", "name2", {
-            unique: false
+            unique: false,
           });
         }
         console.log("store is created");
       };
-      request.onsuccess = function(e) {
+      request.onsuccess = function (e) {
         db = request.result;
         that.db = request.result;
         var transaction = db.transaction("staff" + id, "readwrite");
@@ -1239,12 +1262,12 @@ export default {
         that.store = store;
         // 取出所有数据
         var all = store.getAll();
-        all.onsuccess = function() {
+        all.onsuccess = function () {
           console.log(all.result);
           that.cons = all.result;
         };
       };
-      request.onerror = function(e) {
+      request.onerror = function (e) {
         console.log("false");
       };
     }
@@ -1252,7 +1275,7 @@ export default {
   watch: {
     msg(val) {
       console.log(val);
-    }
+    },
   },
   beforeDestroy() {
     clearTimeout(this.timeout);
@@ -1269,46 +1292,46 @@ export default {
         alert("不支持");
       }
       let request = indexedDB.open("staffmsg", 2);
-      request.onupgradeneeded = function(e) {
+      request.onupgradeneeded = function (e) {
         db = e.target.result;
         if (!db.objectStoreNames.contains("staffmsg")) {
           var objectStore = db.createObjectStore("staffmsg", {
             keyPath: "id",
-            autoIncrement: true
+            autoIncrement: true,
           });
           objectStore.createIndex("sid", "sid", {
-            unique: true
+            unique: true,
           });
           objectStore.createIndex("con", "con", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("img", "img", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("name", "name", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("time", "time", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("buildname", "buildname", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("projectid", "projectid", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("txt", "txt", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("type", "type", {
-            unique: false
+            unique: false,
           });
           objectStore.createIndex("num", "num", {
-            unique: false
+            unique: false,
           });
         }
       };
-      request.onsuccess = function(e) {
+      request.onsuccess = function (e) {
         db = request.result;
         var transaction = db.transaction("staffmsg", "readwrite");
         var store = transaction.objectStore("staffmsg");
@@ -1322,7 +1345,7 @@ export default {
         // sessionStorage.removeItem("staffname");
         // sessionStorage.removeItem("talktime");
         var search = index.get(sid);
-        search.onsuccess = function(e) {
+        search.onsuccess = function (e) {
           let result = e.target.result;
           if (result) {
             let txt = sessionStorage.getItem("lastone");
@@ -1344,18 +1367,18 @@ export default {
             staff.num = timenum;
             // 添加
             var addPersonRequest = store.add(staff);
-            addPersonRequest.onsuccess = function(e) {
+            addPersonRequest.onsuccess = function (e) {
               console.log(e.target.result);
             };
           }
         };
       };
-      request.onerror = function(e) {
+      request.onerror = function (e) {
         console.log("false");
       };
       this.ws.close();
     }
-  }
+  },
 };
 </script>
 <style scoped>

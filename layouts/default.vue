@@ -173,4 +173,12 @@ body.position-fixed {
   transition: opacity 0.5s;
   animation: big-out 0.5s;
 }
+
+a:link{text-decoration:none; }  /* 指正常的未被访问过的链接*/
+
+a:visited{text-decoration:none; }/*指已经访问过的链接*/
+
+a:hover{text-decoration:none;}/*指鼠标在链接*/
+
+a:active{text-decoration:none;}/* 指正在点的链接*/ 
 </style>

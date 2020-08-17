@@ -49,6 +49,7 @@ export default {
     { src: '~plugins/swip', ssr: false },
     { src: '~plugins/axios', ssr: true },
     { src: '~plugins/route', ssr: true },
+    { src: '~plugins/lazy', ssr: true },
     // { src: '~plugins/babel', ssr: true },
   ],
   /*
@@ -120,7 +121,28 @@ export default {
       pathRewrite:{  // 路径重写，
         '^/connect': '/connect'  // 替换target中的请求地址
       }
-    }
+    },
+    '/iptest':{
+      target:'http://39.98.227.114:9550/', // 你请求的第三方接口
+      changeOrigin:true, // 在本地会创建一个虚拟服务端，然后发送请求的数据，并同时接收请求的数据，这样服务端和服务端进行数据的交互就不会有跨域问题
+      pathRewrite:{  // 路径重写，
+        '^/iptest': '/iptest'  // 替换target中的请求地址
+      }
+    },
+    "/question": { 
+      target: "http://39.98.227.114:9550/", // 重新映射的新地址 
+      changeOrigin: true, // 是否跨域
+      pathRewrite: {
+          "^/question": "/question" // 去掉接口地址中的api字符串
+      }
+    },
+    "/mobile": { 
+      target: "http://39.98.227.114:9550/", // 重新映射的新地址 
+      changeOrigin: true, // 是否跨域
+      pathRewrite: {
+          "^/mobile": "/mobile" // 去掉接口地址中的api字符串
+      }
+    },
   },
   axios: {
     proxy: true, // 表示开启代理

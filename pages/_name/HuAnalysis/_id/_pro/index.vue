@@ -215,6 +215,10 @@ export default {
     let ip=context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
+    let name = context.store.state.cookie.cityname;
+    name = decodeURIComponent(name)
+    let bud = context.store.state.cookie.name
+    bud = decodeURIComponent(bud)
     let id=context.params.id;
     let jkl=context.store.state.cookie.pinyin;
     let [res]= await Promise.all([
@@ -251,7 +255,9 @@ export default {
           jkl:jkl,
           title:res.head.title,
           description:res.head.description,
-          keywords:res.head.keywords
+          keywords:res.head.keywords,
+          city:name,
+          name:bud
     }
   },
   components: {
@@ -276,7 +282,9 @@ export default {
       baoming:'',
       title:'',
       description:'',
-      keywords:''
+      keywords:'',
+      city:'',
+      name:''
     };
   },
   methods: {
@@ -391,15 +399,15 @@ export default {
   },
   head() {
     return {
-      title: this.title || '允家新房-户型详情',
+      title: this.title || `${this.city}${this.name}${this.one.house}户型信息_允家新房`,
       meta: [
         {
           name: "description",
-          content: this.description || '允家新房'
+          content: this.description || `允家新房提供${this.city}${this.name}${this.one.house}信息,让您了解真实${this.city}${this.name}房型图`
         },
         {
           name: "keywords",
-          content: this.keywords || '允家新房'
+          content: this.keywords || `${this.name}${this.one.house}户型，${this.name}${this.one.house}户型图`
         }
       ]
     };

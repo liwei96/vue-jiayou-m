@@ -320,8 +320,7 @@ export default {
   methods: {
     start() {
       this.city = localStorage.getItem("cityname");
-      let address = JSON.parse(localStorage.getItem("address"));
-      if (!address) {
+      
         let token = localStorage.getItem("token");
         let ip = ip_arr["ip"];
         // let ip = returnCitySN["cip"];
@@ -361,33 +360,6 @@ export default {
           .catch(error => {
             console.log(error);
           });
-      } else {
-        this.A = address.city.A;
-        this.B = address.city.B;
-        this.C = address.city.C;
-        this.D = address.city.D;
-        this.E = address.city.E;
-        this.F = address.city.F;
-        this.G = address.city.G;
-        this.H = address.city.H;
-        this.I = address.city.I;
-        this.J = address.city.J;
-        this.K = address.city.K;
-        this.L = address.city.L;
-        this.M = address.city.M;
-        this.N = address.city.N;
-        this.O = address.city.O;
-        this.P = address.city.P;
-        this.Q = address.city.Q;
-        this.R = address.city.R;
-        this.S = address.city.S;
-        this.T = address.city.T;
-        this.W = address.city.W;
-        this.X = address.city.X;
-        this.Y = address.city.Y;
-        this.Z = address.city.Z;
-        this.hots = address.hots;
-      }
     },
     getcity() {
       this.getip();

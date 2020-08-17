@@ -5,6 +5,8 @@ export default ({
   store
 }) => {
   app.router.beforeEach((to, from, next) => {
+    // console.log(to.params, from.params)
+
     switch (to.params.name) {
       case 'xuzhou':
         if (process.server == false) {
@@ -36,10 +38,10 @@ export default ({
         break;
       case 'jiaxing':
         if (process.server == false) {
-          localStorage.setItem('city', 39)
-          $cookies.set('city', 39)
+          localStorage.setItem('city', 38)
+          $cookies.set('city', 38)
         }
-        store.state.city = 39
+        store.state.city = 38
         break;
       case 'shaoxing':
         if (process.server == false) {
@@ -76,6 +78,30 @@ export default ({
         }
         store.state.city = 3
         break;
+      case 'qiannan':
+        if (process.server == false) {
+          localStorage.setItem('city', 129)
+          $cookies.set('city', 129)
+        }
+        store.state.city = 129
+        break;
+      case 'wuxi':
+        if (process.server == false) {
+          localStorage.setItem('city', 149)
+          $cookies.set('city', 149)
+        }
+        store.state.city = 149
+        break;
+    }
+    // if (to.params.id == 'undefined') {
+    //   next({
+    //     path:'/hangzhou'
+    //   })
+    // }
+    if(to.params.id == '6440') {
+      next({
+        path:'/hangzhou'
+      })
     }
     next()
   })

@@ -101,6 +101,8 @@ export default {
   async asyncData (context) {
     let ip=context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
+    let name = context.store.state.cookie.cityname;
+    name = decodeURIComponent(name)
     let token=context.store.state.cookie.token;
     let jkl = context.store.state.cookie.pinyin;
     let id=context.params.id;
@@ -118,7 +120,9 @@ export default {
           jkl:jkl,
           title:res.title,
           description:res.description,
-          keywords:res.keywords
+          keywords:res.keywords,
+          name:res.building.name,
+          city:name
     }
   },
   data() {
@@ -135,20 +139,22 @@ export default {
       jkl:'',
       title:'',
       description:'',
-      keywords:''
+      keywords:'',
+      name:'',
+      city:''
     };
   },
   head() {
     return {
-      title: this.title || '允家新房-楼盘动态',
+      title: this.title || `${this.city}${this.name}楼盘动态_允家新房`,
       meta: [
         {
           name: "description",
-          content: this.description || '允家新房'
+          content: this.description ||  `允家新房${this.city}${this.name}楼盘动态为您提供实时楼盘动态,包括实时${this.name}楼盘新闻资讯,实时开盘时间信息、户型房源和价格打折信息等`
         },
         {
           name: "keywords",
-          content: this.keywords || '允家新房'
+          content: this.keywords || `${this.city}${this.name}楼盘动态`
         }
       ]
     };
@@ -296,6 +302,7 @@ export default {
     "foot-view": footView
   },
   mounted() {
+    this.city = localStorage.getItem('cityname')
     let h = $(".Dynamic").height();
                 if(h<700){
                     $('#Foot').css({'position':'fixed','bottom':'0','width':'100%','marginBottom':'56px'});

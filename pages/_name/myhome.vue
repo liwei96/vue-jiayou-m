@@ -99,8 +99,13 @@
       </div>
       <div id="Footer">
         <p>杭州易得房科技有限公司版权所有 电话：400-966-9995</p>
-        <p><img src="~/assets/f-logo.png">网络经营许可证：<a href="http://www.beian.miit.gov.cn/"><span>浙ICP备18057005号</span></a></p>
-    </div>
+        <p>
+          <img src="~/assets/f-logo.png" />网络经营许可证：
+          <a href="http://www.beian.miit.gov.cn/">
+            <span>浙ICP备18057005号</span>
+          </a>
+        </p>
+      </div>
       <div class="m-out">
         <div class="out-con">
           <h6>确定退出</h6>
@@ -193,7 +198,12 @@ export default {
     }
   },
   mounted() {
-    $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom:0 });
+    $("#Foot").css({
+      position: "fixed",
+      bottom: "0",
+      width: "100%",
+      marginBottom: 0
+    });
     this.start();
     let that = this;
     let t = localStorage.getItem("token");
@@ -520,21 +530,21 @@ li {
 }
 #Footer {
   position: fixed;
-  bottom:0;
-  width:100%
+  bottom: 0;
+  width: 100%;
 }
-#Footer p{
-  color:#929AA7;
+#Footer p {
+  color: #929aa7;
   font-size: 12px;
   text-align: center;
   margin-bottom: 6px;
 }
-#Footer p img{
-  width:6%;
+#Footer p img {
+  width: 6%;
   margin-right: 2%;
 }
-#Footer p a{
-  color:#6A7B97;
-  text-decoration: underline
+#Footer p a {
+  color: #6a7b97;
+  text-decoration: underline;
 }
 </style>

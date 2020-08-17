@@ -7,7 +7,7 @@
       <ul>
         <li v-for="(item,key) in lists" :key="key">
           <div class="left">
-            <img src="~/assets/lou1.png" alt />
+            <img src="~/assets/jiapeo.png" alt />
           </div>
           <div class="right">
             <h6>
@@ -24,12 +24,24 @@
             <p class="txt">{{item.content}}</p>
             <div class="btn">
               <span>{{item.createtime}}</span>
-              <strong :data-v="item.id" @click="del($event)"  v-if="tel==item.user_name">删除</strong>
+              <strong :data-v="item.id" @click="del($event)" v-if="tel==item.user_name">删除</strong>
               <p class="interaction">
-                  <img id="agree" :data-v="item.id" :type="item.my_like" :data-n="item.like_num" @click="ag"  data-y="2" src="~/assets/click.png" />
-                    <span :data-v="item.id" :type="item.my_like" :data-n="item.like_num" data-y="2" @click="agrees($event)">
-                    点赞({{item.like_num}})
-                  </span>
+                <img
+                  id="agree"
+                  :data-v="item.id"
+                  :type="item.my_like"
+                  :data-n="item.like_num"
+                  @click="ag"
+                  data-y="2"
+                  :src="item.my_like == 0 ? beforeck : cked"
+                />
+                <span
+                  :data-v="item.id"
+                  :type="item.my_like"
+                  :data-n="item.like_num"
+                  data-y="2"
+                  @click="agrees($event)"
+                >点赞({{item.like_num}})</span>
                 <span @click="commentback(item.id)">回复({{item.children.length}})</span>
               </p>
             </div>
@@ -40,7 +52,11 @@
               </p>
               <p class="time">
                 {{item.children[0].time}}
-                <span :data-v="item.children[0].id" @click="del($event)" v-if="tel==item.children[0].mobile">删除</span>
+                <span
+                  :data-v="item.children[0].id"
+                  @click="del($event)"
+                  v-if="tel==item.children[0].mobile"
+                >删除</span>
               </p>
             </div>
           </div>
@@ -78,9 +94,9 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming"/>
+            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
             <p class="w-mg">
-              <input class="w-mg-c" type="radio" checked v-model="checks"/>我已阅读并同意
+              <input class="w-mg-c" type="radio" checked v-model="checks" />我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
@@ -96,7 +112,7 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" id="ma-ll"/>
+            <input type="text" placeholder="请输入验证码" id="ma-ll" />
             <button class="port1">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -128,35 +144,42 @@ import {
   trend_put,
   collection,
   login,
-  encyclopediaarticle_agree
+  encyclopediaarticle_agree,
 } from "~/api/api";
 export default {
   name: "MoreComments",
-  async asyncData (context) {
-    let ip=context.store.state.cookie.ip;
+  async asyncData(context) {
+    let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
-    let token=context.store.state.cookie.token;
-    let jkl=context.store.state.cookie.pinyin;
-    let id=context.params.id;
-    let [res]= await Promise.all([
-      context.$axios.post('/api/project/comment_info',{ city: city, id: id, page: 1, limit: 10 })
-      .then((resp)=>{
-        let data = resp.data;
+    let token = context.store.state.cookie.token;
+    let jkl = context.store.state.cookie.pinyin;
+    let id = context.params.id;
+    let [res] = await Promise.all([
+      context.$axios
+        .post("/api/project/comment_info", {
+          city: city,
+          id: id,
+          page: 1,
+          limit: 10,
+          token:token
+        })
+        .then((resp) => {
+          let data = resp.data;
           return data;
-      })
-    ])
-    return{
-         lists:res.data,
-         jkl:jkl,
-         title:res.title,
-          description:res.description,
-          keywords:res.keywords
-    }
+        }),
+    ]);
+    return {
+      lists: res.data,
+      jkl: jkl,
+      title: res.title,
+      description: res.description,
+      keywords: res.keywords,
+    };
   },
   data() {
     return {
-      baoming:'',
-      jkl:'',
+      baoming: "",
+      jkl: "",
       change: false,
       succ: false,
       defaultHeight: "0",
@@ -169,33 +192,37 @@ export default {
       phone: "",
       n: "",
       call: "",
-      checks:'',
-      tel:'',
-      title:'',
-      description:'',
-      keywords:''
+      checks: "",
+      tel: "",
+      title: "",
+      description: "",
+      keywords: "",
+      isag: true,
+      isagrees: true,
+      beforeck:require('~/assets/giveup.png'),
+      cked:require('~/assets/clicked.png')
     };
   },
   head() {
     return {
-      title: this.title || '允家新房-楼盘评论',
+      title: this.title || "允家新房-楼盘评论",
       meta: [
         {
           name: "description",
-          content: this.description || '允家新房'
+          content: this.description || "允家新房",
         },
         {
           name: "keywords",
-          content: this.keywords || '允家新房'
-        }
-      ]
+          content: this.keywords || "允家新房",
+        },
+      ],
     };
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
   methods: {
-    method1: function() {
+    method1: function () {
       ratingStar();
     },
     start() {
@@ -205,14 +232,13 @@ export default {
       this.id = id;
       this.call = localStorage.getItem("call");
       let collect = localStorage.getItem(id);
-          if (collect == 0) {
-            $("#fork").show();
-            $("#forked").hide();
-          } else {
-            $("#fork").hide();
-            $("#forked").show();
-          }
-      
+      if (collect == 0) {
+        $("#fork").show();
+        $("#forked").hide();
+      } else {
+        $("#fork").hide();
+        $("#forked").show();
+      }
     },
     del(e) {
       let id = e.target.getAttribute("data-v");
@@ -222,21 +248,21 @@ export default {
       } else {
         let token = localStorage.getItem("token");
         comment_del({ token: token, id: id })
-          .then(resp => {
+          .then((resp) => {
             if (resp.data.code == 200) {
               location.reload();
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
           });
       }
     },
     sendmsg(t) {
       this.phone = t;
-      let that=this;
+      let that = this;
       msg({ phone: t, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             let ip = that.ip;
             let c = localStorage.getItem("city");
@@ -253,17 +279,17 @@ export default {
               platform: 2,
               project: id,
               kid: kid,
-              other: other
+              other: other,
             })
-              .then(resp => {})
-              .catch(error => {
+              .then((resp) => {})
+              .catch((error) => {
                 console.log(error);
               });
             $(".t-b-first").hide();
             $(".t-b-second").show();
             var time = 60;
             var tel = t.substr(0, 3) + "****" + t.substr(7, 11);
-            var fn = function() {
+            var fn = function () {
               time--;
               if (time > 0) {
                 $(".t-b-scode").html("重新发送" + time + "s");
@@ -277,12 +303,12 @@ export default {
             fn();
             var interval = setInterval(fn, 1000);
             $("#ytel").html(tel);
-          }else{
-            $('.l-p').val('')
+          } else {
+            $(".l-p").val("");
             $(".l-p").attr("placeholder", "报名失败");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -290,16 +316,16 @@ export default {
       let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             that.succ = true;
             that.change = false;
-          }else{
-            $("#ma-ll").val('');
+          } else {
+            $("#ma-ll").val("");
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -310,130 +336,142 @@ export default {
         this.$router.push("/" + this.n + "/login");
       }
       collection({ token: token, project: id })
-        .then(resp => {})
-        .catch(error => {
+        .then((resp) => {})
+        .catch((error) => {
           console.log(error);
         });
     },
     goback() {
       this.$router.go(-1);
     },
-    commentback(id){
-      this.$router.push('/'+this.jkl+'/commentback/'+id)
+    commentback(id) {
+      this.$router.push("/" + this.jkl + "/commentback/" + id);
     },
     ag(e) {
-      // console.log(e.target)
-      let img = require("~/assets/clicked.png");
-      let id = e.target.getAttribute("data-v");
-      let ip = this.ip;
-      let token = localStorage.getItem("token");
-      let that = this;
-      let num = e.target.getAttribute("data-n");
-      let y=e.target.getAttribute('data-y')
-      encyclopediaarticle_agree({ ip: ip, id: id, platform: 2, token: token , type: y })
-        .then(resp => {
-          if (resp.data.code == 500) {
-            that.$router.push("/" + that.pinyin + "/login");
-            // window.location.href = "/login";
-          } else {
-            let type = e.target.getAttribute("type");
-            let click = require("~/assets/noclick.png");
-            if (type == 0) {
-              num = parseInt(num) + 1;
-              e.target.setAttribute("data-n", num);
-              e.target.setAttribute("type", 1);
-              e.target.setAttribute("src", img);
-              e.target.nextElementSibling.innerHTML = `有用(${num})`;
-            } else {
-              num = parseInt(num) - 1;
-              e.target.setAttribute("data-n", num);
-              e.target.setAttribute("type", 0);
-              e.target.setAttribute("src", click);
-              e.target.nextElementSibling.innerHTML = `有用(${num})`;
-            }
-          }
+      if (this.isag) {
+        this.isag = false;
+        // console.log(e.target)
+        let img = require("~/assets/clicked.png");
+        let id = e.target.getAttribute("data-v");
+        let ip = this.ip;
+        let token = localStorage.getItem("token");
+        let that = this;
+        let num = e.target.getAttribute("data-n");
+        let y = e.target.getAttribute("data-y");
+        encyclopediaarticle_agree({
+          ip: ip,
+          id: id,
+          platform: 2,
+          token: token,
+          type: y,
         })
-        .catch(error => {
-          console.log(error);
-        });
+          .then((resp) => {
+            if (resp.data.code == 500) {
+              that.$router.push("/" + that.pinyin + "/login");
+              // window.location.href = "/login";
+            } else {
+              let type = e.target.getAttribute("type");
+              let click = require("~/assets/noclick.png");
+              if (type == 0) {
+                num = parseInt(num) + 1;
+                e.target.setAttribute("data-n", num);
+                e.target.setAttribute("type", 1);
+                e.target.setAttribute("src", img);
+                e.target.nextElementSibling.innerHTML = `有用(${num})`;
+              } else {
+                num = parseInt(num) - 1;
+                e.target.setAttribute("data-n", num);
+                e.target.setAttribute("type", 0);
+                e.target.setAttribute("src", click);
+                e.target.nextElementSibling.innerHTML = `有用(${num})`;
+              }
+              that.isag = true;
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
     agrees(e) {
-      // console.log(e.target)
-      let img = require("~/assets/clicked.png");
-      let id = e.target.getAttribute("data-v");
-      let ip = this.ip;
-      let token = localStorage.getItem("token");
-      let that = this;
-      let num = e.target.getAttribute("data-n");
-      let y=e.target.getAttribute('data-y')
-      encyclopediaarticle_agree({ ip: ip, id: id, platform: 2, token: token , type: y })
-        .then(resp => {
-          if (resp.data.code == 500) {
-            that.$router.push("/" + that.pinyin + "/login");
-            // window.location.href = "/login";
-          } else {
-            let type = e.target.getAttribute("type");
-            let click = require("~/assets/noclick.png");
-            if (type == 0) {
-              num = parseInt(num) + 1;
-              e.target.setAttribute("data-n", num);
-              e.target.setAttribute("type", 1);
-              e.target.previousElementSibling.setAttribute("src", img);
-              e.target.innerHTML = `有用(${num})`;
-            } else {
-              num = parseInt(num) - 1;
-              e.target.setAttribute("data-n", num);
-              e.target.setAttribute("type", 0);
-              e.target.previousElementSibling.setAttribute("src", click);
-              e.target.innerHTML = `有用(${num})`;
-            }
-          }
+      if (this.isagrees) {
+        this.isagrees = false;
+        // console.log(e.target)
+        let img = require("~/assets/clicked.png");
+        let id = e.target.getAttribute("data-v");
+        let ip = this.ip;
+        let token = localStorage.getItem("token");
+        let that = this;
+        let num = e.target.getAttribute("data-n");
+        let y = e.target.getAttribute("data-y");
+        encyclopediaarticle_agree({
+          ip: ip,
+          id: id,
+          platform: 2,
+          token: token,
+          type: y,
         })
-        .catch(error => {
-          console.log(error);
-        });
+          .then((resp) => {
+            if (resp.data.code == 500) {
+              that.$router.push("/" + that.pinyin + "/login");
+              // window.location.href = "/login";
+            } else {
+              let type = e.target.getAttribute("type");
+              let click = require("~/assets/noclick.png");
+              if (type == 0) {
+                num = parseInt(num) + 1;
+                e.target.setAttribute("data-n", num);
+                e.target.setAttribute("type", 1);
+                e.target.previousElementSibling.setAttribute("src", img);
+                e.target.innerHTML = `有用(${num})`;
+              } else {
+                num = parseInt(num) - 1;
+                e.target.setAttribute("data-n", num);
+                e.target.setAttribute("type", 0);
+                e.target.previousElementSibling.setAttribute("src", click);
+                e.target.innerHTML = `有用(${num})`;
+              }
+              that.isagrees = true;
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
   },
-  mounted() { 
-    this.tel=localStorage.getItem('tel')
-    $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom: '56px' });
-    this.baoming=localStorage.getItem('phone');
+  mounted() {
+    this.tel = localStorage.getItem("tel");
+    $("#Foot").css({
+      position: "fixed",
+      bottom: "0",
+      width: "100%",
+      marginBottom: "56px",
+    });
+    this.baoming = localStorage.getItem("phone");
     this.start();
     let that = this;
-    $(".p1").on("click", function() {
+    $(".p1").on("click", function () {
       $(".m-chang").show();
       that.change = true;
     });
-    $(".m-chang").on("click", function() {
+    $(".m-chang").on("click", function () {
       $(".m-chang").hide();
       that.change = false;
       that.succ = false;
     });
     // 接口验证码
-    $(".t-b-btn2").on("click", function() {
-      let t=that.checks;
-      if(!t){
-        $('.tishi').show()
-        return
-      }else{
-        $('.tishi').hide()
+    $(".t-b-btn2").on("click", function () {
+      let t = that.checks;
+      if (!t) {
+        $(".tishi").show();
+        return;
+      } else {
+        $(".tishi").hide();
       }
-      var phone = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var type = $(this)
-        .parent()
-        .parent()
-        .prev()
-        .find("h6")
-        .html();
-      var building_name = $(this)
-        .parent()
-        .next()
-        .find("#building_name")
-        .val();
+      var phone = $(this).prev().prev().prev().val();
+      var type = $(this).parent().parent().prev().find("h6").html();
+      var building_name = $(this).parent().next().find("#building_name").val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -445,23 +483,19 @@ export default {
       }
       that.sendmsg(phone);
     });
-    $(".port1").on("click", function() {
-      var ma = $(this)
-        .prev()
-        .val();
+    $(".port1").on("click", function () {
+      var ma = $(this).prev().val();
       if (!ma) {
-        $(this)
-          .prev()
-          .attr("placeholder", "验证码不能为空");
+        $(this).prev().attr("placeholder", "验证码不能为空");
         return;
       }
       that.check(ma);
     });
-    $("#o_btn").on("click", function() {
+    $("#o_btn").on("click", function () {
       that.succ = false;
       $(".m-chang").hide();
     });
-    $(".o-esc").on("click", function() {
+    $(".o-esc").on("click", function () {
       that.succ = false;
       $(".m-chang").hide();
     });
@@ -474,7 +508,7 @@ export default {
     };
   },
   watch: {
-    nowHeight: function() {
+    nowHeight: function () {
       if (this.defaultHeight != this.nowHeight) {
         $(".weiter").css("top", "100px");
         $("#nav-list").css("top", "42%");
@@ -482,8 +516,8 @@ export default {
         $(".weiter").css("top", "220px");
         $("#nav-list").css("top", "21%");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -491,9 +525,9 @@ export default {
   padding: 0;
   margin: 0;
 }
-.tishi{
+.tishi {
   display: none;
-  color:red;
+  color: red;
   font-size: 12px;
 }
 li {

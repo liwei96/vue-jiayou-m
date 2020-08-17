@@ -9,14 +9,15 @@ const store = () => new Vuex.Store({
 
   state: {
     ip: '',
-    IP:'',
+    IP: '',
     token: '',
     call: '',
     city: '',
     cityname: '',
     num: '',
     pinyin: '',
-    cookie: {}
+    cookie: {},
+    proid:''
   },
   mutations: {
     setip(state, data) {
@@ -72,79 +73,93 @@ const store = () => new Vuex.Store({
             localStorage.setItem('city', 112)
             $cookies.set('city', 112)
           }
-           commit('setcity',112)
+          commit('setcity', 112)
           break;
         case 'hangzhou':
           if (process.server == false) {
             localStorage.setItem('city', 1)
             $cookies.set('city', 1)
           }
-          commit('setcity',112)
+          commit('setcity', 1)
           break;
         case 'ningbo':
           if (process.server == false) {
             localStorage.setItem('city', 36)
             $cookies.set('city', 36)
           }
-          commit('setcity',112)
+          commit('setcity', 36)
           break;
         case 'huzhou':
           if (process.server == false) {
             localStorage.setItem('city', 104)
             $cookies.set('city', 104)
           }
-          commit('setcity',112)
+          commit('setcity', 104)
           break;
         case 'jiaxing':
           if (process.server == false) {
-            localStorage.setItem('city', 39)
-            $cookies.set('city', 39)
+            localStorage.setItem('city', 38)
+            $cookies.set('city', 38)
           }
-          commit('setcity',112)
+          commit('setcity', 38)
           break;
         case 'shaoxing':
           if (process.server == false) {
             localStorage.setItem('city', 73)
             $cookies.set('city', 73)
           }
-          commit('setcity',112)
+          commit('setcity', 73)
           break;
         case 'zhanjiang':
           if (process.server == false) {
             localStorage.setItem('city', 93)
             $cookies.set('city', 93)
           }
-          commit('setcity',112)
+          commit('setcity', 93)
           break;
         case 'chongqing':
           if (process.server == false) {
             localStorage.setItem('city', 41)
             $cookies.set('city', 41)
           }
-          commit('setcity',112)
+          commit('setcity', 41)
           break;
         case 'chengdu':
           if (process.server == false) {
             localStorage.setItem('city', 47)
             $cookies.set('city', 47)
           }
-          commit('setcity',112)
+          commit('setcity', 47)
           break;
         case 'guiyang':
           if (process.server == false) {
             localStorage.setItem('city', 3)
             $cookies.set('city', 3)
           }
-          commit('setcity',112)
+          commit('setcity', 3)
+          break;
+        case 'qiannan':
+          if (process.server == false) {
+            localStorage.setItem('city', 129)
+            $cookies.set('city', 129)
+          }
+          commit('setcity', 129)
+          break;
+        case 'wuxi':
+          if (process.server == false) {
+            localStorage.setItem('city', 149)
+            $cookies.set('city', 149)
+          }
+          commit('setcity', 149)
           break;
       }
-        await axios.get('https://ll.edefang.net/getIp.php').then(res=>{
-          // console.log(res.data.substr(22,14))
-          commit('setIP',{ 
-            IP:res.data.substr(22,14)
-          })
-          this.state.cookie.ip = res.data.substr(22,14)
+      await axios.get('https://ll.edefang.net/getIp.php').then(res => {
+        // console.log(res.data.substr(22,14))
+        commit('setIP', {
+          IP: res.data.substr(22, 14)
         })
+        this.state.cookie.ip = res.data.substr(22, 14)
+      })
     }
   },
 
