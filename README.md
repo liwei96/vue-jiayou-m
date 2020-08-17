@@ -1,22 +1,12 @@
-# test
+# nuxt练手项目
 
-> My lovely Nuxt.js project
+> 用nuxt做的房产类网站
 
-## Build Setup
+## 
 
 ```bash
-# install dependencies
-$ npm install
-
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm run start
-
-# generate static project
-$ npm run generate
+中途加入websocket与easyswoole做聊天系统，聊天记录使用indexdb储存（这个储存方法还是有问题）
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+##### 微信分享小东西
+
