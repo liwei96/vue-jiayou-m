@@ -1,8 +1,8 @@
 <template>
   <div class="Periphery">
-    <no-ssr>
+    <!-- <no-ssr>
       <remote-js src="https://webapi.amap.com/maps?v=1.4.14&key=729ac4d779c7e625bc11bd5ba3ff3112"></remote-js>
-    </no-ssr>
+    </no-ssr> -->
     <div class="container-fluid m">
       <div class="m-title visible-xs-block .visible-sm-block">
         <img class="back" src="~/assets/return.png" alt @click="goback" />
@@ -311,7 +311,7 @@ export default {
             });
 
             var cpoint = that.pois; //中心点坐标
-            placeSearch.searchNearBy(name, cpoint, 1200, function (
+            placeSearch.searchNearBy(name, cpoint, 2000, function (
               // eslint-disable-line no-unused-vars
               status,
               result

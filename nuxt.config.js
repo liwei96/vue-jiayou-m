@@ -18,7 +18,8 @@ export default {
       // { src: '//cdn.bootcss.com/bootstrap-slider/10.6.1/bootstrap-slider.min.js' },
       { src: '//cdn.bootcdn.net/ajax/libs/bootstrap-slider/10.6.1/bootstrap-slider.min.js' },
       // { src: '//pv.sohu.com/cityjson?ie=utf-8' },
-      { src: '//ll.edefang.net/getIp.php' }
+      { src: '//ll.edefang.net/getIp.php' },
+      { src: '//webapi.amap.com/maps?v=1.4.14&key=729ac4d779c7e625bc11bd5ba3ff3112' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },

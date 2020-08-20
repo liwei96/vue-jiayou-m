@@ -109,13 +109,17 @@ export default {
     let city = context.store.state.cookie.city;
     let token = context.store.state.cookie.token;
     let jkl = context.store.state.cookie.pinyin;
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res] = await Promise.all([
       context.$axios
         .post("/api/project/dynamic", {
           city: city,
           platform: 2,
           token: token,
-          ip: ip
+          ip: ip,
+          kid:kid,
+          other:other
         })
         .then(resp => {
           let data = resp.data.data;

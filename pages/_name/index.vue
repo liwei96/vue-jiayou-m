@@ -116,8 +116,8 @@
                   <h6>刚需楼盘</h6>
                   <p>您最需要的好楼盘</p>
                   <div class="show-img">
-                    <img :src="rigid_demand1" alt />
-                    <img :src="rigid_demand2" alt />
+                    <img v-lazy="rigid_demand1" alt />
+                    <img v-lazy="rigid_demand2" alt />
                   </div>
                 </nuxt-link>
               </div>
@@ -128,8 +128,8 @@
                   <h6>投资地产</h6>
                   <p>有投资价值的好楼盘</p>
                   <div class="show-img">
-                    <img :src="invest1" alt />
-                    <img :src="invest2" alt />
+                    <img v-lazy="invest1" alt />
+                    <img v-lazy="invest2" alt />
                   </div>
                 </nuxt-link>
               </div>
@@ -140,8 +140,8 @@
                   <h6>改善住宅</h6>
                   <p>提高生活品质的好楼盘</p>
                   <div class="show-img">
-                    <img :src="improve1" alt />
-                    <img :src="improve2" alt />
+                    <img v-lazy="improve1" alt />
+                    <img v-lazy="improve2" alt />
                   </div>
                 </nuxt-link>
               </div>
@@ -152,8 +152,8 @@
                   <h6>现房地产</h6>
                   <p>即买即住的好楼盘</p>
                   <div class="show-img">
-                    <img :src="existing1" alt />
-                    <img :src="existing2" alt />
+                    <img v-lazy="existing1" alt />
+                    <img v-lazy="existing2" alt />
                   </div>
                 </nuxt-link>
               </div>
@@ -177,7 +177,7 @@
                   <nuxt-link :to="'/'+pinyin+'/content/'+hot.id">
                     <div class="hua">
                       <div class="hf-pic">
-                        <img :src="hot.img" :alt="hot.name" :title="hot.name" />
+                        <img v-lazy="hot.img" :alt="hot.name" :title="hot.name" />
                         <span>TOP{{key+1}}</span>
                         <p>
                           <img src="~/assets/weight.png" alt />
@@ -208,7 +208,7 @@
                   <nuxt-link :to="'/'+pinyin+'/content/'+hot.id">
                     <div class="hua">
                       <div class="hf-pic">
-                        <img :src="hot.img" :alt="hot.name" :title="hot.name" />
+                        <img v-lazy="hot.img" :alt="hot.name" :title="hot.name" />
                         <span>TOP{{key+1}}</span>
                         <p>
                           <img src="~/assets/indexhot.png" alt />
@@ -239,7 +239,7 @@
                   <nuxt-link :to="'/'+pinyin+'/content/'+hot.id">
                     <div class="hua">
                       <div class="hf-pic">
-                        <img :src="hot.img" :alt="hot.name" :title="hot.name" />
+                        <img v-lazy="hot.img" :alt="hot.name" :title="hot.name" />
                         <span>TOP{{key+1}}</span>
                         <p>
                           <img src="~/assets/indexsuc.png" alt />
@@ -437,7 +437,7 @@
                 <p>{{s.source?s.source:'允家新房'}} &nbsp;{{s.time}}</p>
               </div>
               <div class="right">
-                <img :src="s.img" alt />
+                <img v-lazy="s.img" alt />
               </div>
             </div>
           </nuxt-link>
@@ -453,7 +453,7 @@
                 <p>{{s.source?s.source:'允家新房'}} &nbsp;{{s.time}}</p>
               </div>
               <div class="right">
-                <img :src="s.img" alt />
+                <img v-lazy="s.img" alt />
               </div>
             </div>
           </nuxt-link>
@@ -469,7 +469,7 @@
                 <p>{{s.source?s.source:'允家新房'}} &nbsp;{{s.time}}</p>
               </div>
               <div class="right">
-                <img :src="s.img" alt />
+                <img v-lazy="s.img" alt />
               </div>
             </div>
           </nuxt-link>
@@ -485,7 +485,7 @@
                 <p>{{s.source?s.source:'允家新房'}} &nbsp;{{s.time}}</p>
               </div>
               <div class="right">
-                <img :src="s.img" alt />
+                <img v-lazy="s.img" alt />
               </div>
             </div>
           </nuxt-link>
@@ -501,7 +501,7 @@
                 <p>{{s.source?s.source:'允家新房'}} &nbsp;{{s.time}}</p>
               </div>
               <div class="right">
-                <img :src="s.img" alt />
+                <img v-lazy="s.img" alt />
               </div>
             </div>
           </nuxt-link>
@@ -517,7 +517,7 @@
                 <p>{{s.source?s.source:'允家新房'}} &nbsp;{{s.time}}</p>
               </div>
               <div class="right">
-                <img :src="s.img" alt />
+                <img v-lazy="s.img" alt />
               </div>
             </div>
           </nuxt-link>
@@ -533,7 +533,7 @@
                 <p>{{s.source?s.source:'允家新房'}} &nbsp;{{s.time}}</p>
               </div>
               <div class="right">
-                <img :src="s.img" alt />
+                <img v-lazy="s.img" alt />
               </div>
             </div>
           </nuxt-link>
@@ -568,7 +568,7 @@
           <span class="wen-time">{{q.time}}</span>
           <span class="Fabulous">
             <img
-              :src="click"
+              v-lazy="click"
               @click.stop="agree($event)"
               data-d="1"
               :data-v="q.id"
@@ -608,7 +608,7 @@
         <div class="re-list" v-for="b in buildings" :key="b.id">
           <nuxt-link :to="'/'+pinyin+'/content/'+b.id">
             <div class="re-con-left">
-              <img :src="b.img" :alt="b.name" :title="b.name" />
+              <img v-lazy="b.img" :alt="b.name" :title="b.name" />
               <span>
                 <i class="iconfont iconyanjing"></i>
                 {{b.num}}
@@ -662,11 +662,14 @@ export default {
     "foot-view": footView,
   },
   async asyncData(context) {
+    console.log(context.store.state.cookie.kid)
     let name = context.params.name;
     let ip = context.store.state.cookie.ip;
     let city = context.store.state.city;
     let token = context.store.state.cookie.token;
     let nn = context.store.state.pinyin;
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     if (!city) {
       city = 0;
       context.store.commit("setcity", { city: city });
@@ -678,6 +681,8 @@ export default {
           platform: 2,
           token: token,
           ip: ip,
+          other:other,
+          kid:kid
         })
         .then((resp) => {
           let data = resp.data.data;

@@ -250,25 +250,27 @@ export default {
       z1 = false
     }
     let jkl = context.params.name;
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res1,res2,res3,res4]= await Promise.all([
-      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:p1,platform:2,token:token})
+      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:p1,platform:2,token:token,kid:kid,other:other})
       .then((resp)=>{
           let data=resp.data.data.data;
           data.n=context.store.state.pinyin;
           return data;
       }),
-      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:p2,platform:2,token:token})
+      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:p2,platform:2,token:token,kid:kid,other:other})
       .then((resp)=>{
           let data=resp.data.data.data;
           return data;
       }),
-      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:p3,platform:2,token:token})
+      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:p3,platform:2,token:token,kid:kid,other:other})
       .then((resp)=>{
           let data=resp.data.data.data;
           data.n=context.store.state.pinyin;
           return data;
       }),
-      context.$axios.post('/api/article/wiki',{ip:ip,city:city,platform:2,token:token})
+      context.$axios.post('/api/article/wiki',{ip:ip,city:city,platform:2,token:token,kid:kid,other:other})
       .then((resp)=>{
           let data=resp.data.header;
           return data;

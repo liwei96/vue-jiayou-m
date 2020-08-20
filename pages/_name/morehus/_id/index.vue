@@ -110,9 +110,11 @@ export default {
     let token = context.store.state.cookie.token;
     let jkl = context.store.state.cookie.pinyin;
     let id = context.params.id;
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res] = await Promise.all([
       context.$axios
-        .post("/api/project/apartments", { id: id, platform: 2, ip: ip })
+        .post("/api/project/apartments", { id: id, platform: 2, ip: ip,kid:kid,other:other })
         .then((resp) => {
           let data = resp.data;
           data.check = true;

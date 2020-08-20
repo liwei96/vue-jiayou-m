@@ -13,7 +13,7 @@
         <p class="m-p">公司位于：杭州市江干区九环路。专注为客户朋友提供一手楼盘新资讯。</p>
         <div class="m-list m-1">
           <span>联系电话</span>
-          <a :href="'tel:'+call">400-9669995</a>
+          <a :href="'tel:'+call">400-718-6686</a>
         </div>
         <div class="m-list">
           <span>工作日</span>

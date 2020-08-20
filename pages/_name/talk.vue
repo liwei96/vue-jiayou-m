@@ -1077,6 +1077,7 @@ export default {
       sessionStorage.setItem("reconnect", arr[0]);
       console.log(arr[1]);
       sessionStorage.setItem("projectid", arr[1].split("&")[0].split("=")[1]);
+      localStorage.setItem("projectid", arr[1].split("&")[0].split("=")[1]);
       sessionStorage.setItem("bulidname", arr[1].split("&")[1].split("=")[1]);
     }
     let that = this;
@@ -1633,6 +1634,7 @@ h2 i {
 }
 .con >>> .worker .worker-left img {
   width: 100%;
+  height: 2.5rem;
   border-radius: 50%;
 }
 .con >>> .worker .worker-right {

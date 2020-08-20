@@ -1,8 +1,8 @@
 <template>
   <div class="Content" id="conll">
-    <no-ssr>
+    <!-- <no-ssr>
       <remote-js src="https://webapi.amap.com/maps?v=1.4.14&key=729ac4d779c7e625bc11bd5ba3ff3112"></remote-js>
-    </no-ssr>
+    </no-ssr>-->
     <div class="container-fluid m" v-cloak>
       <div class="headertop">
         <h2>
@@ -15,7 +15,6 @@
 
       <div class="m-lun visible-xs-block .visible-sm-block">
         <div class="zao"></div>
-
         <div class="m-luns">
           <img :src="topimg?topimg:defaultimg" :alt="building.name" :title="building.name" />
           <!-- <div class="swiper-top">
@@ -171,11 +170,17 @@
       </div>
 
       <div class="m-image visible-xs-block .visible-sm-block">
-        <a data-agl-cvt="2" :href="'tel:'+call" v-show="!iswxsid">
+        <!-- <a data-agl-cvt="2" :href="'tel:'+call" v-show="!iswxsid">
           <img src="~/assets/mj-tell.png" alt />
-        </a>
+        </a>-->
+        <div class="wxtel" v-show="!iswxsid">
+          <a :href="'tel:'+call">
+            <p>{{call}}</p>
+            <img src="~/assets/wxtel.jpg" alt />
+          </a>
+        </div>
         <div class="wxtel" v-show="iswxsid">
-          <a :href="share.staff?'tel:'+share.staff.tel:''">
+          <a :href="share.staff?'tel:'+share.staff.tel:call">
             <p>{{share.staff?share.staff.tel:''}}</p>
             <img src="~/assets/wxtel.jpg" alt />
           </a>
@@ -248,7 +253,7 @@
             <p>4、结算方式：提供已实名的支付宝账户给与您对接的家园咨询师，规定时间内会将优惠费用打至该账户</p>
             <p>
               详细活动方案请致电允家客服电话：
-              <span>400-966-9995</span> 注：活动最终解释权归家园所有
+              <span>400-718-6686</span> 注：活动最终解释权归家园所有
             </p>
           </div>
         </div>
@@ -348,7 +353,11 @@
               <div class="tegood">
                 <nuxt-link :to="'/'+jkl+'/HuAnalysis/'+h.id+'/'+building.id">
                   <div class="top">
-                    <img :src="h.small?h.small:defaultimg" :alt="building.name+'户型图'" :title="building.name+'户型图'" />
+                    <img
+                      :src="h.small?h.small:defaultimg"
+                      :alt="building.name+'户型图'"
+                      :title="building.name+'户型图'"
+                    />
                   </div>
                   <h5>
                     {{h.title}}
@@ -567,14 +576,14 @@
           <div class="swiper-map">
             <div class="swiper-wrapper">
               <div class="swiper-slide">
-                <div :class="mapnum === 0 ? 'tegood active' : 'tegood'" @click="setmap(0, '地铁')">
-                  地铁
+                <div :class="mapnum === 0 ? 'tegood active' : 'tegood'" @click="setmap(0, '公交')">
+                  公交
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
-                <div :class="mapnum === 1 ? 'tegood active' : 'tegood'" @click="setmap(1 ,'公交')">
-                  公交
+                <div :class="mapnum === 1 ? 'tegood active' : 'tegood'" @click="setmap(1 ,'地铁')">
+                  地铁
                   <i></i>
                 </div>
               </div>
@@ -646,7 +655,7 @@
             <div class="swiper-slide" v-for="(c,key) in compares" :key="key">
               <div class="tegood">
                 <div class="img">
-                  <img v-lazy="c.img?c.img:defaultimg" :alt="c.name" :title="c.name" />
+                  <img :src="c.img?c.img:defaultimg" :alt="c.name" :title="c.name" />
                   <p>相似楼盘</p>
                 </div>
                 <h5>{{c.name}}</h5>
@@ -739,7 +748,7 @@
           <div class="re-list" v-for="(list,key) in same_price" :key="key">
             <nuxt-link :to="'/'+jkl+'/content/'+list.id">
               <div class="re-con-left">
-                <img v-lazy="list.img?list.img:defaultimg" :alt="list.name" :title="list.name" />
+                <img :src="list.img?list.img:defaultimg" :alt="list.name" :title="list.name" />
                 <!-- <span>
                   <i class="iconfont iconyanjing"></i>
                   {{list.num}}
@@ -773,7 +782,7 @@
           <div class="re-list" v-for="(list,key) in same_area" :key="key">
             <nuxt-link :to="'/'+jkl+'/content/'+list.id">
               <div class="re-con-left">
-                <img v-lazy="list.img?list.img:defaultimg" :alt="list.name" :title="list.name" />
+                <img :src="list.img?list.img:defaultimg" :alt="list.name" :title="list.name" />
                 <!-- <span>
                   <i class="iconfont iconyanjing"></i>
                   {{list.num}}
@@ -971,7 +980,7 @@
     <transition name="change">
       <div class="shouping" v-show="shouping">
         <img class="esc" @click="shouping = false" src="~/assets/pingesc.png" alt />
-        <img class="img" v-lazy="shoupingimg" alt />
+        <img class="img" :src="shoupingimg" alt />
         <input type="text" placeholder="请输入您手机号" v-model="baoming" />
         <button @click="shou">领取优惠</button>
         <p class="peonum">187人已领取</p>
@@ -1025,6 +1034,16 @@ export default {
       },
     },
   },
+  validate({ params }) {
+    // 必须是number类型
+    let match = params.id.match(/\d+/);
+    if (match) {
+      params.id = match[0];
+      return params.id;
+    } else {
+      return false;
+    }
+  },
   async asyncData(context) {
     let id = context.params.id;
     let token = context.store.state.cookie.token;
@@ -1035,11 +1054,19 @@ export default {
     if (!ip) {
       ip = null;
     }
+    let kid = context.store.state.cookie.kid
+      ? context.store.state.cookie.kid
+      : "";
+    let other = context.store.state.cookie.other
+      ? context.store.state.cookie.other
+      : "";
     let data = {
       platform: 2,
       id: id,
       ip: ip,
       token: token,
+      kid: kid,
+      other: other,
     };
     let url = context.route.fullPath;
     if (url) {
@@ -1147,9 +1174,9 @@ export default {
             }
             let p = parseInt(data.info.constant.single_price / 10000);
             data.max = p + 3;
-            
+
             if (!data.hasOwnProperty("head")) {
-              data.head.phone = "400-966-9995";
+              data.head.phone = "400-718-6686";
               data.head.title = "允家新房";
               data.head.description = "允家新房";
               data.head.keywords = "允家新房";
@@ -1165,7 +1192,7 @@ export default {
                 visitors: [],
               };
             }
-            
+
             return data;
           }
         }
@@ -1262,9 +1289,9 @@ export default {
       topimg: "",
       ling: true,
       mapnum: 0,
-      imgs: [require('~/assets/lou1.png'), require('~/assets/lou2.png')],
-      img1:require('~/assets/lou1.png'),
-      img2:require('~/assets/lou2.png'),
+      imgs: [require("~/assets/lou1.png"), require("~/assets/lou2.png")],
+      img1: require("~/assets/lou1.png"),
+      img2: require("~/assets/lou2.png"),
       li: 0,
       warn: false,
       baoming: "",
@@ -1357,7 +1384,7 @@ export default {
       msg: "",
       iscookie: false,
       isnull: false,
-      mapname: "地铁",
+      mapname: "公交",
       pois: [],
       mapimg: require("~/assets/path.png"),
       huomsg: false,
@@ -1442,11 +1469,11 @@ export default {
       cked: require("~/assets/clicked.png"),
       starttime: "",
       endtime: "",
-      wximage:require('~/assets/head_icon.png.png'),
-      nolmalimg:require("~/assets/jiapeo.png"),
-      timename:{},
-      defaultimg:require('~/assets/default.jpg'),
-      shoupingimg: require('~/assets/shouping.png')
+      wximage: require("~/assets/head_icon.png.png"),
+      nolmalimg: require("~/assets/jiapeo.png"),
+      timename: {},
+      defaultimg: require("~/assets/default.jpg"),
+      shoupingimg: require("~/assets/shouping.png"),
     };
   },
   head() {
@@ -1595,8 +1622,14 @@ export default {
         url = url.split("&");
         let kid = url[0].split("=")[1];
         let other = url[1].split("=")[1];
-        sessionStorage.setItem("kid", kid);
-        sessionStorage.setItem("other", other);
+        if (sessionStorage.getItem("kid")) {
+        } else {
+          sessionStorage.setItem("kid", kid);
+          sessionStorage.setItem("other", other);
+          $cookies.set("kid", kid);
+          $cookies.set("other", other);
+          window.location.reload();
+        }
       }
       let pinyin = this.$route.params.name;
       localStorage.setItem("pinyin", pinyin);
@@ -1877,7 +1910,7 @@ export default {
             });
 
             var cpoint = that.pois; //中心点坐标
-            placeSearch.searchNearBy(name, cpoint, 1200, function (
+            placeSearch.searchNearBy(name, cpoint, 2000, function (
               // eslint-disable-line no-unused-vars
               status,
               result
@@ -3783,12 +3816,12 @@ export default {
       this.$nextTick(() => {
         this.timename = setTimeout(() => {
           this.mmap();
-        }, 400);
+        }, 600);
       });
     }
   },
   destroyed() {
-    clearTimeout(this.timename)
+    clearTimeout(this.timename);
     localStorage.removeItem("map");
     this.ws.close();
   },

@@ -3,7 +3,7 @@
         <p>
             <img src="~/assets/tuan-yunjia.png" alt="">
             <span>杭州易得房科技有限公司</span>
-            <span>400-966-9995</span>
+            <span>400-718-6686</span>
         </p>
     </div>
 </template>

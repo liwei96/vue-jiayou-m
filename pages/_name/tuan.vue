@@ -113,7 +113,7 @@
       </div>
     </div>
     <div id="Footer">
-      <p>杭州易得房科技有限公司版权所有 电话：400-966-9995</p>
+      <p>杭州易得房科技有限公司版权所有 电话：400-718-6686</p>
       <p>
         <img src="~/assets/f-logo.png" />网络经营许可证：
         <a href="http://www.beian.miit.gov.cn/">
@@ -122,7 +122,7 @@
       </p>
     </div>
     <div class="tuan-tel">
-      <a href="tel:400-966-9995">
+      <a href="tel:400-718-6686">
         <img src="~/assets/tuan-tel1.png" alt />
       </a>
     </div>
@@ -173,7 +173,7 @@
         <p>4、结算方式：提供已实名的支付宝账户给与您对接的允家咨询师，规定时间内会将优惠费用打至该账户</p>
         <p>
           详细活动方案请致电允家客服电话：
-          <span>400-966-9995</span> 注：活动最终解释权归允家所有
+          <span>400-718-6686</span> 注：活动最终解释权归允家所有
         </p>
       </div>
     </transition>
@@ -204,13 +204,15 @@ export default {
   },
   async asyncData(context) {
     let jkl = context.store.state.cookie.pinyin;
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res, res1] = await Promise.all([
-      context.$axios.post("/api/group_buy/first", { id: 2 }).then(resp => {
+      context.$axios.post("/api/group_buy/first", { id: 2,kid:kid,other:other }).then(resp => {
         let data = resp.data;
         return data;
       }),
       context.$axios
-        .post("/api/group_buy/info", { id: 2, page: 1, limit: 5 })
+        .post("/api/group_buy/info", { id: 2, page: 1, limit: 5,kid:kid,other:other })
         .then(resp => {
           let data = resp.data.data;
           return data;

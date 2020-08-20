@@ -90,8 +90,10 @@ export default {
     let city = context.store.state.cookie.city;
     let token=context.store.state.cookie.token;
     let jkl = context.store.state.cookie.pinyin;
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res]= await Promise.all([
-      context.$axios.post('/api/project/help_me',{ city: city, token: token, platform: 2, ip: ip })
+      context.$axios.post('/api/project/help_me',{ city: city, token: token, platform: 2, ip: ip,kid:kid,other:other })
       .then((resp)=>{
         let data = resp.data.data;
           return data;
@@ -188,6 +190,9 @@ export default {
         where.feature = this.te;
       }
       where.tel = $(".m-in").val();
+      if(!where.tel){
+        return
+      }
       where.page = 2;
       where.position = 8;
       where.type = 5;

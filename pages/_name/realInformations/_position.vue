@@ -124,12 +124,16 @@ export default {
     let token=context.store.state.cookie.token;
     let jkl=context.params.name;
     let position = context.params.position;
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res1,res2]= await Promise.all([
       context.$axios.post('/api/article/info',{
         city: city,
         ip: ip,
         platform: 2,
-        token: token
+        token: token,
+        kid:kid,
+        other:other
       })
       .then((resp)=>{
         let data = resp.data;
@@ -141,7 +145,9 @@ export default {
         position: position,
         token: token,
         page: 1,
-        limit: 10
+        limit: 10,
+        kid:kid,
+        other:other
       })
       .then((resp)=>{
         let data = resp.data.data.data;

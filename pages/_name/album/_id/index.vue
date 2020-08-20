@@ -234,8 +234,10 @@ export default {
     let city = context.store.state.city;
     let token=context.store.state.token;
     let id= context.params.id
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res]= await Promise.all([
-      context.$axios.post('/api/project/imgs',{ ip: ip, id: id, platform: 2 })
+      context.$axios.post('/api/project/imgs',{ ip: ip, id: id, platform: 2, kid:kid , other:other })
       .then((resp)=>{
           let data = resp.data;
           return data;

@@ -13,13 +13,16 @@ axios.interceptors.request.use(function (config) {
       localStorage.setItem('tel', tel)
     }
   }
-  if (config.url == '/front/flow/sign') {
+  if (process.server == false) {
     let kid = sessionStorage.getItem('kid')
     let other = sessionStorage.getItem('other')
     config.data.kid = kid
     config.data.other = other
+  }
+
+  if (config.url == '/front/flow/sign') {
     config.data.sign = $cookies.get('validate.jy8006.com')
-    if(sessionStorage.getItem('ip')){
+    if (sessionStorage.getItem('ip')) {
       config.data.ip = sessionStorage.getItem('ip')
     }
     // if(sessionStorage.getItem('wxstaff')){
@@ -491,7 +494,9 @@ export const getsdk = (msg) => {
   return axios.request({
     method: 'post',
     url: '/api/weichat/get_sign_package',
-    data:{url:msg}
+    data: {
+      url: msg
+    }
   })
 }
 
@@ -499,7 +504,10 @@ export const getsid = () => {
   return axios.request({
     method: 'get',
     url: '/front/user/getcode',
-    params:{url:'/front/user/get_user_info',slient:1}
+    params: {
+      url: '/front/user/get_user_info',
+      slient: 1
+    }
   })
 }
 
@@ -507,7 +515,7 @@ export const putmap = (msg) => {
   return axios.request({
     method: 'post',
     url: '/front/share/click_time',
-    data:msg
+    data: msg
   })
 }
 
@@ -523,7 +531,7 @@ export const getquestions = (msg) => {
   return axios.request({
     method: 'get',
     url: '/question/page',
-    params:msg
+    params: msg
   })
 }
 
@@ -531,7 +539,7 @@ export const question = (msg) => {
   return axios.request({
     method: 'get',
     url: '/mobile/question/detail',
-    params:msg
+    params: msg
   })
 }
 
@@ -539,6 +547,8 @@ export const souname = (name) => {
   return axios.request({
     method: 'get',
     url: '/api/project/e_search',
-    params:{'name':name}
+    params: {
+      'name': name
+    }
   })
 }

@@ -321,8 +321,10 @@ export default {
     let token=context.store.state.cookie.token;
      let kk = context.params.id;
      let jkl=context.store.state.cookie.pinyin;
+     let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res]= await Promise.all([
-      context.$axios.post('/api/first/feature_second_mobile',{ city: city, ip: ip, platform: 2, token: token })
+      context.$axios.post('/api/first/feature_second_mobile',{ city: city, ip: ip, platform: 2, token: token,kid:kid,other:other })
       .then((resp)=>{
         let data = resp.data.data;
         data.t1=false

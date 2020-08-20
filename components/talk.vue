@@ -773,7 +773,7 @@ export default {
         that.t2 = false;
         let img = this.img;
         let msg =
-          "暂时无业务员在线，请拨打电话400-966-9995咨询,或者回复您的电话，业务员会尽快联系您";
+          "暂时无业务员在线，请拨打电话400-718-6686咨询,或者回复您的电话，业务员会尽快联系您";
         let dv = document.createElement("div");
         dv.className = "worker";
         dv.innerHTML = `<div class="worker-left">

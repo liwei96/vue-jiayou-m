@@ -151,13 +151,17 @@ export default {
     let city = context.store.state.cookie.city;
     let token = context.store.state.cookie.token;
     let jkl = context.store.state.cookie.pinyin;
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res] = await Promise.all([
       context.$axios
         .get("/question/page", {
           params: {
             page: 1,
             limit: 10,
-            project:id
+            project:id,
+            kid:kid,
+            other:other
           },
         })
         .then((resp) => {

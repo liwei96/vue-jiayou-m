@@ -90,7 +90,7 @@
       </div>
     </div>
     <div id="Footer">
-        <p>杭州易得房科技有限公司版权所有 电话：400-966-9995</p>
+        <p>杭州易得房科技有限公司版权所有 电话：400-718-6686</p>
         <p><img src="~/assets/f-logo.png">网络经营许可证：<a href="http://www.beian.miit.gov.cn/"><span>浙ICP备18057005号</span></a></p>
     </div>
     <div class="btn">
@@ -152,9 +152,11 @@ export default {
   async asyncData(context) {
     let jkl = context.store.state.cookie.pinyin;
     let id = context.params.id;
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res] = await Promise.all([
       context.$axios
-        .post("/api/group_buy/detail", { id: 2, project: id })
+        .post("/api/group_buy/detail", { id: 2, project: id,kid:kid,other:other })
         .then(resp => {
           let data = resp.data.data;
           return data;

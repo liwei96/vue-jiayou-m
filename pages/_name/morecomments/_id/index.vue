@@ -154,6 +154,8 @@ export default {
     let token = context.store.state.cookie.token;
     let jkl = context.store.state.cookie.pinyin;
     let id = context.params.id;
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res] = await Promise.all([
       context.$axios
         .post("/api/project/comment_info", {
@@ -161,7 +163,9 @@ export default {
           id: id,
           page: 1,
           limit: 10,
-          token:token
+          token:token,
+          kid:kid,
+          other:other
         })
         .then((resp) => {
           let data = resp.data;

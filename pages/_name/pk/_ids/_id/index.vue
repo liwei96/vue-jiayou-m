@@ -55,13 +55,17 @@ export default {
         }
       }
       ids = kk.join(",");
+      let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
       let [res] = await Promise.all([
         context.$axios
           .post("/api/project/compare_mobile", {
             ip: ip,
             ids: ids,
             platform: 2,
-            token: token
+            token: token,
+            kid:kid,
+            other:other
           })
           .then(resp => {
             // console.log(resp)

@@ -182,7 +182,9 @@
             <div class="re-con-right">
               <h5>
                 <strong>{{b.name}}</strong>
-                <span>{{b.status}}</span>
+                <span class="ishou"  v-if="b.status == '在售'">{{b.status}}</span>
+                <span class="isdai"  v-if="b.status == '待售'">{{b.status}}</span>
+                <span class="iskong" v-if="b.status == '售空'">{{b.status}}</span>
               </h5>
               <p class="price">
                 <span>{{b.single_price}}</span>元/m²
@@ -244,7 +246,9 @@ export default {
     // if(jkl == 'chongqing'){
     //   city = 41
     // }
-    let options = { city: city, token: token, ip: ip, platform: 2 };
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
+    let options = { city: city, token: token, ip: ip, platform: 2,kid:kid,other:other };
     let area1 = 0;
     let price1 = 0;
     let type1 = 0;
@@ -301,6 +305,7 @@ export default {
         options[ll[0]] = ll[1];
       }
     }
+    
     let [res1, res2] = await Promise.all([
       context.$axios.post("/api/project/search_info", options).then(resp => {
         let dd=resp.data.data;
@@ -317,7 +322,9 @@ export default {
           city: city,
           platform: 2,
           ip: ip,
-          token: token
+          token: token,
+          kid:kid,
+          other:other
         })
         .then(resp => {
           let data = resp.data.data.conditions;
@@ -1152,7 +1159,7 @@ nav .dian img {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.recommen .re-list .re-con-right h5 span {
+.recommen .re-list .re-con-right h5 .ishou {
   width: 36px;
   height: 17px;
   border-radius: 2px;
@@ -1161,6 +1168,32 @@ nav .dian img {
   float: right;
   background-color: #e9f7ea;
   color: #2cd264;
+  display: block;
+  font-weight: 500;
+  font-size: 11px;
+}
+.recommen .re-list .re-con-right h5 .isdai {
+  width: 36px;
+  height: 17px;
+  border-radius: 2px;
+  text-align: center;
+  line-height: 17px;
+  float: right;
+  background:rgba(250,193,77,0.2);
+  color: #FAC14D;
+  display: block;
+  font-weight: 500;
+  font-size: 11px;
+}
+.recommen .re-list .re-con-right h5 .iskong {
+  width: 36px;
+  height: 17px;
+  border-radius: 2px;
+  text-align: center;
+  line-height: 17px;
+  float: right;
+  background:rgba(217,217,217,1);
+  color: #fff;
   display: block;
   font-weight: 500;
   font-size: 11px;

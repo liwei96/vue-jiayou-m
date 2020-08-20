@@ -6,7 +6,7 @@ export default ({
 }) => {
   app.router.beforeEach((to, from, next) => {
     // console.log(to.params, from.params)
-
+    // console.log(to.path)
     switch (to.params.name) {
       case 'xuzhou':
         if (process.server == false) {
@@ -93,11 +93,14 @@ export default ({
         store.state.city = 149
         break;
     }
-    // if (to.params.id == 'undefined') {
-    //   next({
-    //     path:'/hangzhou'
-    //   })
-    // }
+    if(to.path.indexOf('content') !==-1){
+      if (to.params.id == undefined || to.params.id == null || to.params.id == 'null' || to.params.id == 'undefined') {
+        next({
+          path:'/hangzhou'
+        })
+      }
+    }
+    
     if(to.params.id == '6440') {
       next({
         path:'/hangzhou'

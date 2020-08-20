@@ -146,6 +146,8 @@ export default {
     let id = context.params.id;
     let t = context.params.position;
     let jkl = context.store.state.cookie.pinyin;
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res] = await Promise.all([
       context.$axios
         .post("/api/article/detail", {
@@ -154,7 +156,9 @@ export default {
           id: id,
           platform: 2,
           position: t,
-          token: token
+          token: token,
+          kid:kid,
+          other:other
         })
         .then(resp => {
           let data = resp.data;

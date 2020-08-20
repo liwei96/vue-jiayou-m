@@ -84,6 +84,8 @@ export default {
     let city = context.store.state.cookie.city;
     let token = context.store.state.cookie.token;
     let jkl = context.store.state.cookie.pinyin;
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res] = await Promise.all([
       context.$axios
         .post("/api/project/quick_search", {
@@ -91,6 +93,8 @@ export default {
           city: city,
           ip: ip,
           platform: 2,
+          kid:kid,
+          other:other
         })
         .then((resp) => {
           let data = resp.data.data;

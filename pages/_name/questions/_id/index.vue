@@ -183,12 +183,16 @@ export default {
     let jkl = context.store.state.cookie.pinyin;
     let id = context.route.params.id;
     let token = context.store.state.cookie.token;
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res] = await Promise.all([
       context.$axios
         .get("/mobile/question/detail", {
           params: {
             id: id,
             token: token,
+            kid:kid,
+            other:other
           },
         })
         .then((resp) => {

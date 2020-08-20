@@ -221,8 +221,10 @@ export default {
     bud = decodeURIComponent(bud)
     let id=context.params.id;
     let jkl=context.store.state.cookie.pinyin;
+    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
+    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res]= await Promise.all([
-      context.$axios.post('/api/project/apartment',{ ip: ip, city: city, id: id, token: token })
+      context.$axios.post('/api/project/apartment',{ ip: ip, city: city, id: id, token: token,kid:kid,other:other })
       .then((resp)=>{
         let dd=resp.data
         let data = resp.data.data;
