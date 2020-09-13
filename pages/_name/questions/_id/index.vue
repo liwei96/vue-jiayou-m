@@ -192,7 +192,8 @@ export default {
             id: id,
             token: token,
             kid:kid,
-            other:other
+            other:other,
+            platform:2
           },
         })
         .then((resp) => {
@@ -327,8 +328,7 @@ export default {
                 console.log(error);
               });
           } else {
-            $(".l-p").val("");
-            $(".l-p").attr("placeholder", "报名失败");
+            this.$toast('请不要重复报名');
           }
         })
         .catch((error) => {

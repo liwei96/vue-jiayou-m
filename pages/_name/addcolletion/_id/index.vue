@@ -58,7 +58,7 @@ export default {
     let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
     let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res]= await Promise.all([
-      context.$axios.post('/api/project/pk_recommand',{ ip: ip, city: city, id: id, token: token, kid:kid, other:other })
+      context.$axios.post('/api/project/pk_recommand',{ ip: ip, city: city, id: id, token: token, kid:kid, other:other,platform:2 })
       .then((resp)=>{
         let data = resp.data;
           

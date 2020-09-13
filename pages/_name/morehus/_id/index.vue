@@ -1,7 +1,8 @@
 <template>
   <div class="MoreHus">
     <h3>
-      <img src="~/assets/return.png" @click="goback" />更多户型
+      <img class="back" src="~/assets/return.png" @click="goback" />更多户型
+      <img src="~/assets/top-house.png" alt class="home" @click="gohome" />
     </h3>
     <div class="hus">
       <ul>
@@ -106,15 +107,25 @@ export default {
     let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
     let name = context.store.state.cookie.cityname;
-    name = decodeURIComponent(name)
+    name = decodeURIComponent(name);
     let token = context.store.state.cookie.token;
     let jkl = context.store.state.cookie.pinyin;
     let id = context.params.id;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
+    let kid = context.store.state.cookie.kid
+      ? context.store.state.cookie.kid
+      : "";
+    let other = context.store.state.cookie.other
+      ? context.store.state.cookie.other
+      : "";
     let [res] = await Promise.all([
       context.$axios
-        .post("/api/project/apartments", { id: id, platform: 2, ip: ip,kid:kid,other:other })
+        .post("/api/project/apartments", {
+          id: id,
+          platform: 2,
+          ip: ip,
+          kid: kid,
+          other: other,
+        })
         .then((resp) => {
           let data = resp.data;
           data.check = true;
@@ -129,7 +140,8 @@ export default {
       title: res.head.title,
       description: res.head.description,
       keywords: res.head.keywords,
-      city:name
+      city: name,
+      call: res.head.phone,
     };
   },
   components: {
@@ -162,18 +174,22 @@ export default {
       title: "",
       description: "",
       keywords: "",
-      name:'',
-      city:'',
-      name:''
+      name: "",
+      city: "",
+      name: "",
     };
   },
   head() {
     return {
-      title: this.title || `${this.city}${this.name}户型图_${this.city}${this.name}效果图_允家新房`,
+      title:
+        this.title ||
+        `${this.city}${this.name}户型图_${this.city}${this.name}效果图_允家新房`,
       meta: [
         {
           name: "description",
-          content: this.description || `允家新房提供${this.city}${this.name}户型图、效果图、户型有哪些?我们为您提供全套图片，让您轻松了解${this.name}布局结构。`,
+          content:
+            this.description ||
+            `允家新房提供${this.city}${this.name}户型图、效果图、户型有哪些?我们为您提供全套图片，让您轻松了解${this.name}布局结构。`,
         },
         {
           name: "keywords",
@@ -189,7 +205,6 @@ export default {
       this.id = id;
       let that = this;
       let col = localStorage.getItem(id);
-      this.call = localStorage.getItem("call");
       if (col == 0) {
         $("#fork").show();
         $("#forked").hide();
@@ -202,41 +217,14 @@ export default {
       this.ip = ip;
       localStorage.getItem("ip");
     },
+    gohome() {
+      let id = this.$route.params.id;
+      let name = this.$route.params.name;
+      this.$router.push(`/${name}/content/${id}`);
+    },
     send(sends) {
       this.tel = sends;
       let that = this;
-      msg({ phone: sends, channel: 2 })
-        .then((resp) => {
-          if (resp.data.code == 200) {
-            that.put();
-            $(".t-b-first").hide();
-            $(".t-b-second").show();
-            var time = 60;
-            var tel = sends.substr(0, 3) + "****" + sends.substr(7, 11);
-            var fn = function () {
-              time--;
-              if (time > 0) {
-                $(".t-b-scode").html("重新发送" + time + "s");
-                $(".t-b-scode").attr("disabled", true);
-              } else {
-                clearInterval(interval);
-                $(".t-b-scode").html("获取验证码");
-                $(".t-b-scode").attr("disabled", false);
-              }
-            };
-            fn();
-            var interval = setInterval(fn, 1000);
-            $("#ytel").html(tel);
-          } else {
-            $(".l-p").val("");
-            $(".l-p").attr("placeholder", "报名失败");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    put() {
       let phone = this.tel;
       let id = this.id;
       let country = localStorage.getItem("city");
@@ -254,11 +242,46 @@ export default {
         kid: kid,
         other: other,
       })
-        .then((resp) => {})
+        .then((resp) => {
+          if (resp.data.code == 200) {
+            msg({ phone: sends, channel: 2 })
+              .then((resp) => {
+                if (resp.data.code == 200) {
+                  $(".t-b-first").hide();
+                  $(".t-b-second").show();
+                  var time = 60;
+                  var tel = sends.substr(0, 3) + "****" + sends.substr(7, 11);
+                  var fn = function () {
+                    time--;
+                    if (time > 0) {
+                      $(".t-b-scode").html("重新发送" + time + "s");
+                      $(".t-b-scode").attr("disabled", true);
+                    } else {
+                      clearInterval(interval);
+                      $(".t-b-scode").html("获取验证码");
+                      $(".t-b-scode").attr("disabled", false);
+                    }
+                  };
+                  fn();
+                  var interval = setInterval(fn, 1000);
+                  $("#ytel").html(tel);
+                } else {
+                  $(".l-p").val("");
+                  $(".l-p").attr("placeholder", "报名失败");
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          } else {
+            this.$toast('请不要重复报名');
+          }
+        })
         .catch((error) => {
           console.log(error);
         });
     },
+    put() {},
     check(checks) {
       let that = this;
       let t = this.tel;
@@ -295,8 +318,8 @@ export default {
     },
   },
   mounted() {
-    sessionStorage.setItem('proname',this.name)
-    this.city = localStorage.getItem('cityname')
+    sessionStorage.setItem("proname", this.name);
+    this.city = localStorage.getItem("cityname");
     let h = $(".MoreHus").height();
     if (h < 700) {
       $("#Foot").css({
@@ -412,13 +435,19 @@ h3 {
   position: relative;
   font-size: 16px;
 }
-h3 img {
+h3 .back {
   position: absolute;
   width: 5%;
   margin-top: 14px;
   left: 5.33%;
 }
 
+h3 .home {
+  position: absolute;
+  width: 5%;
+  margin-top: 14px;
+  right: 5.33%;
+}
 .hus {
   padding: 0 4%;
 }

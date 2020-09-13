@@ -17,7 +17,8 @@ const store = () => new Vuex.Store({
     num: '',
     pinyin: '',
     cookie: {},
-    proid:''
+    proid: '',
+    uuid: ''
   },
   mutations: {
     setip(state, data) {
@@ -47,6 +48,9 @@ const store = () => new Vuex.Store({
     setcookie(state, payload) {
       state.cookie = payload.cookie
     },
+    setuuid(state, payload) {
+      state.cookie.uuid = payload.id
+    },
   },
   actions: {
     async nuxtServerInit({
@@ -55,6 +59,10 @@ const store = () => new Vuex.Store({
       req,
       app
     }) {
+      // console.log(app.store.state)
+      
+
+
       let cookie = req.headers.cookie;
       if (cookie) {
         let cookieArr = cookie.split(";");
@@ -66,6 +74,23 @@ const store = () => new Vuex.Store({
         commit('setcookie', {
           'cookie': obj
         })
+      }
+      if (!app.store.state.cookie.uuid) {
+        var timestamp = Date.parse(new Date());
+        var $chars =
+          "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678"; /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        var maxPos = $chars.length;
+        var pwd = "";
+        let i = 0;
+        for (i = 0; i < 12; i++) {
+          pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        timestamp = pwd + timestamp;
+        // console.log(timestamp)
+        commit('setuuid', {
+          id: timestamp
+        })
+        // console.log(app.store.state.cookie.uuid)
       }
       switch (req.url) {
         case 'xuzhou':
@@ -153,13 +178,6 @@ const store = () => new Vuex.Store({
           commit('setcity', 149)
           break;
       }
-      await axios.get('https://ll.edefang.net/getIp.php').then(res => {
-        // console.log(res.data.substr(22,14))
-        commit('setIP', {
-          IP: res.data.substr(22, 14)
-        })
-        this.state.cookie.ip = res.data.substr(22, 14)
-      })
     }
   },
 

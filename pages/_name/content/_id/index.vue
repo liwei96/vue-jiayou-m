@@ -175,7 +175,7 @@
         </a>-->
         <div class="wxtel" v-show="!iswxsid">
           <a :href="'tel:'+call">
-            <p>{{call}}</p>
+            <p>{{callmsg}}</p>
             <img src="~/assets/wxtel.jpg" alt />
           </a>
         </div>
@@ -264,7 +264,11 @@
         <span>刚需楼盘榜第4名</span>
         <img class="totop" src="~/assets/m-go.png" alt />
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block" v-show="false"></div>
+
+      <div class="banner" v-if="banner.length != 0" @click="gobanner">
+        <img :src="banner.img" alt />
+      </div>
+      <div class="m-line" v-if="banner.length != 0"></div>
       <div class="m-dong visible-xs-block .visible-sm-block">
         <h3 id="m_dong">
           楼盘动态
@@ -992,6 +996,7 @@
         <span v-show="warningbtn">{{warning}}</span>
       </div>
     </transition>
+    <div class="tsmsg" v-show="tstype">{{tsmsg}}</div>
   </div>
 </template>
 <script>
@@ -1045,8 +1050,12 @@ export default {
     }
   },
   async asyncData(context) {
+    // console.log(context.query)
+    // console.log(timestamp);
+
     let id = context.params.id;
     let token = context.store.state.cookie.token;
+    let uuid = context.store.state.uuid;
     if (!token) {
       token = null;
     }
@@ -1060,6 +1069,14 @@ export default {
     let other = context.store.state.cookie.other
       ? context.store.state.cookie.other
       : "";
+    if (context.query.kid != kid && context.query.kid) {
+      kid = context.query.kid;
+      context.store.state.cookie.kid = context.query.kid;
+    }
+    if (context.query.other != other && context.query.other) {
+      other = context.query.other;
+      context.store.state.cookie.other = context.query.other;
+    }
     let data = {
       platform: 2,
       id: id,
@@ -1067,6 +1084,7 @@ export default {
       token: token,
       kid: kid,
       other: other,
+      uuid: context.store.state.cookie.uuid,
     };
     let url = context.route.fullPath;
     if (url) {
@@ -1105,9 +1123,9 @@ export default {
             let p3 = [];
             let t = [];
             for (let item in trend) {
-              p1.unshift((trend[item]["city"] / 10000).toFixed(1));
-              p2.unshift((trend[item]["country"] / 10000).toFixed(1));
-              p3.unshift((trend[item]["project"] / 10000).toFixed(1));
+              p1.unshift(Number(trend[item]["city"]).toFixed(0));
+              p2.unshift(Number(trend[item]["country"]).toFixed(0));
+              p3.unshift(Number(trend[item]["project"]).toFixed(0));
               let d = trend[item]["time"].replace(/-/g, "/");
               t.unshift(d);
             }
@@ -1199,7 +1217,7 @@ export default {
       }),
     ]);
     return {
-      jkl: jkl,
+      jkl: res1.head.city_data.pinyin,
       call: res1.head.phone,
       la: res1.info.constant.location.latitude,
       ln: res1.info.constant.location.longitude,
@@ -1249,10 +1267,16 @@ export default {
       max: res1.max,
       ws: false,
       share: res1.share_info,
+      banner: res1.banner,
+      uuid: uuid,
     };
   },
   data() {
     return {
+      tstype: false,
+      uuid: "",
+      tsmsg: "请不要重复报名",
+      banner: [],
       last_log_id: "",
       wxlat: "",
       wxlng: "",
@@ -1474,6 +1498,7 @@ export default {
       timename: {},
       defaultimg: require("~/assets/default.jpg"),
       shoupingimg: require("~/assets/shouping.png"),
+      callmsg: "",
     };
   },
   head() {
@@ -1567,9 +1592,10 @@ export default {
           project: id,
           kid: kid,
           other: other,
+          source: "线上推广2",
           platform: 2,
         };
-        op = wx;
+        op = normal;
       }
 
       trend_put(op).then((res) => {
@@ -1580,7 +1606,13 @@ export default {
             that.warningbtn = false;
             that.shouping = false;
           }, 1500);
-        }
+        }else if (resp.data.code == 500) {
+            this.tsmsg = "请不要重复报名";
+            this.tstype = true;
+            setTimeout(() => {
+              that.tstype = false;
+            }, 1000);
+          }
       });
     },
     xiang(id) {
@@ -1756,15 +1788,15 @@ export default {
             return (
               params[0].seriesName +
               params[0].data +
-              "万" +
+              "元" +
               "<br>" +
               params[1].seriesName +
               params[1].data +
-              "万" +
+              "元" +
               "<br>" +
               params[2].seriesName +
               params[2].data +
-              "万"
+              "元"
             );
           },
         },
@@ -1772,7 +1804,7 @@ export default {
           data: "房价",
         },
         grid: {
-          x: "20px",
+          x: "45px",
           y: "10px",
           x2: "18px",
           y2: "20px",
@@ -1805,7 +1837,7 @@ export default {
             name: "单位：万",
             type: "value",
             scale: true,
-            max: that.max,
+            // max: that.max,
             min: 0,
             splitNumber: 5,
             axisLine: {
@@ -2122,6 +2154,12 @@ export default {
               .catch((error) => {
                 console.log(error);
               });
+          } else if (resp.data.code == 500) {
+            this.tsmsg = "请不要重复报名";
+            this.tstype = true;
+            setTimeout(() => {
+              that.tstype = false;
+            }, 1000);
           } else {
             $(".l-p").val("");
             $(".l-p").attr("placeholder", "报名失败");
@@ -2296,6 +2334,15 @@ export default {
           });
       }
     },
+    gobanner() {
+      let url = window.location.href;
+      url = url.split("?")[1];
+      if (url) {
+        window.location.href = this.banner.url + "?" + url;
+      } else {
+        window.location.href = this.banner.url;
+      }
+    },
     del(e) {
       let id = e.target.getAttribute("data-v");
       if (!localStorage.getItem("token")) {
@@ -2327,7 +2374,7 @@ export default {
       this.$router.push("/" + this.n + "/pk/" + ids + "/" + id);
     },
     goback() {
-      if (window.history.length <= 1) {
+      if (window.history.length >= 1) {
         this.$router.go(-1);
         return false;
       } else {
@@ -3020,13 +3067,20 @@ export default {
     },
   },
   beforeMount() {
+    let ul = window.location.href;
+    ul = ul.split("?")[1];
+    if (this.$route.params.name != this.jkl) {
+      this.$router.push(
+        "/" + this.jkl + "/content/" + this.$route.params.id + "?" + ul
+      );
+    }
     let that = this;
     var ua = navigator.userAgent.toLowerCase();
     if (ua.match(/MicroMessenger/i) == "micromessenger") {
       let url = window.location.href;
       url = url.split("?")[1];
       if (url && url.indexOf("scid") !== -1) {
-        let sid = url.split("=")[1];
+        let sid = this.$route.query.scid;
 
         $cookies.set("scid", sid);
         that.iswx = false;
@@ -3048,7 +3102,7 @@ export default {
             sessionStorage.setItem("wxscid", sid);
             $cookies.set("scid", sid);
             if (!sessionStorage.getItem("wxscid")) {
-              window.location.href = `http://ll.edefang.net/front/user/getcode_front?scid=${sid}`;
+              window.location.href = `http://ll.edefang.net/front/user/getcode_front?scid=${sid}&${ul}`;
             } else {
               that.iswx = false;
               that.iswxsid = true;
@@ -3068,12 +3122,21 @@ export default {
           }
         } else {
           localStorage.setItem("gowx", 1);
-          window.location.href = `http://ll.edefang.net/front/user/getcode_transfer?silent=0&id=${that.building.id}`;
+          window.location.href = `http://ll.edefang.net/front/user/getcode_transfer?silent=0&id=${that.building.id}&${ul}`;
         }
       }
     }
   },
   mounted() {
+    $cookies.set("cityname", this.building.city_fullname);
+    $cookies.set("uuid", this.uuid);
+    localStorage.setItem("uuid", this.uuid);
+    localStorage.setItem("call", this.call);
+    if (this.call.split(",")[1]) {
+      this.callmsg = this.call.split(",")[0] + "转" + this.call.split(",")[1];
+    } else {
+      this.callmsg = this.call;
+    }
     this.settime();
     this.$nextTick(() => {
       if (sessionStorage.getItem("comment")) {
@@ -3088,10 +3151,11 @@ export default {
     });
     let that = this;
     sessionStorage.setItem("ip", ip_arr["ip"]);
+    $cookies.set("ip", ip_arr["ip"]);
     var ua = navigator.userAgent.toLowerCase();
     if (ua.match(/MicroMessenger/i) == "micromessenger") {
       this.get();
-      console.log(this.share);
+      // console.log(this.share);
       if (Object.keys(that.share).length !== 0) {
         let ci = that.share.visitors;
         if (ci) {
@@ -4189,11 +4253,11 @@ body {
 #m_sc_box {
   display: none;
 }
-.m-incro .go-map {
-  /* background: url(~assets/addressmap.png) no-repeat; */
-  /* background-size: 100%;
-  background-position: left; */
-}
+/* .m-incro .go-map {
+  background: url(~assets/addressmap.png) no-repeat;
+  background-size: 100%;
+  background-position: left;
+} */
 .m-incro .m-ic-icons strong {
   color: #fe582f;
   font-size: 0.6875rem;
@@ -4942,5 +5006,28 @@ body {
   position: absolute;
   left: 9%;
   top: 5%;
+}
+.banner {
+  width: 100%;
+  height: 5rem;
+}
+.banner img {
+  width: 100%;
+}
+.tsmsg {
+  width: 10.625rem;
+  height: 3.75rem;
+  position: fixed;
+  top: 50%;
+  margin-top: -1.875rem;
+  left: 50%;
+  margin-left: -5.3125rem;
+  border-radius: 0.375rem;
+  text-align: center;
+  line-height: 3.75rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: #cdcdcd;
+  font-size: 1rem;
+  z-index: 55555;
 }
 </style>

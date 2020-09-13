@@ -10,11 +10,20 @@ import axios from "axios";
 import headView from "@/components/Header.vue";
 export default {
   components: {
-    "head-view": headView
+    "head-view": headView,
+  },
+  asyncData(context) {
+    console.log(context)
+    let uuid = context.store.state.cookie.uuid
+    console.log(uuid,456)
+    return {
+      uuid:uuid
+    };
   },
   data() {
     return {
-      n: ""
+      n: "",
+      uuid:''
     };
   },
   beforeCreate() {
@@ -30,9 +39,20 @@ export default {
     }
   },
   mounted() {
+    let url = window.location.href;
+      url = url.split("?")[1];
+      if (url && url.indexOf("kid") == -1) {
+        
+      }
+    if(localStorage.getItem('uuid')){
+        $cookies.set('uuid',localStorage.getItem('uuid'))
+      }
+      if(this.uuid){
+        $cookies.set('uuid',this.uuid)
+      }
     //百度统计
     var _hmt = _hmt || [];
-    (function() {
+    (function () {
       var hm = document.createElement("script");
       hm.src = "https://hm.baidu.com/hm.js?ae7b8b5cafd465396d73f240cbef1973";
       var s = document.getElementsByTagName("script")[0];
@@ -50,7 +70,7 @@ export default {
       html.style.fontSize = width / 23.5 + "px";
     }
     axios.interceptors.request.use(
-      function(config) {
+      function (config) {
         if (config.url == "/front/flow/sign") {
           let kid = sessionStorage.getItem("kid");
           let other = sessionStorage.getItem("other");
@@ -63,10 +83,10 @@ export default {
         }
         return config;
       },
-      function(error) {}
+      function (error) {}
     );
     this.n = $cookies.get("pinyin");
-  }
+  },
 };
 </script>
 
@@ -174,11 +194,19 @@ body.position-fixed {
   animation: big-out 0.5s;
 }
 
-a:link{text-decoration:none; }  /* 指正常的未被访问过的链接*/
+a:link {
+  text-decoration: none;
+} /* 指正常的未被访问过的链接*/
 
-a:visited{text-decoration:none; }/*指已经访问过的链接*/
+a:visited {
+  text-decoration: none;
+} /*指已经访问过的链接*/
 
-a:hover{text-decoration:none;}/*指鼠标在链接*/
+a:hover {
+  text-decoration: none;
+} /*指鼠标在链接*/
 
-a:active{text-decoration:none;}/* 指正在点的链接*/ 
+a:active {
+  text-decoration: none;
+} /* 指正在点的链接*/
 </style>

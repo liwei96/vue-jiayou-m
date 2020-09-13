@@ -1,7 +1,8 @@
 <template>
   <div class="Detail" v-cloak>
     <h3>
-      <img src="~/assets/return.png" @click="goback" />楼盘详情
+      <img class="back" src="~/assets/return.png" @click="goback" />楼盘详情
+      <img src="~/assets/top-house.png" alt="" class="home" @click="gohome">
     </h3>
     <div class="con">
       <h2>
@@ -267,6 +268,11 @@ export default {
       localStorage.getItem("ip");
      
     },
+    gohome(){
+      let id = this.$route.params.id
+      let name = this.$route.params.name
+      this.$router.push(`/${name}/content/${id}`)
+    },
     sendmsg() {
       let check = this.checks;
       if (!check) {
@@ -488,11 +494,17 @@ h3 {
   font-size: 10px;
   display: none;
 }
-h3 img {
+h3 .back {
   position: absolute;
   width: 5%;
   margin-top: 14px;
   left: 5.33%;
+}
+h3 .home {
+  position: absolute;
+  width: 5%;
+  margin-top: 14px;
+  right: 5.33%;
 }
 #forked {
   display: none;

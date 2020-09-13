@@ -106,6 +106,7 @@ export default ({
         path:'/hangzhou'
       })
     }
+    
     next()
   })
 }

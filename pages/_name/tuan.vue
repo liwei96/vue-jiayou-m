@@ -207,12 +207,12 @@ export default {
     let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
     let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res, res1] = await Promise.all([
-      context.$axios.post("/api/group_buy/first", { id: 2,kid:kid,other:other }).then(resp => {
+      context.$axios.post("/api/group_buy/first", { id: 2,kid:kid,other:other,platform:2 }).then(resp => {
         let data = resp.data;
         return data;
       }),
       context.$axios
-        .post("/api/group_buy/info", { id: 2, page: 1, limit: 5,kid:kid,other:other })
+        .post("/api/group_buy/info", { id: 2, page: 1, limit: 5,kid:kid,other:other,platform:2 })
         .then(resp => {
           let data = resp.data.data;
           return data;

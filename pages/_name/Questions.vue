@@ -159,9 +159,10 @@ export default {
           params: {
             page: 1,
             limit: 10,
-            // city: city,
+            city: city,
             kid:kid,
-            other:other
+            other:other,
+            platform:2
           },
         })
         .then((resp) => {

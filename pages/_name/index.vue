@@ -2,7 +2,8 @@
   <div class="Index" v-cloak>
     <div class="header">
       <div class="search">
-        <img src="~/assets/index-logo.png" alt class="index-logo" />
+        <img src="~/assets/index-logo.png" alt class="index-logo"/>
+        
         <div class="sea-con">
           <span class="city">
             {{cityname}}
@@ -16,7 +17,8 @@
         </div>
         <img class="mine" src="~/assets/Mine.png" alt />
       </div>
-      <img class="bg" src="~/assets/banner1.jpg" alt />
+      <img class="bg" src="~/assets/banner1.jpg" alt v-if="banner.length == 0"/>
+      <img :src="banner.img" alt class="bg" @click="gobanner" v-if="banner.length != 0"/>
       <div class="banner">
         <nav class="m-na">
           <ul>
@@ -662,7 +664,9 @@ export default {
     "foot-view": footView,
   },
   async asyncData(context) {
-    console.log(context.store.state.cookie.kid)
+    // console.log(context.store.state.cookie.kid)
+    // console.log(context.store.state.cookie.uuid)
+    let uuid =context.store.state.cookie.uuid
     let name = context.params.name;
     let ip = context.store.state.cookie.ip;
     let city = context.store.state.city;
@@ -682,7 +686,8 @@ export default {
           token: token,
           ip: ip,
           other:other,
-          kid:kid
+          kid:kid,
+          uuid:uuid
         })
         .then((resp) => {
           let data = resp.data.data;
@@ -789,10 +794,12 @@ export default {
       tel: res.data.phone,
       cityname: res.city.name,
       city: res.city.id,
+      banner:res.data.banner
     };
   },
   data() {
     return {
+      banner:[],
       kk: 0,
       lll: false,
       isload: true,
@@ -875,6 +882,15 @@ export default {
   methods: {
     method1: function () {
       newsticker();
+    },
+    gobanner:function(){
+      let url = window.location.href;
+      url = url.split("?")[1];
+      if (url) {
+        window.location.href = this.banner.url + "?" + url;
+      } else {
+        window.location.href = this.banner.url;
+      }
     },
     s1s: function () {
       this.s1 = true;
@@ -1082,6 +1098,7 @@ export default {
     },
   },
   mounted() {
+    $cookies.set('ip',ip_arr["ip"])
     let h = $(".Index").height();
     if (h < 700) {
       $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });

@@ -13,11 +13,21 @@ axios.interceptors.request.use(function (config) {
       localStorage.setItem('tel', tel)
     }
   }
-  if (process.server == false) {
-    let kid = sessionStorage.getItem('kid')
-    let other = sessionStorage.getItem('other')
+  if (process.server == false && config.method == 'post') {
+    let kid = $cookies.get('kid')?$cookies.get('kid'):''
+    let other = $cookies.get('other')?$cookies.get('other'):''
     config.data.kid = kid
     config.data.other = other
+    config.data.platform=2
+    config.data.uuid=localStorage.getItem('uuid')
+  }
+  if(process.server == false && config.method == 'get'){
+    let kid = $cookies.get('kid')?$cookies.get('kid'):''
+    let other = $cookies.get('other')?$cookies.get('other'):''
+    config.params.kid = kid
+    config.params.other = other
+    config.params.platform=2
+    config.params.uuid=localStorage.getItem('uuid')
   }
 
   if (config.url == '/front/flow/sign') {

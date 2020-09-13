@@ -2,7 +2,7 @@
   <div class="Periphery">
     <!-- <no-ssr>
       <remote-js src="https://webapi.amap.com/maps?v=1.4.14&key=729ac4d779c7e625bc11bd5ba3ff3112"></remote-js>
-    </no-ssr> -->
+    </no-ssr>-->
     <div class="container-fluid m">
       <div class="m-title visible-xs-block .visible-sm-block">
         <img class="back" src="~/assets/return.png" alt @click="goback" />
@@ -381,13 +381,13 @@ export default {
         $("#fork").hide();
         $("#forked").css("display", "block");
       }
-      this.call = localStorage.getItem("call");
       let IP = localStorage.getItem("ip");
       periphery_data({ ip: IP, platform: 2, id: id })
         .then((resp) => {
           let data = resp.data.data;
           that.la = data.latitude;
           that.ln = data.longitude;
+          that.call = data.phone;
         })
         .catch((error) => {
           console.log(error);
@@ -412,55 +412,57 @@ export default {
         return;
       }
       let that = this;
-      msg({ phone: t, channel: 2 })
+      let ip = ip_arr["ip"];
+      let c = localStorage.getItem("city");
+      let p = that.page;
+      let tel = t;
+      let kid = sessionStorage.getItem("kid");
+      let other = sessionStorage.getItem("other");
+      let id = this.$route.params.id;
+      trend_put({
+        ip: ip,
+        tel: tel,
+        city: c,
+        position: 5,
+        page: 3,
+        type: 9,
+        kid: kid,
+        other: other,
+        project: id,
+      })
         .then((resp) => {
           if (resp.data.code == 200) {
-            let ip = ip_arr["ip"];
-            let c = localStorage.getItem("city");
-            let p = that.page;
-            let tel = t;
-            let kid = sessionStorage.getItem("kid");
-            let other = sessionStorage.getItem("other");
-            let id = this.$route.params.id;
-            trend_put({
-              ip: ip,
-              tel: tel,
-              city: c,
-              position: 5,
-              page: 3,
-              type: 9,
-              kid: kid,
-              other: other,
-              project: id,
-            })
+            msg({ phone: t, channel: 2 })
               .then((resp) => {
                 if (resp.data.code == 200) {
+                  $(".t-b-first").hide();
+                  $(".t-b-second").show();
+                  var time = 60;
+                  tel = t.substr(0, 3) + "****" + t.substr(7, 11);
+                  var fn = function () {
+                    time--;
+                    if (time > 0) {
+                      $(".t-b-scode").html("重新发送" + time + "s");
+                      $(".t-b-scode").attr("disabled", true);
+                    } else {
+                      clearInterval(interval);
+                      $(".t-b-scode").html("获取验证码");
+                      $(".t-b-scode").attr("disabled", false);
+                    }
+                  };
+                  fn();
+                  var interval = setInterval(fn, 1000);
+                  $("#ytel").html(tel);
+                } else {
+                  $(".l-p").val("");
+                  $(".l-p").attr("placeholder", "报名失败");
                 }
               })
               .catch((error) => {
                 console.log(error);
               });
-            $(".t-b-first").hide();
-            $(".t-b-second").show();
-            var time = 60;
-            tel = t.substr(0, 3) + "****" + t.substr(7, 11);
-            var fn = function () {
-              time--;
-              if (time > 0) {
-                $(".t-b-scode").html("重新发送" + time + "s");
-                $(".t-b-scode").attr("disabled", true);
-              } else {
-                clearInterval(interval);
-                $(".t-b-scode").html("获取验证码");
-                $(".t-b-scode").attr("disabled", false);
-              }
-            };
-            fn();
-            var interval = setInterval(fn, 1000);
-            $("#ytel").html(tel);
           } else {
-            $(".l-p").val("");
-            $(".l-p").attr("placeholder", "报名失败");
+            this.$toast("请不要重复报名");
           }
         })
         .catch((error) => {

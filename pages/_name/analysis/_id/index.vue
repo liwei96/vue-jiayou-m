@@ -2,8 +2,9 @@
   <div class="Analysis">
     <div class="container-fluid m">
       <div class="m-title visible-xs-block .visible-sm-block">
-        <img src="~/assets/return.png" alt @click="goback" />
+        <img class="back" src="~/assets/return.png" alt @click="goback" />
         <h3>项目深度分析</h3>
+        <img src="~/assets/top-house.png" alt class="home" @click="gohome" />
       </div>
       <img class="m-zhu visible-xs-block .visible-sm-block" src="~/assets/pc-db.png" alt />
       <div class="m-con visible-xs-block .visible-sm-block">
@@ -61,7 +62,7 @@
                   验证码已发送到
                   <span id="ytel">187****4376</span>，请注意查看
                 </p>
-                <input type="text" placeholder="请输入验证码" id="ma-ll"/>
+                <input type="text" placeholder="请输入验证码" id="ma-ll" />
                 <button class="port1">确定</button>
                 <input type="hidden" id="building_name" value />
                 <input type="hidden" value />
@@ -93,7 +94,7 @@ import {
   msg,
   analysis_put,
   verification,
-  collection
+  collection,
 } from "~/api/api";
 export default {
   name: "Analysis",
@@ -103,25 +104,35 @@ export default {
     let city = context.store.state.cookie.city;
     let token = context.store.state.cookie.token;
     let id = context.params.id;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
+    let kid = context.store.state.cookie.kid
+      ? context.store.state.cookie.kid
+      : "";
+    let other = context.store.state.cookie.other
+      ? context.store.state.cookie.other
+      : "";
     let [res] = await Promise.all([
       context.$axios
-        .post("/api/project/analysis", { id: id, platform: 2, ip: ip,kid:kid,other:other })
-        .then(resp => {
+        .post("/api/project/analysis", {
+          id: id,
+          platform: 2,
+          ip: ip,
+          kid: kid,
+          other: other,
+        })
+        .then((resp) => {
           let data = resp.data.data;
 
           return data;
-        })
+        }),
     ]);
     return {
       invest: res.invest,
       live: res.live,
-      tel: res.phone,
-      jkl:jkl,
-      title:res.title,
-          description:res.description,
-          keywords:res.keywords
+      call: res.phone,
+      jkl: jkl,
+      title: res.title,
+      description: res.description,
+      keywords: res.keywords,
     };
   },
   data() {
@@ -140,28 +151,28 @@ export default {
       id: "",
       checks: "",
       n: "",
-      jkl:'',
-      title:'',
-      description:'',
-      keywords:''
+      jkl: "",
+      title: "",
+      description: "",
+      keywords: "",
     };
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
   head() {
     return {
-      title: this.title || '允家新房-项目深度分析',
+      title: this.title || "允家新房-项目深度分析",
       meta: [
         {
           name: "description",
-          content: this.description || '允家新房'
+          content: this.description || "允家新房",
         },
         {
           name: "keywords",
-          content: this.keywords || '允家新房'
-        }
-      ]
+          content: this.keywords || "允家新房",
+        },
+      ],
     };
   },
   methods: {
@@ -170,9 +181,8 @@ export default {
       this.id = id;
       this.project = id;
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
-      this.call = localStorage.getItem("call");
       localStorage.getItem("ip");
       let collect = localStorage.getItem(id);
       if (collect == 0) {
@@ -183,6 +193,11 @@ export default {
         $("#forked").css("display", "block");
       }
     },
+    gohome() {
+      let id = this.$route.params.id;
+      let name = this.$route.params.name;
+      this.$router.push(`/${name}/content/${id}`);
+    },
     send(sends) {
       this.tel = sends;
       let that = this;
@@ -191,50 +206,55 @@ export default {
       let id = that.project;
       let country = localStorage.getItem("city");
       let ip = that.ip;
-      msg({ phone: sends, channel: 2 })
-        .then(resp => {
+      let kid = sessionStorage.getItem("kid");
+      let other = sessionStorage.getItem("other");
+      analysis_put({
+        tel: phone,
+        project: id,
+        type: 10,
+        position: 5,
+        page: 3,
+        city: country,
+        ip: ip,
+        kid: kid,
+        other: other,
+      })
+        .then((resp) => {
           if (resp.data.code == 200) {
-            let kid = sessionStorage.getItem("kid");
-            let other = sessionStorage.getItem("other");
-            analysis_put({
-              tel: phone,
-              project: id,
-              type: 10,
-              position: 5,
-              page: 3,
-              city: country,
-              ip: ip,
-              kid: kid,
-              other: other
-            })
-              .then(resp => {})
-              .catch(error => {
+            msg({ phone: sends, channel: 2 })
+              .then((resp) => {
+                if (resp.data.code == 200) {
+                  $(".t-b-first").hide();
+                  $(".t-b-second").show();
+                  var time = 60;
+                  var tel = sends.substr(0, 3) + "****" + sends.substr(7, 11);
+                  var fn = function () {
+                    time--;
+                    if (time > 0) {
+                      $(".t-b-scode").html("重新发送" + time + "s");
+                      $(".t-b-scode").attr("disabled", true);
+                    } else {
+                      clearInterval(interval);
+                      $(".t-b-scode").html("获取验证码");
+                      $(".t-b-scode").attr("disabled", false);
+                    }
+                  };
+                  fn();
+                  var interval = setInterval(fn, 1000);
+                  $("#ytel").html(tel);
+                } else {
+                  $(".l-p").val("");
+                  $(".l-p").attr("placeholder", "报名失败");
+                }
+              })
+              .catch((error) => {
                 console.log(error);
               });
-            $(".t-b-first").hide();
-            $(".t-b-second").show();
-            var time = 60;
-            var tel = sends.substr(0, 3) + "****" + sends.substr(7, 11);
-            var fn = function() {
-              time--;
-              if (time > 0) {
-                $(".t-b-scode").html("重新发送" + time + "s");
-                $(".t-b-scode").attr("disabled", true);
-              } else {
-                clearInterval(interval);
-                $(".t-b-scode").html("获取验证码");
-                $(".t-b-scode").attr("disabled", false);
-              }
-            };
-            fn();
-            var interval = setInterval(fn, 1000);
-            $("#ytel").html(tel);
           }else{
-            $('.l-p').val('')
-            $(".l-p").attr("placeholder", "报名失败");
+            this.$toast('请不要重复报名');
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -250,15 +270,15 @@ export default {
         position: 5,
         page: 3,
         city: country,
-        ip: ip
+        ip: ip,
       })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             $(".weiter").hide();
             $(".m-o-succ").show();
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -266,16 +286,16 @@ export default {
       let t = this.baoming;
       let that = this;
       verification({ phone: t, code: checks, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             that.succ = true;
             that.change = false;
-          }else{
-            $("#ma-ll").val('');
+          } else {
+            $("#ma-ll").val("");
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -283,8 +303,8 @@ export default {
       let id = e.target.getAttribute("data-v");
       let token = localStorage.getItem("token");
       collection({ project: id, token: token })
-        .then(resp => {})
-        .then(error => {
+        .then((resp) => {})
+        .then((error) => {
           console.log(error);
         });
     },
@@ -299,7 +319,7 @@ export default {
       }
       let that = this;
       collection({ project: id, token: token })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             $("#fork").hide();
             $("#forked").css("display", "block");
@@ -308,19 +328,19 @@ export default {
             // window.location.href = "/login";
           }
         })
-        .then(error => {
+        .then((error) => {
           console.log(error);
         });
-    }
+    },
   },
   mounted() {
     let h = $(".Analysis").height();
-    $("#Foot").css({ position: "relative",marginBottom: "64px", });
-    $("#Foot").css('marginBottom','64px');
+    $("#Foot").css({ position: "relative", marginBottom: "64px" });
+    $("#Foot").css("marginBottom", "64px");
     this.baoming = localStorage.getItem("phone");
     this.start();
     let that = this;
-    $(".p1").on("click", function() {
+    $(".p1").on("click", function () {
       window.type = $(this).attr("data-v");
       if (type == "预约看房") {
         $(".weiter .t-top h6").html(type);
@@ -331,52 +351,39 @@ export default {
       that.change = true;
       $(".m-chang").show();
     });
-    $("#o_btn").on("click", function() {
+    $("#o_btn").on("click", function () {
       that.succ = false;
       $(".m-chang").hide();
     });
-    $(".o-esc").on("click", function() {
+    $(".o-esc").on("click", function () {
       that.succ = false;
       $(".m-chang").hide();
     });
-    $("#w-esc").on("click", function() {
+    $("#w-esc").on("click", function () {
       $(".m-chang").hide();
       that.change = false;
     });
-    $(".m-chang").on("click", function() {
+    $(".m-chang").on("click", function () {
       $(".m-chang").hide();
       that.succ = false;
       that.change = false;
     });
-    $("#m_ti").on("click", function() {
+    $("#m_ti").on("click", function () {
       $(".m-chang").hide();
       $("#m_ti").hide();
     });
     // 接口验证码
-    $(".t-b-btn2").on("click", function() {
+    $(".t-b-btn2").on("click", function () {
       let check = that.checks;
       if (!check) {
         $(".tishi").show();
-        return
+        return;
       } else {
         $(".tishi").hide();
       }
-      var phone = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var type = $(this)
-        .parent()
-        .parent()
-        .prev()
-        .find("h6")
-        .html();
-      var building_name = $(this)
-        .parent()
-        .next()
-        .find("#building_name")
-        .val();
+      var phone = $(this).prev().prev().prev().val();
+      var type = $(this).parent().parent().prev().find("h6").html();
+      var building_name = $(this).parent().next().find("#building_name").val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -388,20 +395,16 @@ export default {
       }
       that.send(phone);
     });
-    $(".port1").on("click", function() {
-      var ma = $(this)
-        .prev()
-        .val();
+    $(".port1").on("click", function () {
+      var ma = $(this).prev().val();
       if (!ma) {
-        $(this)
-          .prev()
-          .attr("placeholder", "验证码不能为空");
+        $(this).prev().attr("placeholder", "验证码不能为空");
         return;
       }
       that.check(ma);
     });
     // 收藏
-    $("#m_shou").on("click", function() {
+    $("#m_shou").on("click", function () {
       var txt = $(this).text();
 
       if (txt == "收藏") {
@@ -410,7 +413,7 @@ export default {
         $.post(
           "{:url('home/content/fork')}",
           { id: id },
-          function(res) {
+          function (res) {
             if (res.code == 100) {
               $(".m-fork").attr("src", res.ss);
               $(".m-fork").attr("alt", "已收藏");
@@ -439,7 +442,7 @@ export default {
     };
   },
   watch: {
-    nowHeight: function() {
+    nowHeight: function () {
       if (this.defaultHeight != this.nowHeight) {
         $(".weiter").css("top", "100px");
         $("#nav-list").css("top", "42%");
@@ -447,8 +450,8 @@ export default {
         $(".weiter").css("top", "220px");
         $("#nav-list").css("top", "21%");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -476,13 +479,18 @@ export default {
 #forked {
   display: none;
 }
-.m-title img {
+.m-title .back {
   position: absolute;
   top: 25%;
   width: 6%;
   left: 5%;
 }
-
+.m-title .home {
+  position: absolute;
+  top: 25%;
+  width: 6%;
+  right: 5%;
+}
 .m-title h3 {
   color: #333333;
   font-size: 18px;

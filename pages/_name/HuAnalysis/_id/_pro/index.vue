@@ -1,7 +1,8 @@
 <template>
   <div class="HuAnalysis">
     <h3>
-      <img src="~/assets/return.png" @click="goback" />户型详情
+      <img class="back" src="~/assets/return.png" @click="goback" />户型详情
+      <img src="~/assets/top-house.png" alt class="home" @click="gohome" />
     </h3>
     <div class="bg">
       <img :src="one.img" alt />
@@ -160,9 +161,9 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming"/>
+            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
             <p class="w-mg">
-              <input class="w-mg-c" type="checkbox" checked v-model="checks"/>我已阅读并同意
+              <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
               <router-link :to="'/'+jkl+'/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
@@ -178,7 +179,7 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" id="ma-ll"/>
+            <input type="text" placeholder="请输入验证码" id="ma-ll" />
             <button class="port1">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -207,67 +208,81 @@ import {
   collection,
   verification,
   msg,
-  morehus_put
+  morehus_put,
 } from "~/api/api";
 export default {
   name: "HuAnalysis",
-  async asyncData (context) {
-    let ip=context.store.state.cookie.ip;
+  async asyncData(context) {
+    let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
-    let token=context.store.state.cookie.token;
+    let token = context.store.state.cookie.token;
     let name = context.store.state.cookie.cityname;
-    name = decodeURIComponent(name)
-    let bud = context.store.state.cookie.name
-    bud = decodeURIComponent(bud)
-    let id=context.params.id;
-    let jkl=context.store.state.cookie.pinyin;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res]= await Promise.all([
-      context.$axios.post('/api/project/apartment',{ ip: ip, city: city, id: id, token: token,kid:kid,other:other })
-      .then((resp)=>{
-        let dd=resp.data
-        let data = resp.data.data;
-          if(data.this_one[1]){
+    name = decodeURIComponent(name);
+    let bud = context.store.state.cookie.name;
+    bud = decodeURIComponent(bud);
+    let id = context.params.id;
+    let jkl = context.store.state.cookie.pinyin;
+    let kid = context.store.state.cookie.kid
+      ? context.store.state.cookie.kid
+      : "";
+    let other = context.store.state.cookie.other
+      ? context.store.state.cookie.other
+      : "";
+    let [res] = await Promise.all([
+      context.$axios
+        .post("/api/project/apartment", {
+          ip: ip,
+          city: city,
+          id: id,
+          token: token,
+          kid: kid,
+          other: other,
+          platform: 2,
+        })
+        .then((resp) => {
+          let dd = resp.data;
+          let data = resp.data.data;
+          if (data.this_one[1]) {
             data.one = data.this_one[1];
-          }else if(data.this_one[2]){
+          } else if (data.this_one[2]) {
             data.one = data.this_one[2];
-          }else if(data.this_one[3]) {
-            data.one = data.this_one[3]
-          }else if(data.this_one[4]) {
-            data.one = data.this_one[4]
-          }else if(data.this_one[5]) {
-            data.one = data.this_one[5]
-          }else if(data.this_one[6]) {
-            data.one = data.this_one[6]
-          }else if(data.this_one[7]) {
-            data.one = data.this_one[7]
-          }else if(data.this_one[8]) {
-            data.one = data.this_one[8]
-          }else if(data.this_one[0]) {
-            data.one = data.this_one[0]
+          } else if (data.this_one[3]) {
+            data.one = data.this_one[3];
+          } else if (data.this_one[4]) {
+            data.one = data.this_one[4];
+          } else if (data.this_one[5]) {
+            data.one = data.this_one[5];
+          } else if (data.this_one[6]) {
+            data.one = data.this_one[6];
+          } else if (data.this_one[7]) {
+            data.one = data.this_one[7];
+          } else if (data.this_one[8]) {
+            data.one = data.this_one[8];
+          } else if (data.this_one[0]) {
+            data.one = data.this_one[0];
           }
           return dd;
-      })
-    ])
-    return{
-          others : res.data.others,
-          likes : res.data.would_likes,
-          one:res.data.one,
-          jkl:jkl,
-          title:res.head.title,
-          description:res.head.description,
-          keywords:res.head.keywords,
-          city:name,
-          name:bud
-    }
+        }),
+    ]);
+    return {
+      others: res.data.others,
+      likes: res.data.would_likes,
+      one: res.data.one,
+      jkl: jkl,
+      title: res.head.title,
+      description: res.head.description,
+      keywords: res.head.keywords,
+      city: name,
+      name: bud,
+      call: res.head.phone,
+    };
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
   data() {
     return {
-      jkl:'',
+      jkl: "",
       change: false,
       succ: false,
       defaultHeight: "0",
@@ -280,13 +295,13 @@ export default {
       pro: "",
       n: "",
       call: "",
-      checks:'',
-      baoming:'',
-      title:'',
-      description:'',
-      keywords:'',
-      city:'',
-      name:''
+      checks: "",
+      baoming: "",
+      title: "",
+      description: "",
+      keywords: "",
+      city: "",
+      name: "",
     };
   },
   methods: {
@@ -295,69 +310,41 @@ export default {
       let id = this.$route.params.id;
       this.id = id;
       let col = localStorage.getItem(id);
-      this.call = localStorage.getItem("call");
       if (col == 0) {
         $("#fork").show();
         $("#forked").hide();
-      } else if(col==1) {
+      } else if (col == 1) {
         $("#fork").hide();
-        $("#forked").css('display','block');
+        $("#forked").css("display", "block");
       }
+    },
+    gohome() {
+      let id = this.$route.params.pro;
+      let name = this.$route.params.name;
+      this.$router.push(`/${name}/content/${id}`);
     },
     collect(e) {
       let id = e.target.getAttribute("data-v");
       let pro = this.$route.params.pro;
       let token = localStorage.getItem("token");
       collection({ project: pro, token: token })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             $("#fork").hide();
             $("#forked").css("display", "block");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     send(sends) {
       this.tel = sends;
       let that = this;
-      msg({ phone: sends, channel: 2 })
-        .then(resp => {
-          if (resp.data.code == 200) {
-            that.put();
-            $(".t-b-first").hide();
-            $(".t-b-second").show();
-            var time = 60;
-            var tel = sends.substr(0, 3) + "****" + sends.substr(7, 11);
-            var fn = function() {
-              time--;
-              if (time > 0) {
-                $(".t-b-scode").html("重新发送" + time + "s");
-                $(".t-b-scode").attr("disabled", true);
-              } else {
-                clearInterval(interval);
-                $(".t-b-scode").html("获取验证码");
-                $(".t-b-scode").attr("disabled", false);
-              }
-            };
-            fn();
-            var interval = setInterval(fn, 1000);
-            $("#ytel").html(tel);
-          }else{
-            $('.l-p').val('')
-            $(".l-p").attr("placeholder", "报名失败");
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
-    put() {
       let phone = this.tel;
       let id = this.$route.params.pro;
       let country = localStorage.getItem("city");
-      let ip = ip_arr['ip'];
+      let ip = ip_arr["ip"];
       let token = localStorage.getItem("token");
       let kid = sessionStorage.getItem("kid");
       let other = sessionStorage.getItem("other");
@@ -371,60 +358,111 @@ export default {
         token: token,
         platform: 2,
         kid: kid,
-        other: other
+        other: other,
       })
-        .then(resp => {})
-        .catch(error => {
+        .then((resp) => {
+          if (resp.data.code == 200) {
+            msg({ phone: sends, channel: 2 })
+              .then((resp) => {
+                if (resp.data.code == 200) {
+                  $(".t-b-first").hide();
+                  $(".t-b-second").show();
+                  var time = 60;
+                  var tel = sends.substr(0, 3) + "****" + sends.substr(7, 11);
+                  var fn = function () {
+                    time--;
+                    if (time > 0) {
+                      $(".t-b-scode").html("重新发送" + time + "s");
+                      $(".t-b-scode").attr("disabled", true);
+                    } else {
+                      clearInterval(interval);
+                      $(".t-b-scode").html("获取验证码");
+                      $(".t-b-scode").attr("disabled", false);
+                    }
+                  };
+                  fn();
+                  var interval = setInterval(fn, 1000);
+                  $("#ytel").html(tel);
+                } else {
+                  $(".l-p").val("");
+                  $(".l-p").attr("placeholder", "报名失败");
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          } else {
+            this.$toast("请不要重复报名");
+          }
+        })
+        .catch((error) => {
           console.log(error);
         });
     },
+    put() {},
     check(checks) {
       let that = this;
       let t = this.baoming;
       verification({ phone: t, code: checks, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             that.succ = true;
             that.change = false;
-          }else{
-            $("#ma-ll").val('');
+          } else {
+            $("#ma-ll").val("");
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     goback() {
       this.$router.go(-1);
-    }
+    },
   },
   head() {
     return {
-      title: this.title || `${this.city}${this.name}${this.one.house}户型信息_允家新房`,
+      title:
+        this.title ||
+        `${this.city}${this.name}${this.one.house}户型信息_允家新房`,
       meta: [
         {
           name: "description",
-          content: this.description || `允家新房提供${this.city}${this.name}${this.one.house}信息,让您了解真实${this.city}${this.name}房型图`
+          content:
+            this.description ||
+            `允家新房提供${this.city}${this.name}${this.one.house}信息,让您了解真实${this.city}${this.name}房型图`,
         },
         {
           name: "keywords",
-          content: this.keywords || `${this.name}${this.one.house}户型，${this.name}${this.one.house}户型图`
-        }
-      ]
+          content:
+            this.keywords ||
+            `${this.name}${this.one.house}户型，${this.name}${this.one.house}户型图`,
+        },
+      ],
     };
   },
   mounted() {
     let h = $(".HuAnalysis").height();
     if (h < 700) {
-      $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" ,marginBottom: '56px'});
+      $("#Foot").css({
+        position: "fixed",
+        bottom: "0",
+        width: "100%",
+        marginBottom: "56px",
+      });
     } else if (h >= 700) {
-      $("#Foot").css({ position: "relative", bottom: "0", width: "100%", marginBottom: '56px' });
+      $("#Foot").css({
+        position: "relative",
+        bottom: "0",
+        width: "100%",
+        marginBottom: "56px",
+      });
     }
-    this.baoming=localStorage.getItem('phone')
+    this.baoming = localStorage.getItem("phone");
     this.start();
     let that = this;
-    $(".p1").on("click", function() {
+    $(".p1").on("click", function () {
       let type = $(this).attr("data-v");
       if (type == "变价通知") {
         $(".weiter .t-top h6").html(type);
@@ -451,36 +489,23 @@ export default {
       that.change = true;
       $(".m-chang").show();
     });
-    $(".m-chang").on("click", function() {
+    $(".m-chang").on("click", function () {
       $(".m-chang").hide();
       that.change = false;
       that.succ = false;
     });
     // 接口验证码
-    $(".t-b-btn2").on("click", function() {
-      let check=that.checks;
-      if(!check){
-        $('.tishi').show();
-        return
-      }else{
-        $('.tishi').hide();
+    $(".t-b-btn2").on("click", function () {
+      let check = that.checks;
+      if (!check) {
+        $(".tishi").show();
+        return;
+      } else {
+        $(".tishi").hide();
       }
-      var phone = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var type = $(this)
-        .parent()
-        .parent()
-        .prev()
-        .find("h6")
-        .html();
-      var building_name = $(this)
-        .parent()
-        .next()
-        .find("#building_name")
-        .val();
+      var phone = $(this).prev().prev().prev().val();
+      var type = $(this).parent().parent().prev().find("h6").html();
+      var building_name = $(this).parent().next().find("#building_name").val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -492,31 +517,27 @@ export default {
       }
       that.send(phone);
     });
-    $(".port1").on("click", function() {
-      var ma = $(this)
-        .prev()
-        .val();
+    $(".port1").on("click", function () {
+      var ma = $(this).prev().val();
       if (!ma) {
-        $(this)
-          .prev()
-          .attr("placeholder", "验证码不能为空");
+        $(this).prev().attr("placeholder", "验证码不能为空");
         return;
       }
       that.check(ma);
     });
-    $("#o_btn").on("click", function() {
+    $("#o_btn").on("click", function () {
       that.succ = false;
       $(".m-chang").hide();
     });
-    $(".o-esc").on("click", function() {
+    $(".o-esc").on("click", function () {
       that.succ = false;
       $(".m-chang").hide();
     });
-    $("#w-esc").on("click", function() {
+    $("#w-esc").on("click", function () {
       that.change = false;
       $(".m-chang").hide();
     });
-    $(".con-msg").on("click", function() {
+    $(".con-msg").on("click", function () {
       that.$router.push("/" + that.jkl + "/count");
       // window.location.href = "/count";
     });
@@ -529,7 +550,7 @@ export default {
     };
   },
   watch: {
-    nowHeight: function() {
+    nowHeight: function () {
       if (this.defaultHeight != this.nowHeight) {
         $(".weiter").css("top", "100px");
         $("#nav-list").css("top", "42%");
@@ -537,8 +558,8 @@ export default {
         $(".weiter").css("top", "220px");
         $("#nav-list").css("top", "21%");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -552,8 +573,8 @@ export default {
 li {
   list-style: none;
 }
-.tishi{
-  color:red;
+.tishi {
+  color: red;
   font-size: 10px;
   display: none;
 }
@@ -567,11 +588,17 @@ h3 {
   position: relative;
   font-size: 16px;
 }
-h3 img {
+h3 .back {
   position: absolute;
   width: 5%;
   margin-top: 14px;
   left: 5.33%;
+}
+h3 .home {
+  position: absolute;
+  width: 5%;
+  margin-top: 14px;
+  right: 5.33%;
 }
 .hu-tag {
   width: 56px;
@@ -975,11 +1002,15 @@ h3 img {
   font-size: 15px;
   border-radius: 5px;
   border: 0px;
-  box-shadow:0px 2.5px 5px 0px rgba(255,76,76,0.2);
+  box-shadow: 0px 2.5px 5px 0px rgba(255, 76, 76, 0.2);
 }
 
 .m-botnav .m-pho {
-  background:linear-gradient(90deg,rgba(255,76,76,1),rgba(255,152,106,1));
+  background: linear-gradient(
+    90deg,
+    rgba(255, 76, 76, 1),
+    rgba(255, 152, 106, 1)
+  );
   color: #fff;
 }
 .m-botnav .m-pho .ph1 {
@@ -1002,7 +1033,11 @@ h3 img {
 }
 
 .m-botnav .m-y {
-  background:linear-gradient(-270deg,rgba(52,138,255,1),rgba(106,204,255,1));
+  background: linear-gradient(
+    -270deg,
+    rgba(52, 138, 255, 1),
+    rgba(106, 204, 255, 1)
+  );
   color: #fff;
   left: 62%;
 }
