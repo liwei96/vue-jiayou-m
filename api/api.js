@@ -19,7 +19,6 @@ axios.interceptors.request.use(function (config) {
     config.data.kid = kid
     config.data.other = other
     config.data.platform=2
-    config.data.uuid=localStorage.getItem('uuid')
   }
   if(process.server == false && config.method == 'get'){
     let kid = $cookies.get('kid')?$cookies.get('kid'):''
@@ -27,7 +26,6 @@ axios.interceptors.request.use(function (config) {
     config.params.kid = kid
     config.params.other = other
     config.params.platform=2
-    config.params.uuid=localStorage.getItem('uuid')
   }
 
   if (config.url == '/front/flow/sign') {
@@ -560,5 +558,13 @@ export const souname = (name) => {
     params: {
       'name': name
     }
+  })
+}
+
+export const hengda = (msg) => {
+  return axios.request({
+    method: 'get',
+    url: '/api/custom/identity',
+    params: msg
   })
 }

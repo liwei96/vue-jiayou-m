@@ -956,6 +956,15 @@
             <button id="o_btn" @click="guanbi">确定</button>
           </div>
         </transition>
+        <transition name="change">
+          <div class="hengda" v-show="ishengda">
+            <img class="del" src="~/assets/w-del.png" alt @click="guanbi"/>
+            <img src="~/assets/hengda.png" alt class="topimg" />
+            <input type="text" placeholder="输入身份证号后6位" maxlength="6" v-model="IDcode" />
+            <p class="zhu">注: 根据本楼盘售楼处规定，实地看房需先提前报备 身份证后6位</p>
+            <button @click="hengda">申请报备</button>
+          </div>
+        </transition>
         <div id="m_ti"></div>
         <div class="m-bigimgs">
           <img class="m_bigimgs" src alt />
@@ -1021,6 +1030,7 @@ import {
   getsdk,
   getsid,
   putmap,
+  hengda,
 } from "~/api/api";
 export default {
   name: "Content",
@@ -1273,6 +1283,8 @@ export default {
   },
   data() {
     return {
+      IDcode: "",
+      ishengda: false,
       tstype: false,
       uuid: "",
       tsmsg: "请不要重复报名",
@@ -1605,14 +1617,18 @@ export default {
           setTimeout(() => {
             that.warningbtn = false;
             that.shouping = false;
+            if (that.building.name.indexOf("恒大") !== -1) {
+              that.ishengda = true;
+              $('.m-chang').show()
+            }
           }, 1500);
-        }else if (resp.data.code == 500) {
-            this.tsmsg = "请不要重复报名";
-            this.tstype = true;
-            setTimeout(() => {
-              that.tstype = false;
-            }, 1000);
-          }
+        } else if (resp.data.code == 500) {
+          this.tsmsg = "请不要重复报名";
+          this.tstype = true;
+          setTimeout(() => {
+            that.tstype = false;
+          }, 1000);
+        }
       });
     },
     xiang(id) {
@@ -2186,9 +2202,14 @@ export default {
                 this.newimg = true;
               }
             }
-            that.change = false;
-            that.succ = true;
             $("#o_p").text("已成功订购服务，我们会第一时间通过电话联系您");
+            if (that.building.name.indexOf("恒大") !== -1) {
+              that.ishengda = true;
+            } else{
+              that.succ = true;
+            }
+              that.change = false;
+            
           } else {
             $("#ma-ll").val("");
             $("#ma-ll").attr("placeholder", "验证码不正确");
@@ -2197,6 +2218,29 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    hengda() {
+      let tel = this.baoming
+      let that = this
+      if (that.IDcode == "") {
+        this.tsmsg = "请输入身份证后六位";
+        this.tstype = true;
+        setTimeout(() => {
+          that.tstype = false;
+        }, 1000);
+      } else {
+        hengda({ identity: that.IDcode, phone: tel }).then((res) => {
+          if (res.data.code == 200) {
+            that.tsmsg = res.data.message;
+            that.tstype = true;
+            setTimeout(() => {
+              that.tstype = false;
+              that.ishengda = false;
+              that.guanbi()
+            }, 1000);
+          }
+        });
+      }
     },
     pk(e) {
       let id = e.target.getAttribute("data-v");
@@ -2544,6 +2588,7 @@ export default {
       $(".t-b-second").hide();
       this.succ = false;
       this.tu = false;
+      this.ishengda=false
     },
     // 倒计时
     countTime() {
@@ -5029,5 +5074,59 @@ body {
   color: #cdcdcd;
   font-size: 1rem;
   z-index: 55555;
+}
+.hengda {
+  width: 20.3125rem;
+  height: 23.4375rem;
+  border-radius: 0.375rem;
+  background-color: #fff;
+  position: fixed;
+  left: 50%;
+  margin-left: -10.15625rem;
+  top: 24%;
+  z-index: 5555;
+  padding-top: 2.8125rem;
+}
+.hengda .del {
+  width: 0.875rem;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+}
+.hengda .topimg {
+  width: 16.875rem;
+  margin-left: 1.6875rem;
+  margin-bottom: 2.5rem;
+}
+.hengda input {
+  width: 17rem;
+  height: 3.53125rem;
+  border-radius: 0.25rem;
+  border: 0.09375rem solid #cccccc;
+  outline: none;
+  padding-left: 1rem;
+  margin-left: 1.625rem;
+  margin-bottom: 0.875rem;
+}
+.hengda .zhu {
+  color: #ff3333;
+  font-size: 0.75rem;
+  width: 16.875rem;
+  margin-left: 1.6875rem;
+  line-height: 1.125rem;
+  margin-bottom: 1.875rem;
+}
+.hengda button {
+  width: 16.875rem;
+  height: 2.75rem;
+  border-radius: 0.25rem;
+  text-align: center;
+  line-height: 2.75rem;
+  border: 0;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: bold;
+  background: #40a2f4;
+  margin-left: 1.6875rem;
 }
 </style>

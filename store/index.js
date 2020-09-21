@@ -59,10 +59,6 @@ const store = () => new Vuex.Store({
       req,
       app
     }) {
-      // console.log(app.store.state)
-      
-
-
       let cookie = req.headers.cookie;
       if (cookie) {
         let cookieArr = cookie.split(";");
@@ -86,6 +82,7 @@ const store = () => new Vuex.Store({
           pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
         }
         timestamp = pwd + timestamp;
+        req.headers.cookie=req.headers.cookie+'; uuid='+timestamp
         // console.log(timestamp)
         commit('setuuid', {
           id: timestamp

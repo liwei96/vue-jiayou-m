@@ -2,7 +2,7 @@
   <div class="EncyclopediaArticles">
     <h3>
       <img class="goback" src="~/assets/return.png" @click="goback" />
-      {{title}}
+      <!-- {{title}} -->
       <img class="con-img" src="~/assets/ency-img.png" />
     </h3>
     <div class="con">

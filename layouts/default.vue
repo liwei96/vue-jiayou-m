@@ -12,20 +12,6 @@ export default {
   components: {
     "head-view": headView,
   },
-  asyncData(context) {
-    console.log(context)
-    let uuid = context.store.state.cookie.uuid
-    console.log(uuid,456)
-    return {
-      uuid:uuid
-    };
-  },
-  data() {
-    return {
-      n: "",
-      uuid:''
-    };
-  },
   beforeCreate() {
     if (process.client) {
       window.onresize = () => {
@@ -40,16 +26,11 @@ export default {
   },
   mounted() {
     let url = window.location.href;
-      url = url.split("?")[1];
-      if (url && url.indexOf("kid") == -1) {
-        
-      }
-    if(localStorage.getItem('uuid')){
-        $cookies.set('uuid',localStorage.getItem('uuid'))
-      }
-      if(this.uuid){
-        $cookies.set('uuid',this.uuid)
-      }
+    url = url.split("?")[1];
+    if (url && url.indexOf("kid") == -1) {
+    }
+    
+
     //百度统计
     var _hmt = _hmt || [];
     (function () {

@@ -15,6 +15,9 @@ export default function ({
     }else{
       config.data.uuid = store.state.cookie.uuid
     }
+    config.headers['uuid']=store.state.cookie.uuid
+    // console.log(config.headers['uuid'])
+    // config.header['uuid']=store.state.cookie.uuid
       return config
   })
 }
