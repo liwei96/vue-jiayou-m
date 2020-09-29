@@ -117,12 +117,17 @@ export default ({
         })
       }
     }
+      if(to.params.id == '6440' || to.params.id =='4520') {
+        next({
+          path:'/hangzhou'
+        })
+      }
     
-    if(to.params.id == '6440') {
-      next({
-        path:'/hangzhou'
-      })
-    }
+    // if(to.params.id > 3100){
+    //   next({
+    //     path:'/hangzhou'
+    //   })
+    // }
 
     let toQuery = JSON.parse(JSON.stringify(to.query));
     toQuery.uuid = store.state.cookie.uuid;

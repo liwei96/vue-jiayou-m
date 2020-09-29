@@ -55,8 +55,12 @@ export default {
         }
       }
       ids = kk.join(",");
-      let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
       let [res] = await Promise.all([
         context.$axios
           .post("/api/project/compare_mobile", {
@@ -64,26 +68,26 @@ export default {
             ids: ids,
             platform: 2,
             token: token,
-            kid:kid,
-            other:other
+            kid: kid,
+            other: other,
           })
-          .then(resp => {
+          .then((resp) => {
             // console.log(resp)
             let data = resp.data.data;
 
             return data;
-          })
+          }),
       ]);
       return {
         lists: res.buildings,
         jkl: jkl,
         title: res.title,
-      description: res.description,
-      keywords: res.keywords
+        description: res.description,
+        keywords: res.keywords,
       };
     } else {
       return {
-        jkl: jkl
+        jkl: jkl,
       };
     }
   },
@@ -98,11 +102,11 @@ export default {
       warn: false,
       title: "",
       description: "",
-      keywords: ""
+      keywords: "",
     };
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
   head() {
     return {
@@ -110,13 +114,13 @@ export default {
       meta: [
         {
           name: "description",
-          content: this.description || "允家新房"
+          content: this.description || "允家新房",
         },
         {
           name: "keywords",
-          content: this.keywords || "允家新房"
-        }
-      ]
+          content: this.keywords || "允家新房",
+        },
+      ],
     };
   },
   methods: {
@@ -134,7 +138,7 @@ export default {
       ids = kk.join(",");
       localStorage.setItem("ids", ids);
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
     },
@@ -149,7 +153,7 @@ export default {
     },
     goback() {
       this.$router.push("/" + this.n + "/content/" + this.id);
-    }
+    },
   },
   mounted() {
     let h = $(".Pk").height();
@@ -160,25 +164,25 @@ export default {
     }
     this.start();
     let that = this;
-    $(".pk").on("click", function() {
+    $(".pk").on("click", function () {
       if (that.ids) {
         that.$router.push(
           "/" + that.n + "/pkdetail/" + that.ids + "/" + that.id
         );
       } else {
         that.warn = true;
-        setTimeout(function() {
+        setTimeout(function () {
           that.warn = false;
         }, 1500);
       }
 
       // window.location.href = '/'+that.n+"/pkdetail/" + that.ids + "/" + that.id;
     });
-    $("#add").on("click", function() {
+    $("#add").on("click", function () {
       that.$router.push("/" + that.n + "/addcolletion/" + that.id);
       // window.location.href = '/'+that.n+"/addcolletion";
     });
-  }
+  },
 };
 </script>
 <style scoped>

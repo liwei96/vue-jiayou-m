@@ -1,17 +1,17 @@
 <template>
   <div id="Participate">
-    <h3>
-      <img src="~/assets/return.png" @click="goback" />城市加盟
-    </h3>
+    <h3><img src="~/assets/return.png" @click="goback" />城市加盟</h3>
     <img src="~/assets/participateimg.jpg" alt class="bg" />
     <nav>
       <ul>
         <li
-          :class="key==num && 'active'"
-          v-for="(item,key) in navs"
+          :class="key == num && 'active'"
+          v-for="(item, key) in navs"
           :key="key"
           @click="scrollto(key)"
-        >{{item}}</li>
+        >
+          {{ item }}
+        </li>
       </ul>
     </nav>
     <div class="lun">
@@ -20,28 +20,36 @@
           <div class="swiper-slide">
             <div class="list">
               <h5>最大传统客户源被禁</h5>
-              <p>2018年13个有关部门发布了《综合整治骚扰电话专项行动方案》，重点对商业营销类等骚扰电话进行整治，房地产行业最大的获客渠道受到致命打击</p>
+              <p>
+                2018年13个有关部门发布了《综合整治骚扰电话专项行动方案》，重点对商业营销类等骚扰电话进行整治，房地产行业最大的获客渠道受到致命打击
+              </p>
               <button @click="put">申请加盟</button>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="list">
               <h5>线下推广成本高局限大</h5>
-              <p>面销和行销需要充足的人力和物力，成本高并无法做到全面推广，获客效率低，常受街道和城管阻挠，也不被客户所理解。</p>
+              <p>
+                面销和行销需要充足的人力和物力，成本高并无法做到全面推广，获客效率低，常受街道和城管阻挠，也不被客户所理解。
+              </p>
               <button @click="put">申请加盟</button>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="list">
               <h5>销售时间无法利用最大化</h5>
-              <p>销售人员75%的工作时间放在获客工作上，只有25%的时间利用在与客户沟通促进成交上，成交效率低。</p>
+              <p>
+                销售人员75%的工作时间放在获客工作上，只有25%的时间利用在与客户沟通促进成交上，成交效率低。
+              </p>
               <button @click="put">申请加盟</button>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="list">
               <h5>客户管理过于混乱</h5>
-              <p>销售人员获得的客户无法得到系统的登记和实时的回访，意向客户流失率高、成交概率低。</p>
+              <p>
+                销售人员获得的客户无法得到系统的登记和实时的回访，意向客户流失率高、成交概率低。
+              </p>
               <button @click="put">申请加盟</button>
             </div>
           </div>
@@ -59,7 +67,9 @@
               <use xlink:href="#icon-fanhui" />
             </svg>
           </h6>
-          <p>从杭州楼市可见中国未来房产大趋势，二手房存量快速上升，一手房持续推出，一二手倒挂现象将会逐步拉低，直至回归理性</p>
+          <p>
+            从杭州楼市可见中国未来房产大趋势，二手房存量快速上升，一手房持续推出，一二手倒挂现象将会逐步拉低，直至回归理性
+          </p>
         </div>
         <button @click="put">了解更多</button>
       </div>
@@ -72,7 +82,9 @@
               <use xlink:href="#icon-fanhui" />
             </svg>
           </h6>
-          <p>在政府限地价限售价的情况下，开发商为了尽快回款减少资金压力，大概率情况下会开放全面合作，届时我们将会迎来近些年来唯一一个大致一年的黄金时段</p>
+          <p>
+            在政府限地价限售价的情况下，开发商为了尽快回款减少资金压力，大概率情况下会开放全面合作，届时我们将会迎来近些年来唯一一个大致一年的黄金时段
+          </p>
         </div>
         <button @click="put">了解更多</button>
       </div>
@@ -85,7 +97,9 @@
               <use xlink:href="#icon-fanhui" />
             </svg>
           </h6>
-          <p>抓住二手房与一手房之间的差价周期，谁先抢占客户，谁就能赢，得客户者为王的时代即将来临</p>
+          <p>
+            抓住二手房与一手房之间的差价周期，谁先抢占客户，谁就能赢，得客户者为王的时代即将来临
+          </p>
         </div>
         <button @click="put">了解更多</button>
       </div>
@@ -99,13 +113,15 @@
               <h6>
                 <div class="liang">
                   <div></div>
-                </div>三大平台支持
+                </div>
+                三大平台支持
               </h6>
               <img src="~/assets/b1.jpg" alt />
               <h6>
                 <div class="liang">
                   <div></div>
-                </div>多个地区运营经验
+                </div>
+                多个地区运营经验
               </h6>
               <img src="~/assets/b2.jpg" alt />
             </div>
@@ -115,13 +131,15 @@
               <h6>
                 <div class="liang">
                   <div></div>
-                </div>SAAS.大数据管理
+                </div>
+                SAAS.大数据管理
               </h6>
               <img src="~/assets/b3.jpg" alt />
               <h6>
                 <div class="liang">
                   <div></div>
-                </div>推广效果及成本分析
+                </div>
+                推广效果及成本分析
               </h6>
               <img src="~/assets/b4.jpg" alt />
             </div>
@@ -131,13 +149,15 @@
               <h6>
                 <div class="liang">
                   <div></div>
-                </div>SAAS.个性化定制
+                </div>
+                SAAS.个性化定制
               </h6>
               <img src="~/assets/b5.jpg" alt />
               <h6>
                 <div class="liang">
                   <div></div>
-                </div>公众号提醒
+                </div>
+                公众号提醒
               </h6>
               <img src="~/assets/b6.jpg" alt />
             </div>
@@ -147,13 +167,15 @@
               <h6>
                 <div class="liang">
                   <div></div>
-                </div>专业团队支持
+                </div>
+                专业团队支持
               </h6>
               <img src="~/assets/b7.jpg" alt />
               <h6>
                 <div class="liang">
                   <div></div>
-                </div>多方面培训支持
+                </div>
+                多方面培训支持
               </h6>
               <img src="~/assets/b8.jpg" alt />
             </div>
@@ -189,41 +211,43 @@
         <li>
           <div class="round">
             <div></div>
-          </div>提高分站的权重，获得更多的自然流量，从而获得自然流量报名客户
+          </div>
+          提高分站的权重，获得更多的自然流量，从而获得自然流量报名客户
         </li>
         <li>
           <div class="round">
             <div></div>
-          </div>分享项目进行朋友圈营销，通过微信分享的方式获得自然流量客户
+          </div>
+          分享项目进行朋友圈营销，通过微信分享的方式获得自然流量客户
         </li>
         <li>
           <div class="round">
             <div></div>
-          </div>向总部投稿，文章内会设置流量入口到分站网站，获得自然流量客户
+          </div>
+          向总部投稿，文章内会设置流量入口到分站网站，获得自然流量客户
         </li>
         <li>
           <div class="round">
             <div></div>
-          </div>从分站微信小程序可以获得免费流量客户
+          </div>
+          从分站微信小程序可以获得免费流量客户
         </li>
       </ul>
     </div>
     <div class="year">
       <h5>0元加盟</h5>
-      <p>以城市加盟的形式，低成本启动城市运营，我们保证每个地级市有且仅有一家合作商，保障合作商线上获客的优先性和客户的唯一归属权。</p>
+      <p>
+        以城市加盟的形式，低成本启动城市运营，我们保证每个地级市有且仅有一家合作商，保障合作商线上获客的优先性和客户的唯一归属权。
+      </p>
     </div>
     <div class="m-botnav visible-xs-block .visible-sm-block">
       <a :href="`tel:${call}`">
         <button class="m-pho">
-          <p class="ph1">
-            <img src="~/assets/phicon.png" alt />电话咨询
-          </p>
+          <p class="ph1"><img src="~/assets/phicon.png" alt />电话咨询</p>
         </button>
       </a>
       <button class="m-y p1" data-v="申请加盟" @click="put">
-        <p class="ph1">
-          <img src="~/assets/promsg.png" />申请加盟
-        </p>
+        <p class="ph1"><img src="~/assets/promsg.png" />申请加盟</p>
       </button>
     </div>
     <transition name="change">
@@ -233,19 +257,19 @@
         <ul>
           <li>
             <img src="~/assets/j-name.png" alt />
-            <input type="text" :placeholder="namemsg" v-model="name"/>
+            <input type="text" :placeholder="namemsg" v-model="name" />
           </li>
           <li>
             <img src="~/assets/j-tel.png" alt />
-            <input type="text" :placeholder="phonemsg" v-model.lazy="phone"/>
+            <input type="text" :placeholder="phonemsg" v-model.lazy="phone" />
           </li>
           <li>
             <img src="~/assets/j-compancer.png" alt />
-            <input type="text" :placeholder="companymsg" v-model="company"/>
+            <input type="text" :placeholder="companymsg" v-model="company" />
           </li>
           <li>
             <img src="~/assets/j-city.png" alt />
-            <input type="text" :placeholder="citymsg" v-model="city"/>
+            <input type="text" :placeholder="citymsg" v-model="city" />
             <!-- <img src="~/assets/j-more.png" alt class="more" /> -->
           </li>
         </ul>
@@ -264,32 +288,30 @@ import { jiameng } from "~/api/api";
 import footView from "@/components/Foot.vue";
 export default {
   name: "Participate",
-  asyncData (context) {
+  asyncData(context) {
     let jkl = context.store.state.cookie.pinyin;
     return {
-      jkl:jkl
-    }
+      jkl: jkl,
+    };
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
-  head(){
+  head() {
     return {
-      title:  '允家新房-城市加盟',
+      title: "允家新房-城市加盟",
       meta: [
         {
           name: "description",
-          content:  '允家新房'
+          content: "允家新房",
         },
         {
           name: "keywords",
-          content:  '允家新房'
-        }
+          content: "允家新房",
+        },
       ],
-      script: [
-        { src: '~/static/js/iconfont.js' },
-      ]
-    }
+      script: [{ src: "~/static/js/iconfont.js" }],
+    };
   },
   data() {
     return {
@@ -299,16 +321,16 @@ export default {
       show: false,
       defaultHeight: 0,
       nowHeight: 0,
-      city:'',
-      name:'',
-      phone:'',
-      company:'',
-      isok:true,
-      citymsg:'请输入城市',
-      namemsg:'请输入您的称呼',
-      phonemsg:'请输入手机号码',
-      companymsg:'请输入公司全称',
-      jkl:''
+      city: "",
+      name: "",
+      phone: "",
+      company: "",
+      isok: true,
+      citymsg: "请输入城市",
+      namemsg: "请输入您的称呼",
+      phonemsg: "请输入手机号码",
+      companymsg: "请输入公司全称",
+      jkl: "",
     };
   },
   methods: {
@@ -335,10 +357,9 @@ export default {
       }
     },
     start() {
-      if(process.client){
+      if (process.client) {
         this.call = localStorage.getItem("call");
       }
-      
     },
     goback() {
       this.$router.go(-1);
@@ -353,14 +374,14 @@ export default {
         let Y = window.scrollY;
         if (key == 0) {
           if (Y > 167) {
-            var timer = setInterval(function() {
+            var timer = setInterval(function () {
               window.scrollBy(0, -10);
               if (window.scrollY <= 167) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function() {
+            var timer = setInterval(function () {
               window.scrollBy(0, 10);
               if (window.scrollY >= 167) {
                 clearInterval(timer);
@@ -369,14 +390,14 @@ export default {
           }
         } else if (key == 1) {
           if (Y > 380) {
-            var timer = setInterval(function() {
+            var timer = setInterval(function () {
               window.scrollBy(0, -10);
               if (window.scrollY <= 380) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function() {
+            var timer = setInterval(function () {
               window.scrollBy(0, 10);
               if (window.scrollY >= 380) {
                 clearInterval(timer);
@@ -385,14 +406,14 @@ export default {
           }
         } else if (key == 2) {
           if (Y > 750) {
-            var timer = setInterval(function() {
+            var timer = setInterval(function () {
               window.scrollBy(0, -10);
               if (window.scrollY <= 750) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function() {
+            var timer = setInterval(function () {
               window.scrollBy(0, 10);
               if (window.scrollY >= 734) {
                 clearInterval(timer);
@@ -400,7 +421,7 @@ export default {
             }, 1);
           }
         } else if (key == 3) {
-          var timer = setInterval(function() {
+          var timer = setInterval(function () {
             window.scrollBy(0, 10);
             if (window.scrollY >= 1100) {
               clearInterval(timer);
@@ -413,63 +434,67 @@ export default {
       this.show = false;
       $(".zhao").hide();
     },
-    push(){
-      let name=this.name;
-      let phone=this.phone;
-      let company=this.company;
-      let city=this.city;
+    push() {
+      let name = this.name;
+      let phone = this.phone;
+      let company = this.company;
+      let city = this.city;
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (this.phone == "") {
-        console.log(this.phone,this.isok)
-       this.phone=''
-        this.phonemsg='手机号不能为空'
-        this.isok=false
+        console.log(this.phone, this.isok);
+        this.phone = "";
+        this.phonemsg = "手机号不能为空";
+        this.isok = false;
       } else if (!pattern_phone.test(phone)) {
-        this.isok=false
-        this.phone=''
-        this.phonemsg='请输入正确的号码'
-      }else{
-        this.isok=true
+        this.isok = false;
+        this.phone = "";
+        this.phonemsg = "请输入正确的号码";
+      } else {
+        this.isok = true;
       }
-      if(city==''){
-        this.isok=false
-        this.citymsg='不能为空'
-      }else{
-        this.isok=true
+      if (city == "") {
+        this.isok = false;
+        this.citymsg = "不能为空";
+      } else {
+        this.isok = true;
       }
-      if(name==''){
-        this.isok=false
-        this.namemsg='不能为空'
-      }else{
-        this.isok=true
+      if (name == "") {
+        this.isok = false;
+        this.namemsg = "不能为空";
+      } else {
+        this.isok = true;
       }
-      if(company==''){
-        this.isok=false
-        this.companymsg='不能为空'
-      }else{
-        this.isok=true
+      if (company == "") {
+        this.isok = false;
+        this.companymsg = "不能为空";
+      } else {
+        this.isok = true;
       }
-      if(this.isok){
-        jiameng({city:city,name:name,phone:phone,company:company}).then(res=>{
-          if(res.data.code==200){
-            this.show=false
-            $('.zhao').hide();
-          }
-      }).catch(error=>{
-
-      })
+      if (this.isok) {
+        jiameng({ city: city, name: name, phone: phone, company: company })
+          .then((res) => {
+            if (res.data.code == 200) {
+              this.show = false;
+              $(".zhao").hide();
+            }
+          })
+          .catch((error) => {});
       }
-      
-    }
+    },
   },
   mounted() {
-    $('html').css('overflow','initial')
-      $("#Foot").css({ position: "relative", bottom: "0", width: "100%",marginBottom: '56px' });
+    $("html").css("overflow", "initial");
+    $("#Foot").css({
+      position: "relative",
+      bottom: "0",
+      width: "100%",
+      marginBottom: "56px",
+    });
     let that = this;
     var swiper05 = new Swiper(".swiper-container", {
       // eslint-disable-line no-unused-vars
       slidesPerView: 1.3,
-      spaceBetween: 15
+      spaceBetween: 15,
     });
     var swiper = new Swiper(".swiper-container1", {
       // eslint-disable-line no-unused-vars
@@ -479,34 +504,20 @@ export default {
       loop: true,
       pagination: {
         el: ".swiper-pagination",
-        clickable: true
-      }
+        clickable: true,
+      },
     });
-    $(".ion").on("click", function() {
-      var n = $(this)
-        .find(".icon")
-        .attr("data-v");
+    $(".ion").on("click", function () {
+      var n = $(this).find(".icon").attr("data-v");
       if (n == 0) {
-        $(this)
-          .find(".icon")
-          .attr("data-v", "1");
+        $(this).find(".icon").attr("data-v", "1");
         $(this)
           .find(".icon")
           .css({ transform: "rotate(0deg)", color: "#4DB5FF" });
-        $(this)
-          .find(".icon")
-          .parent()
-          .next()
-          .css({ whiteSpace: "inherit" });
+        $(this).find(".icon").parent().next().css({ whiteSpace: "inherit" });
       } else {
-        $(this)
-          .find(".icon")
-          .attr("data-v", "0");
-        $(this)
-          .find(".icon")
-          .parent()
-          .next()
-          .css({ whiteSpace: "nowrap" });
+        $(this).find(".icon").attr("data-v", "0");
+        $(this).find(".icon").parent().next().css({ whiteSpace: "nowrap" });
         $(this)
           .find(".icon")
           .css({ transform: "rotate(180deg)", color: "#A8A8A8" });
@@ -515,7 +526,7 @@ export default {
     if (process.client) {
       window.addEventListener("scroll", this.scroll);
     }
-    $(".zhao").on("click", function() {
+    $(".zhao").on("click", function () {
       that.show = false;
       $(this).hide();
     });
@@ -530,20 +541,20 @@ export default {
     }
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.scroll);
+    window.removeEventListener("scroll", this.scroll);
   },
   created() {
     this.start();
   },
   watch: {
-    nowHeight: function() {
+    nowHeight: function () {
       if (this.defaultHeight != this.nowHeight) {
         $(".fixs").css("top", "10vh");
       } else {
         $(".fixs").css("top", "22vh");
       }
     },
-  }
+  },
 };
 </script>
 <style scoped>

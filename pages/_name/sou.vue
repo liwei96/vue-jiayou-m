@@ -56,7 +56,7 @@
       <ul>
         <li v-for="(item,key) in lists" :key="key" @click="aa(item.id)">
           <p class="name">
-            <span>{{item.name}}</span>
+            <span v-html="item.name"></span>
             <i>{{item.city}}</i>
           </p>
           <p class="where" v-html="item.where"></p>
@@ -280,6 +280,10 @@ li {
   font-weight: bold;
   margin-bottom: .5rem;
 }
+.sou ul li .name span >>> strong {
+  font-style: normal;
+  color:#AFB1B3
+}
 .sou ul li .name i {
   font-style: normal;
   font-size: .75rem;
@@ -289,7 +293,7 @@ li {
   color: #2A2A2B;
   font-size: .875rem;
 }
-.sou ul li .where >>> em {
+.sou ul li .where >>> strong {
   font-style: normal;
   color:#AFB1B3
 }

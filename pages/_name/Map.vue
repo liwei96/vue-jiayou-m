@@ -230,15 +230,15 @@ export default {
   },
   head(){
     return {
-      title:  '允家新房-地图找房',
+      title:  '家园新房-地图找房',
       meta: [
         {
           name: "description",
-          content:  '允家新房'
+          content:  '家园新房'
         },
         {
           name: "keywords",
-          content:  '允家新房'
+          content:  '家园新房'
         }
       ]
     }
