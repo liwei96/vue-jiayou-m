@@ -9,7 +9,7 @@ export default ({
     // to.path = to.path+'?uuid='+store.state.cookie.uuid
     // to.params.uuid = store.state.cookie.uuid
     // console.log(to.path)
-    if(process.server == false){
+    if (process.server == false) {
       if (!$cookies.get("uuid")) {
         var timestamp = Date.parse(new Date());
         var $chars =
@@ -109,20 +109,27 @@ export default ({
         }
         store.state.city = 149
         break;
+      case 'zhaoqing':
+        if (process.server == false) {
+          localStorage.setItem('city', 181)
+          $cookies.set('city', 181)
+        }
+        store.state.city = 181
+        break;
     }
-    if(to.path.indexOf('content') !==-1){
+    if (to.path.indexOf('content') !== -1) {
       if (to.params.id == undefined || to.params.id == null || to.params.id == 'null' || to.params.id == 'undefined') {
         next({
-          path:'/hangzhou'
+          path: '/hangzhou'
         })
       }
     }
-      if(to.params.id == '6440' || to.params.id =='4520') {
-        next({
-          path:'/hangzhou'
-        })
-      }
-    
+    if (to.params.id == '6440' || to.params.id == '4520') {
+      next({
+        path: '/hangzhou'
+      })
+    }
+
     // if(to.params.id > 3100){
     //   next({
     //     path:'/hangzhou'

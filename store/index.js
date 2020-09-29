@@ -82,14 +82,15 @@ const store = () => new Vuex.Store({
           pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
         }
         timestamp = pwd + timestamp;
-        req.headers.cookie=req.headers.cookie+'; uuid='+timestamp
+        req.headers.cookie = req.headers.cookie + '; uuid=' + timestamp
         // console.log(timestamp)
         commit('setuuid', {
           id: timestamp
         })
         // console.log(app.store.state.cookie.uuid)
       }
-      switch (req.url) {
+      let name=req.url.split('/')[1]
+      switch (name) {
         case 'xuzhou':
           if (process.server == false) {
             localStorage.setItem('city', 112)
@@ -173,6 +174,13 @@ const store = () => new Vuex.Store({
             $cookies.set('city', 149)
           }
           commit('setcity', 149)
+          break;
+        case 'zhaoqing':
+          if (process.server == false) {
+            localStorage.setItem('city', 181)
+            $cookies.set('city', 181)
+          }
+          commit('setcity', 181)
           break;
       }
     }
