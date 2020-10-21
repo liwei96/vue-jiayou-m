@@ -664,9 +664,6 @@ export default {
     "foot-view": footView,
   },
   async asyncData(context) {
-    // console.log(context.store.state.cookie.kid)
-    // console.log(context.store.state.cookie.uuid)
-    let uuid =context.store.state.cookie.uuid
     let name = context.params.name;
     let ip = context.store.state.cookie.ip;
     let city = context.store.state.city;
@@ -687,7 +684,6 @@ export default {
           ip: ip,
           other:other,
           kid:kid,
-          uuid:uuid
         })
         .then((resp) => {
           let data = resp.data.data;

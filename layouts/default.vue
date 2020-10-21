@@ -29,7 +29,22 @@ export default {
     url = url.split("?")[1];
     if (url && url.indexOf("kid") == -1) {
     }
-    
+    if (
+      !localStorage.getItem("uuid") ||
+      localStorage.getItem("uuid").length != 25
+    ) {
+      if (this.$route.query.uuid) {
+        $cookies.set("uuid", this.$route.query.uuid);
+        this.$store.dispatch("setuuid", this.$route.query.uuid);
+        localStorage.setItem("uuid", this.$route.query.uuid);
+      }
+    } else {
+      let uuid = localStorage.getItem("uuid");
+      if (uuid.length == 25) {
+        $cookies.set("uuid", uuid);
+        this.$store.dispatch("setuuid", uuid);
+      }
+    }
 
     //百度统计
     var _hmt = _hmt || [];

@@ -4,26 +4,6 @@ export default ({
   store
 }) => {
   app.router.beforeEach((to, from, next) => {
-    // console.log(to.params, from.params)
-    // console.log(to.path)'
-    // to.path = to.path+'?uuid='+store.state.cookie.uuid
-    // to.params.uuid = store.state.cookie.uuid
-    // console.log(to.path)
-    if (process.server == false) {
-      if (!$cookies.get("uuid")) {
-        var timestamp = Date.parse(new Date());
-        var $chars =
-          "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678"; /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
-        var maxPos = $chars.length;
-        var pwd = "";
-        let i = 0;
-        for (i = 0; i < 12; i++) {
-          pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
-        }
-        timestamp = pwd + timestamp;
-        $cookies.set("uuid", timestamp);
-      }
-    }
     switch (to.params.name) {
       case 'xuzhou':
         if (process.server == false) {
@@ -136,9 +116,37 @@ export default ({
     //   })
     // }
 
-    let toQuery = JSON.parse(JSON.stringify(to.query));
-    toQuery.uuid = store.state.cookie.uuid;
-    console.log(toQuery)
-    next()
+    if (!to.query.uuid) {
+      let toQuery = JSON.parse(JSON.stringify(to.query));
+      if (store.state.cookie.uuid && store.state.cookie.uuid.length == 25) {
+        var timestamp = store.state.cookie.uuid
+      } else if (from.query.uuid && from.query.uuid.length == 25) {
+        toQuery.uuid = from.query.uuid;
+        store.state.uuid = from.query.uuid
+        next({
+          path: to.path,
+          query: toQuery
+        })
+      } else {
+        var timestamp = Date.parse(new Date());
+        var $chars =
+          "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678"; /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        var maxPos = $chars.length;
+        var pwd = "";
+        let i = 0;
+        for (i = 0; i < 12; i++) {
+          pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        timestamp = pwd + timestamp;
+      }
+      toQuery.uuid = timestamp;
+      store.state.cookie.uuid = timestamp
+      next({
+        path: to.path,
+        query: toQuery
+      })
+    } else {
+      next()
+    }
   })
 }

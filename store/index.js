@@ -48,9 +48,9 @@ const store = () => new Vuex.Store({
     setcookie(state, payload) {
       state.cookie = payload.cookie
     },
-    setuuid(state, payload) {
-      state.cookie.uuid = payload.id
-    },
+    setuuid(state,id){
+      state.cookie.uuid = id
+    }
   },
   actions: {
     async nuxtServerInit({
@@ -70,24 +70,6 @@ const store = () => new Vuex.Store({
         commit('setcookie', {
           'cookie': obj
         })
-      }
-      if (!app.store.state.cookie.uuid) {
-        var timestamp = Date.parse(new Date());
-        var $chars =
-          "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678"; /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
-        var maxPos = $chars.length;
-        var pwd = "";
-        let i = 0;
-        for (i = 0; i < 12; i++) {
-          pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
-        }
-        timestamp = pwd + timestamp;
-        req.headers.cookie = req.headers.cookie + '; uuid=' + timestamp
-        // console.log(timestamp)
-        commit('setuuid', {
-          id: timestamp
-        })
-        // console.log(app.store.state.cookie.uuid)
       }
       let name=req.url.split('/')[1]
       switch (name) {
@@ -183,6 +165,9 @@ const store = () => new Vuex.Store({
           commit('setcity', 181)
           break;
       }
+    },
+    setuuid(context, data){
+      context.commit('setuuid', data)
     }
   },
 

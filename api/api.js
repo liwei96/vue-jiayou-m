@@ -13,6 +13,15 @@ axios.interceptors.request.use(function (config) {
       localStorage.setItem('tel', tel)
     }
   }
+  if(config.method == 'get'){
+    config.params.uuid = $cookies.get('uuid')
+  }else{
+    if(config.data){
+      config.data.uuid = $cookies.get('uuid')
+    }else{
+      config.params.uuid = $cookies.get('uuid')
+    }
+  }
   if (process.server == false && config.method == 'post') {
     let kid = $cookies.get('kid')?$cookies.get('kid'):''
     let other = $cookies.get('other')?$cookies.get('other'):''

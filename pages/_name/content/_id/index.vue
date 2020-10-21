@@ -1062,10 +1062,8 @@ export default {
   async asyncData(context) {
     // console.log(context.query)
     // console.log(timestamp);
-
     let id = context.params.id;
     let token = context.store.state.cookie.token;
-    let uuid = context.store.state.uuid;
     if (!token) {
       token = null;
     }
@@ -1094,7 +1092,6 @@ export default {
       token: token,
       kid: kid,
       other: other,
-      uuid: context.store.state.cookie.uuid,
     };
     let url = context.route.fullPath;
     if (url) {
@@ -1278,7 +1275,6 @@ export default {
       ws: false,
       share: res1.share_info,
       banner: res1.banner,
-      uuid: uuid,
     };
   },
   data() {
@@ -1286,7 +1282,6 @@ export default {
       IDcode: "",
       ishengda: false,
       tstype: false,
-      uuid: "",
       tsmsg: "请不要重复报名",
       banner: [],
       last_log_id: "",
@@ -1623,11 +1618,12 @@ export default {
             }
           }, 1500);
         } else if (resp.data.code == 500) {
-          this.tsmsg = "请不要重复报名";
+          this.tsmsg = resp.data.msg || resp.data.message;
           this.tstype = true;
           setTimeout(() => {
             that.tstype = false;
           }, 1000);
+          this.guanbi()
         }
       });
     },
@@ -2171,11 +2167,12 @@ export default {
                 console.log(error);
               });
           } else if (resp.data.code == 500) {
-            this.tsmsg = "请不要重复报名";
+            this.tsmsg = resp.data.msg || resp.data.message;
             this.tstype = true;
             setTimeout(() => {
               that.tstype = false;
             }, 1000);
+            this.guanbi()
           } else {
             $(".l-p").val("");
             $(".l-p").attr("placeholder", "报名失败");
@@ -3174,8 +3171,6 @@ export default {
   },
   mounted() {
     $cookies.set("cityname", this.building.city_fullname);
-    $cookies.set("uuid", this.uuid);
-    localStorage.setItem("uuid", this.uuid);
     localStorage.setItem("call", this.call);
     if (this.call.split(",")[1]) {
       this.callmsg = this.call.split(",")[0] + "转" + this.call.split(",")[1];
