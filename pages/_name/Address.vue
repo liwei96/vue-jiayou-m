@@ -8,9 +8,9 @@
     </nav>
     <div class="current">
       <img src="~/assets/cur.png" alt class="cur" />
-      <span class="city">{{city}}</span>
+      <span class="city">{{ city }}</span>
       <span class="msg">当前城市</span>
-      <span class="btn" @click="getcity($event)">{{btn}}</span>
+      <span class="btn" @click="getcity($event)">{{ btn }}</span>
     </div>
     <div class="hot">
       <h5>支持城市</h5>
@@ -21,102 +21,157 @@
           :key="hot.area_id"
           @click="setcity"
           :data-n="hot.pinyin"
-        >{{hot.short}}</span>
+          >{{ hot.short }}</span
+        >
       </div>
     </div>
     <div class="all">
       <h4>全部城市</h4>
       <p class="tit" id="A">A</p>
       <ul>
-        <li v-for="city in A" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li
+          v-for="city in A"
+          :key="city.area_id"
+          @click="show($event, city.area_id)"
+        >
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="B">B</p>
       <ul>
-        <li v-for="city in B" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in B" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="C">C</p>
       <ul>
-        <li v-for="city in C" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in C" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="D">D</p>
       <ul>
-        <li v-for="city in D" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in D" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="E">E</p>
       <ul>
-        <li v-for="city in E" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in E" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="F">F</p>
       <ul>
-        <li v-for="city in F" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in F" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="G">G</p>
       <ul>
-        <li v-for="city in G" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in G" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="H">H</p>
       <ul>
-        <li v-for="city in H" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li
+          v-for="city in H"
+          :key="city.area_id"
+          @click="show($event, city.area_id, city.short, city.pinyin)"
+        >
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="J">J</p>
       <ul>
-        <li v-for="city in J" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in J" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="K">K</p>
       <ul>
-        <li v-for="city in K" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in K" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="L">L</p>
       <ul>
-        <li v-for="city in L" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in L" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="M">M</p>
       <ul>
-        <li v-for="city in M" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in M" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="N">N</p>
       <ul>
-        <li v-for="city in N" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in N" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="O">O</p>
       <ul>
-        <li v-for="city in O" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in O" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="P">P</p>
       <ul>
-        <li v-for="city in P" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in P" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="Q">Q</p>
       <ul>
-        <li v-for="city in Q" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in Q" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="R">R</p>
       <ul>
-        <li v-for="city in R" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in R" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="S">S</p>
       <ul>
-        <li v-for="city in S" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in S" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="T">T</p>
       <ul>
-        <li v-for="city in T" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in T" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="W">W</p>
       <ul>
-        <li v-for="city in W" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in W" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="X">X</p>
       <ul>
-        <li v-for="city in X" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in X" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="Y">Y</p>
       <ul>
-        <li v-for="city in Y" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in Y" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
       <p class="tit" id="Z">Z</p>
       <ul>
-        <li v-for="city in Z" :key="city.area_id" @click="show($event)">{{city.city}}</li>
+        <li v-for="city in Z" :key="city.area_id" @click="show($event, city.area_id, city.short, city.pinyin)">
+          {{ city.city }}
+        </li>
       </ul>
     </div>
     <ul class="right">
@@ -195,14 +250,18 @@
       <img src="~/assets/w-del.png" alt class="del" @click="close" />
       <img class="bg" src="~/assets/addressd.png" alt />
       <h5>很遗憾没有城市信息</h5>
-      <p>非常遗憾的通知您，您当前选择的城市我并未涉及，不是我们能力不足，是我们需要更多的人来一起点亮它，让我们一起来维护您选择的家园</p>
+      <p>
+        非常遗憾的通知您，您当前选择的城市我并未涉及，不是我们能力不足，是我们需要更多的人来一起点亮它，让我们一起来维护您选择的家园
+      </p>
       <div class="bom">
         <div class="b-left" @click="tohot">热门城市</div>
         <div class="b-right" @click="please">申请开放</div>
       </div>
     </div>
     <foot-view :pinyin="jkl"></foot-view>
-    <div class="msg">我们已收到您诚挚的申请，在下一个开放城市中我们会优先开放—{{getname}}</div>
+    <div class="msg">
+      我们已收到您诚挚的申请，在下一个开放城市中我们会优先开放—{{ getname }}
+    </div>
   </div>
 </template>
 <script>
@@ -211,52 +270,63 @@ import { address_start, ip } from "~/api/api";
 import axios from "axios";
 export default {
   name: "Address",
-  async asyncData (context) {
-   let ip=context.store.state.cookie.ip;
+  async asyncData(context) {
+    let ip = context.store.state.cookie.ip;
     let city = context.store.state.cookie.city;
-    let token=context.store.state.cookie.token;
+    let token = context.store.state.cookie.token;
     let jkl = context.store.state.cookie.pinyin;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res]= await Promise.all([
-      context.$axios.post('/api/first/city',{ platform: 2, token: token, ip: ip,kid:kid,other:other })
-      .then((resp)=>{
+    let kid = context.store.state.cookie.kid
+      ? context.store.state.cookie.kid
+      : "";
+    let other = context.store.state.cookie.other
+      ? context.store.state.cookie.other
+      : "";
+    let [res] = await Promise.all([
+      context.$axios
+        .post("/api/first/city", {
+          platform: 2,
+          token: token,
+          ip: ip,
+          kid: kid,
+          other: other,
+        })
+        .then((resp) => {
           let msg = resp.data.data;
-            
+
           return msg;
-      })
-    ])
-    return{
-          A : res.city.A,
-            B : res.city.B,
-            C : res.city.C,
-            D : res.city.D,
-            E : res.city.E,
-            F : res.city.F,
-            G : res.city.G,
-            H : res.city.H,
-            I : res.city.I,
-            J : res.city.J,
-            K : res.city.K,
-            L : res.city.L,
-            M : res.city.M,
-            N : res.city.N,
-            O : res.city.O,
-            P : res.city.P,
-            Q : res.city.Q,
-            R : res.city.R,
-            S : res.city.S,
-            T : res.city.T,
-            W : res.city.W,
-            X : res.city.X,
-            Y : res.city.Y,
-            Z : res.city.Z,
-            hots : res.hots,
-            jkl:jkl,
-            title:res.city.title,
-            description:res.city.description,
-            keywords:res.city.keywords
-    }
+        }),
+    ]);
+    return {
+      A: res.city.A,
+      B: res.city.B,
+      C: res.city.C,
+      D: res.city.D,
+      E: res.city.E,
+      F: res.city.F,
+      G: res.city.G,
+      H: res.city.H,
+      I: res.city.I,
+      J: res.city.J,
+      K: res.city.K,
+      L: res.city.L,
+      M: res.city.M,
+      N: res.city.N,
+      O: res.city.O,
+      P: res.city.P,
+      Q: res.city.Q,
+      R: res.city.R,
+      S: res.city.S,
+      T: res.city.T,
+      W: res.city.W,
+      X: res.city.X,
+      Y: res.city.Y,
+      Z: res.city.Z,
+      hots: res.hots,
+      jkl: jkl,
+      title: res.city.title,
+      description: res.city.description,
+      keywords: res.city.keywords,
+    };
   },
   data() {
     return {
@@ -295,73 +365,73 @@ export default {
       btn: "重新定位",
       hots: [],
       ip: "",
-      jkl:'',
-      title:'',
-      keywords:'',
-      description:''
+      jkl: "",
+      title: "",
+      keywords: "",
+      description: "",
     };
   },
-    head() {
+  head() {
     return {
       title: this.title || "允家新房",
-      meta:[
+      meta: [
         {
           name: "description",
-          content: this.description
+          content: this.description,
         },
         {
           name: "keywords",
-          content: this.keywords
-        }
-      ]
+          content: this.keywords,
+        },
+      ],
     };
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
   methods: {
     start() {
       this.city = localStorage.getItem("cityname");
-      
-        let token = localStorage.getItem("token");
-        let ip = ip_arr["ip"];
-        // let ip = returnCitySN["cip"];
-        this.ip = ip;
-        localStorage.getItem("ip");
-        let data = { platform: 2, token: token, ip: ip };
-        address_start(data)
-          .then(resp => {
-            let msg = resp.data.data.city;
-            localStorage.setItem("address", JSON.stringify(resp.data.data));
-            this.A = msg.A;
-            this.B = msg.B;
-            this.C = msg.C;
-            this.D = msg.D;
-            this.E = msg.E;
-            this.F = msg.F;
-            this.G = msg.G;
-            this.H = msg.H;
-            this.I = msg.I;
-            this.J = msg.J;
-            this.K = msg.K;
-            this.L = msg.L;
-            this.M = msg.M;
-            this.N = msg.N;
-            this.O = msg.O;
-            this.P = msg.P;
-            this.Q = msg.Q;
-            this.R = msg.R;
-            this.S = msg.S;
-            this.T = msg.T;
-            this.W = msg.W;
-            this.X = msg.X;
-            this.Y = msg.Y;
-            this.Z = msg.Z;
-            this.hots = resp.data.data.hots;
-          })
-          .catch(error => {
-            console.log(error);
-          });
+
+      let token = localStorage.getItem("token");
+      let ip = ip_arr["ip"];
+      // let ip = returnCitySN["cip"];
+      this.ip = ip;
+      localStorage.getItem("ip");
+      let data = { platform: 2, token: token, ip: ip };
+      address_start(data)
+        .then((resp) => {
+          let msg = resp.data.data.city;
+          localStorage.setItem("address", JSON.stringify(resp.data.data));
+          this.A = msg.A;
+          this.B = msg.B;
+          this.C = msg.C;
+          this.D = msg.D;
+          this.E = msg.E;
+          this.F = msg.F;
+          this.G = msg.G;
+          this.H = msg.H;
+          this.I = msg.I;
+          this.J = msg.J;
+          this.K = msg.K;
+          this.L = msg.L;
+          this.M = msg.M;
+          this.N = msg.N;
+          this.O = msg.O;
+          this.P = msg.P;
+          this.Q = msg.Q;
+          this.R = msg.R;
+          this.S = msg.S;
+          this.T = msg.T;
+          this.W = msg.W;
+          this.X = msg.X;
+          this.Y = msg.Y;
+          this.Z = msg.Z;
+          this.hots = resp.data.data.hots;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     getcity() {
       this.getip();
@@ -371,33 +441,46 @@ export default {
       let n = e.target.getAttribute("data-n");
       let name = e.target.innerHTML;
       localStorage.setItem("city", city);
-      $cookies.set('city',city);
+      $cookies.set("city", city);
       localStorage.setItem("cityname", name);
-      $cookies.set('cityname',name);
+      $cookies.set("cityname", name);
       localStorage.setItem("pinyin", n);
-      $cookies.set('pinyin',n)
-      window.location.href="/"+n
+      $cookies.set("pinyin", n);
+      window.location.href = "/" + n;
       // this.$router.push("/" + n);
     },
 
     goback() {
       this.$router.go(-1);
     },
-    show(e) {
-      let n = e.target;
-      this.getname = n.innerHTML;
-      let address = JSON.parse(localStorage.getItem("address"));
-      for (let item of address["hots"]) {
-        if (n.innerHTML == item["city"]) {
+    show(e, id, name, pinyin) {
+      if (id) {
+        let city = id;
+        let n = pinyin;
+        let name = name;
+        localStorage.setItem("city", city);
+        $cookies.set("city", city);
+        localStorage.setItem("cityname", name);
+        $cookies.set("cityname", name);
+        localStorage.setItem("pinyin", n);
+        $cookies.set("pinyin", n);
+        window.location.href = "/" + n;
+      } else {
+        let n = e.target;
+        this.getname = n.innerHTML;
+        let address = JSON.parse(localStorage.getItem("address"));
+        for (let item of address["hots"]) {
+          if (n.innerHTML == item["city"]) {
+          }
         }
+        $(".zhao").show();
+        this.kk = true;
       }
-      $(".zhao").show();
-      this.kk = true;
     },
     close() {
       $(".zhao").hide();
       this.kk = false;
-      this.ll=0;
+      this.ll = 0;
     },
     tohot() {
       $(".zhao").hide();
@@ -409,25 +492,25 @@ export default {
         this.ll = 1;
         $(".b-right").css({ color: "#B8BCC2" });
         $(".msg").show();
-        setTimeout(function() {
+        setTimeout(function () {
           $(".msg").hide();
         }, 2000);
       }
-    }
+    },
   },
   mounted() {
     this.start();
     let that = this;
     let n = localStorage.getItem("pinyin");
-    $("#sea").on("click", function() {
+    $("#sea").on("click", function () {
       // window.location.href = '/'+n+"/soucity";
       this.$router.push("/" + n + "/soucity");
     });
-    $(".zhao").on("click", function() {
+    $(".zhao").on("click", function () {
       $(this).hide();
       that.kk = false;
     });
-  }
+  },
 };
 </script>
 <style scoped>

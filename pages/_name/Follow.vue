@@ -18,17 +18,10 @@
 </template>
 <script>
 import footView from "@/components/Foot.vue";
-import { getiptest } from '~/api/api'
 export default {
   name: "Follow",
   async asyncData(context) {
     let jkl = context.store.state.cookie.pinyin;
-    let [res]= await Promise.all([
-      context.$axios.get('/iptest',)
-      .then((resp)=>{
-      console.log(resp)          
-      })
-    ])
     return {
       jkl: jkl
     };
@@ -69,13 +62,6 @@ export default {
     },
   },
   mounted() {
-    getiptest().then(res=>{
-      console.log(res)
-    })
-    var ua = navigator.userAgent.toLowerCase();
-    if (ua.match(/MicroMessenger/i) == "micromessenger") {
-      this.get();
-    }
     $("#Foot").css({
       position: "relative",
       bottom: "0",

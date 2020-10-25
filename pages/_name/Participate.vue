@@ -445,10 +445,12 @@ export default {
         this.phone = "";
         this.phonemsg = "手机号不能为空";
         this.isok = false;
+        return
       } else if (!pattern_phone.test(phone)) {
         this.isok = false;
         this.phone = "";
         this.phonemsg = "请输入正确的号码";
+        return
       } else {
         this.isok = true;
       }
