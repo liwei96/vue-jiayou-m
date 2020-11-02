@@ -577,3 +577,25 @@ export const hengda = (msg) => {
     params: msg
   })
 }
+
+export const put = (name) => {
+  return axios.request({
+    method: 'post',
+    url: '/front/flow/sign',
+    data: name
+  })
+}
+export const send = (name) => {
+  return axios.request({
+    method: 'post',
+    url: '/front/flow/send',
+    data: name
+  })
+}
+export const check = (name) => {
+  return axios.request({
+    method: 'post',
+    url: '/front/flow/sure',
+    data: name
+  })
+}

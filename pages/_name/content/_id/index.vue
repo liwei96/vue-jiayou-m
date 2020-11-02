@@ -973,7 +973,7 @@
       <div id="panel" style="display:none;"></div>
     </div>
 
-    <div class="swp" v-show="tu">
+    <!-- <div class="swp" v-show="tu">
       <slide-verify
         :l="20"
         :r="5"
@@ -985,7 +985,7 @@
         @refresh="onRefresh"
         :slider-text="text"
       ></slide-verify>
-    </div>
+    </div> -->
     <div class="iscookie" v-show="iscookie">
       <p>为了更好的体验，请在浏览器设置中打开cookie</p>
     </div>
@@ -1420,80 +1420,6 @@ export default {
       mapimg: require("~/assets/path.png"),
       huomsg: false,
       ws: false,
-      faces: [
-        "[微笑]",
-        "[嘻嘻]",
-        "[哈哈]",
-        "[可爱]",
-        "[可怜]",
-        "[挖鼻]",
-        "[吃惊]",
-        "[害羞]",
-        "[挤眼]",
-        "[闭嘴]",
-        "[鄙视]",
-        "[爱你]",
-        "[泪]",
-        "[偷笑]",
-        "[亲亲]",
-        "[生病]",
-        "[太开心]",
-        "[白眼]",
-        "[右哼哼]",
-        "[左哼哼]",
-        "[嘘]",
-        "[衰]",
-        "[委屈]",
-        "[吐]",
-        "[哈欠]",
-        "[抱抱]",
-        "[怒]",
-        "[疑问]",
-        "[馋嘴]",
-        "[拜拜]",
-        "[思考]",
-        "[汗]",
-        "[困]",
-        "[睡]",
-        "[钱]",
-        "[失望]",
-        "[酷]",
-        "[色]",
-        "[哼]",
-        "[鼓掌]",
-        "[晕]",
-        "[悲伤]",
-        "[抓狂]",
-        "[黑线]",
-        "[阴险]",
-        "[怒骂]",
-        "[互粉]",
-        "[心]",
-        "[伤心]",
-        "[猪头]",
-        "[熊猫]",
-        "[兔子]",
-        "[ok]",
-        "[耶]",
-        "[good]",
-        "[NO]",
-        "[赞]",
-        "[来]",
-        "[弱]",
-        "[草泥马]",
-        "[神马]",
-        "[囧]",
-        "[浮云]",
-        "[给力]",
-        "[围观]",
-        "[威武]",
-        "[奥特曼]",
-        "[礼物]",
-        "[钟]",
-        "[话筒]",
-        "[蜡烛]",
-        "[蛋糕]",
-      ],
       isagree: true,
       isagrees: true,
       beforeck: require("~/assets/giveup.png"),
@@ -1535,15 +1461,24 @@ export default {
   },
   methods: {
     gotalk() {
-      // this.showpop = true
-      let k = $cookies.get("pinyin");
-      if (sessionStorage.getItem(this.building.id)) {
-        sessionStorage.setItem("sid", sessionStorage.getItem(this.building.id));
+      let urlid = this.$route.params.id;
+      let id = sessionStorage.getItem(urlid);
+      if (id) {
+        sessionStorage.setItem("staffid", id);
+        let n = parseInt(sessionStorage.getItem(id));
+        let total = parseInt(sessionStorage.getItem("total"));
+        total = total - n;
+        if (total != 0) {
+          sessionStorage.setItem("total", total);
+        } else {
+          sessionStorage.removeItem("total");
+        }
+        sessionStorage.removeItem(id);
+        
+      } else {
+        sessionStorage.removeItem("staffid");
       }
-      sessionStorage.setItem("projectid", this.building.id);
-      sessionStorage.setItem("ws" + this.building.id, true);
-      // this.$router.push(`/${k}/talk`);
-      window.location.href = `/${k}/talk`;
+      this.$router.push("/" + this.jkl + "/talk/"+urlid);
     },
     shou() {
       let tel = this.baoming;
@@ -2659,284 +2594,6 @@ export default {
         this.$router.push("/" + this.jkl + "/login");
       }
     },
-    createwebsocket() {
-      try {
-        if ("WebSocket" in window) {
-          this.ws = new ReconnectingWebSocket("ws://39.98.227.114:9501");
-        } else if ("MozWebSocket" in window) {
-          this.ws = new ReconnectingWebSocket("ws://39.98.227.114:9501");
-        }
-        this.init();
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    init() {
-      let that = this;
-      this.ws.onopen = function (event) {
-        let options = {
-          //要发送的数据
-          class: "Info",
-          action: "project",
-          content: {
-            token: localStorage.getItem("wstoken"),
-            Id: that.building.id,
-          },
-        };
-        that.ws.send(JSON.stringify(options));
-      };
-      this.ws.onmessage = function (event) {
-        if (event.data != "connect success") {
-          let data = JSON.parse(event.data);
-          if (data.code != 500) {
-            if (data.action == "talk") {
-              that.wsshow = true;
-              that.wsnum = Number(that.wsnum) + 1;
-              sessionStorage.setItem(that.building.id, data.content.id);
-              let name = "小" + data.content.username.substr(0, 1);
-              sessionStorage.setItem("staffname", name);
-              if (that.sids.indexOf(data.content.id) != -1) {
-                var transaction = that.db.transaction("staffmsg", "readwrite");
-                var store = transaction.objectStore("staffmsg");
-                var index = store.index("sid");
-                var search = index.get(data.content.id);
-                var myDate = new Date();
-                let time = myDate.toLocaleTimeString();
-                let timenum = Date.parse(new Date());
-                search.onsuccess = function (e) {
-                  let result = e.target.result;
-                  if (result) {
-                    result.txt = data.content.content;
-                    result.time = time;
-                    result.num = timenum;
-                    result.type = 1;
-                    store.put(result);
-                  }
-                };
-
-                var indexedDB =
-                  window.indexedDB ||
-                  window.webkitIndexedDB ||
-                  window.mozIndexedDB ||
-                  window.msIndexedDB;
-                var db;
-                if (!indexedDB) {
-                  alert("不支持");
-                }
-                let img = data.content.avatar;
-                img = decodeURIComponent(img);
-                let request = indexedDB.open("staff" + data.content.id, 2);
-                request.onsuccess = function (e) {
-                  db = request.result;
-                  let transaction = db.transaction(
-                    "staff" + data.content.id,
-                    "readwrite"
-                  );
-                  let msg = data.content.content;
-                  if (msg.split("face").length !== 0) {
-                    let index = msg.indexOf("face");
-                    while (index != -1) {
-                      var reg = /face\[[\u4e00-\u9fa5_a-zA-Z]+\]/s;
-                      var match = msg.match(reg);
-                      if (match) {
-                        var title = match[0].replace("face", "");
-                      }
-                      for (let val in that.faces) {
-                        if (that.faces[val].con == title) {
-                          let img = require(`~/assets/${val}.gif`);
-                          let h = `<img src="${img}">`;
-                          msg = msg.replace(`face${title}`, h);
-                        }
-                      }
-                      index = msg.indexOf("face", index + 4);
-                    }
-                  }
-                  let store = transaction.objectStore(
-                    "staff" + data.content.id
-                  );
-                  sessionStorage.setItem("lastone", msg);
-                  let addPersonRequest = store.add({
-                    className: "worker",
-                    con: msg,
-                    img: img,
-                    name1: "worker-left",
-                    name2: "worker-right",
-                  });
-                };
-              } else {
-                var transaction = that.db.transaction("staffmsg", "readwrite");
-                var store = transaction.objectStore("staffmsg");
-                let img = data.content.avatar;
-                img = decodeURIComponent(img);
-                var myDate = new Date();
-                let time = myDate.toLocaleTimeString();
-                let timenum = Date.parse(new Date());
-                let staff = {};
-                staff.name = "小" + data.content.username.substr(0, 1);
-                staff.sid = data.content.id;
-                staff.img = img;
-                staff.time = time;
-                staff.buildname = sessionStorage.getItem("buildname");
-                staff.projectid = sessionStorage.getItem("projectid");
-                staff.txt = data.content.content;
-                staff.type = 1;
-                staff.num = timenum;
-                let otheradd = store.add(staff);
-                otheradd.onsuccess = function () {
-                  var index =
-                    window.indexedDB ||
-                    window.webkitIndexedDB ||
-                    window.mozIndexedDB ||
-                    window.msIndexedDB;
-                  let req = index.open("staff" + data.content.id, 2);
-                  req.onupgradeneeded = function (e) {
-                    let db = e.target.result;
-                    if (
-                      !db.objectStoreNames.contains("staff" + data.content.id)
-                    ) {
-                      let objectStore = db.createObjectStore(
-                        "staff" + data.content.id,
-                        {
-                          keyPath: "id",
-                          autoIncrement: true,
-                        }
-                      );
-                      objectStore.createIndex("classname", "classname", {
-                        unique: true,
-                      });
-                      objectStore.createIndex("con", "con", {
-                        unique: false,
-                      });
-                      objectStore.createIndex("img", "img", {
-                        unique: false,
-                      });
-                      objectStore.createIndex("name1", "name1", {
-                        unique: false,
-                      });
-                      objectStore.createIndex("name2", "name2", {
-                        unique: false,
-                      });
-                    }
-                  };
-                  req.onsuccess = function (e) {
-                    let db = req.result;
-                    let tran = db.transaction(
-                      "staff" + data.content.id,
-                      "readwrite"
-                    );
-                    let store = tran.objectStore("staff" + data.content.id);
-
-                    let addPersonRequest = store.add({
-                      className: "worker",
-                      con: data.content.content,
-                      img: img,
-                      name1: "worker-left",
-                      name2: "worker-right",
-                    });
-                    addPersonRequest.onsuccess = function () {
-                      that.wsstart();
-                    };
-                  };
-                };
-              }
-            }
-          }
-        }
-      };
-    },
-    send(msg) {
-      let token = localStorage.getItem("wstoken");
-      let sid = sessionStorage.getItem(sessionStorage.getItem("projectid"))
-        ? sessionStorage.getItem("sid")
-        : 0;
-      let id = sessionStorage.getItem("projectid");
-      let actions = {
-        //要发送的数据
-        class: "Chat",
-        action: "send",
-        content: { staff_id: sid, msg: msg, token: token, project: id },
-      };
-      sessionStorage.setItem("lastone", msg);
-      let dd = JSON.stringify(actions);
-      this.ws.send(dd);
-    },
-    getpro(id) {
-      let options = {
-        //要发送的数据
-        class: "Info",
-        action: "project",
-        content: {
-          token: localStorage.getItem("wstoken"),
-          Id: id,
-        },
-      };
-      this.ws.send(JSON.stringify(options));
-    },
-    wsstart() {
-      let that = this;
-      for (let val in that.faces) {
-        that.faces[val] = {
-          img: require(`~/assets/${val}.gif`),
-          con: that.faces[val],
-        };
-      }
-      this.sids = [];
-
-      var indexedDB =
-        window.indexedDB ||
-        window.webkitIndexedDB ||
-        window.mozIndexedDB ||
-        window.msIndexedDB;
-      var db;
-      if (!indexedDB) {
-        alert("不支持");
-      }
-      let request = indexedDB.open("staffmsg", 2);
-      request.onupgradeneeded = function (e) {
-        db = e.target.result;
-        if (!db.objectStoreNames.contains("staffmsg")) {
-          var objectStore = db.createObjectStore("staffmsg", {
-            keyPath: "id",
-            autoIncrement: true,
-          });
-          objectStore.createIndex("sid", "sid", {
-            unique: true,
-          });
-          objectStore.createIndex("con", "con", {
-            unique: false,
-          });
-          objectStore.createIndex("img", "img", {
-            unique: false,
-          });
-          objectStore.createIndex("name", "name", {
-            unique: false,
-          });
-          objectStore.createIndex("time", "time", {
-            unique: false,
-          });
-          objectStore.createIndex("buildname", "buildname", {
-            unique: false,
-          });
-        }
-      };
-      request.onsuccess = function (e) {
-        db = request.result;
-        that.db = request.result;
-        var transaction = db.transaction("staffmsg", "readwrite");
-        var store = transaction.objectStore("staffmsg");
-        // 取出所有数据
-        var all = store.getAll();
-        all.onsuccess = function () {
-          that.cons = all.result;
-          for (let val of that.cons) {
-            that.sids.push(val.sid);
-          }
-        };
-      };
-      request.onerror = function (e) {
-        console.log("false");
-      };
-    },
     get() {
       let that = this;
       let url = encodeURIComponent(window.location.href);
@@ -3170,6 +2827,46 @@ export default {
     }
   },
   mounted() {
+    let that = this;
+    this.ws = this.$store.state.ws
+    this.$store.state.ws.onmessage = function (event) {
+      let data = JSON.parse(event.data);
+      if(data.action == 301) {
+        let urlid = that.$route.params.id
+        if(!sessionStorage.getItem(urlid)){
+          sessionStorage.setItem(urlid,data.fromUserName)
+          // that.putcard()
+        }else{
+          that.wsshow = true
+          if(sessionStorage.getItem(data.fromUserName)){
+            sessionStorage.setItem(data.fromUserName,(parseInt(sessionStorage.getItem(data.fromUserName))+1))
+          }else{
+            sessionStorage.setItem(data.fromUserName,1)
+          }
+          if (
+            sessionStorage.getItem("total") &&
+            sessionStorage.getItem("total") != "NaN"
+          ) {
+            sessionStorage.setItem(
+              "total",
+              parseInt(sessionStorage.getItem("total")) + 1
+            );
+            that.wsnum = parseInt(sessionStorage.getItem('total'));
+          } else {
+            sessionStorage.setItem("total", 1);
+            that.wsnum = 1;
+          }
+        }
+      }else if (data.action == 206) {
+        that.usernum = data.num.user_num
+        that.looknum = data.num.look_num
+        that.rate = data.num.rate
+        that.stafftel = data.staff.tel
+        that.staffname = data.staff.name
+        that.staffimg = data.staff.img
+        that.talktype = true
+      }
+    }
     $cookies.set("cityname", this.building.city_fullname);
     localStorage.setItem("call", this.call);
     if (this.call.split(",")[1]) {
@@ -3189,7 +2886,7 @@ export default {
         }, 500);
       }
     });
-    let that = this;
+    
     sessionStorage.setItem("ip", ip_arr["ip"]);
     $cookies.set("ip", ip_arr["ip"]);
     var ua = navigator.userAgent.toLowerCase();
@@ -3217,14 +2914,7 @@ export default {
         };
       }
     }
-
-    this.wsstart();
-    this.createwebsocket();
-    setTimeout(() => {
-      if (!sessionStorage.getItem("ws" + this.building.id)) {
-        this.wsshow = true;
-      }
-    }, 7000);
+    
 
     $cookies.set("name", this.building.name);
     $cookies.set("address", this.building.address);
@@ -3927,7 +3617,6 @@ export default {
   destroyed() {
     clearTimeout(this.timename);
     localStorage.removeItem("map");
-    this.ws.close();
   },
 };
 </script>

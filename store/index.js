@@ -50,6 +50,9 @@ const store = () => new Vuex.Store({
     },
     setuuid(state,id){
       state.cookie.uuid = id
+    },
+    setws(state,id){
+      state.ws = id
     }
   },
   actions: {
@@ -168,6 +171,9 @@ const store = () => new Vuex.Store({
     },
     setuuid(context, data){
       context.commit('setuuid', data)
+    },
+    setws(context, data){
+      context.commit('setws', data)
     }
   },
 

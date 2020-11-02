@@ -36,6 +36,9 @@ export default {
       },
       {
         src: '//webapi.amap.com/maps?v=1.4.14&key=729ac4d779c7e625bc11bd5ba3ff3112'
+      },
+      {
+        src: '//cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js'
       }
     ],
     link: [{
@@ -105,7 +108,7 @@ export default {
     },
     {
       src: '~plugins/route',
-      ssr: true
+      ssr: false
     },
     {
       src: '~plugins/lazy',
@@ -135,7 +138,7 @@ export default {
     /*
      ** You can extend webpack config here
      */
-
+    transpile: [/vant.*?less/],
     extend(config, ctx) {},
     extractCSS: {
       allChunks: true
@@ -168,7 +171,13 @@ export default {
         }],
         ['@babel/plugin-proposal-class-properties', {
           'loose': true
-        }]
+        }],
+        ['import', {
+          libraryName: 'vant',
+          "style": (name) => {
+            return `${name}/style/less.js`
+          }
+        }, 'vant']
       ]
     }
   },
