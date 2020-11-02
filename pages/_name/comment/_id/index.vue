@@ -141,7 +141,6 @@ export default {
     }
   },
   mounted() {
-    console.log(sessionStorage.getItem('comment').split('/')[3])
     jQuery.fn.ratingStars = function(e) {
       var r = {
           selectors: {
