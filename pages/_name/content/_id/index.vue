@@ -1462,6 +1462,7 @@ export default {
   methods: {
     gotalk() {
       let urlid = this.$route.params.id;
+      sessionStorage.setItem('proid',urlid)
       let id = sessionStorage.getItem(urlid);
       if (id) {
         sessionStorage.setItem("staffid", id);
@@ -1475,8 +1476,6 @@ export default {
         }
         sessionStorage.removeItem(id);
         
-      } else {
-        sessionStorage.removeItem("staffid");
       }
       this.$router.push("/" + this.jkl + "/talk/"+urlid);
     },
@@ -2865,6 +2864,8 @@ export default {
         that.staffname = data.staff.name
         that.staffimg = data.staff.img
         that.talktype = true
+      } else if (data.action == 302) {
+        sessionStorage.setItem('staffid',data.sid)
       }
     }
     $cookies.set("cityname", this.building.city_fullname);

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import ReconnectingWebSocket from 'reconnecting-websocket'
 export default ({
   app,
   store
@@ -97,25 +98,6 @@ export default ({
         store.state.city = 181
         break;
     }
-    if (to.path.indexOf('content') !== -1) {
-      if (to.params.id == undefined || to.params.id == null || to.params.id == 'null' || to.params.id == 'undefined') {
-        next({
-          path: '/hangzhou'
-        })
-      }
-    }
-    if (to.params.id == '6440' || to.params.id == '4520') {
-      next({
-        path: '/hangzhou'
-      })
-    }
-
-    // if(to.params.id > 3100){
-    //   next({
-    //     path:'/hangzhou'
-    //   })
-    // }
-
     let city = localStorage.getItem('city')
     let ip = ip_arr["ip"];
     let url = 'm.jy1980.com'+to.fullPath
@@ -123,33 +105,52 @@ export default ({
     let pro = 0
     if (url.indexOf('content') !== -1) {
       pro = to.params.id
+    }else{
+      pro = 0
     }
-    let pp = {
-      controller: "Info",
-      action: "register",
-      params: {
-        "city": city,
-        "project": pro,
-        "ip": ip,
-        "url": url
-      },
-    };
+    
     if (!to.query.uuid) {
       let toQuery = JSON.parse(JSON.stringify(to.query));
       let timestamp = ''
       if (from.query.uuid) {
         timestamp = from.query.uuid
+        let pp = {
+          controller: "Info",
+          action: "register",
+          params: {
+            "city": city,
+            "project": pro,
+            "ip": ip,
+            "url": url,
+            uuid: from.query.uuid
+          },
+        };
         console.log(456)
         if(store.state.ws){
-          if(to.fullPath.indexOf('content')!==-1){
-            store.state.ws.send(JSON.stringify(pp))
+          if(to.fullPath.indexOf('talk')===-1){
+            setTimeout(()=>{
+              store.state.ws.send(JSON.stringify(pp))
+            },3000)
           }
         }
       } else if (localStorage.getItem('uuid')) {
         console.log(789)
         if(store.state.ws){
-          if(to.fullPath.indexOf('content')!==-1){
-            store.state.ws.send(JSON.stringify(pp))
+          let pp = {
+            controller: "Info",
+            action: "register",
+            params: {
+              "city": city,
+              "project": pro,
+              "ip": ip,
+              "url": url,
+              uuid: localStorage.getItem('uuid')
+            },
+          };
+          if(to.fullPath.indexOf('talk')===-1){
+            setTimeout(()=>{
+              store.state.ws.send(JSON.stringify(pp))
+            },3000)
           }
         }
         timestamp = localStorage.getItem('uuid')
@@ -172,9 +173,22 @@ export default ({
         let ws = new ReconnectingWebSocket(
           "ws://139.155.128.107:9509?uuid="+timestamp
         );
+        let pp = {
+          controller: "Info",
+          action: "register",
+          params: {
+            "city": city,
+            "project": pro,
+            "ip": ip,
+            "url": url,
+            uuid: timestamp
+          },
+        };
         ws.onopen = function () {
-          if(to.fullPath.indexOf('content')!==-1){
-            ws.send(JSON.stringify(pp))
+          if(to.fullPath.indexOf('talk')===-1){
+            setTimeout(()=>{
+              store.state.ws.send(JSON.stringify(pp))
+            },3000)
           }
         }
         store.dispatch("setws", ws);
@@ -188,9 +202,22 @@ export default ({
         let ws = new ReconnectingWebSocket(
           "ws://139.155.128.107:9509?uuid="+localStorage.getItem('uuid')
         );
+        let pp = {
+          controller: "Info",
+          action: "register",
+          params: {
+            "city": city,
+            "project": pro,
+            "ip": ip,
+            "url": url,
+            uuid: to.query.uuid
+          },
+        };
         ws.onopen = function () {
-          if(to.fullPath.indexOf('content')!==-1){
-            ws.send(JSON.stringify(pp))
+          if(to.fullPath.indexOf('talk')===-1){
+            setTimeout(()=>{
+              store.state.ws.send(JSON.stringify(pp))
+            },3000)
           }
         }
         store.dispatch("setws", ws);
@@ -202,8 +229,10 @@ export default ({
         "ws://139.155.128.107:9509?uuid="+localStorage.getItem('uuid')
       );
       ws.onopen = function () {
-        if(to.fullPath.indexOf('content')!==-1){
-          ws.send(JSON.stringify(pp))
+        if(to.fullPath.indexOf('talk')===-1){
+          setTimeout(()=>{
+            store.state.ws.send(JSON.stringify(pp))
+          },3000)
         }
       }
       store.dispatch("setws", ws);

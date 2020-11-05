@@ -11,10 +11,11 @@
       </header>
       <div class="con">
         <p class="time">{{ time }}</p>
+        <div class="conbox"></div>
       </div>
       <div class="nav">
         <div class="top">
-          <p :class="txt ? 'active' : ''" @click="txt = !txt">大家都在问</p>
+          <p :class="txt ? 'active' : ''" @click="settxt">大家都在问</p>
           <a :href="'tel:'+stafftel">
             <p :class="teltype ? 'hid' : ''">电话咨询</p>
           </a>
@@ -26,7 +27,7 @@
             v-model="talktxt"
             placeholder="在这输入内容"
           />
-          <img src="~/assets/talk-icon.png" alt="" @click="icon = !icon" />
+          <img src="~/assets/talk-icon.png" alt="" @click="seticon" />
           <img src="~/assets/talk-img.png" alt="" v-show="!msg" />
           <input type="file" id="upload" v-show="!msg" />
           <span v-if="msg" @click="send">发送</span>
@@ -87,7 +88,7 @@
           />
           <p class="xiyi">
             <input type="checkbox" v-model="check" />我已阅读并同意
-            <nuxt-link :to="'/'+jkl+'/server'">《家有用户协议》</nuxt-link>
+            <nuxt-link :to="'/'+jkl+'/server'">《允家用户协议》</nuxt-link>
           </p>
           <button @click="sendmsg">确定</button>
         </div>
@@ -114,6 +115,21 @@ export default {
     let jkl = context.params.name;
     return {
       jkl: jkl,
+    };
+  },
+  head() {
+    return {
+      title: "允家新房",
+      meta: [
+        {
+          name: "description",
+          content: "允家新房",
+        },
+        {
+          name: "keywords",
+          content: "允家新房",
+        },
+      ],
     };
   },
   data() {
@@ -389,6 +405,21 @@ export default {
         this.ws.send(JSON.stringify(pp));
       }
     },
+    compare(key) {
+      return function (value1, value2) {
+        var val1 = value1[key];
+        var val2 = value2[key];
+        return val1 - val2;
+      };
+    },
+    settxt(){
+      this.txt = !this.txt
+      this.icon = false
+    },
+    seticon(){
+      this.icon = !this.icon
+      this.txt = false
+    }
   },
   created() {
     let that = this;
@@ -401,6 +432,7 @@ export default {
   },
   mounted() {
     let that = this;
+    this.load = true
     $(".con").on("click", ".mfbtn", function () {
       that.show = true;
     });
@@ -417,13 +449,10 @@ export default {
       (sessionStorage.getItem(proid) ||
       sessionStorage.getItem("staffid") ||
       0);
-    if (!that.staffid) {
-      this.load = true;
       setTimeout(() => {
         that.load = false;
         that.autotalk(id);
-      }, 5000);
-    }
+      }, 2000);
     this.ws.onopen = function () {
       that.loadbox(id, that.staffid);
       that.putcard();
@@ -435,45 +464,33 @@ export default {
       }
     }
     that.ws.onmessage = function (event) {
+      // 0 5 0 1 11
       let data = JSON.parse(event.data);
       if (data.action == 305) {
-        that.userimg = require('~/assets/talk-peo.png');
+        that.userimg = require("~/assets/talk-peo.png");
         that.staffimg = data.staff.head_img;
         that.staffname = data.staff.name;
         let pro = data.project_info;
+        that.promsg = pro;
         if (pro.length !== 0) {
           that.proid = pro.id;
-          let txt = `
-            <img src="${that.userimg}" alt="" />
-          <div class="pro">
-            <img src="${pro.img}" alt="" />
-            <div class="pro-msg">
-              <p class="name">${pro.name}</p>
-              <p class="area">建面 ${pro.area}/m²</p>
-              <p class="price">
-                均价<span><i>${pro.price}</i>元/m²</span>
-              </p>
-            </div>
-          </div>
-          `;
-          let dv = document.createElement("div");
-          dv.innerHTML = txt;
-          dv.className = "peo-pro alltxt";
-          if(that.isonce == 0){
-            that.record(id, that.staffid);
-            that.isonce = 1
-            $(".con").append(dv);
-            dv.scrollIntoView();
-          }
+          $(".conbox").html("");
+          that.record(id, that.staffid);
+          this.load = true;
         }
       } else if (data.action == 303) {
+        that.load = false;
+        $(".conbox").html("");
         that.isover = true;
         let nn = 0;
         if (that.list.length == 0) {
           that.list = data.data.reverse();
+          // that.list = data.data.reverse();
         } else {
           let list = data.data.reverse();
+          // let list = data.data.reverse();
           nn = list.length - 1;
+          // that.list = list;
           that.list = list.concat(that.list);
         }
         let dd = new Date();
@@ -499,6 +516,14 @@ export default {
         }
         that.page = that.page + 1;
         that.total = data.total;
+        that.list = that.list.filter((x, index, self) => {
+          var arrids = [];
+          that.list.forEach((item, i) => {
+            arrids.push(item.id);
+          });
+          return arrids.indexOf(x.id) === index;
+        });
+        that.list.sort(that.compare("id"));
         for (let val of that.list) {
           let msg = val.content;
           if (msg == "%get your phone%") {
@@ -507,7 +532,9 @@ export default {
             let dv = document.createElement("div");
             dv.className = "gettel alltxt";
             dv.innerHTML = `
-            <img src="${img}" alt="" class="peoimg" />
+            <div class="left">
+              <img src="${img}" alt="" class="peoimg" />
+            </div>
             <div class="telbox">
               <img src="${mm}" alt="" />
               <div class="telbox-bom">
@@ -519,16 +546,20 @@ export default {
               </div>
             </div>
             `;
-            $(".con").append(dv);
+            $(".conbox").append(dv);
           } else if (msg == "%put my card%") {
             let img = that.staffimg;
             let dv = document.createElement("div");
             dv.className = "putcard alltxt";
             dv.innerHTML = `
-            <img src="${img}" alt="" class="peoimg" />
+            <div class="left">
+              <img src="${img}" alt="" class="peoimg" />
+            </div>
             <div class="cardbox">
               <div class="top">
-                <img src="${img}" alt="" />
+                <div class="top-left">
+                  <img src="${img}" alt="" />
+                </div>
                 <div class="top-right">
                   <h5>${that.staffname} <span>新房咨询</span></h5>
                   <p>从业咨询服务6年</p>
@@ -553,7 +584,7 @@ export default {
               </a>
             </div>
             `;
-            $(".con").append(dv);
+            $(".conbox").append(dv);
           } else {
             if (msg.split("face").length !== 0) {
               let index = msg.indexOf("face");
@@ -619,7 +650,7 @@ export default {
                   `;
               }
             }
-            $(".con").append(dv);
+            $(".conbox").append(dv);
           }
         }
         let kk;
@@ -629,6 +660,23 @@ export default {
         } else {
           kk = dds[nn];
         }
+        // let txt = `
+        //     <img src="${that.userimg}" alt="" />
+        //   <div class="pro">
+        //     <img src="${that.promsg.img}" alt="" />
+        //     <div class="pro-msg">
+        //       <p class="name">${that.promsg.name}</p>
+        //       <p class="area">建面 ${that.promsg.area}/m²</p>
+        //       <p class="price">
+        //         均价<span><i>${that.promsg.price}</i>元/m²</span>
+        //       </p>
+        //     </div>
+        //   </div>
+        //   `;
+        // let dv = document.createElement("div");
+        // dv.innerHTML = txt;
+        // dv.className = "peo-pro alltxt";
+        // $(".conbox").prepend(dv);
         if (kk) {
           kk.scrollIntoView();
         }
@@ -636,13 +684,23 @@ export default {
         if (data.fromUserName.length < 10) {
           that.load = false;
         }
-        if ((data.fromUserName == that.staffid || !that.staffid) && data.fromUserName!=152) {
-          if (!that.staffid && data.fromUserName.length < 10) {
+        if (
+          (data.fromUserName == that.staffid ||
+            !sessionStorage.getItem(that.proid)) &&
+          String(data.fromUserName).length < 10
+        ) {
+          if (
+            !sessionStorage.getItem(that.proid) &&
+            data.fromUserName.length < 10 &&
+            data.fromUserName !== that.staffid
+          ) {
             sessionStorage.setItem("staffid", data.fromUserName);
             sessionStorage.setItem(that.proid, data.fromUserName);
             that.staffid = data.fromUserName;
             that.loadbox(id, that.staffid);
+            that.page = 1;
           }
+          console.log(data);
           let img = that.staffimg || require("~/assets/people.png");
           let msg = data.content;
           if (msg == "%get your phone%") {
@@ -650,7 +708,9 @@ export default {
             let dv = document.createElement("div");
             dv.className = "gettel alltxt";
             dv.innerHTML = `
-            <img src="${img}" alt="" class="peoimg" />
+            <div class="left">
+              <img src="${img}" alt="" class="peoimg" />
+            </div>
             <div class="telbox">
               <img src="${mm}" alt="" />
               <div class="telbox-bom">
@@ -662,17 +722,21 @@ export default {
               </div>
             </div>
             `;
-            $(".con").append(dv);
+            $(".conbox").append(dv);
             dv.scrollIntoView();
           } else if (msg == "%put my card%") {
             let mm = require("~/assets/talk-tel.jpg");
             let dv = document.createElement("div");
             dv.className = "putcard alltxt";
             dv.innerHTML = `
-            <img src="${img}" alt="" class="peoimg" />
+            <div class="left">
+              <img src="${img}" alt="" class="peoimg" />
+            </div>
             <div class="cardbox">
               <div class="top">
-                <img src="${img}" alt="" />
+                <div class="top-left">
+                  <img src="${img}" alt="" />
+                </div>
                 <div class="top-right">
                   <h5>${that.staffname} <span>新房咨询</span></h5>
                   <p>从业咨询服务6年</p>
@@ -697,7 +761,7 @@ export default {
               </a>
             </div>
             `;
-            $(".con").append(dv);
+            $(".conbox").append(dv);
             dv.scrollIntoView();
           } else if (data.content.indexOf("img:") !== -1) {
             let dv = document.createElement("div");
@@ -710,7 +774,7 @@ export default {
                   <img src="${img}" alt="" />
                 </div>
               `;
-            $(".con").append(dv);
+            $(".conbox").append(dv);
             dv.scrollIntoView();
           } else {
             if (msg.split("face").length !== 0) {
@@ -741,7 +805,7 @@ export default {
                   ${msg}
                   </p>
             `;
-            $(".con").append(dv);
+            $(".conbox").append(dv);
             dv.scrollIntoView();
           }
         } else {
@@ -774,8 +838,10 @@ export default {
         that.looknum = data.num.look_num;
         that.rate = data.num.rate;
         that.stafftel = data.staff.tel;
+      } else if (data.action == 302) {
+        that.staffid = data.sid;
+        sessionStorage.setItem('staffid',data.sid)
       }
-      console.log(data);
     };
 
     let dds = document.getElementsByClassName("alltxt");
@@ -789,7 +855,7 @@ export default {
         .getElementById("upload")
         .addEventListener("change", function (e) {
           var file = event.currentTarget.files[0];
-          if ((file.size / 1000).toFixed(0) < 2000) {
+          if ((file.size / 1000).toFixed(0) < 800) {
             let r = new FileReader(); //本地预览
             r.onload = function (e) {
               var imgFile = e.target.result; //或e.target都是一样的
@@ -815,7 +881,7 @@ export default {
             };
             let base = r.readAsDataURL(file);
           } else {
-            this.toast("请不要上传超过2M的图片");
+            alert('请不要上传超过1M的图片')
           }
         });
     });
@@ -840,7 +906,6 @@ export default {
   },
   beforeDestroy() {
     sessionStorage.removeItem("islist");
-    sessionStorage.removeItem("staffid");
   },
 };
 </script>
@@ -1050,11 +1115,15 @@ header {
     display: flex;
     flex-direction: row;
     margin-bottom: 1.5rem;
-    .peoimg {
+    .left {
       width: 2.5rem;
-      margin-right: 1rem;
-      height: 2.5rem;
-      border-radius: 50%;
+        margin-right: 1rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        overflow: hidden;
+      .peoimg {
+        width: 2.5rem;
+      }
     }
     .telbox {
       width: 15rem;
@@ -1079,6 +1148,7 @@ header {
           line-height: 0.9375rem;
         }
         button {
+          margin-top: 0.625rem;
           width: 100%;
           height: 1.875rem;
           border-radius: 0.25rem;
@@ -1098,17 +1168,18 @@ header {
     display: flex;
     flex-direction: row;
     margin-bottom: 1.5rem;
-    .peoimg {
+    .left {
       width: 2.5rem;
-      margin-right: 1rem;
-      height: 2.5rem;
-      border-radius: 50%;
-    }
-    h5 {
-        margin: 0;
+        margin-right: 1rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        overflow: hidden;
+      .peoimg {
+        width: 2.5rem;
+      }
     }
     p {
-        margin: 0;
+      margin:0
     }
     .cardbox {
       width: 15rem;
@@ -1118,12 +1189,16 @@ header {
       padding: 0.9375rem;
       .top {
         display: flex;
-        margin-bottom: 0.8rem;
-        img {
+        margin-bottom: 1rem;
+        .top-left {
           width: 2.25rem;
-          height: 2.25rem;
-          margin-right: 0.625rem;
-          border-radius: 50%;
+            height: 2.25rem;
+            margin-right: 0.625rem;
+            border-radius: 50%;
+            overflow: hidden;
+          img {
+            width: 2.25rem;
+          }
         }
         .top-right {
           h5 {
@@ -1151,7 +1226,7 @@ header {
       }
       .bom {
         display: flex;
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.75rem;
         .txt {
           width: 33%;
           .num {
