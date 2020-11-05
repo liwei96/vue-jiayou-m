@@ -15,7 +15,7 @@
       </div>
       <div class="nav">
         <div class="top">
-          <p :class="txt ? 'active' : ''" @click="settxt">大家都在问</p>
+          <p :class="txt ? 'active' : ''" @click="settxts">大家都在问</p>
           <a :href="'tel:'+stafftel">
             <p :class="teltype ? 'hid' : ''">电话咨询</p>
           </a>
@@ -27,7 +27,7 @@
             v-model="talktxt"
             placeholder="在这输入内容"
           />
-          <img src="~/assets/talk-icon.png" alt="" @click="seticon" />
+          <img src="~/assets/talk-icon.png" alt="" @click="seticons" />
           <img src="~/assets/talk-img.png" alt="" v-show="!msg" />
           <input type="file" id="upload" v-show="!msg" />
           <span v-if="msg" @click="send">发送</span>
@@ -412,11 +412,11 @@ export default {
         return val1 - val2;
       };
     },
-    settxt(){
+    settxts(){
       this.txt = !this.txt
       this.icon = false
     },
-    seticon(){
+    seticons(){
       this.icon = !this.icon
       this.txt = false
     }
