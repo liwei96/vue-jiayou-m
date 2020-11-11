@@ -16,7 +16,7 @@
       <div class="nav">
         <div class="top">
           <p :class="txt ? 'active' : ''" @click="settxts">大家都在问</p>
-          <a :href="'tel:'+stafftel">
+          <a :href="'tel:' + stafftel">
             <p :class="teltype ? 'hid' : ''">电话咨询</p>
           </a>
         </div>
@@ -29,7 +29,7 @@
           />
           <img src="~/assets/talk-icon.png" alt="" @click="seticons" />
           <img src="~/assets/talk-img.png" alt="" v-show="!msg" />
-          <input type="file" id="upload" v-show="!msg" />
+          <input type="file" id="upload" />
           <span v-if="msg" @click="send">发送</span>
         </div>
       </div>
@@ -54,13 +54,27 @@
             </p>
           </div>
           <div class="txt">
-            <p v-if="type" class="showmsg" @click="settxt('您好，项目什么时候开盘？')">您好，项目什么时候开盘？</p>
+            <p
+              v-if="type"
+              class="showmsg"
+              @click="settxt('您好，项目什么时候开盘？')"
+            >
+              您好，项目什么时候开盘？
+            </p>
           </div>
           <div class="txt">
-            <p v-if="type" class="showmsg" @click="settxt('首付大概是多少？')">首付大概是多少？</p>
+            <p v-if="type" class="showmsg" @click="settxt('首付大概是多少？')">
+              首付大概是多少？
+            </p>
           </div>
           <div class="txt">
-            <p v-if="type" class="showmsg" @click="settxt('什么时候可以看房？')">什么时候可以看房？</p>
+            <p
+              v-if="type"
+              class="showmsg"
+              @click="settxt('什么时候可以看房？')"
+            >
+              什么时候可以看房？
+            </p>
           </div>
         </div>
       </div>
@@ -88,7 +102,7 @@
           />
           <p class="xiyi">
             <input type="checkbox" v-model="check" />我已阅读并同意
-            <nuxt-link :to="'/'+jkl+'/server'">《允家用户协议》</nuxt-link>
+            <nuxt-link :to="'/' + jkl + '/server'">《允家用户协议》</nuxt-link>
           </p>
           <button @click="sendmsg">确定</button>
         </div>
@@ -105,6 +119,13 @@
         </div>
       </div>
     </van-popup>
+    <van-popup
+      v-model="show2"
+      position="center"
+      :style="{ background: 'rgba(0,0,0,0)' }"
+    >
+      <img style="width: 100vw" :src="bigimg" alt="" @click="show2 = false"
+    /></van-popup>
   </div>
 </template>
 <script>
@@ -134,6 +155,8 @@ export default {
   },
   data() {
     return {
+      show2: false,
+      bigimg: "",
       faces: [
         "[微笑]",
         "[嘻嘻]",
@@ -243,7 +266,7 @@ export default {
       isnull: true,
       staffid: "",
       isonce: 0,
-      message:'获取验证码'
+      message: "获取验证码",
     };
   },
   methods: {
@@ -255,7 +278,7 @@ export default {
       this.txt = false;
     },
     send() {
-      let img = require('~/assets/talk-peo.png');
+      let img = require("~/assets/talk-peo.png");
       let msg = this.talktxt;
       let ll = this.talktxt;
       let that = this;
@@ -277,7 +300,7 @@ export default {
           index = msg.indexOf("face", index + 4);
         }
       }
-      let id = this.staffid||152;
+      let id = this.staffid || 152;
       let pp = {
         controller: "chat",
         action: "send",
@@ -302,7 +325,7 @@ export default {
     },
     sendmsg() {
       if (!this.tel) {
-          this.$toast('手机号不能为空');
+        this.$toast("手机号不能为空");
         // this.toast("手机号不能为空");
         return;
       }
@@ -331,13 +354,14 @@ export default {
         city: city,
         project: id,
         tel: that.tel,
-          position: 32,
-          page: 3,
-          type: 9,
-          kid: kid,
-          other: other,
-          source: "线上推广2",
-          platform: 2,
+        position: 32,
+        page: 3,
+        type: 9,
+        kid: kid,
+        other: other,
+        source: "线上推广2",
+        platform: 2,
+        staff_id: sessionStorage.getItem("staffid"),
       }).then((res) => {
         console.log(res);
       });
@@ -382,7 +406,7 @@ export default {
       let pp = {
         controller: "chat",
         action: "index",
-        params: { staff: staffid, customer: id },
+        params: { staff: staffid, customer: id, type: 0 },
       };
       this.ws.send(JSON.stringify(pp));
     },
@@ -412,14 +436,14 @@ export default {
         return val1 - val2;
       };
     },
-    settxts(){
-      this.txt = !this.txt
-      this.icon = false
+    settxts() {
+      this.txt = !this.txt;
+      this.icon = false;
     },
-    seticons(){
-      this.icon = !this.icon
-      this.txt = false
-    }
+    seticons() {
+      this.icon = !this.icon;
+      this.txt = false;
+    },
   },
   created() {
     let that = this;
@@ -432,7 +456,7 @@ export default {
   },
   mounted() {
     let that = this;
-    this.load = true
+    this.load = true;
     $(".con").on("click", ".mfbtn", function () {
       that.show = true;
     });
@@ -444,15 +468,13 @@ export default {
     }
     this.ws = this.$store.state.ws;
     let id = localStorage.getItem("uuid");
-    let proid = this.$route.params.id
+    let proid = this.$route.params.id;
     that.staffid =
-      (sessionStorage.getItem(proid) ||
-      sessionStorage.getItem("staffid") ||
-      0);
-      setTimeout(() => {
-        that.load = false;
-        that.autotalk(id);
-      }, 2000);
+      sessionStorage.getItem(proid) || sessionStorage.getItem("staffid") || 0;
+    setTimeout(() => {
+      that.load = false;
+      that.autotalk(id);
+    }, 2000);
     this.ws.onopen = function () {
       that.loadbox(id, that.staffid);
       that.putcard();
@@ -467,6 +489,7 @@ export default {
       // 0 5 0 1 11
       let data = JSON.parse(event.data);
       if (data.action == 305) {
+        that.load = false;
         that.userimg = require("~/assets/talk-peo.png");
         that.staffimg = data.staff.head_img;
         that.staffname = data.staff.name;
@@ -495,7 +518,7 @@ export default {
         }
         let dd = new Date();
         if (that.list[0]) {
-          dd = new Date(that.list[0].createtime);
+          dd = new Date(that.list[0].createtime.replace(/\-/g, "/"));
         }
         let date = new Date();
         let time = date - dd;
@@ -516,13 +539,10 @@ export default {
         }
         that.page = that.page + 1;
         that.total = data.total;
-        that.list = that.list.filter((x, index, self) => {
-          var arrids = [];
-          that.list.forEach((item, i) => {
-            arrids.push(item.id);
-          });
-          return arrids.indexOf(x.id) === index;
-        });
+        that.list = that.list.reduce((cur, next) => {
+          obj[next.id] ? "" : (obj[next.id] = true && cur.push(next));
+          return cur;
+        }, []);
         that.list.sort(that.compare("id"));
         for (let val of that.list) {
           let msg = val.content;
@@ -585,6 +605,25 @@ export default {
             </div>
             `;
             $(".conbox").append(dv);
+          } else if (msg.indexOf("project_card") !== -1) {
+            msg = JSON.parse(msg);
+            let txt = `
+                <img src="${that.userimg}" alt="" />
+              <div class="pro">
+                <img src="${msg.img}" alt="" />
+                <div class="pro-msg">
+                  <p class="name">${msg.name}</p>
+                  <p class="area">建面 ${msg.area}/m²</p>
+                  <p class="price">
+                    均价<span><i>${msg.price}</i>元/m²</span>
+                  </p>
+                </div>
+              </div>
+              `;
+            let dv = document.createElement("div");
+            dv.innerHTML = txt;
+            dv.className = "peo-pro alltxt";
+            $(".conbox").append(dv);
           } else {
             if (msg.split("face").length !== 0) {
               let index = msg.indexOf("face");
@@ -611,9 +650,11 @@ export default {
                 let kk = require("~/assets/talk-peo.png");
                 dv.className = "imgbox alltxt";
                 dv.innerHTML = `
+                  <div class="left">
                   <img src="${kk}" alt="" class="peoimg" />
+                </div>
                   <div class="right">
-                    <img src="${img}" alt="" />
+                    <img class="bigimg" src="${img}" alt="" />
                   </div>
                 `;
               } else {
@@ -632,9 +673,11 @@ export default {
                 let kk = that.staffimg;
                 dv.className = "imgs alltxt";
                 dv.innerHTML = `
+                  <div class="left">
                   <img src="${kk}" alt="" class="peoimg" />
+                </div>
                   <div class="right">
-                    <img src="${img}" alt="" />
+                    <img class="bigimg" src="${img}" alt="" />
                   </div>
                 `;
               } else {
@@ -660,23 +703,7 @@ export default {
         } else {
           kk = dds[nn];
         }
-        // let txt = `
-        //     <img src="${that.userimg}" alt="" />
-        //   <div class="pro">
-        //     <img src="${that.promsg.img}" alt="" />
-        //     <div class="pro-msg">
-        //       <p class="name">${that.promsg.name}</p>
-        //       <p class="area">建面 ${that.promsg.area}/m²</p>
-        //       <p class="price">
-        //         均价<span><i>${that.promsg.price}</i>元/m²</span>
-        //       </p>
-        //     </div>
-        //   </div>
-        //   `;
-        // let dv = document.createElement("div");
-        // dv.innerHTML = txt;
-        // dv.className = "peo-pro alltxt";
-        // $(".conbox").prepend(dv);
+
         if (kk) {
           kk.scrollIntoView();
         }
@@ -769,11 +796,33 @@ export default {
             let kk = that.staffimg;
             dv.className = "imgs alltxt";
             dv.innerHTML = `
-                <img src="${kk}" alt="" class="peoimg" />
+                <div class="left">
+                  <img src="${kk}" alt="" class="peoimg" />
+                </div>
                 <div class="right">
-                  <img src="${img}" alt="" />
+                  <img class="bigimg" src="${img}" alt="" />
                 </div>
               `;
+            $(".conbox").append(dv);
+            dv.scrollIntoView();
+          } else if (data.content.indexOf("project_card") !== -1) {
+            let msg = JSON.parse(data.content);
+            let txt = `
+                <img src="${that.userimg}" alt="" />
+              <div class="pro">
+                <img src="${msg.img}" alt="" />
+                <div class="pro-msg">
+                  <p class="name">${msg.name}</p>
+                  <p class="area">建面 ${msg.area}/m²</p>
+                  <p class="price">
+                    均价<span><i>${msg.price}</i>元/m²</span>
+                  </p>
+                </div>
+              </div>
+              `;
+            let dv = document.createElement("div");
+            dv.innerHTML = txt;
+            dv.className = "peo-pro alltxt";
             $(".conbox").append(dv);
             dv.scrollIntoView();
           } else {
@@ -838,11 +887,12 @@ export default {
         that.looknum = data.num.look_num;
         that.rate = data.num.rate;
         that.stafftel = data.staff.tel;
-      } else if (data.action == 302) {
-        that.staffid = data.sid;
-        sessionStorage.setItem('staffid',data.sid)
       }
     };
+    $(".con").on("click", ".bigimg", function () {
+      that.bigimg = $(this).attr("src");
+      that.show2 = true;
+    });
 
     let dds = document.getElementsByClassName("alltxt");
     let dd = dds[dds.length - 1];
@@ -865,7 +915,7 @@ export default {
               dv.innerHTML = `
                 <img src="${img}" alt="" class="peoimg" />
                 <div class="right">
-                  <img src="${imgFile}" alt="">
+                  <img class="bigimg" src="${imgFile}" alt="">
                 </div>
               `;
               let ig = ``;
@@ -881,7 +931,7 @@ export default {
             };
             let base = r.readAsDataURL(file);
           } else {
-            alert('请不要上传超过1M的图片')
+            alert("请不要上传超过1M的图片");
           }
         });
     });
@@ -911,14 +961,14 @@ export default {
 </script>
 <style lang="less" scoped>
 * {
-    margin: 0;
+  margin: 0;
 }
 .talk {
   display: flex;
   flex-direction: column;
   height: 100vh;
   /deep/ h5 {
-      margin: 0;
+    margin: 0;
   }
 }
 header {
@@ -1117,10 +1167,10 @@ header {
     margin-bottom: 1.5rem;
     .left {
       width: 2.5rem;
-        margin-right: 1rem;
-        height: 2.5rem;
-        border-radius: 50%;
-        overflow: hidden;
+      margin-right: 1rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      overflow: hidden;
       .peoimg {
         width: 2.5rem;
       }
@@ -1170,16 +1220,16 @@ header {
     margin-bottom: 1.5rem;
     .left {
       width: 2.5rem;
-        margin-right: 1rem;
-        height: 2.5rem;
-        border-radius: 50%;
-        overflow: hidden;
+      margin-right: 1rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      overflow: hidden;
       .peoimg {
         width: 2.5rem;
       }
     }
     p {
-      margin:0
+      margin: 0;
     }
     .cardbox {
       width: 15rem;
@@ -1192,10 +1242,10 @@ header {
         margin-bottom: 1rem;
         .top-left {
           width: 2.25rem;
-            height: 2.25rem;
-            margin-right: 0.625rem;
-            border-radius: 50%;
-            overflow: hidden;
+          height: 2.25rem;
+          margin-right: 0.625rem;
+          border-radius: 50%;
+          overflow: hidden;
           img {
             width: 2.25rem;
           }
@@ -1369,6 +1419,8 @@ header {
       font-size: 0.875rem;
       background-color: #52c2cc;
       margin-left: 0.5rem;
+      position: relative;
+      z-index: 10;
     }
   }
 }

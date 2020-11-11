@@ -1,5 +1,4 @@
 import axios from 'axios'
-import ReconnectingWebSocket from 'reconnecting-websocket'
 export default ({
   app,
   store
@@ -98,61 +97,23 @@ export default ({
         store.state.city = 181
         break;
     }
-    let city = localStorage.getItem('city')
-    let ip = ip_arr["ip"];
-    let url = 'm.jy1980.com'+to.fullPath
-    console.log(url)
-    let pro = 0
-    if (url.indexOf('content') !== -1) {
-      pro = to.params.id
-    }else{
-      pro = 0
-    }
+    // let city = localStorage.getItem('city')
+    // let ip = ip_arr["ip"];
+    // let url = 'm.jy1980.com'+to.fullPath
+    // console.log(url)
+    // let pro = 0
+    // if (url.indexOf('content') !== -1) {
+    //   pro = to.params.id
+    // }else{
+    //   pro = 0
+    // }
     
     if (!to.query.uuid) {
       let toQuery = JSON.parse(JSON.stringify(to.query));
       let timestamp = ''
       if (from.query.uuid) {
         timestamp = from.query.uuid
-        let pp = {
-          controller: "Info",
-          action: "register",
-          params: {
-            "city": city,
-            "project": pro,
-            "ip": ip,
-            "url": url,
-            uuid: from.query.uuid
-          },
-        };
-        console.log(456)
-        if(store.state.ws){
-          if(to.fullPath.indexOf('talk')===-1){
-            setTimeout(()=>{
-              store.state.ws.send(JSON.stringify(pp))
-            },3000)
-          }
-        }
       } else if (localStorage.getItem('uuid')) {
-        console.log(789)
-        if(store.state.ws){
-          let pp = {
-            controller: "Info",
-            action: "register",
-            params: {
-              "city": city,
-              "project": pro,
-              "ip": ip,
-              "url": url,
-              uuid: localStorage.getItem('uuid')
-            },
-          };
-          if(to.fullPath.indexOf('talk')===-1){
-            setTimeout(()=>{
-              store.state.ws.send(JSON.stringify(pp))
-            },3000)
-          }
-        }
         timestamp = localStorage.getItem('uuid')
       } else {
         timestamp = Date.parse(new Date());
@@ -169,74 +130,13 @@ export default ({
       toQuery.uuid = timestamp;
       store.state.cookie.uuid = timestamp
       localStorage.setItem('uuid', timestamp)
-      if (!store.state.ws) {
-        let ws = new ReconnectingWebSocket(
-          "ws://139.155.128.107:9509?uuid="+timestamp
-        );
-        let pp = {
-          controller: "Info",
-          action: "register",
-          params: {
-            "city": city,
-            "project": pro,
-            "ip": ip,
-            "url": url,
-            uuid: timestamp
-          },
-        };
-        ws.onopen = function () {
-          if(to.fullPath.indexOf('talk')===-1){
-            setTimeout(()=>{
-              store.state.ws.send(JSON.stringify(pp))
-            },3000)
-          }
-        }
-        store.dispatch("setws", ws);
-      }
       next({
         path: to.path,
         query: toQuery
       })
     } else {
-      if (!store.state.ws) {
-        let ws = new ReconnectingWebSocket(
-          "ws://139.155.128.107:9509?uuid="+localStorage.getItem('uuid')
-        );
-        let pp = {
-          controller: "Info",
-          action: "register",
-          params: {
-            "city": city,
-            "project": pro,
-            "ip": ip,
-            "url": url,
-            uuid: to.query.uuid
-          },
-        };
-        ws.onopen = function () {
-          if(to.fullPath.indexOf('talk')===-1){
-            setTimeout(()=>{
-              store.state.ws.send(JSON.stringify(pp))
-            },3000)
-          }
-        }
-        store.dispatch("setws", ws);
-      }
       next()
     }
-    if (!store.state.ws) {
-      let ws = new ReconnectingWebSocket(
-        "ws://139.155.128.107:9509?uuid="+localStorage.getItem('uuid')
-      );
-      ws.onopen = function () {
-        if(to.fullPath.indexOf('talk')===-1){
-          setTimeout(()=>{
-            store.state.ws.send(JSON.stringify(pp))
-          },3000)
-        }
-      }
-      store.dispatch("setws", ws);
-    }
-    next()
+    // next()
   })
 }

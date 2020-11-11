@@ -9,14 +9,23 @@
           <img class="top-ll" src="~/assets/return.png" alt @click="goback" />
           <img class="content-img" src="~/assets/content-logo.png" alt />
           <img class="topright tophome" src="~/assets/top-house.png" alt />
-          <img class="topright" src="~/assets/top-user.png" alt @click="gohome" />
+          <img
+            class="topright"
+            src="~/assets/top-user.png"
+            alt
+            @click="gohome"
+          />
         </h2>
       </div>
 
       <div class="m-lun visible-xs-block .visible-sm-block">
         <div class="zao"></div>
         <div class="m-luns">
-          <img :src="topimg?topimg:defaultimg" :alt="building.name" :title="building.name" />
+          <img
+            :src="topimg ? topimg : defaultimg"
+            :alt="building.name"
+            :title="building.name"
+          />
           <!-- <div class="swiper-top">
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="(img,key) in topimgs" :key="key">
@@ -25,7 +34,7 @@
             </div>
             <div id="swiper-pagination1"></div>
           </div>-->
-          <span id="lnum">共{{topnum}}张</span>
+          <span id="lnum">共{{ topnum }}张</span>
         </div>
       </div>
       <transition name="fade">
@@ -33,15 +42,17 @@
           <img src="~/assets/return.png" alt @click="goback" />
           <ul>
             <li
-              :class="fx1==key&&'active'"
-              v-for="(item,key) in fxs"
+              :class="fx1 == key && 'active'"
+              v-for="(item, key) in fxs"
               :key="key"
               @click="goto(key)"
-            >{{item}}</li>
+            >
+              {{ item }}
+            </li>
           </ul>
         </div>
       </transition>
-      <div class="tuan-msg" v-show="tuan==1">
+      <div class="tuan-msg" v-show="tuan == 1">
         <div class="tar">
           <div class="left">
             <!-- <h5>
@@ -55,26 +66,31 @@
           <div class="right">
             <h5>距结束仅剩</h5>
             <p>
-              {{day}}天
-              <span>{{hour}}</span>:
-              <span>{{min}}</span>:
-              <span>{{second}}</span>
+              {{ day }}天 <span>{{ hour }}</span
+              >: <span>{{ min }}</span
+              >:
+              <span>{{ second }}</span>
             </p>
           </div>
         </div>
       </div>
       <div class="m-incro visible-xs-block .visible-sm-block">
-        <h3>{{building.name}}</h3>
+        <h3>{{ building.name }}</h3>
 
         <div class="m-ic-icons">
-          <span class="m-zai">{{building.status}}</span>
-          <span class="m-jing">{{building.decorate}}</span>
-          <span v-show="building.railway">{{building.railway}}</span>
-          <span>{{building.features[0]}}</span>
-          <strong v-show="tuan==1">限时优惠</strong>
+          <span class="m-zai">{{ building.status }}</span>
+          <span class="m-jing">{{ building.decorate }}</span>
+          <span v-show="building.railway">{{ building.railway }}</span>
+          <span>{{ building.features[0] }}</span>
+          <strong v-show="tuan == 1">限时优惠</strong>
           <div class="build-icons" v-show="!iswx">
             <div class="icons-left">
-              <img src="~/assets/contrast.png" alt @click="pks($event)" :data-v="id" />
+              <img
+                src="~/assets/contrast.png"
+                alt
+                @click="pks($event)"
+                :data-v="id"
+              />
               PK
             </div>
             <div>
@@ -108,19 +124,22 @@
         <ul class="m-jtop">
           <li>
             <p>
-              <span>{{parseInt(building.single_price)}}</span>元/m²
+              <span>{{ parseInt(building.single_price) }}</span
+              >元/m²
             </p>
             <span>参考单价</span>
           </li>
           <li>
             <p class="lo">
-              <span>{{parseInt(building.total_price)}}</span>万起
+              <span>{{ parseInt(building.total_price) }}</span
+              >万起
             </p>
             <span>参考总价</span>
           </li>
           <li>
             <p v-show="building.area">
-              <span>{{building.area}}</span>/m²
+              <span>{{ building.area }}</span
+              >/m²
             </p>
             <span>建筑面积</span>
           </li>
@@ -129,21 +148,21 @@
           <ul>
             <li>
               户型：
-              <span class="m-pric">{{building.house}}</span>
+              <span class="m-pric">{{ building.house }}</span>
             </li>
             <li>
               装修：
-              <span>{{building.decorate}}</span>
+              <span>{{ building.decorate }}</span>
             </li>
           </ul>
           <ul>
             <li>
               类型：
-              <span class="m-pric">{{building.type}}</span>
+              <span class="m-pric">{{ building.type }}</span>
             </li>
             <li>
               开盘：
-              <span>{{building.timeline.first_open_time}}</span>
+              <span>{{ building.timeline.first_open_time }}</span>
             </li>
           </ul>
           <nuxt-link :to="'/' + jkl + '/detail/' + id">
@@ -156,7 +175,7 @@
         <div class="go-map">
           <!-- <img class="map-address" src="~/assets/blackaddress.png" alt /> -->
           <span class="map-address">地址：</span>
-          <span class="map-msg">{{building.address}}</span>
+          <span class="map-msg">{{ building.address }}</span>
           <img class="map-go" src="~/assets/map-address.png" alt />
         </div>
         <div class="m-new">
@@ -174,14 +193,14 @@
           <img src="~/assets/mj-tell.png" alt />
         </a>-->
         <div class="wxtel" v-show="!iswxsid">
-          <a :href="'tel:'+call">
-            <p>{{callmsg}}</p>
+          <a :href="'tel:' + call">
+            <p>{{ callmsg }}</p>
             <img src="~/assets/wxtel.jpg" alt />
           </a>
         </div>
         <div class="wxtel" v-show="iswxsid">
-          <a :href="share.staff?'tel:'+share.staff.tel:call">
-            <p>{{share.staff?share.staff.tel:''}}</p>
+          <a :href="share.staff ? 'tel:' + share.staff.tel : call">
+            <p>{{ share.staff ? share.staff.tel : "" }}</p>
             <img src="~/assets/wxtel.jpg" alt />
           </a>
         </div>
@@ -198,43 +217,57 @@
           </p>-->
           <button @click="huomsg = true">活动规则</button>
         </nav>
-        <div class="top" v-show="tuan==1">
-          <img src="~/assets/newtuan-pin.jpg" alt />
-          <div class="pin-bao" @click="xiangs(22)" v-show="!newimg">立即参团</div>
-          <p class="pin-msg">已有{{group_buy.saled_num}}人加入</p>
-          <img src="~/assets/tuna-hased.jpg" alt class="hased" v-show="newimg" />
+        <div class="top" >
+          <img src="~/assets/tuna-hased.png" alt />
+          <div class="pin-bao" @click="xiangs(22)">
+            领取优惠
+          </div>
+          <p class="pin-msg">{{ sign.num+55 }}人已领取</p>
+          <p class="pin-left">售楼处专供允家平台客户<span>（{{endtime.substr(5)}}截止）</span></p>
+          <!-- <img
+            src="~/assets/tuna-hased.jpg"
+            alt
+            class="hased"
+            v-show="newimg"
+          />
           <div class="bom">
             <div class="trend-con1">
               <div class="swiper-container10">
                 <div class="swiper-wrapper">
                   <div
                     class="swiper-slide"
-                    v-for="(trend,key) in group_buy.joined_tels"
+                    v-for="(trend, key) in group_buy.joined_tels"
                     :key="key"
-                  >{{trend}}领取了优惠券</div>
+                  >
+                    {{ trend }}领取了优惠券
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="bomm">
-          <div class="pin-bao y1" v-show="!newimg" @click="xiang(28)">抢优惠券</div>
-          <p class="pin-msg ym">{{sign.num}}人已抢到</p>
-          <p class="pin-time">有效期：{{starttime}}-{{endtime}}</p>
-          <img src="~/assets/youhui.jpg" alt />
-          <div class="bom">
+          <div class="pin-bao y1" v-show="!newimg" @click="xiang(28)">
+            抢优惠券
+          </div>
+          <p class="pin-msg ym">{{ sign.num }}人已抢到</p>
+          <p class="pin-time">免费专车1对1服务限时券<span>（剩余{{ sign.num-123 }}张）</span></p>
+          <img src="~/assets/youhui.png" alt />
+          <!-- <div class="bom">
             <div class="trend-con1">
               <div class="swiper-container10">
                 <div class="swiper-wrapper">
                   <div
                     class="swiper-slide"
-                    v-for="(trend,key) in sign.info"
+                    v-for="(trend, key) in sign.info"
                     :key="key"
-                  >{{trend}}领取了优惠券</div>
+                  >
+                    {{ trend }}领取了优惠券
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="huo-msg" v-show="huomsg">
@@ -242,15 +275,23 @@
           <h4>活动规则</h4>
           <img @click="huomsg = false" src="~/assets/w-del.png" alt />
           <div>
-            <p>1、本次团购活动以分档累计补发的方案执行，通过家园网站成交该项目具体团购费用如下所示：</p>
+            <p>
+              1、本次团购活动以分档累计补发的方案执行，通过家园网站成交该项目具体团购费用如下所示：
+            </p>
             <p>0-5套---------每套1000元</p>
             <p>6-10套--------每套2000元</p>
             <p>11-15套-------每套3000元</p>
             <p>16-20套-------每套4000元</p>
             <p>21套以上------每套5000元</p>
-            <p>2、结算时间：网签成功后次月20号发放。补发费用待该范围内的最后一套网签成功后次月20号发放</p>
-            <p>3、核算方式：由开发商或代理公司判定为家园平台客户即可享受这个优惠</p>
-            <p>4、结算方式：提供已实名的支付宝账户给与您对接的家园咨询师，规定时间内会将优惠费用打至该账户</p>
+            <p>
+              2、结算时间：网签成功后次月20号发放。补发费用待该范围内的最后一套网签成功后次月20号发放
+            </p>
+            <p>
+              3、核算方式：由开发商或代理公司判定为家园平台客户即可享受这个优惠
+            </p>
+            <p>
+              4、结算方式：提供已实名的支付宝账户给与您对接的家园咨询师，规定时间内会将优惠费用打至该账户
+            </p>
             <p>
               详细活动方案请致电允家客服电话：
               <span>400-718-6686</span> 注：活动最终解释权归家园所有
@@ -274,7 +315,7 @@
           楼盘动态
           <nuxt-link :to="'/' + jkl + '/contentdynamic/' + id">
             <span>
-              共{{ds}}条
+              共{{ ds }}条
               <img src="~/assets/m-go.png" alt />
             </span>
           </nuxt-link>
@@ -282,19 +323,19 @@
 
         <div class="m-tai m-d">
           <span>
-            {{nowdong.time}}
+            {{ nowdong.time }}
             <i>最新</i>
           </span>
           <h4>最新房源动态</h4>
-          <p>{{nowdong.introduce}}</p>
+          <p>{{ nowdong.introduce }}</p>
         </div>
         <div class="m-jia m-d" v-show="tui">
           <span>
-            {{tui.time}}
+            {{ tui.time }}
             <i>加推</i>
           </span>
           <h4>最新加推楼盘</h4>
-          <p>{{tui.introduce}}</p>
+          <p>{{ tui.introduce }}</p>
         </div>
 
         <div class="t-o o1"></div>
@@ -307,28 +348,28 @@
               <div class="swiper-slide">
                 <div :class="ndss">
                   <h5>拿地</h5>
-                  <p>{{ndtime}}</p>
+                  <p>{{ ndtime }}</p>
                   <div></div>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="jtss">
                   <h5>首开</h5>
-                  <p>{{jttime}}</p>
+                  <p>{{ jttime }}</p>
                   <div></div>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="skss">
                   <h5>加推</h5>
-                  <p>{{sktime}}</p>
+                  <p>{{ sktime }}</p>
                   <div></div>
                 </div>
               </div>
               <div class="swiper-slide">
                 <div :class="jfss">
                   <h5>交房</h5>
-                  <p>{{jftime}}</p>
+                  <p>{{ jftime }}</p>
                   <div></div>
                 </div>
               </div>
@@ -353,24 +394,29 @@
         </h3>
         <div class="swiper-house">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="(h,key) in hu" :key="key">
+            <div class="swiper-slide" v-for="(h, key) in hu" :key="key">
               <div class="tegood">
-                <nuxt-link :to="'/'+jkl+'/HuAnalysis/'+h.id+'/'+building.id">
+                <nuxt-link
+                  :to="'/' + jkl + '/HuAnalysis/' + h.id + '/' + building.id"
+                >
                   <div class="top">
                     <img
-                      :src="h.small?h.small:defaultimg"
-                      :alt="building.name+'户型图'"
-                      :title="building.name+'户型图'"
+                      :src="h.small ? h.small : defaultimg"
+                      :alt="building.name + '户型图'"
+                      :title="building.name + '户型图'"
                     />
                   </div>
                   <h5>
-                    {{h.title}}
-                    <span>{{h.status}}</span>
+                    {{ h.title }}
+                    <span>{{ h.status }}</span>
                   </h5>
-                  <p class="jian">建面 {{h.area}}&nbsp;&nbsp;&nbsp;类型 {{h.type}}</p>
+                  <p class="jian">
+                    建面 {{ h.area }}&nbsp;&nbsp;&nbsp;类型 {{ h.type }}
+                  </p>
                   <p class="red">
                     约
-                    <span>{{h.price}}</span>万起
+                    <span>{{ h.price }}</span
+                    >万起
                   </p>
                 </nuxt-link>
                 <button class="p1" data-v="咨询详细户型">咨询详细户型</button>
@@ -380,12 +426,12 @@
         </div>
         <!-- <button class="p1" data-v="了解详细户型">了解详细户型</button> -->
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block"></div>
+      <!-- <div class="m-line visible-xs-block .visible-sm-block"></div>
       <div class="m-you visible-xs-block .visible-sm-block">
         <img class="m-y-g" src="~/assets/new-yuyue1.png" />
         <button class="p1" data-v="预约看房">预约看房</button>
         <span>876人已领取</span>
-      </div>
+      </div> -->
 
       <div class="m-line visible-xs-block .visible-sm-block"></div>
 
@@ -405,10 +451,12 @@
         <div class="dui-zi">
           <div class="swiper-wrapper">
             <div class="swiper-slide dui-box">
-              <nuxt-link :to="'/'+jkl+'/analysis/'+id">
+              <nuxt-link :to="'/' + jkl + '/analysis/' + id">
                 <div class="tou-con">
                   <h4>投资分析</h4>
-                  <p v-for="(v,key) in invest" :key="key">{{key+1}}、{{v}}</p>
+                  <p v-for="(v, key) in invest" :key="key">
+                    {{ key + 1 }}、{{ v }}
+                  </p>
                 </div>
                 <div class="tou-img">
                   <img src="~/assets/pc-db.png" alt />
@@ -416,10 +464,12 @@
               </nuxt-link>
             </div>
             <div class="swiper-slide dui-box">
-              <nuxt-link :to="'/'+jkl+'/analysis/'+id">
+              <nuxt-link :to="'/' + jkl + '/analysis/' + id">
                 <div class="tou-con">
                   <h4>宜居分析</h4>
-                  <p v-for="(v,key) in live" :key="key">{{key+1}}、{{v}}</p>
+                  <p v-for="(v, key) in live" :key="key">
+                    {{ key + 1 }}、{{ v }}
+                  </p>
                 </div>
                 <div class="tou-img">
                   <img src="~/assets/yiju.png" alt />
@@ -432,7 +482,10 @@
         </div>
         <button class="p1" data-v="获取楼盘分析资料">获取楼盘分析资料</button>
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block" v-show="tuan==1"></div>
+      <div
+        class="m-line visible-xs-block .visible-sm-block"
+        v-show="tuan == 1"
+      ></div>
       <!-- <div class="tuan-qiang" v-show="tuan==1">
         <img src="~/assets/tuan-qiang.png" alt />
         <div class="q-con">
@@ -475,10 +528,11 @@
           查询最新成交价
           <p>
             已有
-            <span>{{searchnum}}</span>人查询
+            <span>{{ searchnum }}</span
+            >人查询
           </p>
         </h3>
-        <div id="chart" style="width:100%;height:250px"></div>
+        <div id="chart" style="width: 100%; height: 250px"></div>
         <div class="table">
           <table>
             <tbody>
@@ -487,9 +541,9 @@
                 <th>成交套数</th>
                 <th>成交金额</th>
               </tr>
-              <tr v-for="(dd,key) in chengjiao" :key="key">
-                <td>{{dd.date}}</td>
-                <td>{{dd.num}}套</td>
+              <tr v-for="(dd, key) in chengjiao" :key="key">
+                <td>{{ dd.date }}</td>
+                <td>{{ dd.num }}套</td>
                 <td>***万</td>
               </tr>
             </tbody>
@@ -513,14 +567,16 @@
             </span>
           </nuxt-link>
         </h3>
-        <p id="tishi" v-show="questions.length==0?true:false">暂无问答，快来提问吧</p>
+        <p id="tishi" v-show="questions.length == 0 ? true : false">
+          暂无问答，快来提问吧
+        </p>
         <div class="m-d-content">
-          <template v-show="questions.length==0?false:true">
-            <div class="m-w-content" v-for="(q,key) in questions" :key="key">
-              <nuxt-link :to="'/'+jkl+'/questions/'+q.id">
+          <template v-show="questions.length == 0 ? false : true">
+            <div class="m-w-content" v-for="(q, key) in questions" :key="key">
+              <nuxt-link :to="'/' + jkl + '/questions/' + q.id">
                 <h4>
                   <span>问</span>
-                  <u>{{q.question}}</u>
+                  <u>{{ q.question }}</u>
                 </h4>
               </nuxt-link>
               <p>
@@ -531,15 +587,13 @@
               </p>
               <p>
                 <i>
-                  {{q.answer.substr(0,19)}}{{q.answer.length>20?'...':''}}
-                  <u
-                    v-show="q.answer.length>19"
-                    @click="chan(q.id)"
-                  >展开</u>
+                  {{ q.answer.substr(0, 19)
+                  }}{{ q.answer.length > 20 ? "..." : "" }}
+                  <u v-show="q.answer.length > 19" @click="chan(q.id)">展开</u>
                 </i>
-                <i class="sl">{{q.answer}}</i>
+                <i class="sl">{{ q.answer }}</i>
               </p>
-              <span class="time">{{q.time}}</span>
+              <span class="time">{{ q.time }}</span>
               <span class="giveup">
                 <img
                   id="answer"
@@ -556,7 +610,8 @@
                   :data-n="q.like_num"
                   data-y="1"
                   @click="agrees($event)"
-                >有用({{q.like_num ? q.like_num : 0}})</span>
+                  >有用({{ q.like_num ? q.like_num : 0 }})</span
+                >
               </span>
             </div>
           </template>
@@ -580,43 +635,64 @@
           <div class="swiper-map">
             <div class="swiper-wrapper">
               <div class="swiper-slide">
-                <div :class="mapnum === 0 ? 'tegood active' : 'tegood'" @click="setmap(0, '公交')">
+                <div
+                  :class="mapnum === 0 ? 'tegood active' : 'tegood'"
+                  @click="setmap(0, '公交')"
+                >
                   公交
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
-                <div :class="mapnum === 1 ? 'tegood active' : 'tegood'" @click="setmap(1 ,'地铁')">
+                <div
+                  :class="mapnum === 1 ? 'tegood active' : 'tegood'"
+                  @click="setmap(1, '地铁')"
+                >
                   地铁
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
-                <div :class="mapnum === 2 ? 'tegood active' : 'tegood'" @click="setmap(2, '教育')">
+                <div
+                  :class="mapnum === 2 ? 'tegood active' : 'tegood'"
+                  @click="setmap(2, '教育')"
+                >
                   教育
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
-                <div :class="mapnum === 3 ? 'tegood active' : 'tegood'" @click="setmap(3, '医院')">
+                <div
+                  :class="mapnum === 3 ? 'tegood active' : 'tegood'"
+                  @click="setmap(3, '医院')"
+                >
                   医院
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
-                <div :class="mapnum === 4 ? 'tegood active' : 'tegood'" @click="setmap(4, '购物')">
+                <div
+                  :class="mapnum === 4 ? 'tegood active' : 'tegood'"
+                  @click="setmap(4, '购物')"
+                >
                   购物
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
-                <div :class="mapnum === 5 ? 'tegood active' : 'tegood'" @click="setmap(5, '美食')">
+                <div
+                  :class="mapnum === 5 ? 'tegood active' : 'tegood'"
+                  @click="setmap(5, '美食')"
+                >
                   美食
                   <i></i>
                 </div>
               </div>
               <div class="swiper-slide">
-                <div :class="mapnum === 6 ? 'tegood active' : 'tegood'" @click="setmap(6, '娱乐')">
+                <div
+                  :class="mapnum === 6 ? 'tegood active' : 'tegood'"
+                  @click="setmap(6, '娱乐')"
+                >
                   娱乐
                   <i></i>
                 </div>
@@ -625,7 +701,9 @@
           </div>
           <div class="map-con">
             <ul class="con"></ul>
-            <p class="msg" v-show="isnull">附近没有{{mapname}}，您可以看看其他信息</p>
+            <p class="msg" v-show="isnull">
+              附近没有{{ mapname }}，您可以看看其他信息
+            </p>
           </div>
         </div>
         <button class="p1" data-v="获取详细周边配套">获取详细周边配套</button>
@@ -637,16 +715,15 @@
         <div id="pic"></div>
         <div class="m-mark">
           <i class="m-s1"></i>
-          <span>{{building.name}}</span>
+          <span>{{ building.name }}</span>
           <i class="m-s2"></i>
-          <span>{{building.country_name}}</span>
+          <span>{{ building.country_name }}</span>
           <i class="m-s3"></i>
-          <span>{{building.city_name}}</span>
+          <span>{{ building.city_name }}</span>
         </div>
         <p class="msg">
           <img src="~/assets/bell.png" alt />
-          价格变动这么快？
-          订阅最新变价通知，楼盘变价我们第一时间通知您
+          价格变动这么快？ 订阅最新变价通知，楼盘变价我们第一时间通知您
         </p>
         <button class="p1" data-v="最新房价趋势解读">最新房价趋势解读</button>
       </div>
@@ -656,18 +733,22 @@
         <h4>楼盘对比</h4>
         <div class="swiper-pk">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="(c,key) in compares" :key="key">
+            <div class="swiper-slide" v-for="(c, key) in compares" :key="key">
               <div class="tegood">
                 <div class="img">
-                  <img :src="c.img?c.img:defaultimg" :alt="c.name" :title="c.name" />
+                  <img
+                    :src="c.img ? c.img : defaultimg"
+                    :alt="c.name"
+                    :title="c.name"
+                  />
                   <p>相似楼盘</p>
                 </div>
-                <h5>{{c.name}}</h5>
+                <h5>{{ c.name }}</h5>
                 <p class="llk">
-                  {{c.country}}&nbsp;&nbsp;
-                  <span v-show="c.area">{{c.area}}m²</span>
+                  {{ c.country }}&nbsp;&nbsp;
+                  <span v-show="c.area">{{ c.area }}m²</span>
                 </p>
-                <p class="red">{{parseInt(c.price)}}元/m²</p>
+                <p class="red">{{ parseInt(c.price) }}元/m²</p>
                 <button @click="pkhref(c.id)">加入对比</button>
               </div>
             </div>
@@ -686,15 +767,17 @@
             </span>
           </nuxt-link>
         </h4>
-        <p id="tishi" v-show="comments.length==0?true:false">暂无点评，快来点评吧</p>
+        <p id="tishi" v-show="comments.length == 0 ? true : false">
+          暂无点评，快来点评吧
+        </p>
         <ul>
-          <li v-for="(v,key) in comments" :key="key">
+          <li v-for="(v, key) in comments" :key="key">
             <div class="left">
               <img src="~/assets/jiapeo.png" alt />
             </div>
             <div class="right">
               <h6>
-                {{v.mobile}}
+                {{ v.mobile }}
                 <span class="attitude">有兴趣</span>
                 <p class="interaction">
                   <img
@@ -712,7 +795,8 @@
                     :data-n="v.like_num"
                     data-y="2"
                     @click="agrees($event)"
-                  >有用({{v.like_num}})</span>
+                    >有用({{ v.like_num }})</span
+                  >
                 </p>
               </h6>
               <div class="btn">
@@ -724,10 +808,15 @@
                   void-color="#E8EBED"
                   :readonly="read"
                 />
-                <span>{{v.time}}</span>
-                <strong :data-v="v.id" @click="del($event)" v-show="tel==v.mobile">删除</strong>
+                <span>{{ v.time }}</span>
+                <strong
+                  :data-v="v.id"
+                  @click="del($event)"
+                  v-show="tel == v.mobile"
+                  >删除</strong
+                >
               </div>
-              <p class="txt">{{v.content}}</p>
+              <p class="txt">{{ v.content }}</p>
             </div>
           </li>
         </ul>
@@ -749,10 +838,14 @@
           </p>
         </div>
         <div class="re-con r1" v-show="n1">
-          <div class="re-list" v-for="(list,key) in same_price" :key="key">
-            <nuxt-link :to="'/'+jkl+'/content/'+list.id">
+          <div class="re-list" v-for="(list, key) in same_price" :key="key">
+            <nuxt-link :to="'/' + jkl + '/content/' + list.id">
               <div class="re-con-left">
-                <img :src="list.img?list.img:defaultimg" :alt="list.name" :title="list.name" />
+                <img
+                  :src="list.img ? list.img : defaultimg"
+                  :alt="list.name"
+                  :title="list.name"
+                />
                 <!-- <span>
                   <i class="iconfont iconyanjing"></i>
                   {{list.num}}
@@ -760,33 +853,42 @@
               </div>
               <div class="re-con-right">
                 <h5>
-                  {{list.name}}
-                  <span>{{list.status}}</span>
+                  {{ list.name }}
+                  <span>{{ list.status }}</span>
                 </h5>
                 <p class="price">
-                  <span>{{list.price}}</span>元/m²
+                  <span>{{ list.price }}</span
+                  >元/m²
                 </p>
                 <p class="area">
-                  <span>{{list.type}}</span>
+                  <span>{{ list.type }}</span>
                   |
-                  <span>{{list.city.substr(0,2)}}-{{list.country.substr(0,2)}}</span>
+                  <span
+                    >{{ list.city.substr(0, 2) }}-{{
+                      list.country.substr(0, 2)
+                    }}</span
+                  >
                   |
-                  <span v-show="list.area">{{list.area}}m²</span>
+                  <span v-show="list.area">{{ list.area }}m²</span>
                 </p>
                 <p class="tabs">
-                  <span class="strong">{{list.decorate}}</span>
-                  <span v-show="list.railway">{{list.railway}}</span>
-                  <span>{{list.features[0]}}</span>
+                  <span class="strong">{{ list.decorate }}</span>
+                  <span v-show="list.railway">{{ list.railway }}</span>
+                  <span>{{ list.features[0] }}</span>
                 </p>
               </div>
             </nuxt-link>
           </div>
         </div>
         <div class="re-con r2" v-show="n2">
-          <div class="re-list" v-for="(list,key) in same_area" :key="key">
-            <nuxt-link :to="'/'+jkl+'/content/'+list.id">
+          <div class="re-list" v-for="(list, key) in same_area" :key="key">
+            <nuxt-link :to="'/' + jkl + '/content/' + list.id">
               <div class="re-con-left">
-                <img :src="list.img?list.img:defaultimg" :alt="list.name" :title="list.name" />
+                <img
+                  :src="list.img ? list.img : defaultimg"
+                  :alt="list.name"
+                  :title="list.name"
+                />
                 <!-- <span>
                   <i class="iconfont iconyanjing"></i>
                   {{list.num}}
@@ -794,23 +896,28 @@
               </div>
               <div class="re-con-right">
                 <h5>
-                  {{list.name}}
-                  <span>{{list.status}}</span>
+                  {{ list.name }}
+                  <span>{{ list.status }}</span>
                 </h5>
                 <p class="price">
-                  <span>{{list.price}}</span>元/m²
+                  <span>{{ list.price }}</span
+                  >元/m²
                 </p>
                 <p class="area">
-                  <span>{{list.type}}</span>
+                  <span>{{ list.type }}</span>
                   |
-                  <span>{{list.city.substr(0,2)}}-{{list.country.substr(0,2)}}</span>
+                  <span
+                    >{{ list.city.substr(0, 2) }}-{{
+                      list.country.substr(0, 2)
+                    }}</span
+                  >
                   |
-                  <span v-show="list.area">{{list.area}}m²</span>
+                  <span v-show="list.area">{{ list.area }}m²</span>
                 </p>
                 <p class="tabs">
-                  <span class="strong">{{list.decorate}}</span>
-                  <span v-show="list.railway">{{list.railway}}</span>
-                  <span>{{list.features[0]}}</span>
+                  <span class="strong">{{ list.decorate }}</span>
+                  <span v-show="list.railway">{{ list.railway }}</span>
+                  <span>{{ list.features[0] }}</span>
                 </p>
               </div>
             </nuxt-link>
@@ -821,19 +928,26 @@
       <!-- 微信环境的浏览记录 -->
       <div class="wxlu" v-show="iswxsid">
         <div class="swiper-wrapper">
-          <div class="swiper-slide" v-for="(item,key) in share.visitors" :key="key">
+          <div
+            class="swiper-slide"
+            v-for="(item, key) in share.visitors"
+            :key="key"
+          >
             <div class="wxlu-con">
-              <img :src="item.head_img?item.head_img:wximage" alt />
+              <img :src="item.head_img ? item.head_img : wximage" alt />
               <div class="wxlumsg">
-                <h5>{{item.nickname?item.nickname:'匿名'}}</h5>
-                <p>{{item.min?item.min:5}}分钟前浏览</p>
+                <h5>{{ item.nickname ? item.nickname : "匿名" }}</h5>
+                <p>{{ item.min ? item.min : 5 }}分钟前浏览</p>
               </div>
             </div>
           </div>
         </div>
       </div>
       <!-- 底部悬浮 -->
-      <div class="m-botnav visible-xs-block .visible-sm-block" v-show="!iswxsid">
+      <div
+        class="m-botnav visible-xs-block .visible-sm-block"
+        v-show="!iswxsid"
+      >
         <p id="m_shou" @click="gotalk">
           <!-- <img
             id="fork"
@@ -852,36 +966,32 @@
           />收藏-->
           <img src="~/assets/talkimg.png" alt />
           在线咨询
-          <span v-show="wsshow">{{wsnum}}</span>
+          <span v-show="wsshow">{{ wsnum }}</span>
         </p>
-        <a :href="'tel:'+call">
+        <a :href="'tel:' + call">
           <button class="m-pho">
-            <p class="ph1">
-              <img src="~/assets/phicon.png" alt />电话咨询
-            </p>
+            <p class="ph1"><img src="~/assets/phicon.png" alt />电话咨询</p>
           </button>
         </a>
         <button class="m-y p1" data-v="预约看房">
-          <p class="ph1">
-            <img src="~/assets/promsg.png" />预约看房
-          </p>
+          <p class="ph1"><img src="~/assets/promsg.png" />预约看房</p>
         </button>
       </div>
       <div class="wxwork" v-show="iswxsid">
         <div class="wximg" @click="gotalk">
-          <img :src="share.staff?share.staff.head_img:nolmalimg" alt />
+          <img :src="share.staff ? share.staff.head_img : nolmalimg" alt />
           <p>咨询</p>
-          <span v-show="wsshow">{{wsnum}}</span>
+          <span v-show="wsshow">{{ wsnum }}</span>
         </div>
         <div class="wxmsg">
-          <h5>{{share.staff?share.staff.name:''}}</h5>
+          <h5>{{ share.staff ? share.staff.name : "" }}</h5>
           <p>咨询分析师</p>
         </div>
         <button class="wxyue p1" data-v="预约看房">
           <img src="~/assets/wxtime.png" alt />
           预约看房
         </button>
-        <a :href="share.staff?'tel:'+share.staff.tel:''">
+        <a :href="share.staff ? 'tel:' + share.staff.tel : ''">
           <button class="wxtel">
             <img src="~/assets/wxtel.png" alt />
             电话咨询
@@ -920,13 +1030,24 @@
                   maxlength="11"
                 />
                 <p class="w-mg">
-                  <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
-                  <nuxt-link :to="'/'+jkl+'/server'">
+                  <input
+                    class="w-mg-c"
+                    type="checkbox"
+                    checked
+                    v-model="checks"
+                  />我已阅读并同意
+                  <nuxt-link :to="'/' + jkl + '/server'">
                     <a href="javasript:;">《允家新房用户协议》</a>
                   </nuxt-link>
                 </p>
 
-                <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="dingyue">立即订阅</button>
+                <button
+                  class="t-b-btn t-b-btn2 bg_01"
+                  id="dingxue"
+                  @click="dingyue"
+                >
+                  立即订阅
+                </button>
                 <p class="w-tit">
                   <!-- <img src="~/assets/w-call.png" />允家严格保障您的信息安全 -->
                   提交后将有咨询师与您取得联系并提供服务
@@ -937,7 +1058,12 @@
                   验证码已发送到
                   <span id="ytel">187****4376</span>，请注意查看
                 </p>
-                <input type="tel" placeholder="请输入验证码" v-model="ma" id="ma-ll" />
+                <input
+                  type="tel"
+                  placeholder="请输入验证码"
+                  v-model="ma"
+                  id="ma-ll"
+                />
                 <button class="port1" @click="check">确定</button>
                 <input type="hidden" id="building_name" value />
                 <input type="hidden" value />
@@ -958,10 +1084,17 @@
         </transition>
         <transition name="change">
           <div class="hengda" v-show="ishengda">
-            <img class="del" src="~/assets/w-del.png" alt @click="guanbi"/>
+            <img class="del" src="~/assets/w-del.png" alt @click="guanbi" />
             <img src="~/assets/hengda.png" alt class="topimg" />
-            <input type="text" placeholder="输入身份证号后6位" maxlength="6" v-model="IDcode" />
-            <p class="zhu">注: 根据本楼盘售楼处规定，实地看房需先提前报备 身份证后6位</p>
+            <input
+              type="text"
+              placeholder="输入身份证号后6位"
+              maxlength="6"
+              v-model="IDcode"
+            />
+            <p class="zhu">
+              注: 根据本楼盘售楼处规定，实地看房需先提前报备 身份证后6位
+            </p>
             <button @click="hengda">申请报备</button>
           </div>
         </transition>
@@ -970,7 +1103,7 @@
           <img class="m_bigimgs" src alt />
         </div>
       </div>
-      <div id="panel" style="display:none;"></div>
+      <div id="panel" style="display: none"></div>
     </div>
 
     <!-- <div class="swp" v-show="tu">
@@ -992,7 +1125,12 @@
     <div class="pingbox" v-show="shouping" @click="shouping = false"></div>
     <transition name="change">
       <div class="shouping" v-show="shouping">
-        <img class="esc" @click="shouping = false" src="~/assets/pingesc.png" alt />
+        <img
+          class="esc"
+          @click="shouping = false"
+          src="~/assets/pingesc.png"
+          alt
+        />
         <img class="img" :src="shoupingimg" alt />
         <input type="text" placeholder="请输入您手机号" v-model="baoming" />
         <button @click="shou">领取优惠</button>
@@ -1002,10 +1140,10 @@
           作人员与您联系，此优惠不与参团优惠叠加使用
         </p>
         <p class="zhu">注：活动最终解释权归允家所有</p>
-        <span v-show="warningbtn">{{warning}}</span>
+        <span v-show="warningbtn">{{ warning }}</span>
       </div>
     </transition>
-    <div class="tsmsg" v-show="tstype">{{tsmsg}}</div>
+    <div class="tsmsg" v-show="tstype">{{ tsmsg }}</div>
   </div>
 </template>
 <script>
@@ -1461,23 +1599,36 @@ export default {
   },
   methods: {
     gotalk() {
-      let urlid = this.$route.params.id;
-      sessionStorage.setItem('proid',urlid)
-      let id = sessionStorage.getItem(urlid);
-      if (id) {
-        sessionStorage.setItem("staffid", id);
-        let n = parseInt(sessionStorage.getItem(id));
-        let total = parseInt(sessionStorage.getItem("total"));
-        total = total - n;
-        if (total != 0) {
-          sessionStorage.setItem("total", total);
-        } else {
-          sessionStorage.removeItem("total");
-        }
-        sessionStorage.removeItem(id);
-        
-      }
-      this.$router.push("/" + this.jkl + "/talk/"+urlid);
+      let url = window.location.href;
+      let newurl = url.split("?")[0];
+      let uuid = this.$route.query.uuid;
+      let city = this.city;
+      let id = this.$route.params.id;
+      newurl += `?proid=${id}&uuid=${uuid}&city=${city}`;
+      newurl = encodeURIComponent(newurl);
+      // window.location.href =
+      //   "http://localhost:3000/hangzhou/talk?reconnect=" + newurl;
+      // window.location.href =
+      //   "http://testim.jy1980.com/hangzhou/talk?reconnect=" + newurl+'&uuid='+this.$route.query.uuid;
+      window.location.href =
+        "http://m.jy1980.com/hangzhou/talk?reconnect=" + newurl+'&uuid='+this.$route.query.uuid;
+      // let urlid = this.$route.params.id;
+      // sessionStorage.setItem('proid',urlid)
+      // let id = sessionStorage.getItem(urlid);
+      // if (id) {
+      //   sessionStorage.setItem("staffid", id);
+      //   let n = parseInt(sessionStorage.getItem(id));
+      //   let total = parseInt(sessionStorage.getItem("total"));
+      //   total = total - n;
+      //   if (total != 0) {
+      //     sessionStorage.setItem("total", total);
+      //   } else {
+      //     sessionStorage.removeItem("total");
+      //   }
+      //   sessionStorage.removeItem(id);
+
+      // }
+      // this.$router.push("/" + this.jkl + "/talk/"+urlid);
     },
     shou() {
       let tel = this.baoming;
@@ -1548,7 +1699,7 @@ export default {
             that.shouping = false;
             if (that.building.name.indexOf("恒大") !== -1) {
               that.ishengda = true;
-              $('.m-chang').show()
+              $(".m-chang").show();
             }
           }, 1500);
         } else if (resp.data.code == 500) {
@@ -1557,7 +1708,7 @@ export default {
           setTimeout(() => {
             that.tstype = false;
           }, 1000);
-          this.guanbi()
+          this.guanbi();
         }
       });
     },
@@ -1575,7 +1726,7 @@ export default {
       $(".m-chang").show();
       this.change = true;
       this.ones = 1;
-      $(".weiter .t-top h6").html("参团优惠");
+      $(".weiter .t-top h6").html("领取优惠");
       $(".weiter .t-top p").html(
         "领取团购限时优惠券！优惠编码将与您手机号绑定"
       );
@@ -2106,7 +2257,7 @@ export default {
             setTimeout(() => {
               that.tstype = false;
             }, 1000);
-            this.guanbi()
+            this.guanbi();
           } else {
             $(".l-p").val("");
             $(".l-p").attr("placeholder", "报名失败");
@@ -2136,11 +2287,10 @@ export default {
             $("#o_p").text("已成功订购服务，我们会第一时间通过电话联系您");
             if (that.building.name.indexOf("恒大") !== -1) {
               that.ishengda = true;
-            } else{
+            } else {
               that.succ = true;
             }
-              that.change = false;
-            
+            that.change = false;
           } else {
             $("#ma-ll").val("");
             $("#ma-ll").attr("placeholder", "验证码不正确");
@@ -2151,8 +2301,8 @@ export default {
         });
     },
     hengda() {
-      let tel = this.baoming
-      let that = this
+      let tel = this.baoming;
+      let that = this;
       if (that.IDcode == "") {
         this.tsmsg = "请输入身份证后六位";
         this.tstype = true;
@@ -2167,7 +2317,7 @@ export default {
             setTimeout(() => {
               that.tstype = false;
               that.ishengda = false;
-              that.guanbi()
+              that.guanbi();
             }, 1000);
           }
         });
@@ -2519,7 +2669,7 @@ export default {
       $(".t-b-second").hide();
       this.succ = false;
       this.tu = false;
-      this.ishengda=false
+      this.ishengda = false;
     },
     // 倒计时
     countTime() {
@@ -2827,47 +2977,6 @@ export default {
   },
   mounted() {
     let that = this;
-    this.ws = this.$store.state.ws
-    this.$store.state.ws.onmessage = function (event) {
-      let data = JSON.parse(event.data);
-      if(data.action == 301) {
-        let urlid = that.$route.params.id
-        if(!sessionStorage.getItem(urlid)){
-          sessionStorage.setItem(urlid,data.fromUserName)
-          // that.putcard()
-        }else{
-          that.wsshow = true
-          if(sessionStorage.getItem(data.fromUserName)){
-            sessionStorage.setItem(data.fromUserName,(parseInt(sessionStorage.getItem(data.fromUserName))+1))
-          }else{
-            sessionStorage.setItem(data.fromUserName,1)
-          }
-          if (
-            sessionStorage.getItem("total") &&
-            sessionStorage.getItem("total") != "NaN"
-          ) {
-            sessionStorage.setItem(
-              "total",
-              parseInt(sessionStorage.getItem("total")) + 1
-            );
-            that.wsnum = parseInt(sessionStorage.getItem('total'));
-          } else {
-            sessionStorage.setItem("total", 1);
-            that.wsnum = 1;
-          }
-        }
-      }else if (data.action == 206) {
-        that.usernum = data.num.user_num
-        that.looknum = data.num.look_num
-        that.rate = data.num.rate
-        that.stafftel = data.staff.tel
-        that.staffname = data.staff.name
-        that.staffimg = data.staff.img
-        that.talktype = true
-      } else if (data.action == 302) {
-        sessionStorage.setItem('staffid',data.sid)
-      }
-    }
     $cookies.set("cityname", this.building.city_fullname);
     localStorage.setItem("call", this.call);
     if (this.call.split(",")[1]) {
@@ -2887,7 +2996,7 @@ export default {
         }, 500);
       }
     });
-    
+
     sessionStorage.setItem("ip", ip_arr["ip"]);
     $cookies.set("ip", ip_arr["ip"]);
     var ua = navigator.userAgent.toLowerCase();
@@ -2915,7 +3024,6 @@ export default {
         };
       }
     }
-    
 
     $cookies.set("name", this.building.name);
     $cookies.set("address", this.building.address);
@@ -4460,34 +4568,45 @@ body {
 }
 .pin-bao {
   position: absolute;
-  width: 70px;
-  height: 26px;
-  background: linear-gradient(
-    180deg,
-    rgba(248, 195, 61, 1),
-    rgba(255, 238, 187, 1)
-  );
-  border-radius: 13px;
-  color: #ef2b31;
-  font-size: 0.8125rem;
+  width: 4.6875rem;
+  height: 1.625rem;
+  background: linear-gradient(270deg, #FF7519, #FFAE3D);
+  border-radius: 0.8125rem;
+  color: #FFFFFF;
+  font-size: 0.75rem;
   text-align: center;
-  line-height: 28px;
+  line-height: 1.625rem;
   right: 8%;
   top: 14%;
 }
 .pin .pin-msg {
   position: absolute;
-  right: 8%;
-  top: 45%;
-  color: #ffd4ce;
+  right: 9.2%;
+  top: 55%;
+  color: #FF7519;
   font-size: 0.75rem;
+}
+.pin .pin-left {
+  position: absolute;
+  left: 8%;
+  top: 56%;
+  color: #E6813D;
+  font-size: 0.75rem;
+}
+.pin .pin-left span {
+  color: #211C18;
+  font-size: 0.625rem;
 }
 .pin .pin-time {
   position: absolute;
-  color: #ffeae5;
+  color: #3A80BA;
   font-size: 0.625rem;
-  top: 49%;
-  left: 22%;
+  top: 55%;
+  left: 8%;
+}
+.pin .pin-time span {
+  color: #211C18;
+  font-size: 0.625rem;
 }
 .pin .top,
 .pin .bomm {
@@ -4498,9 +4617,11 @@ body {
 }
 .pin .y1 {
   top: 14%;
+  background: linear-gradient(270deg, #348AFF, #6ACCFF);
 }
 .pin .ym {
-  top: 45%;
+  top: 55%;
+  color: #40A2F4;
 }
 .pin img {
   width: 92%;
