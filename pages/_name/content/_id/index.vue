@@ -8,13 +8,48 @@
         <h2>
           <img class="top-ll" src="~/assets/return.png" alt @click="goback" />
           <img class="content-img" src="~/assets/content-logo.png" alt />
-          <img class="topright tophome" src="~/assets/top-house.png" alt />
+          <img class="topright tophome" src="~/assets/mapcai.png" alt @click="listtype = !listtype"/>
+          <!-- <img class="topright tophome" src="~/assets/top-house.png" alt /> -->
           <img
             class="topright"
             src="~/assets/top-user.png"
             alt
             @click="gohome"
           />
+          <ul class="cailist" v-if="listtype">
+            <li class="cmn">
+              <router-link :to="'/' + jkl">
+                <i></i>
+                <img src="~/assets/barhome.png" />
+                <p>首 页</p>
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="'/' + jkl + '/search'">
+                <img src="~/assets/barsearch.png" />
+                <p>楼盘查询</p>
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="'/' + jkl + '/participate'">
+                <img src="~/assets/tegother.png" />
+                <!-- <img src="~/assets/barsearch.png" /> -->
+                <p>平台合作</p>
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="'/' + jkl + '/encyclopedia/before/56'">
+                <img src="~/assets/barke.png" />
+                <p>买房百科</p>
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="'/' + jkl + '/realinformations/46'">
+                <img src="~/assets/barxun.png" />
+                <p>房产资讯</p>
+              </router-link>
+            </li>
+          </ul>
         </h2>
       </div>
 
@@ -217,13 +252,13 @@
           </p>-->
           <button @click="huomsg = true">活动规则</button>
         </nav>
-        <div class="top" >
+        <div class="top">
           <img src="~/assets/tuna-hased.png" alt />
-          <div class="pin-bao" @click="xiangs(22)">
-            领取优惠
-          </div>
-          <p class="pin-msg">{{ sign.num+55 }}人已领取</p>
-          <p class="pin-left">售楼处专供允家平台客户<span>（{{endtime.substr(5)}}截止）</span></p>
+          <div class="pin-bao" @click="xiangs(22)">领取优惠</div>
+          <p class="pin-msg">{{ sign.num + 55 }}人已领取</p>
+          <p class="pin-left">
+            售楼处专供允家平台客户<span>（{{ endtime.substr(5) }}截止）</span>
+          </p>
           <!-- <img
             src="~/assets/tuna-hased.jpg"
             alt
@@ -251,7 +286,9 @@
             抢优惠券
           </div>
           <p class="pin-msg ym">{{ sign.num }}人已抢到</p>
-          <p class="pin-time">免费专车1对1服务限时券<span>（剩余{{ sign.num-123 }}张）</span></p>
+          <p class="pin-time">
+            免费专车1对1服务限时券<span>（剩余{{ sign.num - 123 }}张）</span>
+          </p>
           <img src="~/assets/youhui.png" alt />
           <!-- <div class="bom">
             <div class="trend-con1">
@@ -337,7 +374,7 @@
           <h4>最新加推楼盘</h4>
           <p>{{ tui.introduce }}</p>
         </div>
-
+        
         <div class="t-o o1"></div>
         <div class="t-o o2" v-show="tui"></div>
         <div class="t-l l1"></div>
@@ -1355,7 +1392,6 @@ export default {
                 visitors: [],
               };
             }
-
             return data;
           }
         }
@@ -1570,6 +1606,7 @@ export default {
       defaultimg: require("~/assets/default.jpg"),
       shoupingimg: require("~/assets/shouping.png"),
       callmsg: "",
+      listtype:false
     };
   },
   head() {
@@ -1611,7 +1648,10 @@ export default {
       // window.location.href =
       //   "http://testim.jy1980.com/hangzhou/talk?reconnect=" + newurl+'&uuid='+this.$route.query.uuid;
       window.location.href =
-        "http://m.jy1980.com/hangzhou/talk?reconnect=" + newurl+'&uuid='+this.$route.query.uuid;
+        "http://mobile.jy8006.com/hangzhou/talk?reconnect=" +
+        newurl +
+        "&uuid=" +
+        this.$route.query.uuid;
       // let urlid = this.$route.params.id;
       // sessionStorage.setItem('proid',urlid)
       // let id = sessionStorage.getItem(urlid);
@@ -3318,9 +3358,9 @@ export default {
         }
       });
 
-      $(".tophome").on("click", function () {
-        that.$router.push("/" + that.n);
-      });
+      // $(".tophome").on("click", function () {
+      //   that.$router.push("/" + that.n);
+      // });
 
       $(".m-listen").on("click", function () {
         $(".m-chang").show();
@@ -4934,5 +4974,47 @@ body {
   font-weight: bold;
   background: #40a2f4;
   margin-left: 1.6875rem;
+}
+
+h2 .cailist {
+  width: 9.375rem;
+  background: rgba(41, 41, 41, 0.9);
+  position: absolute;
+  top: 2.625rem;
+  border-radius: 0.375rem;
+  z-index: 230;
+  right: 4%;
+}
+h2 .cailist li {
+  position: relative;
+  color: #e6e6e6;
+  font-size: 0.9375rem;
+  line-height: 3.125rem;
+  border: 0;
+}
+h2 .cailist li a {
+  width: 100%;
+  display: flex;
+  color: #e6e6e6;
+  align-items: center;
+}
+h2 .cailist li.cmn i {
+  display: block;
+  border: 0.4375rem solid transparent;
+  border-bottom-color: rgba(41, 41, 41, 0.9);
+  position: absolute;
+  top: -0.875rem;
+  right: 0.625rem;
+}
+h2 .cailist li p {
+  border-bottom: 0.5px solid #545454;
+  flex: 1;
+}
+h2 .cailist li img {
+  width: 1.125rem;
+  margin: 0;
+  margin-left: 0.8rem;
+  margin-right: 0.875rem;
+  height: 1.125rem;
 }
 </style>

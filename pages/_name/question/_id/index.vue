@@ -8,31 +8,32 @@
         <li class="cmn">
           <router-link :to="'/'+jkl">
             <span></span>
-            <img src="~/assets/mapcai.png" />
+            <img src="~/assets/barhome.png" />
             <p>首 页</p>
           </router-link>
         </li>
         <li>
           <router-link :to="'/'+jkl+'/search'">
-            <img src="~/assets/mapcai.png" />
+            <img src="~/assets/barsearch.png" />
             <p>楼盘查询</p>
           </router-link>
         </li>
         <li>
-          <router-link :to="'/'+jkl+'/myhome'">
-            <img src="~/assets/mapcai.png" />
-            <p>个人中心</p>
+          <router-link :to="'/'+jkl+'/participate'">
+            <img src="~/assets/tegother.png" />
+            <!-- <img src="~/assets/barsearch.png" /> -->
+            <p>平台合作</p>
           </router-link>
         </li>
         <li>
           <router-link :to="'/'+jkl+'/encyclopedia/before/56'">
-            <img src="~/assets/mapcai.png" />
+            <img src="~/assets/barke.png" />
             <p>买房百科</p>
           </router-link>
         </li>
         <li>
           <router-link :to="'/'+jkl+'/realinformations/46'">
-            <img src="~/assets/mapcai.png" />
+            <img src="~/assets/barxun.png" />
             <p>房产资讯</p>
           </router-link>
         </li>
@@ -696,6 +697,7 @@ h3 .cailist li {
 h3 .cailist li a {
   width: 100%;
   display: flex;
+  color: #e6e6e6;
   align-items: center;
 }
 h3 .cailist li.cmn span {

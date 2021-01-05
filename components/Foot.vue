@@ -10,7 +10,7 @@
         </ul>
         <p><img src="~/assets/f-logo.png">杭州易得房科技有限公司版权所有 </p>
         <p class="f-tel">电话：400-718-6686</p>
-        <p>网络经营许可证：<a href="http://www.beian.miit.gov.cn/"><span>浙ICP备18057005号</span></a></p>
+        <p>网络经营许可证：<a href="https://beian.miit.gov.cn/"><span>浙ICP备18057005号-2</span></a></p>
     </div>
 </template>
 <script>

@@ -96,6 +96,27 @@ export default ({
         }
         store.state.city = 181
         break;
+      case 'shangrao':
+        if (process.server == false) {
+          localStorage.setItem('city', 216)
+          $cookies.set('city', 216)
+        }
+        store.state.city = 216
+        break;
+      case 'nanchang':
+      if (process.server == false) {
+        localStorage.setItem('city', 229)
+        $cookies.set('city', 229)
+      }
+      store.state.city = 229
+        break;
+      case 'langfang':
+      if (process.server == false) {
+        localStorage.setItem('city', 242)
+        $cookies.set('city', 242)
+      }
+      store.state.city = 242
+      break;
     }
     // let city = localStorage.getItem('city')
     // let ip = ip_arr["ip"];

@@ -190,7 +190,8 @@ export default {
         //   }
         // }
         // this.bbs = dd;
-        souname(name).then((res) => {
+        let city = localStorage.getItem('cityname')
+        souname(name,1,city).then((res) => {
           console.log(res);
           this.lists = res.data.data
         });

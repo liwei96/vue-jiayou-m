@@ -317,7 +317,7 @@ export default {
   },
   async asyncData (context) {
     let ip=context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
+    let city = context.store.state.city;
     let token=context.store.state.cookie.token;
      let kk = context.params.id;
      let jkl=context.store.state.cookie.pinyin;

@@ -163,9 +163,9 @@ export default {
           let trend = resp.data.data.price_trends;
           let data = resp.data.data;
           if (Number(trend.current.rate) > 0) {
-            trend.mb = "下降";
-          } else {
             trend.mb = "上升";
+          } else {
+            trend.mb = "下降";
             trend.current.rate = Math.abs(Number(trend.current.rate));
           }
           if (Number(trend.current.rate_lastyear) < 0) {

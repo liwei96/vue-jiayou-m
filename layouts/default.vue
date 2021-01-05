@@ -12,18 +12,18 @@ export default {
   components: {
     "head-view": headView,
   },
-  beforeCreate() {
-    if (process.client) {
-      window.onresize = () => {
-        if (process.client && document.body.clientWidth > 450) {
-          window.location.href = "http://www.jy8006.com";
-        }
-      };
-      if (process.client && document.body.clientWidth > 450) {
-        window.location.href = "http://www.jy8006.com";
-      }
-    }
-  },
+  // beforeCreate() {
+  //   if (process.client) {
+  //     window.onresize = () => {
+  //       if (process.client && document.body.clientWidth > 450) {
+  //         window.location.href = "http://www.jy8006.com";
+  //       }
+  //     };
+  //     if (process.client && document.body.clientWidth > 450) {
+  //       window.location.href = "http://www.jy8006.com";
+  //     }
+  //   }
+  // },
   mounted() {
     let url = window.location.href;
     url = url.split("?")[1];
@@ -93,6 +93,10 @@ export default {
       var s = document.getElementsByTagName("script")[0];
       s.parentNode.insertBefore(bp, s);
     })();
+//     (function(){
+// var src = "https://jspassport.ssl.qhimg.com/11.0.1.js?d182b3f28525f2db83acfaaf6e696dba";
+// document.write('<script src="' + src + '" id="sozz"><\/script>');
+// })();
   },
 };
 </script>

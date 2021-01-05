@@ -13,28 +13,28 @@ axios.interceptors.request.use(function (config) {
       localStorage.setItem('tel', tel)
     }
   }
-  if(config.method == 'get'){
+  if (config.method == 'get') {
     config.params.uuid = $cookies.get('uuid')
-  }else{
-    if(config.data){
+  } else {
+    if (config.data) {
       config.data.uuid = $cookies.get('uuid')
-    }else{
+    } else {
       config.params.uuid = $cookies.get('uuid')
     }
   }
   if (process.server == false && config.method == 'post') {
-    let kid = $cookies.get('kid')?$cookies.get('kid'):''
-    let other = $cookies.get('other')?$cookies.get('other'):''
+    let kid = $cookies.get('kid') ? $cookies.get('kid') : ''
+    let other = $cookies.get('other') ? $cookies.get('other') : ''
     config.data.kid = kid
     config.data.other = other
-    config.data.platform=2
+    config.data.platform = 2
   }
-  if(process.server == false && config.method == 'get'){
-    let kid = $cookies.get('kid')?$cookies.get('kid'):''
-    let other = $cookies.get('other')?$cookies.get('other'):''
+  if (process.server == false && config.method == 'get') {
+    let kid = $cookies.get('kid') ? $cookies.get('kid') : ''
+    let other = $cookies.get('other') ? $cookies.get('other') : ''
     config.params.kid = kid
     config.params.other = other
-    config.params.platform=2
+    config.params.platform = 2
   }
 
   if (config.url == '/front/flow/sign') {
@@ -560,12 +560,15 @@ export const question = (msg) => {
   })
 }
 
-export const souname = (name) => {
+export const souname = (name, k, city) => {
   return axios.request({
     method: 'get',
     url: '/api/project/e_search',
     params: {
-      'name': name
+      'name': name,
+      page: k,
+      limit: 10,
+      city: city
     }
   })
 }

@@ -10,32 +10,33 @@
         <img src="~/assets/mapcai.png" alt class="cai" @click="taggle" />
         <ul class="cailist" v-if="list">
           <li class="cmn">
-            <router-link :to="'/'+jkl">
+            <router-link :to="'/' + jkl">
               <span></span>
               <img src="~/assets/barhome.png" />
               <p>首 页</p>
             </router-link>
           </li>
           <li>
-            <router-link :to="'/'+jkl+'/search'">
+            <router-link :to="'/' + jkl + '/search'">
               <img src="~/assets/barsearch.png" />
               <p>楼盘查询</p>
             </router-link>
           </li>
           <li>
-            <router-link :to="'/'+jkl+'/myhome'">
-              <img src="~/assets/barsearch.png" />
-              <p>个人中心</p>
+            <router-link :to="'/' + jkl + '/participate'">
+              <img src="~/assets/tegother.png" />
+              <!-- <img src="~/assets/barsearch.png" /> -->
+              <p>平台合作</p>
             </router-link>
           </li>
           <li>
-            <router-link :to="'/'+jkl+'/encyclopedia/before/56'">
+            <router-link :to="'/' + jkl + '/encyclopedia/before/56'">
               <img src="~/assets/barke.png" />
               <p>买房百科</p>
             </router-link>
           </li>
           <li>
-            <router-link :to="'/'+jkl+'/realinformations/46'">
+            <router-link :to="'/' + jkl + '/realinformations/46'">
               <img src="~/assets/barxun.png" />
               <p>房产资讯</p>
             </router-link>
@@ -46,7 +47,7 @@
         <div class="mapbox">
           <div class="m-continer" id="m-container"></div>
           <p class="tel">
-            <a :href="'tel:'+call">
+            <a :href="'tel:' + call">
               <p>电话</p>
               <p>咨询</p>
             </a>
@@ -61,43 +62,64 @@
         <div class="swiper-map">
           <div class="swiper-wrapper">
             <div class="swiper-slide">
-              <div :class="mapnum === 0 ? 'tegood active' : 'tegood'" @click="setmap(0, '地铁')">
+              <div
+                :class="mapnum === 0 ? 'tegood active' : 'tegood'"
+                @click="setmap(0, '地铁')"
+              >
                 地铁
                 <i></i>
               </div>
             </div>
             <div class="swiper-slide">
-              <div :class="mapnum === 1 ? 'tegood active' : 'tegood'" @click="setmap(1 ,'公交')">
+              <div
+                :class="mapnum === 1 ? 'tegood active' : 'tegood'"
+                @click="setmap(1, '公交')"
+              >
                 公交
                 <i></i>
               </div>
             </div>
             <div class="swiper-slide">
-              <div :class="mapnum === 2 ? 'tegood active' : 'tegood'" @click="setmap(2, '教育')">
+              <div
+                :class="mapnum === 2 ? 'tegood active' : 'tegood'"
+                @click="setmap(2, '教育')"
+              >
                 教育
                 <i></i>
               </div>
             </div>
             <div class="swiper-slide">
-              <div :class="mapnum === 3 ? 'tegood active' : 'tegood'" @click="setmap(3, '医院')">
+              <div
+                :class="mapnum === 3 ? 'tegood active' : 'tegood'"
+                @click="setmap(3, '医院')"
+              >
                 医院
                 <i></i>
               </div>
             </div>
             <div class="swiper-slide">
-              <div :class="mapnum === 4 ? 'tegood active' : 'tegood'" @click="setmap(4, '购物')">
+              <div
+                :class="mapnum === 4 ? 'tegood active' : 'tegood'"
+                @click="setmap(4, '购物')"
+              >
                 购物
                 <i></i>
               </div>
             </div>
             <div class="swiper-slide">
-              <div :class="mapnum === 5 ? 'tegood active' : 'tegood'" @click="setmap(5, '美食')">
+              <div
+                :class="mapnum === 5 ? 'tegood active' : 'tegood'"
+                @click="setmap(5, '美食')"
+              >
                 美食
                 <i></i>
               </div>
             </div>
             <div class="swiper-slide">
-              <div :class="mapnum === 6 ? 'tegood active' : 'tegood'" @click="setmap(6, '娱乐')">
+              <div
+                :class="mapnum === 6 ? 'tegood active' : 'tegood'"
+                @click="setmap(6, '娱乐')"
+              >
                 娱乐
                 <i></i>
               </div>
@@ -106,10 +128,12 @@
         </div>
         <div class="map-con">
           <ul class="con"></ul>
-          <p class="msg" v-show="isnull">附近没有{{mapname}}，您可以看看其他信息</p>
+          <p class="msg" v-show="isnull">
+            附近没有{{ mapname }}，您可以看看其他信息
+          </p>
         </div>
       </div>
-      <div id="panel" style="display: none;"></div>
+      <div id="panel" style="display: none"></div>
       <div class="m-container"></div>
       <div class="visible-xs-block .visible-sm-block">
         <transition name="change">
@@ -121,15 +145,31 @@
             </div>
             <div class="t-bottom">
               <div class="t-b-first">
-                <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
+                <input
+                  class="l-p"
+                  type="tel"
+                  placeholder="输入预约手机号码"
+                  v-model="baoming"
+                />
                 <p class="w-mg">
-                  <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
-                  <router-link :to="'/'+jkl+'/server'">
+                  <input
+                    class="w-mg-c"
+                    type="checkbox"
+                    checked
+                    v-model="checks"
+                  />我已阅读并同意
+                  <router-link :to="'/' + jkl + '/server'">
                     <a href="javasript:;">《允家新房用户协议》</a>
                   </router-link>
                 </p>
                 <p class="tishi">请勾选用户协议</p>
-                <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="sendmsg">立即订阅</button>
+                <button
+                  class="t-b-btn t-b-btn2 bg_01"
+                  id="dingxue"
+                  @click="sendmsg"
+                >
+                  立即订阅
+                </button>
                 <p class="w-tit">
                   <img src="~/assets/w-call.png" />允家严格保障您的信息安全
                 </p>
@@ -139,7 +179,12 @@
                   验证码已发送到
                   <span id="ytel">187****4376</span>，请注意查看
                 </p>
-                <input type="text" placeholder="请输入验证码" id="ma-ll" v-model="ma"/>
+                <input
+                  type="text"
+                  placeholder="请输入验证码"
+                  id="ma-ll"
+                  v-model="ma"
+                />
                 <button class="port1" @click="check">确定</button>
                 <input type="hidden" id="building_name" value />
                 <input type="hidden" value />
@@ -164,16 +209,23 @@
         </div>
       </div>
     </div>
-    <div class="tsmsg" v-show="tstype">{{tsmsg}}</div>
+    <div class="tsmsg" v-show="tstype">{{ tsmsg }}</div>
     <transition name="change">
-          <div class="hengda" v-show="ishengda">
-            <img class="del" src="~/assets/w-del.png" alt @click="guanbi"/>
-            <img src="~/assets/hengda.png" alt class="topimg" />
-            <input type="text" placeholder="输入身份证号后6位" maxlength="6" v-model="IDcode" />
-            <p class="zhu">注: 根据本楼盘售楼处规定，实地看房需先提前报备 身份证后6位</p>
-            <button @click="hengda">申请报备</button>
-          </div>
-        </transition>
+      <div class="hengda" v-show="ishengda">
+        <img class="del" src="~/assets/w-del.png" alt @click="guanbi" />
+        <img src="~/assets/hengda.png" alt class="topimg" />
+        <input
+          type="text"
+          placeholder="输入身份证号后6位"
+          maxlength="6"
+          v-model="IDcode"
+        />
+        <p class="zhu">
+          注: 根据本楼盘售楼处规定，实地看房需先提前报备 身份证后6位
+        </p>
+        <button @click="hengda">申请报备</button>
+      </div>
+    </transition>
     <!-- <div id="Footer">
       <p>杭州易得房科技有限公司版权所有 电话：400-966-9995</p>
       <p>
@@ -195,7 +247,7 @@ import {
   trend_put,
   verification,
   collection,
-  hengda
+  hengda,
 } from "~/api/api";
 export default {
   name: "Periphery",
@@ -254,11 +306,11 @@ export default {
       list: false,
       timename: {},
       isover: true,
-      ishengda:false,
-      IDcode:'',
-      tstype:false,
-      tsmsg:'',
-      ma:''
+      ishengda: false,
+      IDcode: "",
+      tstype: false,
+      tsmsg: "",
+      ma: "",
     };
   },
   methods: {
@@ -501,9 +553,12 @@ export default {
         .then((resp) => {
           if (resp.data.code == 200) {
             that.change = false;
-            if(sessionStorage.getItem('proname')&&sessionStorage.getItem('proname').indexOf('恒大')!==-1){
-              that.ishengda=true
-            }else{
+            if (
+              sessionStorage.getItem("proname") &&
+              sessionStorage.getItem("proname").indexOf("恒大") !== -1
+            ) {
+              that.ishengda = true;
+            } else {
               that.succ = true;
             }
           } else {
@@ -516,8 +571,8 @@ export default {
         });
     },
     hengda() {
-      let tel = this.baoming
-      let that = this
+      let tel = this.baoming;
+      let that = this;
       if (that.IDcode == "") {
         this.tsmsg = "请输入身份证后六位";
         this.tstype = true;
@@ -532,7 +587,7 @@ export default {
             setTimeout(() => {
               that.tstype = false;
               that.ishengda = false;
-              that.guanbi()
+              that.guanbi();
             }, 1000);
           }
         });
@@ -541,8 +596,8 @@ export default {
     guanbi() {
       $(".t-b-first").show();
       $(".t-b-second").hide();
-      $('.m-chang').hide();
-      $('.hengda').hide();
+      $(".m-chang").hide();
+      $(".hengda").hide();
     },
     zhou() {
       let that = this;
@@ -964,7 +1019,6 @@ export default {
       }
     });
     $(".port1").on("click", function () {
-      
       that.check(ma);
     });
     $("#o_btn").on("click", function () {

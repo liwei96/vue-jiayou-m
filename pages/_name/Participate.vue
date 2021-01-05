@@ -309,8 +309,7 @@ export default {
           name: "keywords",
           content: "允家新房",
         },
-      ],
-      script: [{ src: "~/static/js/iconfont.js" }],
+      ]
     };
   },
   data() {

@@ -20,9 +20,10 @@
           </router-link>
         </li>
         <li>
-          <router-link :to="'/'+jkl+'/myhome'">
-            <img src="~/assets/barsearch.png" />
-            <p>个人中心</p>
+          <router-link :to="'/'+jkl+'/participate'">
+            <img src="~/assets/tegother.png" />
+            <!-- <img src="~/assets/barsearch.png" /> -->
+            <p>平台合作</p>
           </router-link>
         </li>
         <li>

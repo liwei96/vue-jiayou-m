@@ -2,11 +2,11 @@
   <div class="Index" v-cloak>
     <div class="header">
       <div class="search">
-        <img src="~/assets/index-logo.png" alt class="index-logo"/>
-        
+        <img src="~/assets/index-logo.png" alt class="index-logo" />
+
         <div class="sea-con">
           <span class="city">
-            {{cityname}}
+            {{ cityname }}
             <i class="iconfont iconbelow-s"></i>
           </span>
           <button id="sea">
@@ -17,42 +17,119 @@
         </div>
         <img class="mine" src="~/assets/Mine.png" alt />
       </div>
-      <img class="bg" src="~/assets/banner1.jpg" alt v-if="banner.length == 0"/>
-      <img :src="banner.img" alt class="bg" @click="gobanner" v-if="banner.length != 0"/>
+      <img
+        class="bg"
+        src="~/assets/banner1.jpg"
+        alt
+        v-if="banner.length == 0"
+      />
+      <img
+        :src="banner.img"
+        alt
+        class="bg"
+        @click="gobanner"
+        v-if="banner.length != 0"
+      />
       <div class="banner">
         <nav class="m-na">
-          <ul>
+          <!-- <ul>
             <li>
-              <nuxt-link :to="'/'+pinyin+'/search'">
+              <nuxt-link :to="'/' + pinyin + '/search'">
                 <img src="~/assets/new-search.png" alt="楼盘查询" />
                 <p>楼盘查询</p>
               </nuxt-link>
             </li>
             <li>
-              <nuxt-link :to="'/'+pinyin+'/encyclopedia/before/56'">
+              <nuxt-link :to="'/' + pinyin + '/encyclopedia/before/56'">
                 <img src="~/assets/new-wiki.png" alt="买房百科" />
                 <p>买房百科</p>
               </nuxt-link>
             </li>
             <li>
-              <nuxt-link :to="'/'+pinyin+'/realinformations/46'">
+              <nuxt-link :to="'/' + pinyin + '/realinformations/46'">
                 <img src="~/assets/new-zixun.png" alt="房产资讯" />
                 <p>房产资讯</p>
               </nuxt-link>
             </li>
             <li>
-              <nuxt-link :to="'/'+pinyin+'/count'">
+              <nuxt-link :to="'/' + pinyin + '/count'">
                 <img src="~/assets/new-compact.png" alt="房贷计算" />
                 <p>房贷计算</p>
               </nuxt-link>
             </li>
             <li>
-              <nuxt-link :to="'/'+pinyin+'/map'">
+              <nuxt-link :to="'/' + pinyin + '/map'">
                 <img src="~/assets/new-map.png" alt="地图找房" />
                 <p>地图找房</p>
               </nuxt-link>
             </li>
-          </ul>
+          </ul> -->
+          <div class="swiper-nav">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <ul>
+                  <li>
+                    <nuxt-link :to="'/' + pinyin + '/search'">
+                      <img src="~/assets/new-search.png" alt="楼盘查询" />
+                      <p>楼盘查询</p>
+                    </nuxt-link>
+                  </li>
+                </ul>
+              </div>
+              <div class="swiper-slide">
+                <ul>
+                  <li>
+                    <nuxt-link :to="'/' + pinyin + '/encyclopedia/before/56'">
+                      <img src="~/assets/new-wiki.png" alt="买房百科" />
+                      <p>买房百科</p>
+                    </nuxt-link>
+                  </li>
+                </ul>
+              </div>
+              <div class="swiper-slide">
+                <ul>
+                  <li>
+                    <nuxt-link :to="'/' + pinyin + '/realinformations/46'">
+                      <img src="~/assets/new-zixun.png" alt="房产资讯" />
+                      <p>房产资讯</p>
+                    </nuxt-link>
+                  </li>
+                </ul>
+              </div>
+              <div class="swiper-slide">
+                <ul>
+                  <li>
+                    <nuxt-link :to="'/' + pinyin + '/count'">
+                      <img src="~/assets/new-compact.png" alt="房贷计算" />
+                      <p>房贷计算</p>
+                    </nuxt-link>
+                  </li>
+                </ul>
+              </div>
+              <div class="swiper-slide">
+                <ul>
+                  <li>
+                    <nuxt-link :to="'/' + pinyin + '/participate'">
+                      <img src="~/assets/new-together.png" alt />
+                    </nuxt-link>
+                    <p>平台合作</p>
+                  </li>
+                </ul>
+              </div>
+              <div class="swiper-slide">
+                <ul>
+                  <li>
+                    <nuxt-link :to="'/' + pinyin + '/map'">
+                      <img src="~/assets/new-map.png" alt="地图找房" />
+                      <p>地图找房</p>
+                    </nuxt-link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- 如果需要分页器 -->
+            <div class="swiper-pagination1"></div>
+          </div>
         </nav>
         <div class="trend">
           <span class="trend-lead">房产头条</span>
@@ -61,12 +138,14 @@
               <div class="swiper-wrapper">
                 <div
                   class="swiper-slide"
-                  v-for="(trend,key) in trends"
+                  v-for="(trend, key) in trends"
                   :key="key"
                   :data-v="trend.id"
                   :data-t="trend.position"
                   @click="ency($event)"
-                >{{trend.title}}</div>
+                >
+                  {{ trend.title }}
+                </div>
               </div>
             </div>
           </div>
@@ -91,17 +170,17 @@
         <div class="drift-con">
           <div class="drift-list">
             <h4>
-              {{parseInt(trend_price)}}
+              {{ parseInt(trend_price) }}
               <span>元/m²</span>
             </h4>
-            <p>{{trend_mounth}}月均价</p>
+            <p>{{ trend_mounth }}月均价</p>
           </div>
           <div class="drift-list">
-            <h4>{{trend_down}}%</h4>
+            <h4>{{ trend_down }}%</h4>
             <p>环比上月</p>
           </div>
           <div class="drift-list lbom">
-            <h4>{{trend_up}}%</h4>
+            <h4>{{ trend_up }}%</h4>
             <p>同比去年</p>
           </div>
         </div>
@@ -114,7 +193,7 @@
           <div class="swiper-wrapper">
             <div class="swiper-slide">
               <div class="tegood">
-                <nuxt-link :to="'/'+pinyin+'/top/1'">
+                <nuxt-link :to="'/' + pinyin + '/top/1'">
                   <h6>刚需楼盘</h6>
                   <p>您最需要的好楼盘</p>
                   <div class="show-img">
@@ -126,7 +205,7 @@
             </div>
             <div class="swiper-slide">
               <div class="tegood">
-                <nuxt-link :to="'/'+pinyin+'/top/2'">
+                <nuxt-link :to="'/' + pinyin + '/top/2'">
                   <h6>投资地产</h6>
                   <p>有投资价值的好楼盘</p>
                   <div class="show-img">
@@ -138,7 +217,7 @@
             </div>
             <div class="swiper-slide">
               <div class="tegood">
-                <nuxt-link :to="'/'+pinyin+'/top/3'">
+                <nuxt-link :to="'/' + pinyin + '/top/3'">
                   <h6>改善住宅</h6>
                   <p>提高生活品质的好楼盘</p>
                   <div class="show-img">
@@ -150,7 +229,7 @@
             </div>
             <div class="swiper-slide">
               <div class="tegood">
-                <nuxt-link :to="'/'+pinyin+'/top/4'">
+                <nuxt-link :to="'/' + pinyin + '/top/4'">
                   <h6>现房地产</h6>
                   <p>即买即住的好楼盘</p>
                   <div class="show-img">
@@ -175,27 +254,35 @@
           <div class="panel active">
             <div class="swiper-box">
               <div class="swiper-wrapper hot-fang">
-                <div class="swiper-slide" v-for="(hot,key) in hots" :key="hot.id">
-                  <nuxt-link :to="'/'+pinyin+'/content/'+hot.id">
+                <div
+                  class="swiper-slide"
+                  v-for="(hot, key) in hots"
+                  :key="hot.id"
+                >
+                  <nuxt-link :to="'/' + pinyin + '/content/' + hot.id">
                     <div class="hua">
                       <div class="hf-pic">
-                        <img v-lazy="hot.img" :alt="hot.name" :title="hot.name" />
-                        <span>TOP{{key+1}}</span>
+                        <img
+                          v-lazy="hot.img"
+                          :alt="hot.name"
+                          :title="hot.name"
+                        />
+                        <span>TOP{{ key + 1 }}</span>
                         <p>
                           <img src="~/assets/weight.png" alt />
-                          {{hot.num}}
+                          {{ hot.num }}
                         </p>
                       </div>
                       <div class="hf-con">
-                        <h1>{{hot.name}}</h1>
+                        <h1>{{ hot.name }}</h1>
                         <p>
-                          {{hot.country}}&nbsp;&nbsp;&nbsp;{{parseInt(hot.area_min)}}
-                          <span
-                            v-if="hot.area_max"
-                          >-</span>
-                          {{parseInt(hot.area_max)}}m²
+                          {{ hot.country }}&nbsp;&nbsp;&nbsp;{{
+                            parseInt(hot.area_min)
+                          }}
+                          <span v-if="hot.area_max">-</span>
+                          {{ parseInt(hot.area_max) }}m²
                         </p>
-                        <h6>{{parseInt(hot.single_price)}}元/m²起</h6>
+                        <h6>{{ parseInt(hot.single_price) }}元/m²起</h6>
                       </div>
                     </div>
                   </nuxt-link>
@@ -206,27 +293,35 @@
           <div class="panel">
             <div class="swiper-box-tui">
               <div class="swiper-wrapper hot-fang">
-                <div class="swiper-slide" v-for="(hot,key) in tuis" :key="hot.id">
-                  <nuxt-link :to="'/'+pinyin+'/content/'+hot.id">
+                <div
+                  class="swiper-slide"
+                  v-for="(hot, key) in tuis"
+                  :key="hot.id"
+                >
+                  <nuxt-link :to="'/' + pinyin + '/content/' + hot.id">
                     <div class="hua">
                       <div class="hf-pic">
-                        <img v-lazy="hot.img" :alt="hot.name" :title="hot.name" />
-                        <span>TOP{{key+1}}</span>
+                        <img
+                          v-lazy="hot.img"
+                          :alt="hot.name"
+                          :title="hot.name"
+                        />
+                        <span>TOP{{ key + 1 }}</span>
                         <p>
                           <img src="~/assets/indexhot.png" alt />
-                          {{hot.num}}
+                          {{ hot.num }}
                         </p>
                       </div>
                       <div class="hf-con">
-                        <h1>{{hot.name}}</h1>
+                        <h1>{{ hot.name }}</h1>
                         <p>
-                          {{hot.country}}&nbsp;&nbsp;&nbsp;{{parseInt(hot.area_min)}}
-                          <span
-                            v-if="hot.area_max"
-                          >-</span>
-                          {{parseInt(hot.area_max)}}m²
+                          {{ hot.country }}&nbsp;&nbsp;&nbsp;{{
+                            parseInt(hot.area_min)
+                          }}
+                          <span v-if="hot.area_max">-</span>
+                          {{ parseInt(hot.area_max) }}m²
                         </p>
-                        <h6>{{parseInt(hot.single_price)}}元/m²起</h6>
+                        <h6>{{ parseInt(hot.single_price) }}元/m²起</h6>
                       </div>
                     </div>
                   </nuxt-link>
@@ -237,27 +332,35 @@
           <div class="panel">
             <div class="swiper-box2">
               <div class="swiper-wrapper hot-fang">
-                <div class="swiper-slide" v-for="(hot,key) in nows" :key="hot.id">
-                  <nuxt-link :to="'/'+pinyin+'/content/'+hot.id">
+                <div
+                  class="swiper-slide"
+                  v-for="(hot, key) in nows"
+                  :key="hot.id"
+                >
+                  <nuxt-link :to="'/' + pinyin + '/content/' + hot.id">
                     <div class="hua">
                       <div class="hf-pic">
-                        <img v-lazy="hot.img" :alt="hot.name" :title="hot.name" />
-                        <span>TOP{{key+1}}</span>
+                        <img
+                          v-lazy="hot.img"
+                          :alt="hot.name"
+                          :title="hot.name"
+                        />
+                        <span>TOP{{ key + 1 }}</span>
                         <p>
                           <img src="~/assets/indexsuc.png" alt />
-                          {{hot.num}}
+                          {{ hot.num }}
                         </p>
                       </div>
                       <div class="hf-con">
-                        <h1>{{hot.name}}</h1>
+                        <h1>{{ hot.name }}</h1>
                         <p>
-                          {{hot.country}}&nbsp;&nbsp;&nbsp;{{parseInt(hot.area_min)}}
-                          <span
-                            v-if="hot.area_max"
-                          >-</span>
-                          {{parseInt(hot.area_max)}}m²
+                          {{ hot.country }}&nbsp;&nbsp;&nbsp;{{
+                            parseInt(hot.area_min)
+                          }}
+                          <span v-if="hot.area_max">-</span>
+                          {{ parseInt(hot.area_max) }}m²
                         </p>
-                        <h6>{{parseInt(hot.single_price)}}元/m²起</h6>
+                        <h6>{{ parseInt(hot.single_price) }}元/m²起</h6>
                       </div>
                     </div>
                   </nuxt-link>
@@ -275,16 +378,17 @@
           <nuxt-link :to="'/' + pinyin + '/dynamic'">
             <span class="m-d-more" id="dynamic">
               共
-              <i>{{dong.num}}</i>条
+              <i>{{ dong.num }}</i
+              >条
               <img src="~/assets/m-go.png" alt />
             </span>
           </nuxt-link>
         </h3>
         <ul class="dong-t">
           <li>
-            <h1>{{dong.name}}最新房源动态</h1>
-            <p>{{dong.introduce}}</p>
-            <h5>{{dong.time}}</h5>
+            <h1>{{ dong.name }}最新房源动态</h1>
+            <p>{{ dong.introduce }}</p>
+            <h5>{{ dong.time }}</h5>
           </li>
         </ul>
       </div>
@@ -301,19 +405,30 @@
               @click.self="ency($event)"
             >
               <nuxt-link
-                :to="'/'+pinyin+'/encyclopediaArticle/'+left_info.position+'/'+left_info.id"
+                :to="
+                  '/' +
+                  pinyin +
+                  '/encyclopediaArticle/' +
+                  left_info.position +
+                  '/' +
+                  left_info.id
+                "
               >
                 <h2
                   :data-v="left_info.id"
                   :data-t="left_info.position"
                   @click.self="ency($event)"
-                >{{left_info.title}}</h2>
+                >
+                  {{ left_info.title }}
+                </h2>
                 <p
                   v-if="left_info.description"
                   :data-v="left_info.id"
                   :data-t="left_info.position"
                   @click.self="ency($event)"
-                >{{left_info.description}}</p>
+                >
+                  {{ left_info.description }}
+                </p>
               </nuxt-link>
             </div>
             <div class="lou_dong_right">
@@ -325,19 +440,30 @@
                 @click.self="ency($event)"
               >
                 <nuxt-link
-                  :to="'/'+pinyin+'/encyclopediaArticle/'+right_info1.position+'/'+right_info1.id"
+                  :to="
+                    '/' +
+                    pinyin +
+                    '/encyclopediaArticle/' +
+                    right_info1.position +
+                    '/' +
+                    right_info1.id
+                  "
                 >
                   <h2
                     :data-v="right_info1.id"
                     :data-t="right_info1.position"
                     @click.self="ency($event)"
-                  >{{right_info1.title}}</h2>
+                  >
+                    {{ right_info1.title }}
+                  </h2>
                   <p
                     v-if="right_info1.description"
                     :data-v="right_info1.id"
                     :data-t="right_info1.position"
                     @click.self="ency($event)"
-                  >{{right_info1.description}}</p>
+                  >
+                    {{ right_info1.description }}
+                  </p>
                 </nuxt-link>
               </div>
               <div
@@ -348,18 +474,29 @@
                 @click.self="ency($event)"
               >
                 <nuxt-link
-                  :to="'/'+pinyin+'/encyclopediaArticle/'+right_info2.position+'/'+right_info2.id"
+                  :to="
+                    '/' +
+                    pinyin +
+                    '/encyclopediaArticle/' +
+                    right_info2.position +
+                    '/' +
+                    right_info2.id
+                  "
                 >
                   <h2
                     :data-v="right_info2.id"
                     :data-t="right_info2.position"
                     @click.self="ency($event)"
-                  >{{right_info2.title}}</h2>
+                  >
+                    {{ right_info2.title }}
+                  </h2>
                   <p
                     :data-v="right_info2.id"
                     :data-t="right_info2.position"
                     @click.self="ency($event)"
-                  >{{right_info2.description}}</p>
+                  >
+                    {{ right_info2.description }}
+                  </p>
                 </nuxt-link>
               </div>
             </div>
@@ -432,11 +569,15 @@
       <!-- 房产导购 -->
       <ul class="lists s1" v-show="s1">
         <li v-for="s in s1_con" :key="s.id">
-          <nuxt-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
+          <nuxt-link
+            :to="
+              '/' + pinyin + '/encyclopediaArticle/' + s.position + '/' + s.id
+            "
+          >
             <div class="list">
               <div class="left">
-                <h5>{{s.title}}</h5>
-                <p>{{s.source?s.source:'允家新房'}} &nbsp;{{s.time}}</p>
+                <h5>{{ s.title }}</h5>
+                <p>{{ s.source ? s.source : "允家新房" }} &nbsp;{{ s.time }}</p>
               </div>
               <div class="right">
                 <img v-lazy="s.img" alt />
@@ -448,11 +589,15 @@
       <!-- 百科 -->
       <ul class="lists s2" v-show="s2">
         <li v-for="s in s2_con" :key="s.id">
-          <nuxt-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
+          <nuxt-link
+            :to="
+              '/' + pinyin + '/encyclopediaArticle/' + s.position + '/' + s.id
+            "
+          >
             <div class="list">
               <div class="left">
-                <h5>{{s.title}}</h5>
-                <p>{{s.source?s.source:'允家新房'}} &nbsp;{{s.time}}</p>
+                <h5>{{ s.title }}</h5>
+                <p>{{ s.source ? s.source : "允家新房" }} &nbsp;{{ s.time }}</p>
               </div>
               <div class="right">
                 <img v-lazy="s.img" alt />
@@ -464,11 +609,15 @@
       <!-- 本地楼市 -->
       <ul class="lists s3" v-show="s3">
         <li v-for="s in s3_con" :key="s.id">
-          <nuxt-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
+          <nuxt-link
+            :to="
+              '/' + pinyin + '/encyclopediaArticle/' + s.position + '/' + s.id
+            "
+          >
             <div class="list">
               <div class="left">
-                <h5>{{s.title}}</h5>
-                <p>{{s.source?s.source:'允家新房'}} &nbsp;{{s.time}}</p>
+                <h5>{{ s.title }}</h5>
+                <p>{{ s.source ? s.source : "允家新房" }} &nbsp;{{ s.time }}</p>
               </div>
               <div class="right">
                 <img v-lazy="s.img" alt />
@@ -480,11 +629,15 @@
       <!-- 资讯 -->
       <ul class="lists s4" v-show="s4">
         <li v-for="s in s4_con" :key="s.id">
-          <nuxt-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
+          <nuxt-link
+            :to="
+              '/' + pinyin + '/encyclopediaArticle/' + s.position + '/' + s.id
+            "
+          >
             <div class="list">
               <div class="left">
-                <h5>{{s.title}}</h5>
-                <p>{{s.source?s.source:'允家新房'}} &nbsp;{{s.time}}</p>
+                <h5>{{ s.title }}</h5>
+                <p>{{ s.source ? s.source : "允家新房" }} &nbsp;{{ s.time }}</p>
               </div>
               <div class="right">
                 <img v-lazy="s.img" alt />
@@ -496,11 +649,15 @@
       <!-- 热点新闻 -->
       <ul class="lists s5" v-show="s5">
         <li v-for="s in s5_con" :key="s.id">
-          <nuxt-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
+          <nuxt-link
+            :to="
+              '/' + pinyin + '/encyclopediaArticle/' + s.position + '/' + s.id
+            "
+          >
             <div class="list">
               <div class="left">
-                <h5>{{s.title}}</h5>
-                <p>{{s.source?s.source:'允家新房'}} &nbsp;{{s.time}}</p>
+                <h5>{{ s.title }}</h5>
+                <p>{{ s.source ? s.source : "允家新房" }} &nbsp;{{ s.time }}</p>
               </div>
               <div class="right">
                 <img v-lazy="s.img" alt />
@@ -512,11 +669,15 @@
       <!-- 成交报告 -->
       <ul class="lists s6" v-show="s6">
         <li v-for="s in s6_con" :key="s.id">
-          <nuxt-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
+          <nuxt-link
+            :to="
+              '/' + pinyin + '/encyclopediaArticle/' + s.position + '/' + s.id
+            "
+          >
             <div class="list">
               <div class="left">
-                <h5>{{s.title}}</h5>
-                <p>{{s.source?s.source:'允家新房'}} &nbsp;{{s.time}}</p>
+                <h5>{{ s.title }}</h5>
+                <p>{{ s.source ? s.source : "允家新房" }} &nbsp;{{ s.time }}</p>
               </div>
               <div class="right">
                 <img v-lazy="s.img" alt />
@@ -528,11 +689,15 @@
       <!-- 土拍 -->
       <ul class="lists s7" v-show="s7">
         <li v-for="s in s7_con" :key="s.id">
-          <nuxt-link :to="'/'+pinyin+'/encyclopediaArticle/'+s.position+'/'+s.id">
+          <nuxt-link
+            :to="
+              '/' + pinyin + '/encyclopediaArticle/' + s.position + '/' + s.id
+            "
+          >
             <div class="list">
               <div class="left">
-                <h5>{{s.title}}</h5>
-                <p>{{s.source?s.source:'允家新房'}} &nbsp;{{s.time}}</p>
+                <h5>{{ s.title }}</h5>
+                <p>{{ s.source ? s.source : "允家新房" }} &nbsp;{{ s.time }}</p>
               </div>
               <div class="right">
                 <img v-lazy="s.img" alt />
@@ -554,20 +719,25 @@
           </span>
         </nuxt-link>
       </h4>
-      <div class="wen-list" v-for="(q,key) in questions" :key="key">
-        <nuxt-link :to="'/'+pinyin+'/questions/'+q.id">
+      <div class="wen-list" v-for="(q, key) in questions" :key="key">
+        <nuxt-link :to="'/' + pinyin + '/questions/' + q.id">
           <h5>
             <span>问</span>
-            {{q.question}}
+            {{ q.question }}
           </h5>
         </nuxt-link>
         <span class="answer">答</span>
         <p class="wen-con">
-          <span>{{q.answer}}</span>
-          <i class="wen-list-more" @click="getwens(q.id)" v-if="q.answer.length>50">[全文]</i>
+          <span>{{ q.answer }}</span>
+          <i
+            class="wen-list-more"
+            @click="getwens(q.id)"
+            v-if="q.answer.length > 50"
+            >[全文]</i
+          >
         </p>
         <p>
-          <span class="wen-time">{{q.time}}</span>
+          <span class="wen-time">{{ q.time }}</span>
           <span class="Fabulous">
             <img
               v-lazy="click"
@@ -584,7 +754,8 @@
               :data-v="q.id"
               :data-n="q.num"
               :type="q.my_like"
-            >有用({{q.num}})</span>
+              >有用({{ q.num }})</span
+            >
           </span>
         </p>
       </div>
@@ -592,51 +763,52 @@
     <div class="line"></div>
     <!-- 帮我找房 -->
     <div class="help">
-      <nuxt-link :to="'/'+pinyin+'/help'">
+      <nuxt-link :to="'/' + pinyin + '/help'">
         <img src="~/assets/m-help.jpg" alt />
       </nuxt-link>
     </div>
     <div class="line"></div>
     <!-- 推荐楼盘 -->
-    <div class="recommen" v-if="buildings.length>1">
+    <div class="recommen" v-if="buildings.length > 1">
       <h4>
         为你推荐
         <span>
           <i class="iconfont iconbroadcast"></i>
-          为您找到{{count}}个
+          为您找到{{ count }}个
         </span>
       </h4>
       <div class="re-con">
         <div class="re-list" v-for="b in buildings" :key="b.id">
-          <nuxt-link :to="'/'+pinyin+'/content/'+b.id">
+          <nuxt-link :to="'/' + pinyin + '/content/' + b.id">
             <div class="re-con-left">
               <img v-lazy="b.img" :alt="b.name" :title="b.name" />
               <span>
                 <i class="iconfont iconyanjing"></i>
-                {{b.num}}
+                {{ b.num }}
               </span>
             </div>
             <div class="re-con-right">
               <h5>
-                {{b.name}}
-                <span>{{b.status}}</span>
+                {{ b.name }}
+                <span>{{ b.status }}</span>
               </h5>
               <p class="price">
-                <span>{{b.single_price}}</span>元/m²
+                <span>{{ b.single_price }}</span
+                >元/m²
               </p>
               <p class="area">
-                <span>{{b.city}}-{{b.country}}</span>
+                <span>{{ b.city }}-{{ b.country }}</span>
                 <span>建面</span>
                 <span v-if="b.area_max">
-                  {{parseInt(b.area_min)}}
+                  {{ parseInt(b.area_min) }}
                   <span id="arealine" v-if="b.area_max">-</span>
-                  {{parseInt(b.area_max)}}m²
+                  {{ parseInt(b.area_max) }}m²
                 </span>
               </p>
               <p class="tabs">
-                <span class="strong">{{b.decorate}}</span>
-                <span v-if="b.railway">{{b.railway}}</span>
-                <span>{{b.type}}</span>
+                <span class="strong">{{ b.decorate }}</span>
+                <span v-if="b.railway">{{ b.railway }}</span>
+                <span>{{ b.type }}</span>
               </p>
             </div>
           </nuxt-link>
@@ -669,8 +841,12 @@ export default {
     let city = context.store.state.city;
     let token = context.store.state.cookie.token;
     let nn = context.store.state.pinyin;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
+    let kid = context.store.state.cookie.kid
+      ? context.store.state.cookie.kid
+      : "";
+    let other = context.store.state.cookie.other
+      ? context.store.state.cookie.other
+      : "";
     if (!city) {
       city = 0;
       context.store.commit("setcity", { city: city });
@@ -682,8 +858,8 @@ export default {
           platform: 2,
           token: token,
           ip: ip,
-          other:other,
-          kid:kid,
+          other: other,
+          kid: kid,
         })
         .then((resp) => {
           let data = resp.data.data;
@@ -790,12 +966,12 @@ export default {
       tel: res.data.phone,
       cityname: res.city.name,
       city: res.city.id,
-      banner:res.data.banner
+      banner: res.data.banner,
     };
   },
   data() {
     return {
-      banner:[],
+      banner: [],
       kk: 0,
       lll: false,
       isload: true,
@@ -879,7 +1055,7 @@ export default {
     method1: function () {
       newsticker();
     },
-    gobanner:function(){
+    gobanner: function () {
       let url = window.location.href;
       url = url.split("?")[1];
       if (url) {
@@ -1094,7 +1270,7 @@ export default {
     },
   },
   mounted() {
-    $cookies.set('ip',ip_arr["ip"])
+    $cookies.set("ip", ip_arr["ip"]);
     let h = $(".Index").height();
     if (h < 700) {
       $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
@@ -1115,6 +1291,16 @@ export default {
     if (cityname) {
       this.cityname = cityname;
     }
+    var swiper07 = new Swiper(".swiper-nav", {
+      slidesPerView: 5,
+      spaceBetween: 0,
+      resistanceRatio: 0,
+      slidesOffsetAfter: 0,
+      slidesOffsetBefore: 0,
+      pagination: {
+        el: ".swiper-pagination1",
+      },
+    });
     var mySwiper = new Swiper(".swiper-container9", {
       direction: "vertical", // 垂直切换选项
       autoplay: true,
@@ -1330,11 +1516,38 @@ li {
   margin: 0;
   padding: 0;
 }
+.swiper-nav {
+  position: relative;
+  padding-bottom: 0.25rem;
+}
+.swiper-pagination1 {
+  position: absolute;
+  bottom: 0.5rem!important;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+}
+.swiper-pagination1 >>> .swiper-pagination-bullet {
+  width: 0.5rem;
+  height: 0.125rem;
+  border-radius: 0.0625rem;
+  background-color: #bfbfbf;
+  margin: 0!important;
+}
+.swiper-pagination1 >>> .swiper-pagination-bullet-active {
+  width: 0.875rem;
+  height: 0.125rem;
+  border-radius: 0.0625rem;
+  background-color: #2ac66e;
+}
+.m-na .swiper-nav {
+  overflow: hidden;
+}
 
 .m-na ul li {
   height: 100px;
   float: left;
-  width: 20%;
+  /* width: 20%; */
   text-align: center;
   list-style: none;
 }
