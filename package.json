@@ -22,7 +22,7 @@
     "@babel/runtime": "^7.9.6",
     "@gauseen/nuxt-proxy": "^1.0.1",
     "@nuxtjs/component-cache": "^1.1.5",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-loader": "^8.1.0",
     "echarts": "^4.7.0",
     "moment": "^2.24.0",
