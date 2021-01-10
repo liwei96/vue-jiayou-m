@@ -16,6 +16,7 @@
         </router-link>
       </p>
     </nav>
+    <img class="imgbox" :src="banner.img" alt="" @click="gohome" v-if="banner.length!=0">
     <div class="top">
       <div class="m-menu visible-xs-block .visible-sm--block">
         <ul>
@@ -327,18 +328,18 @@ export default {
           other:other
         })
         .then(resp => {
-          let data = resp.data.data.conditions;
+          let data = resp.data.data;
           return data;
         })
     ]);
     return {
-      citys: res2.cities,
-      dities: res2.railways,
-      single_prices: res2.single_prices,
-      total_prices: res2.total_prices,
-      apartments: res2.apartments,
-      build_types: res2.build_types,
-      features: res2.features,
+      citys: res2.conditions.cities,
+      dities: res2.conditions.railways,
+      single_prices: res2.conditions.single_prices,
+      total_prices: res2.conditions.total_prices,
+      apartments: res2.conditions.apartments,
+      build_types: res2.conditions.build_types,
+      features: res2.conditions.features,
       buildings: res1.datas,
       jkl: jkl,
       area1: area1,
@@ -355,7 +356,8 @@ export default {
       city:city,
       title:res1.title,
       keywords:res1.keywords,
-      description:res1.description
+      description:res1.description,
+      banner: res2.banner
     };
   },
   data() {
@@ -427,6 +429,11 @@ export default {
     }
   },
   methods: {
+    gohome() {
+      if(this.banner.url) {
+        window.location.href=this.banner.url
+      }
+    },
     start_data() {
       this.nn = this.$route.params.name;
       this.kk = false;
@@ -999,6 +1006,11 @@ export default {
 * {
   padding: 0;
   margin: 0;
+}
+.imgbox {
+  width: 92%;
+  margin-left: 4%;
+  border-radius: .25rem;
 }
 li {
   list-style: none;

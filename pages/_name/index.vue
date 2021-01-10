@@ -1056,10 +1056,13 @@ export default {
       newsticker();
     },
     gobanner: function () {
+      if(!this.banner.url) {
+        return
+      }
       let url = window.location.href;
       url = url.split("?")[1];
       if (url) {
-        window.location.href = this.banner.url + "?" + url;
+        window.location.href = this.banner.url;
       } else {
         window.location.href = this.banner.url;
       }

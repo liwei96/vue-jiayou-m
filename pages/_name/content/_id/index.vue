@@ -8,7 +8,12 @@
         <h2>
           <img class="top-ll" src="~/assets/return.png" alt @click="goback" />
           <img class="content-img" src="~/assets/content-logo.png" alt />
-          <img class="topright tophome" src="~/assets/mapcai.png" alt @click="listtype = !listtype"/>
+          <img
+            class="topright tophome"
+            src="~/assets/mapcai.png"
+            alt
+            @click="listtype = !listtype"
+          />
           <!-- <img class="topright tophome" src="~/assets/top-house.png" alt /> -->
           <img
             class="topright"
@@ -252,10 +257,34 @@
           </p>-->
           <button @click="huomsg = true">活动规则</button>
         </nav>
-        <div class="top">
+        <div class="hong-tit" v-if="activity.length != 0">
+          <span>返乡置业</span>1亿购房补贴大放送
+        </div>
+        <div class="hui-con hong" v-if="activity.length != 0">
+          <div class="hui-left">
+            <h6>
+              <span>￥{{ activity.money }}</span
+              >购房补贴
+            </h6>
+            <p>购房补贴金后将与您手机号绑定</p>
+          </div>
+          <div class="hui-right">
+            <button
+              @click="
+                pop
+              "
+            >
+              立即领取
+            </button>
+            <p>
+              <span>{{ activity.num }}人</span>已领取
+            </p>
+          </div>
+        </div>
+        <div class="top" v-if="activity.length == 0">
           <img src="~/assets/tuna-hased.png" alt />
           <div class="pin-bao" @click="xiangs(22)">领取优惠</div>
-          <p class="pin-msg">{{ sign.num + 55 }}人已领取</p>
+          <p class="pin-msg">{{ 85 + 55 }}人已领取</p>
           <p class="pin-left">
             售楼处专供允家平台客户<span>（{{ endtime.substr(5) }}截止）</span>
           </p>
@@ -285,9 +314,9 @@
           <div class="pin-bao y1" v-show="!newimg" @click="xiang(28)">
             抢优惠券
           </div>
-          <p class="pin-msg ym">{{ sign.num }}人已抢到</p>
+          <p class="pin-msg ym">{{ 256 }}人已抢到</p>
           <p class="pin-time">
-            免费专车1对1服务限时券<span>（剩余{{ sign.num - 123 }}张）</span>
+            免费专车1对1服务限时券<span>（剩余{{ 256 - 123 }}张）</span>
           </p>
           <img src="~/assets/youhui.png" alt />
           <!-- <div class="bom">
@@ -313,26 +342,12 @@
           <img @click="huomsg = false" src="~/assets/w-del.png" alt />
           <div>
             <p>
-              1、本次团购活动以分档累计补发的方案执行，通过家园网站成交该项目具体团购费用如下所示：
+              平台优惠发放时间：待开发商或总代理公司补贴发放到位后尽快发放。
             </p>
-            <p>0-5套---------每套1000元</p>
-            <p>6-10套--------每套2000元</p>
-            <p>11-15套-------每套3000元</p>
-            <p>16-20套-------每套4000元</p>
-            <p>21套以上------每套5000元</p>
-            <p>
-              2、结算时间：网签成功后次月20号发放。补发费用待该范围内的最后一套网签成功后次月20号发放
-            </p>
-            <p>
-              3、核算方式：由开发商或代理公司判定为家园平台客户即可享受这个优惠
-            </p>
-            <p>
-              4、结算方式：提供已实名的支付宝账户给与您对接的家园咨询师，规定时间内会将优惠费用打至该账户
-            </p>
-            <p>
-              详细活动方案请致电允家客服电话：
-              <span>400-718-6686</span> 注：活动最终解释权归家园所有
-            </p>
+            <p>核算方式：由开发商或代理公司判定为允家平台客户即可享受这个优惠。</p>
+            <p>结算方式：提供已实名的支付宝账户给与您对接的允家咨询师，规定时间内会将优惠费用打至该账户。</p>
+            <p>详细活动方案请致允家电客服电话：4007186686</p>
+            <p>注：活动最终解释权归允家所有</p>
           </div>
         </div>
       </div>
@@ -374,7 +389,7 @@
           <h4>最新加推楼盘</h4>
           <p>{{ tui.introduce }}</p>
         </div>
-        
+
         <div class="t-o o1"></div>
         <div class="t-o o2" v-show="tui"></div>
         <div class="t-l l1"></div>
@@ -1181,6 +1196,15 @@
       </div>
     </transition>
     <div class="tsmsg" v-show="tstype">{{ tsmsg }}</div>
+    <van-popup v-model="show" :style="{ background: 'rgba(0,0,0,0)' }">
+      <hong @close="close" :id="id"
+        :txt="'返乡置业+领取补贴'"
+        :name="'领取优惠'"
+        :typebtn="1"
+        :typenum="115"
+        :proname="abstract.name"
+        :num="activity.money"></hong>
+    </van-popup>
   </div>
 </template>
 <script>
@@ -1191,6 +1215,7 @@ import "swiper/css/swiper.min.css";
 // import { echarts } from "./static/js/echarts.min.js";
 import axios from "axios";
 import Loading from "@/components/loading.vue";
+import hong from '@/components/hong.vue'
 import ReconnectingWebSocket from "reconnecting-websocket";
 import {
   content_data,
@@ -1210,6 +1235,7 @@ import {
 export default {
   name: "Content",
   components: {
+    hong,
     "my-loading": Loading,
     "foot-view": footView,
     // "talk": talk,
@@ -1412,7 +1438,7 @@ export default {
       hu: res1.info.constant.apartments,
       live: res1.info.constant.analysis.live,
       invest: res1.info.constant.analysis.invest,
-      searchnum: res1.info.varialble.num.search_num,
+      // searchnum: res1.info.varialble.num.search_num,
       chengjiao: res1.info.constant.deals,
       times: res1.times,
       prices: res1.prices,
@@ -1440,19 +1466,23 @@ export default {
       collect: res1.info.varialble.collect,
       checks: true,
       city: res1.info.constant.city,
-      tuan: res1.activity.group.flag,
-      group_buy: res1.activity.group.info,
-      sign: res1.activity.sign,
+      // tuan: res1.activity.group.flag,
+      // group_buy: res1.activity.group.info,
+      // sign: res1.activity.sign,
       open: res1.head.open,
       topimg: res1.topimg,
       max: res1.max,
       ws: false,
       share: res1.share_info,
       banner: res1.banner,
+      activity: res1.activity || [],
     };
   },
   data() {
     return {
+      abstract: [],
+      remark: '',
+      show: false,
       IDcode: "",
       ishengda: false,
       tstype: false,
@@ -1530,7 +1560,7 @@ export default {
       hu: [],
       invest: [],
       live: [],
-      searchnum: "",
+      searchnum: 156,
       chengjiao: [],
       prices: [],
       times: [],
@@ -1606,7 +1636,7 @@ export default {
       defaultimg: require("~/assets/default.jpg"),
       shoupingimg: require("~/assets/shouping.png"),
       callmsg: "",
-      listtype:false
+      listtype: false,
     };
   },
   head() {
@@ -1635,6 +1665,12 @@ export default {
     next();
   },
   methods: {
+    pop(){
+      this.show = true;
+    },
+    close() {
+      this.show = false
+    },
     gotalk() {
       let url = window.location.href;
       let newurl = url.split("?")[0];
@@ -1698,7 +1734,10 @@ export default {
       let url = window.location.href;
       url = url.split("?")[1];
       let op = {};
-      if (url && url.indexOf("scid") !== -1) {
+      if (
+        url &&
+        (url.indexOf("staff_id") !== -1 || url.indexOf("scid") !== -1)
+      ) {
         let wx = {
           platform: 2,
           city: c,
@@ -1729,7 +1768,6 @@ export default {
         };
         op = normal;
       }
-
       trend_put(op).then((res) => {
         if (res.data.code == 200) {
           that.warning = "领取成功";
@@ -2237,7 +2275,10 @@ export default {
       let options = {};
       let url = window.location.href;
       url = url.split("?")[1];
-      if (url && url.indexOf("scid") !== -1) {
+      if (
+        url &&
+        (url.indexOf("staff_id") !== -1 || url.indexOf("scid") !== -1)
+      ) {
         let wx = {
           platform: 2,
           city: c,
@@ -2500,10 +2541,13 @@ export default {
       }
     },
     gobanner() {
+      if(!this.banner.url) {
+        return
+      }
       let url = window.location.href;
       url = url.split("?")[1];
       if (url) {
-        window.location.href = this.banner.url + "?" + url;
+        window.location.href = this.banner.url;
       } else {
         window.location.href = this.banner.url;
       }
@@ -3795,6 +3839,91 @@ body {
   background-color: #fff;
   top: 0;
 }
+.hong-tit {
+  width: 92%;
+  margin-left: 4%;
+  height: 1.75rem;
+  border-radius: 0.25rem 0.25rem 0 0;
+  line-height: 1.75rem;
+  background: linear-gradient(90deg, #ff4b2d, #ffa146);
+  color: #fff;
+  font-size: 0.8125rem;
+  margin-top: 1.125rem;
+}
+.hong-tit span {
+  margin-left: 0.75rem;
+  margin-right: 0.5rem;
+}
+.hong-tit .hong {
+  margin-top: 0;
+}
+.hui-right button {
+  background: linear-gradient(90deg, #ff4b2d, #ffa146);
+  border-radius: 0.8125rem;
+}
+.hong-tit .hong .hui-left p {
+  color: #d95b42;
+  font-size: 0.75rem;
+}
+.hong-tit .hong .hui-left h6 {
+  color: #ff4b28;
+  font-size: 1rem;
+}
+.hong-tit .hong .hui-left h6 span {
+  font-size: 1.25rem;
+}
+.hui-con {
+  width: 92%;
+  margin-left: 4%;
+  height: 4.6875rem;
+  border-radius: 0.0625rem;
+  background: url("~assets/b1.png") no-repeat;
+  background-size: 100%;
+}
+.hui-left {
+  padding-left: 1rem;
+  padding-top: 0.625rem;
+  float: left;
+}
+.hui-left p {
+  color: #af917d;
+  font-size: 0.75rem;
+}
+.hui-left h6 {
+  color: #ff7519;
+  font-size: 0.625rem;
+  margin-bottom: 0.125rem;
+}
+.hui-left h6 span {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+.hui-left h6 i {
+  font-style: normal;
+  color: #201b18;
+  font-size: 0.625rem;
+}
+.hui-right {
+  padding-top: 0.6875rem;
+  float: right;
+  margin-right: 0.9375rem;
+}
+.hui-right button {
+  width: 4.6875rem;
+  height: 1.625rem;
+  text-align: center;
+  line-height: 1.625rem;
+  color: #fff;
+  font-size: 0.75rem;
+  border: 0;
+  background-color: #ff7519;
+  border-radius: .8125rem;
+}
+.hui-right p {
+  color: #ff7519;
+  font-size: 0.75rem;
+  margin-top: 0.1875rem;
+}
 .iscookie p {
   width: 80vw;
   height: 10vh;
@@ -4567,7 +4696,7 @@ body {
 .pin nav {
   padding: 1.5625rem 0 0 4%;
   overflow: hidden;
-  margin-bottom: 24px;
+  margin-bottom: 1.25rem;
 }
 .pin nav h3 {
   float: left;
@@ -4610,9 +4739,9 @@ body {
   position: absolute;
   width: 4.6875rem;
   height: 1.625rem;
-  background: linear-gradient(270deg, #FF7519, #FFAE3D);
+  background: linear-gradient(270deg, #ff7519, #ffae3d);
   border-radius: 0.8125rem;
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 0.75rem;
   text-align: center;
   line-height: 1.625rem;
@@ -4623,29 +4752,29 @@ body {
   position: absolute;
   right: 9.2%;
   top: 55%;
-  color: #FF7519;
+  color: #ff7519;
   font-size: 0.75rem;
 }
 .pin .pin-left {
   position: absolute;
   left: 8%;
   top: 56%;
-  color: #E6813D;
+  color: #e6813d;
   font-size: 0.75rem;
 }
 .pin .pin-left span {
-  color: #211C18;
+  color: #211c18;
   font-size: 0.625rem;
 }
 .pin .pin-time {
   position: absolute;
-  color: #3A80BA;
+  color: #3a80ba;
   font-size: 0.625rem;
   top: 55%;
   left: 8%;
 }
 .pin .pin-time span {
-  color: #211C18;
+  color: #211c18;
   font-size: 0.625rem;
 }
 .pin .top,
@@ -4657,11 +4786,11 @@ body {
 }
 .pin .y1 {
   top: 14%;
-  background: linear-gradient(270deg, #348AFF, #6ACCFF);
+  background: linear-gradient(270deg, #348aff, #6accff);
 }
 .pin .ym {
   top: 55%;
-  color: #40A2F4;
+  color: #40a2f4;
 }
 .pin img {
   width: 92%;
