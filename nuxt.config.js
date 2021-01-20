@@ -21,7 +21,8 @@ export default {
     script: [
       // { src: 'https://cdn.bootcss.com/jquery/3.5.0/jquery.min.js' },
       {
-        src: '//libs.baidu.com/jquery/2.0.0/jquery.min.js'
+        // src: '//libs.baidu.com/jquery/2.0.0/jquery.min.js'
+        src: '/js/jquery.min.js'
       },
       {
         src: '//res.wx.qq.com/open/js/jweixin-1.6.0.js'

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import ReconnectingWebSocket from 'reconnecting-websocket'
 export default ({
   app,
   store
@@ -151,11 +152,23 @@ export default ({
       toQuery.uuid = timestamp;
       store.state.cookie.uuid = timestamp
       localStorage.setItem('uuid', timestamp)
+      if (!store.state.ws) {
+        let ws = new ReconnectingWebSocket(
+          "wss://ws.edefang.net?uuid=" + timestamp
+        );
+        store.dispatch("setws", ws);
+      }
       next({
         path: to.path,
         query: toQuery
       })
     } else {
+      if (!store.state.ws) {
+        let ws = new ReconnectingWebSocket(
+          "wss://ws.edefang.net?uuid=" + to.query.uuid
+        );
+        store.dispatch("setws", ws);
+      }
       next()
     }
     // next()

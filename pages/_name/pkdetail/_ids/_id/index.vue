@@ -717,6 +717,9 @@ export default {
   padding: 0;
   margin: 0;
 }
+.Pkdetail {
+  padding-bottom: 4rem;
+}
 h3 {
   color: #333333;
   text-align: center;
@@ -1237,4 +1240,5 @@ h3 img {
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 1000;
 }
+
 </style>

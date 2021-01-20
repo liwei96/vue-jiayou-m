@@ -1346,7 +1346,9 @@ body {
   font-size: .625rem;
   margin-right: 1.86666667%;
 }
-
+.m-botnav .havenew {
+  color: #ff9a26;
+}
 .m-botnav p img {
   width: 46%;
   display: block;

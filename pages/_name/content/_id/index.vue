@@ -269,13 +269,7 @@
             <p>购房补贴金后将与您手机号绑定</p>
           </div>
           <div class="hui-right">
-            <button
-              @click="
-                pop
-              "
-            >
-              立即领取
-            </button>
+            <button @click="pop">立即领取</button>
             <p>
               <span>{{ activity.num }}人</span>已领取
             </p>
@@ -344,8 +338,12 @@
             <p>
               平台优惠发放时间：待开发商或总代理公司补贴发放到位后尽快发放。
             </p>
-            <p>核算方式：由开发商或代理公司判定为允家平台客户即可享受这个优惠。</p>
-            <p>结算方式：提供已实名的支付宝账户给与您对接的允家咨询师，规定时间内会将优惠费用打至该账户。</p>
+            <p>
+              核算方式：由开发商或代理公司判定为允家平台客户即可享受这个优惠。
+            </p>
+            <p>
+              结算方式：提供已实名的支付宝账户给与您对接的允家咨询师，规定时间内会将优惠费用打至该账户。
+            </p>
             <p>详细活动方案请致允家电客服电话：4007186686</p>
             <p>注：活动最终解释权归允家所有</p>
           </div>
@@ -1000,7 +998,7 @@
         class="m-botnav visible-xs-block .visible-sm-block"
         v-show="!iswxsid"
       >
-        <p id="m_shou" @click="gotalk">
+        <p id="m_shou" @click="gotalk" v-if="totalnum <= 0 || !totalnum">
           <!-- <img
             id="fork"
             src="~/assets/forks.png"
@@ -1019,6 +1017,11 @@
           <img src="~/assets/talkimg.png" alt />
           在线咨询
           <span v-show="wsshow">{{ wsnum }}</span>
+        </p>
+        <p id="m_shou" class="havenew" @click="gotalk" v-if="totalnum > 0">
+          <img src="~/assets/talking.gif" alt />
+          有新消息
+          <span>{{ totalnum }}</span>
         </p>
         <a :href="'tel:' + call">
           <button class="m-pho">
@@ -1197,14 +1200,61 @@
     </transition>
     <div class="tsmsg" v-show="tstype">{{ tsmsg }}</div>
     <van-popup v-model="show" :style="{ background: 'rgba(0,0,0,0)' }">
-      <hong @close="close" :id="id"
+      <hong
+        @close="close"
+        :id="id"
         :txt="'返乡置业+领取补贴'"
         :name="'领取优惠'"
         :typebtn="1"
         :typenum="115"
         :proname="abstract.name"
-        :num="activity.money"></hong>
+        :num="activity.money"
+      ></hong>
     </van-popup>
+    <div class="talkbox" v-if="talktype">
+      <img
+        src="~/assets/w-del.png"
+        alt=""
+        class="del"
+        @click="talktype = false"
+      />
+      <div class="peo">
+        <div class="left">
+          <img :src="staffimg" alt="" />
+        </div>
+        <div class="right">
+          <h3>{{ staffname }} <span>新房咨询</span></h3>
+          <p>从业咨询服务6年</p>
+        </div>
+      </div>
+      <div class="msg">
+        <div class="li">
+          <p class="num">
+            <span>{{ usernum }}</span
+            >人
+          </p>
+          <p class="txt">服务客户</p>
+        </div>
+        <div class="li">
+          <p class="num">
+            <span>{{ looknum }}</span
+            >次
+          </p>
+          <p class="txt">带看客户</p>
+        </div>
+        <div class="li">
+          <p class="num">
+            <span>{{ rate }}</span
+            >%
+          </p>
+          <p class="txt">好评率</p>
+        </div>
+      </div>
+      <div class="btn">
+        <button @click="gotalk">在线咨询</button>
+        <button @click="talktype = false">稍后咨询</button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -1215,7 +1265,7 @@ import "swiper/css/swiper.min.css";
 // import { echarts } from "./static/js/echarts.min.js";
 import axios from "axios";
 import Loading from "@/components/loading.vue";
-import hong from '@/components/hong.vue'
+import hong from "@/components/hong.vue";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import {
   content_data,
@@ -1480,8 +1530,9 @@ export default {
   },
   data() {
     return {
+      ws: {},
       abstract: [],
-      remark: '',
+      remark: "",
       show: false,
       IDcode: "",
       ishengda: false,
@@ -1637,6 +1688,15 @@ export default {
       shoupingimg: require("~/assets/shouping.png"),
       callmsg: "",
       listtype: false,
+      totalnum: 0,
+      usernum: 0,
+      looknum: 0,
+      rate: 0,
+      stafftel: 0,
+      staffname: "",
+      staffimg: "",
+      talktype: false,
+      staffid: 152
     };
   },
   head() {
@@ -1665,19 +1725,40 @@ export default {
     next();
   },
   methods: {
-    pop(){
+    putcard() {
+      let urlid = this.$route.params.id;
+      let id = sessionStorage.getItem(urlid);
+      let host = window.location.host
+      let pp = {
+        controller: "Staff",
+        action: "info",
+        params: { uuid: id, host: host },
+      };
+      if (id) {
+        this.ws.send(JSON.stringify(pp));
+      }
+    },
+    pop() {
       this.show = true;
     },
     close() {
-      this.show = false
+      this.show = false;
     },
     gotalk() {
+      this.totalnum = 0
+      sessionStorage.removeItem('total')
       let url = window.location.href;
       let newurl = url.split("?")[0];
       let uuid = this.$route.query.uuid;
       let city = this.city;
       let id = this.$route.params.id;
-      newurl += `?proid=${id}&uuid=${uuid}&city=${city}`;
+      let staffid = this.staffid
+      if (this.staffid == 152) {
+        newurl += `?proid=${id}&uuid=${uuid}&city=${city}`;
+      } else {
+        newurl += `?proid=${id}&uuid=${uuid}&city=${city}&staffid=${staffid}`;
+      }
+      console.log(newurl)
       newurl = encodeURIComponent(newurl);
       // window.location.href =
       //   "http://localhost:3000/hangzhou/talk?reconnect=" + newurl;
@@ -1688,6 +1769,11 @@ export default {
         newurl +
         "&uuid=" +
         this.$route.query.uuid;
+      //  window.location.href =
+      //   "http://localhost:3000/hangzhou/talk?reconnect=" +
+      //   newurl +
+      //   "&uuid=" +
+      //   this.$route.query.uuid;
       // let urlid = this.$route.params.id;
       // sessionStorage.setItem('proid',urlid)
       // let id = sessionStorage.getItem(urlid);
@@ -2541,8 +2627,8 @@ export default {
       }
     },
     gobanner() {
-      if(!this.banner.url) {
-        return
+      if (!this.banner.url) {
+        return;
       }
       let url = window.location.href;
       url = url.split("?")[1];
@@ -3063,6 +3149,50 @@ export default {
     let that = this;
     $cookies.set("cityname", this.building.city_fullname);
     localStorage.setItem("call", this.call);
+    this.ws = this.$store.state.ws
+    this.ws.onmessage = function (event) {
+      let data = JSON.parse(event.data);
+      if (data.action == 301) {
+        that.staffid = data.fromUserName
+        let urlid = that.$route.params.id;
+        if (!sessionStorage.getItem(urlid)) {
+          sessionStorage.setItem(urlid, data.fromUserName);
+          that.putcard();
+        } else {
+          if (sessionStorage.getItem(data.fromUserName)) {
+            sessionStorage.setItem(
+              data.fromUserName,
+              parseInt(sessionStorage.getItem(data.fromUserName)) + 1
+            );
+          } else {
+            sessionStorage.setItem(data.fromUserName, 1);
+          }
+          if (
+            sessionStorage.getItem("total") &&
+            sessionStorage.getItem("total") != "NaN"
+          ) {
+            sessionStorage.setItem(
+              "total",
+              parseInt(sessionStorage.getItem("total")) + 1
+            );
+            that.totalnum = parseInt(sessionStorage.getItem("total"));
+          } else {
+            sessionStorage.setItem("total", 1);
+            that.totalnum = 1;
+          }
+        }
+      } else if (data.action == 206) {
+        that.usernum = data.num.user_num;
+        that.looknum = data.num.look_num;
+        that.rate = data.num.rate;
+        that.stafftel = data.staff.tel;
+        that.staffname = data.staff.name;
+        that.staffimg = data.staff.img;
+        that.talktype = true;
+      } else if (data.action == 302) {
+        sessionStorage.setItem('currentid',data.sid)
+      }
+    };
     if (this.call.split(",")[1]) {
       this.callmsg = this.call.split(",")[0] + "转" + this.call.split(",")[1];
     } else {
@@ -3813,7 +3943,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style lang="less" scoped>
 @import url("~/static/css/c-index.css");
 @import url("~/static/css/c-index1.2.css");
 * {
@@ -3917,7 +4047,7 @@ body {
   font-size: 0.75rem;
   border: 0;
   background-color: #ff7519;
-  border-radius: .8125rem;
+  border-radius: 0.8125rem;
 }
 .hui-right p {
   color: #ff7519;
@@ -4041,20 +4171,20 @@ body {
 .swp .slide-verify {
   width: 240px;
 }
-.swp >>> .slide-verify-slider {
+.swp /deep/ .slide-verify-slider {
   width: 100%;
   height: 30px;
   margin-top: 0;
   line-height: 30px;
 }
-.swp >>> .slide-verify-slider .slide-verify-slider-mask-item {
+.swp /deep/ .slide-verify-slider .slide-verify-slider-mask-item {
   width: 29px;
   height: 29px;
 }
-.swp >>> .slide-verify-slider-mask {
+.swp /deep/ .slide-verify-slider-mask {
   height: 29px !important;
 }
-.swp >>> .slide-verify-slider-mask-item-icon {
+.swp /deep/ .slide-verify-slider-mask-item-icon {
   top: 10px;
   left: 6px;
 }
@@ -5145,5 +5275,101 @@ h2 .cailist li img {
   margin-left: 0.8rem;
   margin-right: 0.875rem;
   height: 1.125rem;
+}
+.talkbox {
+  position: fixed;
+  bottom: 0;
+  z-index: 3000;
+  height: 13.75rem;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0px 0px 0.5625rem 0px rgba(52, 71, 87, 0.24);
+  .del {
+    width: 1rem;
+    height: 1rem;
+    position: absolute;
+    top: 0.9375rem;
+    right: 0.9375rem;
+  }
+  .peo {
+    padding-top: 1.5625rem;
+    padding-left: 1.9375rem;
+    display: flex;
+    margin-bottom: 1.125rem;
+    .left {
+      margin-right: 0.625rem;
+      overflow: hidden;
+      height: 3rem;
+      border-radius: 50%;
+      img {
+        width: 3rem;
+      }
+    }
+    .right {
+      h3 {
+        color: #1f1f1f;
+        font-size: 1.0625rem;
+        margin-bottom: 0.375rem;
+        span {
+          font-weight: 400;
+          color: #7495bd;
+          font-size: 0.6875rem;
+          padding: 0.125rem 0.3125rem 0.15625rem 0.3125rem;
+          background-color: #f2f8ff;
+          border-radius: 0.09375rem;
+        }
+      }
+      p {
+        color: #646466;
+        font-size: 0.8125rem;
+      }
+    }
+  }
+  .msg {
+    display: flex;
+    margin-bottom: 1.75rem;
+    .li {
+      width: 33%;
+      text-align: center;
+      border-right: 0.03125rem solid #f0f0f2;
+      .num {
+        color: #121212;
+        font-size: 0.625rem;
+        margin-bottom: 0.25rem;
+        span {
+          color: #121212;
+          font-size: 1.125rem;
+          font-weight: bold;
+        }
+      }
+      .txt {
+        color: #646466;
+        font-size: 0.6875rem;
+      }
+    }
+  }
+  .btn {
+    button {
+      width: 9.375rem;
+      height: 2.5rem;
+      border-radius: 0.25rem;
+      text-align: center;
+      line-height: 2.5rem;
+      font-size: 0.9375rem;
+      border: 0;
+      outline: none;
+    }
+    button:nth-of-type(1) {
+      background: linear-gradient(270deg, #1fc365, #3fd6a6);
+      margin-left: 1.9375rem;
+      color: #fff;
+    }
+    button:nth-of-type(2) {
+      border: 0.03125rem solid #3da56a;
+      background-color: #f0f7f3;
+      color: #3da56a;
+      margin-left: 0.625rem;
+    }
+  }
 }
 </style>
