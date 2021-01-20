@@ -5360,14 +5360,14 @@ h2 .cailist li img {
       outline: none;
     }
     button:nth-of-type(1) {
-      background: linear-gradient(270deg, #1fc365, #3fd6a6);
+      background: linear-gradient(-270deg,#348aff,#6accff);
       margin-left: 1.9375rem;
       color: #fff;
     }
     button:nth-of-type(2) {
-      border: 0.03125rem solid #3da56a;
+      border: 0.03125rem solid #3eacf0;
       background-color: #f0f7f3;
-      color: #3da56a;
+      color: #3eacf0;
       margin-left: 0.625rem;
     }
   }
