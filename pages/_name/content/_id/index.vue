@@ -875,6 +875,18 @@
         <!-- </nuxt-link> -->
       </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>
+      <!-- 相关资讯 -->
+      <div class="my-infos" v-if="infos.length>0">
+        <h4>
+          相关资讯<nuxt-link :to="'/'+jkl+'/realinformations/46'"><span>更多资讯 <img src="~/assets/m-go.png" alt/></span></nuxt-link>
+        </h4>
+        <ul>
+          <nuxt-link v-for="(item,key) in infos" :key="item.id" :to="'/'+jkl+'/encyclopediaArticle/46/'+item.id">
+            <li v-if="key<=2">{{item.title}}</li>
+          </nuxt-link>
+        </ul>
+      </div>
+      <div class="m-line visible-xs-block .visible-sm-block"></div>
       <!-- 同价位、区位 -->
       <div class="m-tui visible-xs-block .visible-sm-block">
         <div class="m-nav">
@@ -1280,7 +1292,7 @@ import {
   getsdk,
   getsid,
   putmap,
-  hengda,
+  hengda
 } from "~/api/api";
 export default {
   name: "Content",
@@ -1292,13 +1304,13 @@ export default {
     "remote-js": {
       render(createElement) {
         return createElement("script", {
-          attrs: { type: "text/javascript", src: this.src },
+          attrs: { type: "text/javascript", src: this.src }
         });
       },
       props: {
-        src: { type: String, required: true },
-      },
-    },
+        src: { type: String, required: true }
+      }
+    }
   },
   validate({ params }) {
     // 必须是number类型
@@ -1342,7 +1354,7 @@ export default {
       ip: ip,
       token: token,
       kid: kid,
-      other: other,
+      other: other
     };
     let url = context.route.fullPath;
     if (url) {
@@ -1360,7 +1372,7 @@ export default {
 
     let jkl = context.params.name;
     let [res1] = await Promise.all([
-      context.$axios.post("/api/detail/mobile", data).then((res) => {
+      context.$axios.post("/api/detail/mobile", data).then(res => {
         if (res) {
           if (res.data.code === 200) {
             let data = res.data;
@@ -1463,15 +1475,15 @@ export default {
                 staff: {
                   tel: 123,
                   name: "456",
-                  head_img: require("~/assets/jiapeo.png"),
+                  head_img: require("~/assets/jiapeo.png")
                 },
-                visitors: [],
+                visitors: []
               };
             }
             return data;
           }
         }
-      }),
+      })
     ]);
     return {
       jkl: res1.head.city_data.pinyin,
@@ -1526,6 +1538,7 @@ export default {
       share: res1.share_info,
       banner: res1.banner,
       activity: res1.activity || [],
+      infos: res1.article
     };
   },
   data() {
@@ -1546,8 +1559,8 @@ export default {
         staff: {
           tel: 123,
           name: "456",
-          head_img: require("~/assets/jiapeo.png"),
-        },
+          head_img: require("~/assets/jiapeo.png")
+        }
       },
       iswxsid: false,
       iswx: false,
@@ -1705,13 +1718,13 @@ export default {
       meta: [
         {
           name: "description",
-          content: this.description,
+          content: this.description
         },
         {
           name: "keywords",
-          content: this.keywords,
-        },
-      ],
+          content: this.keywords
+        }
+      ]
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -1728,11 +1741,11 @@ export default {
     putcard() {
       let urlid = this.$route.params.id;
       let id = sessionStorage.getItem(urlid);
-      let host = window.location.host
+      let host = window.location.host;
       let pp = {
         controller: "Staff",
         action: "info",
-        params: { uuid: id, host: host },
+        params: { uuid: id, host: host }
       };
       if (id) {
         this.ws.send(JSON.stringify(pp));
@@ -1745,20 +1758,20 @@ export default {
       this.show = false;
     },
     gotalk() {
-      this.totalnum = 0
-      sessionStorage.removeItem('total')
+      this.totalnum = 0;
+      sessionStorage.removeItem("total");
       let url = window.location.href;
       let newurl = url.split("?")[0];
       let uuid = this.$route.query.uuid;
       let city = this.city;
       let id = this.$route.params.id;
-      let staffid = this.staffid
+      let staffid = this.staffid;
       if (this.staffid == 152) {
         newurl += `?proid=${id}&uuid=${uuid}&city=${city}`;
       } else {
         newurl += `?proid=${id}&uuid=${uuid}&city=${city}&staffid=${staffid}`;
       }
-      console.log(newurl)
+      console.log(newurl);
       newurl = encodeURIComponent(newurl);
       // window.location.href =
       //   "http://localhost:3000/hangzhou/talk?reconnect=" + newurl;
@@ -1835,7 +1848,7 @@ export default {
           source: "微信分享2",
           kid: kid,
           staff_id: that.share.staff.sid,
-          other: other,
+          other: other
         };
         op = wx;
       } else {
@@ -1850,11 +1863,11 @@ export default {
           kid: kid,
           other: other,
           source: "线上推广2",
-          platform: 2,
+          platform: 2
         };
         op = normal;
       }
-      trend_put(op).then((res) => {
+      trend_put(op).then(res => {
         if (res.data.code == 200) {
           that.warning = "领取成功";
           that.warningbtn = true;
@@ -1896,7 +1909,7 @@ export default {
       );
       $("#dingxue").html("立即抢券");
     },
-    method1: function () {
+    method1: function() {
       echarts();
       ratingStar();
     },
@@ -1985,7 +1998,7 @@ export default {
       var options = {
         //定义一个标题
         legend: {
-          data: ["AI"],
+          data: ["AI"]
         },
         color: ["rgba(77,181,255,1)"],
         //X轴设置
@@ -1996,17 +2009,17 @@ export default {
             axisLine: {
               lineStyle: {
                 color: "rgba(153,153,153,1)",
-                fontSize: "10px",
-              },
+                fontSize: "10px"
+              }
             },
             axisLabel: {
               interval: 0,
               show: true,
               textStyle: {
-                color: "rgba(153,153,153,1)", //这里用参数代替了
-              },
-            },
-          },
+                color: "rgba(153,153,153,1)" //这里用参数代替了
+              }
+            }
+          }
         ],
         yAxis: [
           {
@@ -2015,24 +2028,24 @@ export default {
             axisLabel: {
               show: true,
               textStyle: {
-                color: "rgba(153,153,153,1)", //这里用参数代替了
-              },
+                color: "rgba(153,153,153,1)" //这里用参数代替了
+              }
             },
             axisLine: {
               lineStyle: {
-                color: "rgba(153,153,153,1)",
-              },
-            },
-          },
+                color: "rgba(153,153,153,1)"
+              }
+            }
+          }
         ],
         series: [
           {
             name: "销量",
             data: that.prices,
             type: "bar",
-            barWidth: 18,
-          },
-        ],
+            barWidth: 18
+          }
+        ]
       };
       myChart.setOption(options);
     },
@@ -2045,7 +2058,7 @@ export default {
         backgroundColor: "#fff",
         tooltip: {
           trigger: "axis",
-          formatter: function (params) {
+          formatter: function(params) {
             return (
               params[0].seriesName +
               params[0].data +
@@ -2059,39 +2072,39 @@ export default {
               params[2].data +
               "元"
             );
-          },
+          }
         },
         legend: {
-          data: "房价",
+          data: "房价"
         },
         grid: {
           x: "45px",
           y: "10px",
           x2: "18px",
-          y2: "20px",
+          y2: "20px"
         },
         calculable: true,
         xAxis: [
           {
             axisLabel: {
               rotate: 30,
-              interval: 0,
+              interval: 0
             },
             axisLine: {
               lineStyle: {
-                color: "#919499",
-              },
+                color: "#919499"
+              }
             },
 
             boundaryGap: false,
-            data: (function () {
+            data: (function() {
               var list = that.trend_time;
               return list;
             })(),
             axisLabel: {
-              rotate: 0,
-            },
-          },
+              rotate: 0
+            }
+          }
         ],
         yAxis: [
           {
@@ -2103,18 +2116,18 @@ export default {
             splitNumber: 5,
             axisLine: {
               lineStyle: {
-                color: "#919499",
+                color: "#919499"
               },
               show: false,
-              formatter: "{value}万",
+              formatter: "{value}万"
             },
             splitLine: {
               shwo: true,
               lineStyle: {
-                type: "dashed",
-              },
-            },
-          },
+                type: "dashed"
+              }
+            }
+          }
         ],
         series: [
           {
@@ -2123,7 +2136,7 @@ export default {
             symbol: "none",
             smooth: 0.2,
             color: ["#40A2F4"],
-            data: that.trend_price3,
+            data: that.trend_price3
           },
           {
             name: that.building.country_name + "&nbsp;&nbsp;均价",
@@ -2131,7 +2144,7 @@ export default {
             symbol: "none",
             smooth: 0.2,
             color: ["#29CC72"],
-            data: that.trend_price2,
+            data: that.trend_price2
           },
           {
             name: that.building.city_name + "&nbsp;&nbsp;均价",
@@ -2139,9 +2152,9 @@ export default {
             symbol: "none",
             smooth: 0.2,
             color: ["#A3AACC"],
-            data: that.trend_price1,
-          },
-        ],
+            data: that.trend_price1
+          }
+        ]
       };
       chart.setOption(option);
     },
@@ -2153,7 +2166,7 @@ export default {
       let img = require("~/assets/mappro.png");
       let pro = this.building.name;
       let add = this.building.address;
-      AMap.convertFrom(baidu, "baidu", function (status, result) {
+      AMap.convertFrom(baidu, "baidu", function(status, result) {
         if (result.info === "ok") {
           var lnglats = result.locations; // Array.<LngLat>
           that.pois = [lnglats[0].lng, lnglats[0].lat];
@@ -2161,7 +2174,7 @@ export default {
             zoom: 14, //初始化地图层级
             center: that.pois, //初始化地图中心点
             zoomEnable: false,
-            dragEnable: false,
+            dragEnable: false
           });
           let content = `<div
           style="width:140px;height: 36px;box-shadow:0px 0px 5px 0px rgba(6,0,1,0.1);border-radius:18px;padding-left: 17px;position: relative;background: #fff;">
@@ -2177,19 +2190,19 @@ export default {
           let marker = new AMap.Marker({
             content: content,
             position: that.pois,
-            offset: new AMap.Pixel(-70, -44),
+            offset: new AMap.Pixel(-70, -44)
           });
           let con =
             '<div style="width: 24px;height: 24px;border-radius: 50%;background:rgba(71,161,255,0.3);position: relative;"><div style="width: 6px;height: 6px;border-radius: 50%;background:rgba(71,161,255,1);position: absolute;top:50%;left:50%;margin-top: -3px;margin-left: -3px;"></div></div>';
           let mark = new AMap.Marker({
             content: con,
             position: that.pois,
-            offset: new AMap.Pixel(-12, -12),
+            offset: new AMap.Pixel(-12, -12)
           });
           mark.setMap(map);
           marker.setMap(map);
 
-          AMap.service(["AMap.PlaceSearch"], function () {
+          AMap.service(["AMap.PlaceSearch"], function() {
             // eslint-disable-line no-unused-vars
             //构造地点查询类
             var placeSearch = new AMap.PlaceSearch({
@@ -2199,11 +2212,11 @@ export default {
               citylimit: false, //是否强制限制在设置的城市内搜索
               map: map, // 展现结果的地图实例
               panel: "panel", // 结果列表将在此容器中进行展示。
-              autoFitView: false, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
+              autoFitView: false // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
             });
 
             var cpoint = that.pois; //中心点坐标
-            placeSearch.searchNearBy(name, cpoint, 2000, function (
+            placeSearch.searchNearBy(name, cpoint, 2000, function(
               // eslint-disable-line no-unused-vars
               status,
               result
@@ -2217,7 +2230,7 @@ export default {
               } else {
                 that.isnull = false;
                 that.setzhou(name, result.poiList.pois.length);
-                $.each(result.poiList.pois, function (i, e) {
+                $.each(result.poiList.pois, function(i, e) {
                   if (i <= 2) {
                     var p2 = [e.location.lng, e.location.lat];
                     var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
@@ -2270,7 +2283,7 @@ export default {
       let id = this.id;
       let data = { channel: 2, phone: tel, ip: ip };
       msg(data)
-        .then((resp) => {
+        .then(resp => {
           let code = resp.data.code;
           if (code == 200) {
             let city = localStorage.getItem("city");
@@ -2279,7 +2292,7 @@ export default {
               localStorage.setItem("city", 1);
             }
             var time = 60;
-            var fn = function () {
+            var fn = function() {
               time--;
               if (time > 0) {
                 $(".t-b-scode").html("重新发送" + time + "s");
@@ -2294,7 +2307,7 @@ export default {
             var interval = setInterval(fn, 1000);
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
@@ -2306,7 +2319,7 @@ export default {
       }
       let that = this;
       collection({ project: id, token: token })
-        .then((resp) => {
+        .then(resp => {
           if (resp.data.code == 200) {
             if (that.forknum == 0) {
               that.forknum = 1;
@@ -2318,7 +2331,7 @@ export default {
             that.$router.push("/" + that.n + "/login");
           }
         })
-        .then((error) => {
+        .then(error => {
           console.log(error);
         });
     },
@@ -2344,7 +2357,7 @@ export default {
         project: id,
         kid: kid,
         other: other,
-        platform: 2,
+        platform: 2
       };
       let tuan = {
         platform: 2,
@@ -2356,7 +2369,7 @@ export default {
         project: id,
         remark: "团购2",
         kid: kid,
-        other: other,
+        other: other
       };
       let options = {};
       let url = window.location.href;
@@ -2376,7 +2389,7 @@ export default {
           source: "微信分享2",
           kid: kid,
           staff_id: that.share.staff.sid,
-          other: other,
+          other: other
         };
         options = wx;
       } else {
@@ -2388,18 +2401,18 @@ export default {
       }
 
       trend_put(options)
-        .then((resp) => {
+        .then(resp => {
           // console.log(resp)
           if (resp.data.code == 200) {
             msg({ phone: t, channel: 2, ip: ip })
-              .then((resp) => {
+              .then(resp => {
                 if (resp.data.code == 200) {
                   $(".t-b-first").hide();
                   $(".t-b-second").show();
 
                   var time = 60;
                   var tels = t.substr(0, 3) + "****" + t.substr(7, 11);
-                  var fn = function () {
+                  var fn = function() {
                     time--;
                     if (time > 0) {
                       $(".t-b-scode").html("重新发送" + time + "s");
@@ -2415,7 +2428,7 @@ export default {
                   $("#ytel").html(tels);
                 }
               })
-              .catch((error) => {
+              .catch(error => {
                 console.log(error);
               });
           } else if (resp.data.code == 500) {
@@ -2430,7 +2443,7 @@ export default {
             $(".l-p").attr("placeholder", "报名失败");
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
@@ -2443,7 +2456,7 @@ export default {
       let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
-        .then((resp) => {
+        .then(resp => {
           if (resp.data.code == 200) {
             if (this.ones == 1) {
               this.li = 1;
@@ -2463,7 +2476,7 @@ export default {
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
@@ -2477,7 +2490,7 @@ export default {
           that.tstype = false;
         }, 1000);
       } else {
-        hengda({ identity: that.IDcode, phone: tel }).then((res) => {
+        hengda({ identity: that.IDcode, phone: tel }).then(res => {
           if (res.data.code == 200) {
             that.tsmsg = res.data.message;
             that.tstype = true;
@@ -2504,7 +2517,7 @@ export default {
       } else {
         this.warn = true;
         let that = this;
-        setTimeout(function () {
+        setTimeout(function() {
           that.warn = false;
         }, 1500);
       }
@@ -2516,13 +2529,13 @@ export default {
         this.$router.push("/" + this.n + "/login");
       }
       collection({ project: id, token: token })
-        .then((resp) => {
+        .then(resp => {
           if (resp.data.code == 200) {
             $(".fk").hide();
             $(".fed").css("display", "block");
           }
         })
-        .then((error) => {
+        .then(error => {
           console.log(error);
         });
     },
@@ -2550,9 +2563,9 @@ export default {
           id: id,
           platform: 2,
           token: token,
-          type: y,
+          type: y
         })
-          .then((resp) => {
+          .then(resp => {
             if (resp.data.code == 500) {
               that.$router.push("/" + that.pinyin + "/login");
               // window.location.href = "/login";
@@ -2575,7 +2588,7 @@ export default {
               that.isagree = true;
             }
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
           });
       }
@@ -2596,9 +2609,9 @@ export default {
           id: id,
           platform: 2,
           token: token,
-          type: y,
+          type: y
         })
-          .then((resp) => {
+          .then(resp => {
             if (resp.data.code == 500) {
               that.$router.push("/" + that.pinyin + "/login");
               // window.location.href = "/login";
@@ -2621,7 +2634,7 @@ export default {
               that.isagrees = true;
             }
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
           });
       }
@@ -2646,12 +2659,12 @@ export default {
       } else {
         let token = localStorage.getItem("token");
         comment_del({ token: token, id: id })
-          .then((resp) => {
+          .then(resp => {
             if (resp.data.code == 200) {
               location.reload();
             }
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
           });
       }
@@ -2734,14 +2747,14 @@ export default {
         let Y = window.scrollY;
         if (key == 0) {
           if (Y > 100) {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, -10);
               if (window.scrollY <= 100) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, 10);
               if (window.scrollY >= 100) {
                 clearInterval(timer);
@@ -2750,14 +2763,14 @@ export default {
           }
         } else if (key == 1) {
           if (Y > 1100) {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, -10);
               if (window.scrollY <= 1100) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, 10);
               if (window.scrollY >= 1100) {
                 clearInterval(timer);
@@ -2766,14 +2779,14 @@ export default {
           }
         } else if (key == 2) {
           if (Y > 2700) {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, -10);
               if (window.scrollY <= 2700) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, 10);
               if (window.scrollY >= 2700) {
                 clearInterval(timer);
@@ -2782,14 +2795,14 @@ export default {
           }
         } else if (key == 3) {
           if (Y > 3200) {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, -10);
               if (window.scrollY <= 3200) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, 10);
               if (window.scrollY >= 3200) {
                 clearInterval(timer);
@@ -2923,10 +2936,10 @@ export default {
         "onMenuShareWeibo",
         "updateAppMessageShareData",
         "updateTimelineShareData",
-        "getLocation",
+        "getLocation"
       ];
 
-      getsdk(url).then((res) => {
+      getsdk(url).then(res => {
         // console.log(res);
         let that = this;
         wx.config({
@@ -2935,9 +2948,9 @@ export default {
           timestamp: res.data.data.timestamp, // 必填，生成签名的时间戳
           nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
           signature: res.data.data.signature, // 必填，签名
-          jsApiList: jsApiList, // 必填，需要使用的JS接口列表
+          jsApiList: jsApiList // 必填，需要使用的JS接口列表
         });
-        wx.ready(function () {
+        wx.ready(function() {
           if (that.iswxsid) {
             if (wx.onMenuShareAppMessage) {
               wx.onMenuShareAppMessage({
@@ -2947,21 +2960,21 @@ export default {
                 imgUrl: that.share.config.img, // 分享图标
                 type: "", // 分享类型,music、video或link，不填默认为link
                 dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
-                success: function () {
+                success: function() {
                   // 用户确认分享后执行的回调函数
                   // alert('1.01')
                 },
-                cancel: function () {
+                cancel: function() {
                   // 用户取消分享后执行的回调函数
-                },
+                }
               });
               wx.onMenuShareTimeline({
                 title: that.share.config.title, // 分享标题
                 link: window.location.href, // 分享链接
                 imgUrl: that.share.config.img, // 分享图标
-                success: function () {
+                success: function() {
                   // 用户点击了分享后执行的回调函数
-                },
+                }
               });
             } else {
               wx.updateAppMessageShareData({
@@ -2969,24 +2982,24 @@ export default {
                 desc: that.share.config.description, // 分享描述
                 link: window.location.href, // 分享链接
                 imgUrl: that.share.config.img, // 分享图标
-                success: function () {
+                success: function() {
                   // 设置成功
                   // alert('1.40')
-                },
+                }
               });
               wx.updateTimelineShareData({
                 title: that.share.config.title, // 分享标题
                 link: window.location.href, // 分享链接
                 imgUrl: that.share.config.img, // 分享图标
-                success: function () {
+                success: function() {
                   // 设置成功
-                },
+                }
               });
             }
             if (that.iswxsid) {
               wx.getLocation({
                 type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-                success: function (res) {
+                success: function(res) {
                   that.wxlat = res.latitude; // 纬度，浮点数，范围为90 ~ -90
                   that.wxlng = res.longitude; // 经度，浮点数，范围为180 ~ -180。
                   let url = window.location.href;
@@ -2997,12 +3010,12 @@ export default {
                     putmap({
                       lat: res.latitude,
                       long: res.longitude,
-                      id: id,
-                    }).then((res) => {
+                      id: id
+                    }).then(res => {
                       console.log(res);
                     });
                   }
-                },
+                }
               });
             }
           } else {
@@ -3014,13 +3027,13 @@ export default {
                 imgUrl: that.building.img, // 分享图标
                 type: "", // 分享类型,music、video或link，不填默认为link
                 dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
-                success: function () {
+                success: function() {
                   // 用户确认分享后执行的回调函数
                   // alert('1.01')
                 },
-                cancel: function () {
+                cancel: function() {
                   // 用户取消分享后执行的回调函数
-                },
+                }
               });
             } else {
               wx.updateAppMessageShareData({
@@ -3028,23 +3041,23 @@ export default {
                 desc: that.keywords, // 分享描述
                 link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                 imgUrl: that.building.img, // 分享图标
-                success: function () {
+                success: function() {
                   // 设置成功
                   // alert('1.40')
-                },
+                }
               });
               wx.updateTimelineShareData({
                 title: that.title, // 分享标题
                 link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                 imgUrl: that.building.img, // 分享图标
-                success: function () {
+                success: function() {
                   // 设置成功
-                },
+                }
               });
             }
           }
         });
-        wx.error((res) => {
+        wx.error(res => {
           // alert(res);
         });
       });
@@ -3082,7 +3095,7 @@ export default {
         myweekday = "0" + myweekday;
       }
       return myyear + "-" + mymonth + "-" + myweekday;
-    },
+    }
   },
   beforeMount() {
     let ul = window.location.href;
@@ -3149,11 +3162,11 @@ export default {
     let that = this;
     $cookies.set("cityname", this.building.city_fullname);
     localStorage.setItem("call", this.call);
-    this.ws = this.$store.state.ws
-    this.ws.onmessage = function (event) {
+    this.ws = this.$store.state.ws;
+    this.ws.onmessage = function(event) {
       let data = JSON.parse(event.data);
       if (data.action == 301) {
-        that.staffid = data.fromUserName
+        that.staffid = data.fromUserName;
         let urlid = that.$route.params.id;
         if (!sessionStorage.getItem(urlid)) {
           sessionStorage.setItem(urlid, data.fromUserName);
@@ -3190,7 +3203,7 @@ export default {
         that.staffimg = data.staff.img;
         that.talktype = true;
       } else if (data.action == 302) {
-        sessionStorage.setItem('currentid',data.sid)
+        sessionStorage.setItem("currentid", data.sid);
       }
     };
     if (this.call.split(",")[1]) {
@@ -3232,9 +3245,9 @@ export default {
           staff: {
             tel: 123,
             name: "456",
-            head_img: require("~/assets/jiapeo.png"),
+            head_img: require("~/assets/jiapeo.png")
           },
-          visitors: [],
+          visitors: []
         };
       }
     }
@@ -3254,7 +3267,7 @@ export default {
       }, 20000);
     }
 
-    $(".huo-more").on("click", function () {
+    $(".huo-more").on("click", function() {
       $(this).hide();
       $(".table").css("height", "auto");
     });
@@ -3264,7 +3277,7 @@ export default {
       observer: true,
       slidesOffsetAfter: 12,
       resistanceRatio: 0.1,
-      slidesOffsetBefore: 14,
+      slidesOffsetBefore: 14
     });
     var swiper05 = new Swiper(".swiper-dynamic", {
       slidesPerView: 3.8,
@@ -3272,7 +3285,7 @@ export default {
       observer: true,
       slidesOffsetBefore: 20,
       resistanceRatio: 0.1,
-      slidesOffsetAfter: -10,
+      slidesOffsetAfter: -10
     });
     var swiper06 = new Swiper(".swiper-house", {
       slidesPerView: 2.08,
@@ -3280,7 +3293,7 @@ export default {
       observer: true,
       slidesOffsetAfter: 2,
       resistanceRatio: 0.1,
-      slidesOffsetBefore: 14,
+      slidesOffsetBefore: 14
     });
     var swiper07 = new Swiper(".swiper-pk", {
       slidesPerView: 2.4,
@@ -3288,7 +3301,7 @@ export default {
       observer: true,
       resistanceRatio: 0.1,
       slidesOffsetAfter: 1,
-      slidesOffsetBefore: 14,
+      slidesOffsetBefore: 14
     });
     if (navigator.cookieEnabled != true) {
       this.load = false;
@@ -3305,7 +3318,7 @@ export default {
       position: "relative",
       bottom: "0",
       width: "100%",
-      marginBottom: "56px",
+      marginBottom: "56px"
     });
     that.baoming = localStorage.getItem("phone");
     let id = this.$route.params.id;
@@ -3326,15 +3339,18 @@ export default {
       })();
     };
 
-    $(".go-map").on("click", function () {
+    $(".go-map").on("click", function() {
       that.$router.push("/" + that.n + "/Periphery/" + that.id + "/1");
     });
     //同价位楼盘
-    $(".m-nav p").on("click", function () {
+    $(".m-nav p").on("click", function() {
       let txt = $(this).text();
-      $(this).addClass("n-active").siblings("p").removeClass("n-active");
+      $(this)
+        .addClass("n-active")
+        .siblings("p")
+        .removeClass("n-active");
     });
-    jQuery.fn.ratingStars = function (e) {
+    jQuery.fn.ratingStars = function(e) {
       var r = {
           selectors: {
             starsSelector: ".rating-stars",
@@ -3342,29 +3358,35 @@ export default {
             starActiveClass: "is--active",
             starHoverClass: "is--hover",
             starNoHoverClass: "is--no-hover",
-            targetFormElementSelector: ".rating-value",
-          },
+            targetFormElementSelector: ".rating-value"
+          }
         },
         t = $.extend({}, r, e),
         s = {
-          init: function (e) {
+          init: function(e) {
             s.registerEvents(e), s.loadDefaultValue(e);
           },
-          loadDefaultValue: function (e) {
-            var r = $(e).children(t.selectors.targetFormElementSelector).val(),
+          loadDefaultValue: function(e) {
+            var r = $(e)
+                .children(t.selectors.targetFormElementSelector)
+                .val(),
               s = 0;
             $.each(
-              $(e).children(t.starsSelector).children(t.starSelector),
-              function (e, a) {
+              $(e)
+                .children(t.starsSelector)
+                .children(t.starSelector),
+              function(e, a) {
                 s <= r - 1 && $(a).addClass(t.selectors.starActiveClass), s++;
               }
             );
           },
-          registerEvents: function (e) {
+          registerEvents: function(e) {
             var r = this;
             $.each(
-              $(e).children(t.starsSelector).children(t.starSelector),
-              function (t, s) {
+              $(e)
+                .children(t.starsSelector)
+                .children(t.starSelector),
+              function(t, s) {
                 $(s).on("mouseenter", $.proxy(r.onStarEnter, r, s, e)),
                   $(s).on("mouseleave", $.proxy(r.onStarLeave, r, s, e)),
                   $(s).on(
@@ -3374,12 +3396,14 @@ export default {
               }
             );
           },
-          onStarEnter: function (e, r) {
+          onStarEnter: function(e, r) {
             var s = $(e).index(),
               a = 0;
             $.each(
-              $(r).children(t.starsSelector).children(t.starSelector),
-              function (e, r) {
+              $(r)
+                .children(t.starsSelector)
+                .children(t.starSelector),
+              function(e, r) {
                 a <= s
                   ? $(r).addClass(t.selectors.starHoverClass)
                   : $(r).addClass(t.selectors.starNoHoverClass),
@@ -3388,7 +3412,7 @@ export default {
             ),
               $(r).trigger("ratingOnEnter", { ratingValue: s + 1 });
           },
-          onStarLeave: function (e, r) {
+          onStarLeave: function(e, r) {
             var s = $(e).index();
             $(r)
               .children(t.starsSelector)
@@ -3400,7 +3424,7 @@ export default {
                 .removeClass(t.selectors.starNoHoverClass),
               $(r).trigger("ratingOnLeave", { ratingValue: s + 1 });
           },
-          onStarSelected: function (e, r) {
+          onStarSelected: function(e, r) {
             var s = $(e).index();
             $(r)
               .children(t.starsSelector)
@@ -3408,8 +3432,10 @@ export default {
               .removeClass(t.selectors.starActiveClass);
             var a = 0;
             $.each(
-              $(r).children(t.starsSelector).children(t.starSelector),
-              function (e, r) {
+              $(r)
+                .children(t.starsSelector)
+                .children(t.starSelector),
+              function(e, r) {
                 a <= s && $(r).addClass(t.selectors.starActiveClass), a++;
               }
             ),
@@ -3417,13 +3443,13 @@ export default {
                 .children(t.selectors.targetFormElementSelector)
                 .val(s + 1),
               $(r).trigger("ratingChanged", { ratingValue: s + 1 });
-          },
+          }
         };
-      return this.each(function () {
+      return this.each(function() {
         s.init($(this));
       });
     };
-    $(".question").on("click", function () {
+    $(".question").on("click", function() {
       let token = localStorage.getItem("token");
       if (token) {
         that.$router.push("/" + that.jkl + "/leavequestion/" + that.id);
@@ -3435,7 +3461,7 @@ export default {
       direction: "vertical", // 垂直切换选项
       autoplay: true,
       observer: true, //修改swiper自己或子元素时，自动初始化swiper
-      observeParents: true, //修改swiper的父元素时，自动初始化swiper
+      observeParents: true //修改swiper的父元素时，自动初始化swiper
     });
     /*对比分析资料轮播*/
     var swiper = new Swiper(".dui-zi", {
@@ -3445,11 +3471,11 @@ export default {
       observeParents: true, //修改swiper的父元素时，自动初始化swiper
       resistanceRatio: 0.1,
       pagination: {
-        el: ".swiper-pagination2",
-      },
+        el: ".swiper-pagination2"
+      }
     });
     /*微信浏览记录轮播*/
-    this.$nextTick(function () {
+    this.$nextTick(function() {
       var swiper = new Swiper(".wxlu", {
         // eslint-disable-line no-unused-vars
         spaceBetween: 20,
@@ -3457,7 +3483,7 @@ export default {
         observeParents: true, //修改swiper的父元素时，自动初始化swiper
         resistanceRatio: 0.1,
         loop: true,
-        autoplay: true,
+        autoplay: true
       });
     });
 
@@ -3467,7 +3493,7 @@ export default {
       slidesPerView: 1.8,
       spaceBetween: 30,
       observer: true, //修改swiper自己或子元素时，自动初始化swiper
-      observeParents: true, //修改swiper的父元素时，自动初始化swiper
+      observeParents: true //修改swiper的父元素时，自动初始化swiper
     });
 
     var swiper = new Swiper(".swiper-top", {
@@ -3478,37 +3504,51 @@ export default {
       observeParents: true, //修改swiper的父元素时，自动初始化swiper
       pagination: {
         el: ".swiper-pagination",
-        clickable: true,
+        clickable: true
       },
-      resistanceRatio: 0.1,
+      resistanceRatio: 0.1
     });
 
-    $(document).ready(function () {
+    $(document).ready(function() {
       var h = $(".h-c-c").height();
       $(".h-c-i img").css("height", h + "px");
 
       var cnm = 1;
 
-      $(".p-c-exc").on("click", function () {
+      $(".p-c-exc").on("click", function() {
         $(".m-p-succ").hide();
         $(".m-chang").hide();
       });
-      $("#m_sc_esc").on("click", function () {
+      $("#m_sc_esc").on("click", function() {
         $("#m_sc_box").hide();
         $(".m-chang").hide();
       });
-      $(".m-c-content input").focus(function () {
+      $(".m-c-content input").focus(function() {
         $(".m-c-content").css("margin-top", "80px");
       });
-      $(".m-c-content input").blur(function () {
+      $(".m-c-content input").blur(function() {
         $(".m-c-content").css("margin-top", "170px");
       });
       // 验证码
-      $(".m-c-btn").on("click", function () {
-        var tel = $(this).prev().prev().prev().prev().prev().prev().val();
+      $(".m-c-btn").on("click", function() {
+        var tel = $(this)
+          .prev()
+          .prev()
+          .prev()
+          .prev()
+          .prev()
+          .prev()
+          .val();
         var pattern_tel = /^1[3-9][0-9]{9}$/;
         if (tel == "") {
-          $(this).prev().prev().prev().prev().prev().prev().val("");
+          $(this)
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .val("");
           $(this)
             .prev()
             .prev()
@@ -3519,7 +3559,14 @@ export default {
             .attr("placeholder", "手机号码不能为空");
           return;
         } else if (!pattern_tel.test(tel)) {
-          $(this).prev().prev().prev().prev().prev().prev().val("");
+          $(this)
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .val("");
           $(this)
             .prev()
             .prev()
@@ -3536,82 +3583,100 @@ export default {
       //   that.$router.push("/" + that.n);
       // });
 
-      $(".m-listen").on("click", function () {
+      $(".m-listen").on("click", function() {
         $(".m-chang").show();
         $("#m_a_box").show(300);
       });
-      $("#m_a_esc").on("click", function () {
+      $("#m_a_esc").on("click", function() {
         $(".m-chang").hide();
         $("#m_a_box").hide();
       });
 
-      $("#m_want").on("click", function () {
+      $("#m_want").on("click", function() {
         $(".m-chang").show();
         $("#m_sc_box").show(150);
       });
 
-      $("#m_look").on("click", function () {
+      $("#m_look").on("click", function() {
         $(".m-chang").show();
         $("#m_y_box").show(300);
       });
-      $("#m_fen").on("click", function () {
+      $("#m_fen").on("click", function() {
         $(".m-chang").show();
         $("#m_f_box").show(300);
       });
-      $(".m-y").on("click", function () {
+      $(".m-y").on("click", function() {
         $(".m-chang").show();
         $("#m_y_box").show(300);
       });
-      $("#m_f_esc").on("click", function () {
+      $("#m_f_esc").on("click", function() {
         $(".m-chang").hide();
         $("#m_f_box").hide();
       });
     });
 
     // 点击顶部图片跳转
-    $(".zao").on("click", function () {
+    $(".zao").on("click", function() {
       that.$router.push("/" + that.n + "/album/" + that.id);
     });
     // 周边规划跳转
-    $(".m-zhou h3 span").on("click", function () {
+    $(".m-zhou h3 span").on("click", function() {
       that.$router.push("/" + that.n + "/Periphery/" + that.id + "/1");
     });
 
-    document.addEventListener("touchmove", function (e) {
+    document.addEventListener("touchmove", function(e) {
       var h = document.body.scrollTop;
       if (h >= 2279) {
-        $(".m-3").addClass("m-active").siblings("span").removeClass("m-active");
+        $(".m-3")
+          .addClass("m-active")
+          .siblings("span")
+          .removeClass("m-active");
       } else if (h >= 1538) {
-        $(".m-2").addClass("m-active").siblings("span").removeClass("m-active");
+        $(".m-2")
+          .addClass("m-active")
+          .siblings("span")
+          .removeClass("m-active");
       } else if (h >= 170) {
         $(".m-tnav").show();
-        $(".m-1").addClass("m-active").siblings("span").removeClass("m-active");
+        $(".m-1")
+          .addClass("m-active")
+          .siblings("span")
+          .removeClass("m-active");
       } else {
         $(".m-tnav").hide();
       }
     });
 
-    $(".m-1").on("click", function () {
+    $(".m-1").on("click", function() {
       document.body.scrollTop = 170;
-      $(".m-1").addClass("m-active").siblings("span").removeClass("m-active");
+      $(".m-1")
+        .addClass("m-active")
+        .siblings("span")
+        .removeClass("m-active");
     });
-    $(".m-2").on("click", function () {
+    $(".m-2").on("click", function() {
       document.body.scrollTop = 1538;
-      $(".m-2").addClass("m-active").siblings("span").removeClass("m-active");
+      $(".m-2")
+        .addClass("m-active")
+        .siblings("span")
+        .removeClass("m-active");
     });
-    $(".m-3").on("click", function () {
+    $(".m-3").on("click", function() {
       document.body.scrollTop = 2279;
-      $(".m-3").addClass("m-active").siblings("span").removeClass("m-active");
+      $(".m-3")
+        .addClass("m-active")
+        .siblings("span")
+        .removeClass("m-active");
     });
-    $(".m-bian").on("click", function () {
+    $(".m-bian").on("click", function() {
       $("#m_c_box").show(150);
       $(".m-chang").show();
     });
-    $("#m_c_esc").on("click", function () {
+    $("#m_c_esc").on("click", function() {
       $("#m_c_box").hide();
       $(".m-chang").hide();
     });
-    $(".m-chang").on("click", function () {
+    $(".m-chang").on("click", function() {
       $(".m-p-succ").hide();
       $(".m-chang").hide();
       $("#m_c_box").hide();
@@ -3637,7 +3702,7 @@ export default {
       that.tu = false;
     });
 
-    $(".p1").on("click", function () {
+    $(".p1").on("click", function() {
       window.type = $(this).attr("data-v");
 
       if (type == "最新变价通知") {
@@ -3726,8 +3791,10 @@ export default {
       that.change = true;
     });
 
-    $(".t-b-scode").on("click", function () {
-      var phone = $(this).prev().val();
+    $(".t-b-scode").on("click", function() {
+      var phone = $(this)
+        .prev()
+        .val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -3739,7 +3806,7 @@ export default {
       }
 
       var time = 60;
-      var fn = function () {
+      var fn = function() {
         time--;
         if (time > 0) {
           $(".t-b-scode").html("重发" + time + "s");
@@ -3753,31 +3820,31 @@ export default {
       fn();
       var interval = setInterval(fn, 1000);
       var data = {
-        phone: phone,
+        phone: phone
       };
     });
 
-    $("#s_esc").on("click", function () {
+    $("#s_esc").on("click", function() {
       $(".succ").hide();
       $(".zhao").hide();
     });
-    $(".s-btn").on("click", function () {
+    $(".s-btn").on("click", function() {
       $(".succ").hide();
       $(".zhao").hide();
     });
-    $("#find").on("click", function () {
+    $("#find").on("click", function() {
       $("#bname").submit();
     });
 
-    $("#a-esc").on("click", function () {
+    $("#a-esc").on("click", function() {
       $(".addre").hide();
       $(".zhao").hide();
     });
-    $("#l-esc").on("click", function () {
+    $("#l-esc").on("click", function() {
       $(".login").hide();
       $(".zhao").hide();
     });
-    $(".zhao").on("click", function () {
+    $(".zhao").on("click", function() {
       $(this).hide();
       $(".login").hide();
       $(".weiter").hide();
@@ -3787,12 +3854,15 @@ export default {
       $("#mpanel5").hide();
       $(".ts").css("z-index", "20001");
     });
-    $(".register").on("click", function () {
+    $(".register").on("click", function() {
       $(".zhao").show();
       $(".login").show(150);
     });
-    $(".m-get").on("click", function () {
-      var phone = $(this).prev().prev().val();
+    $(".m-get").on("click", function() {
+      var phone = $(this)
+        .prev()
+        .prev()
+        .val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -3804,7 +3874,7 @@ export default {
       }
 
       var time = 60;
-      var fn = function () {
+      var fn = function() {
         time--;
         if (time > 0) {
           $(".m-get").html("重新发送" + time + "s");
@@ -3818,34 +3888,49 @@ export default {
       fn();
       var interval = setInterval(fn, 1000);
       var data = {
-        phone: phone,
+        phone: phone
       };
     });
 
     // 验证码
-    $(".m-getcode").on("click", function () {
-      var tel = $(this).prev().val();
+    $(".m-getcode").on("click", function() {
+      var tel = $(this)
+        .prev()
+        .val();
 
       var pattern_tel = /^1[3-9][0-9]{9}$/;
       if (tel == "") {
-        $(this).prev().val("");
-        $(this).prev().attr("placeholder", "手机号码不能为空");
+        $(this)
+          .prev()
+          .val("");
+        $(this)
+          .prev()
+          .attr("placeholder", "手机号码不能为空");
         return;
       } else if (!pattern_tel.test(tel)) {
-        $(this).prev().val("");
-        $(this).prev().attr("placeholder", "手机号码不合法");
+        $(this)
+          .prev()
+          .val("");
+        $(this)
+          .prev()
+          .attr("placeholder", "手机号码不合法");
         return;
       }
-      var type = $(this).next().val();
-      var building_name = $(this).next().next().val();
+      var type = $(this)
+        .next()
+        .val();
+      var building_name = $(this)
+        .next()
+        .next()
+        .val();
       var data = {
         phone: tel,
         type: type,
-        building_name: building_name,
+        building_name: building_name
       };
-      $.post("{:url('home/content/port1')}", data, function (res) {}, "json");
+      $.post("{:url('home/content/port1')}", data, function(res) {}, "json");
       var time = 3;
-      var fn = function () {
+      var fn = function() {
         time--;
         if (time > 0) {
           $(".m-getcode").html("重新发送" + time + "s");
@@ -3860,39 +3945,45 @@ export default {
       var interval = setInterval(fn, 1000);
     });
 
-    $("#o_btn").on("click", function () {
+    $("#o_btn").on("click", function() {
       that.succ = false;
       $(".m-chang").hide();
     });
-    $(".o-esc").on("click", function () {
+    $(".o-esc").on("click", function() {
       that.succ = false;
       $(".m-chang").hide();
     });
 
     //楼盘问答---查看全文
     var flag = true;
-    $(".m-w-all").click(function () {
+    $(".m-w-all").click(function() {
       if (flag == true) {
-        $(this).prev().children("i").css({
-          "-webkit-line-clamp": "inherit",
-        });
+        $(this)
+          .prev()
+          .children("i")
+          .css({
+            "-webkit-line-clamp": "inherit"
+          });
         $(this).html("点击收起");
         flag = false;
       } else {
-        $(this).prev().children("i").css({
-          "-webkit-line-clamp": "3",
-        });
+        $(this)
+          .prev()
+          .children("i")
+          .css({
+            "-webkit-line-clamp": "3"
+          });
         $(this).html("查看全文");
         flag = true;
       }
     });
     //点击按钮出现hover
-    $(function () {
+    $(function() {
       function changeColor(id, class1, class2) {
-        $("#" + id).on("touchstart", function () {
+        $("#" + id).on("touchstart", function() {
           $(this).attr("class", class1);
         });
-        $("#" + id).on("touchend", function () {
+        $("#" + id).on("touchend", function() {
           $(this).attr("class", class2);
         });
       }
@@ -3917,7 +4008,7 @@ export default {
       this.priceline();
     },
 
-    nowHeight: function () {
+    nowHeight: function() {
       if (this.defaultHeight != this.nowHeight) {
         $(".weiter").css("top", "100px");
       } else {
@@ -3926,7 +4017,7 @@ export default {
     },
     $route() {
       this.$router.go(0);
-    },
+    }
   },
   updated() {
     if (this.over) {
@@ -3940,7 +4031,7 @@ export default {
   destroyed() {
     clearTimeout(this.timename);
     localStorage.removeItem("map");
-  },
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -5360,7 +5451,7 @@ h2 .cailist li img {
       outline: none;
     }
     button:nth-of-type(1) {
-      background: linear-gradient(-270deg,#348aff,#6accff);
+      background: linear-gradient(-270deg, #348aff, #6accff);
       margin-left: 1.9375rem;
       color: #fff;
     }
@@ -5369,6 +5460,52 @@ h2 .cailist li img {
       background-color: #f0f7f3;
       color: #3eacf0;
       margin-left: 0.625rem;
+    }
+  }
+}
+.my-infos {
+  h4 {
+    color: #121212;
+    font-size: 1rem;
+    font-weight: bold;
+    padding-left: 4%;
+    margin-top: 1.125rem;
+    margin-bottom: 1.5rem;
+    span {
+      color: #646466;
+      font-size: 0.875rem;
+      float: right;
+      font-weight: normal;
+      img {
+        width: 20%;
+        margin-left: 4%;
+        margin-bottom: 2px;
+      }
+    }
+  }
+  ul {
+    padding: 0 4%;
+    li {
+      color: #323233;
+      font-size: .875rem;
+      line-height: 1.375rem;
+      padding-bottom: 1.125rem;
+      border-bottom: .03125rem solid #F2F2F2;
+      margin-bottom: 1.0625rem;
+    }
+    li:before {
+      content: "";
+      display: inline-block;
+      width: .1875rem;
+      height: .1875rem;
+      background-color: #333;
+      border-radius: 50%;
+      margin-right: .3125rem;
+      vertical-align: middle;
+    }
+    li:last-child {
+      border: 0;
+      margin-bottom: .4375rem;
     }
   }
 }

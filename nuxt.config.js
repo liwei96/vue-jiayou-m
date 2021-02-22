@@ -221,7 +221,7 @@ export default {
       pathRewrite: {
         "^/mobile": "/mobile" // 去掉接口地址中的api字符串
       }
-    },
+    }
   },
   axios: {
     proxy: true, // 表示开启代理

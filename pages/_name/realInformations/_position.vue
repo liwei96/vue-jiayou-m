@@ -230,7 +230,8 @@ export default {
         });
     },
     goback() {
-      this.$router.push('/'+this.jkl);
+      // this.$router.push('/'+this.jkl);
+      this.$router.go(-1)
     },
     scroll() {
       let Y = window.scrollY;
