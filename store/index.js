@@ -187,6 +187,20 @@ const store = () => new Vuex.Store({
           $cookies.set('city', 242)
         }
         commit('setcity', 242)
+          break;
+        case 'nantong':
+        if (process.server == false) {
+          localStorage.setItem('city', 253)
+          $cookies.set('city', 253)
+        }
+        commit('setcity', 253)
+          break;
+        case 'yichang':
+        if (process.server == false) {
+          localStorage.setItem('city', 191)
+          $cookies.set('city', 191)
+        }
+        commit('setcity', 191)
         break;
       }
     },

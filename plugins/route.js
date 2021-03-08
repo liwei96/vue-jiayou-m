@@ -117,6 +117,20 @@ export default ({
         $cookies.set('city', 242)
       }
       store.state.city = 242
+        break;
+      case 'nantong':
+      if (process.server == false) {
+        localStorage.setItem('city', 253)
+        $cookies.set('city', 253)
+      }
+      store.state.city = 253
+        break;
+      case 'yichang':
+      if (process.server == false) {
+        localStorage.setItem('city', 191)
+        $cookies.set('city', 191)
+      }
+      store.state.city = 191
       break;
     }
     // let city = localStorage.getItem('city')

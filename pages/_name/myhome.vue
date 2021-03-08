@@ -44,11 +44,12 @@
               <img src="~/assets/home_icon.png" alt />
             </router-link>关于允家
           </li>
-          <li>
-            <a :href="'tel:'+call">
+          <li @click="gozhao">
+            <!-- <a :href="'tel:'+call"> -->
               <img src="~/assets/telephone_icon.png" alt />
-            </a>
-            联系我们
+            <!-- </a> -->
+            诚聘英才
+            <!-- 联系我们 -->
           </li>
           <li class="feeback">
             <img src="~/assets/Opinion.png" alt />
@@ -157,6 +158,9 @@ export default {
     };
   },
   methods: {
+    gozhao(){
+      window.location.href="http://recruit.jy8006.com?type=2&city="+localStorage.getItem('city')
+    },
     start() {
       this.n = this.$route.params.name;
       this.call = localStorage.getItem("call");

@@ -160,13 +160,23 @@ export default {
   },
   methods: {
     goback() {
-      this.$router.go(-1);
+      if (sessionStorage.getItem("ccid")) {
+       window.location.href =
+          "http://recruit.jy8006.com/content/"+sessionStorage.getItem("ccid")+"?type="+sessionStorage.getItem('hostnum')
+      }else {
+        this.$router.go(-1);
+      }
     }
   },
   components: {
     "foot-view": footView
   },
   mounted() {
+    let id = this.$route.query.cid
+    if(id){
+      sessionStorage.setItem('ccid',id)
+      sessionStorage.setItem('hostnum',this.$route.query.host)
+    }
     let h = $("#Exemption").height();
     if (h < 700) {
       $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });

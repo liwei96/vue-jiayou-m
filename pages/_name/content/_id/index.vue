@@ -572,8 +572,8 @@
         </div>
         <button class="p1" data-v="领取免费地图">我要领取地图</button>
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block"></div>
-      <div class="m-huo visible-xs-block .visible-sm-block">
+      <div class="m-line visible-xs-block .visible-sm-block"  v-if="chengjiao.length>0"></div>
+      <div class="m-huo visible-xs-block .visible-sm-block" v-if="chengjiao.length>0">
         <h3>
           查询最新成交价
           <p>
@@ -3112,7 +3112,6 @@ export default {
       url = url.split("?")[1];
       if (url && url.indexOf("scid") !== -1) {
         let sid = this.$route.query.scid;
-
         $cookies.set("scid", sid);
         that.iswx = false;
         that.iswxsid = true;
