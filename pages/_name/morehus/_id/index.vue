@@ -206,7 +206,7 @@ export default {
             `允家新房提供${this.city}${this.name}户型图、效果图、户型有哪些?我们为您提供全套图片，让您轻松了解${this.name}布局结构。`,
         },
         {
-          name: "keywords",
+          name: "Keywords",
           content: this.keywords || `${this.city}${this.name}户型图`,
         },
       ],

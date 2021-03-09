@@ -193,7 +193,7 @@ export default {
           content: this.dis
         },
         {
-          name: "keywords",
+          name: "Keywords",
           content: this.keywords
         }
       ]

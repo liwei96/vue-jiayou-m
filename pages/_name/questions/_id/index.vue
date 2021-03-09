@@ -241,7 +241,7 @@ export default {
           content: this.description || `${this.question.question}`,
         },
         {
-          name: "keywords",
+          name: "Keywords",
           content: this.keywords || `${this.question.question}`,
         },
       ],

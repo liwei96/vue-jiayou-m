@@ -1045,7 +1045,7 @@ export default {
           content: this.description,
         },
         {
-          name: "keywords",
+          name: "Keywords",
           content: this.keywords,
         },
       ],

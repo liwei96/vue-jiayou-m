@@ -482,7 +482,7 @@ export default {
             `允家新房提供${this.city}${this.name}${this.one.house}信息,让您了解真实${this.city}${this.name}房型图`,
         },
         {
-          name: "keywords",
+          name: "Keywords",
           content:
             this.keywords ||
             `${this.name}${this.one.house}户型，${this.name}${this.one.house}户型图`,

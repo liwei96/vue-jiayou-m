@@ -31,7 +31,7 @@ export default {
           content:  '允家新房'
         },
         {
-          name: "keywords",
+          name: "Keywords",
           content:  '允家新房'
         }
       ]
@@ -47,7 +47,7 @@ export default {
             "允家新房是专注于新房购买的O2O平台,为买房人提供一对一新房房产咨询服务和新楼盘信息，包括新楼盘价格走势和最新房源"
         },
         {
-          name: "keywords",
+          name: "Keywords",
           content: "关于我们"
         }
       ]

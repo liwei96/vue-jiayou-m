@@ -194,7 +194,7 @@ export default {
           content: this.description || "允家新房-允家咨询师",
         },
         {
-          name: "keywords",
+          name: "Keywords",
           content: this.keywords || "允家新房-允家咨询师",
         },
       ],

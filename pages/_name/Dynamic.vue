@@ -163,7 +163,7 @@ export default {
           content: this.description || '允家新房'
         },
         {
-          name: "keywords",
+          name: "Keywords",
           content: this.keywords || '允家新房'
         }
       ]

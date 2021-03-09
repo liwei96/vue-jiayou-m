@@ -183,7 +183,7 @@ export default {
             `允家新房${this.city}${this.name}楼盘动态为您提供实时楼盘动态,包括实时${this.name}楼盘新闻资讯,实时开盘时间信息、户型房源和价格打折信息等`,
         },
         {
-          name: "keywords",
+          name: "Keywords",
           content: this.keywords || `${this.city}${this.name}楼盘动态`,
         },
       ],
