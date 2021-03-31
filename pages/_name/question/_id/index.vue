@@ -156,7 +156,7 @@ export default {
     let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res] = await Promise.all([
       context.$axios
-        .get("/question/page", {
+        .get("/yun_jia/question/phone/list", {
           params: {
             page: 1,
             limit: 10,

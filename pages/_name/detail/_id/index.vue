@@ -7,7 +7,7 @@
     <div class="con">
       <h2>
         {{build.name}}
-        <span>在售</span>
+        <span>{{build.status}}</span>
       </h2>
       <p class="tabs">
         <span class="blue">{{build.decorate}}</span>
@@ -25,15 +25,15 @@
       </p>
       <p class="info">
         交房时间
-        <span>{{build.give_time}}</span>
+        <span>{{build.givetime}}</span>
       </p>
       <p class="info">
         楼盘户型
-        <span>{{build.apartment}}</span>
+        <span>{{build.houses}}</span>
       </p>
       <p class="info">
         开盘时间
-        <span>{{build.first_open_time}}</span>
+        <span>{{build.opentime}}</span>
       </p>
       <p class="info">
         开&nbsp; 发 &nbsp;商
@@ -68,7 +68,7 @@
       </p>
       <p class="info">
         预售许可证
-        <span>{{build.advance_licence}}</span>
+        <span>{{build.presale}}</span>
       </p>
     </div>
     <div class="line"></div>
@@ -83,7 +83,7 @@
       </p>
       <p class="info">
         容&nbsp; 积&nbsp; 率
-        <span>{{build.capacity_rate}}</span>
+        <span>{{build.capicity_rate}}</span>
       </p>
       <p class="info">
         绿&nbsp; 化&nbsp; 率
@@ -95,15 +95,15 @@
       </p>
       <p class="info">
         物业费用
-        <span>{{build.property_cost}}元/m²月</span>
+        <span>{{build.property_fee}}元/m²月</span>
       </p>
       <p class="info">
         物业公司
-        <span>{{build.property_company}}</span>
+        <span>{{build.property}}</span>
       </p>
       <p class="info">
         车位情况
-        <span>{{build.parking_num}}个车位</span>
+        <span>{{build.parking}}个车位</span>
       </p>
     </div>
     <div class="line"></div>
@@ -199,18 +199,18 @@ export default {
     let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
     let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res]= await Promise.all([
-      context.$axios.post('/api/project/detail',{ platform: 2, id: id, ip: ip,kid:kid,other:other })
+      context.$axios.get('/yun_jia/building/mobile/detail/abstract',{params:{ platform: 2, id: id, ip: ip,kid:kid,other:other }})
       .then((resp)=>{
-        let data = resp.data.data;
+        let data = resp.data;
           return data;
       })
     ])
     return{
-          build:res.building,
+          build:res.data,
           jkl:jkl,
-          title:res.title,
-          description:res.description,
-          keywords:res.keywords
+          title:res.common.header.title,
+          description:res.common.header.description,
+          keywords:res.common.header.keywords
     }
   },
   data() {

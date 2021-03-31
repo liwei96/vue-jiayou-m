@@ -53,7 +53,7 @@
           <div class="pro-msg">
             <h5>
               {{building.name}}
-              <span>{{building.status}}</span>
+              <span>{{building.state}}</span>
             </h5>
             <p class="price">
               <span>{{building.price}}</span>
@@ -61,7 +61,7 @@
             </p>
             <p
               class="info"
-            >住宅 | {{building.city}}-{{building.country.substr(0,2)}} | {{building.area}}m²</p>
+            >住宅 | {{building.city_name}}-{{building.country.substr(0,2)}} | {{building.area}}m²</p>
             <p class="type">
               <span class="zhuang">{{building.decorate}}</span>
               <span class="type-icon" v-for="(item,key) in building.feature" :key="key">{{item}}</span>
@@ -74,15 +74,15 @@
     <div class="answer">
       <div class="answer-title">
         <p class="title-tit">答</p>
-        <img :src="staff.head_img" alt />
+        <img :src="staff.staff.head_img" alt />
         <div class="answer-msg">
           <h6>
-            {{staff.name}}
+            {{staff.staff.name}}
             <span>专业解答</span>
           </h6>
           <p>
             最近咨询
-            <span>{{staff.ServeNum}}人</span>
+            <span>{{staff.num}}人</span>
           </p>
         </div>
         <button @click="show">免费咨询</button>
@@ -188,7 +188,7 @@ export default {
     let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res] = await Promise.all([
       context.$axios
-        .get("/mobile/question/detail", {
+        .get("/applets/question/detail", {
           params: {
             id: id,
             token: token,
@@ -205,7 +205,7 @@ export default {
     return {
       staff: res.common.staff,
       building: res.building,
-      question: res.question,
+      question: res.data,
       other: res.relevant,
       jkl: jkl,
       title: res.common.header.title,

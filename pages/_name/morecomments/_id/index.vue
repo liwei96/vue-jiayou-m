@@ -12,7 +12,7 @@
           </div>
           <div class="right">
             <h6>
-              {{item.user_name}}
+              {{item.name}}
               <van-rate
                 v-model="item.score"
                 :size="13"
@@ -24,8 +24,8 @@
             </h6>
             <p class="txt">{{item.content}}</p>
             <div class="btn">
-              <span>{{item.createtime}}</span>
-              <strong :data-v="item.id" @click="del($event)" v-if="tel==item.user_name">删除</strong>
+              <span>{{item.time}}</span>
+              <strong :data-v="item.id" @click="del($event)" v-if="tel==item.name">删除</strong>
               <p class="interaction">
                 <img
                   id="agree"
@@ -159,7 +159,7 @@ export default {
     let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res] = await Promise.all([
       context.$axios
-        .post("/api/project/comment_info", {
+        .get("/applets/comment/list", {params:{
           city: city,
           id: id,
           page: 1,
@@ -168,7 +168,7 @@ export default {
           kid:kid,
           other:other,
           platform:2
-        })
+        }})
         .then((resp) => {
           let data = resp.data;
           return data;
@@ -177,10 +177,10 @@ export default {
     return {
       lists: res.data,
       jkl: jkl,
-      title: res.title,
-      description: res.description,
-      keywords: res.keywords,
-      call:res.head.phone
+      title: res.common.header.title,
+      description: res.common.header.description,
+      keywords: res.common.header.keywords,
+      call:res.common.phone
     };
   },
   data() {
@@ -454,9 +454,6 @@ export default {
   mounted() {
     this.tel = localStorage.getItem("tel");
     $("#Foot").css({
-      position: "fixed",
-      bottom: "0",
-      width: "100%",
       marginBottom: "56px",
     });
     this.baoming = localStorage.getItem("phone");
@@ -569,7 +566,8 @@ h3 .home {
 
 .con {
   padding: 0 4%;
-  padding-bottom: 70px;
+  padding-bottom: 20px;
+  min-height: 76vh;
 }
 .rating-stars .rating-stars-container .rating-star {
   display: inline-block;

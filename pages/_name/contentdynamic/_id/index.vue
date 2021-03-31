@@ -10,16 +10,16 @@
       <div class="list" v-for="(m,key) in lists" :key="key">
         <p class="tit">
           <i class="round"></i>
-          {{m.createtime}}
+          {{m.time}}
         </p>
         <div class="lcon">
-          <h4>{{m.building_name}}最新房源动态</h4>
+          <h4>{{m.name}}最新房源动态</h4>
           <div class="lcon-con">
             <div class="left">
-              <img :src="m.building_img" alt />
+              <img :src="m.img" alt />
             </div>
             <div class="right">
-              <p>{{m.introduce}}</p>
+              <p>{{m.content}}</p>
               <span class="all" @click="all($event)">全文</span>
             </div>
           </div>
@@ -96,7 +96,7 @@
 import footView from "@/components/Foot.vue";
 import {
   dynamic_start,
-  dynamic,
+  newdynamic,
   ip,
   msg,
   verification,
@@ -122,30 +122,30 @@ export default {
       : "";
     let [res] = await Promise.all([
       context.$axios
-        .post("/api/project/dynamic", {
+        .get("/yun_jia/dynamic/phone/info", {params:{
           city: city,
           platform: 2,
           token: token,
           ip: ip,
-          project: id,
+          id: id,
           limit: 50,
           kid: kid,
           other: other,
-        })
+        }})
         .then((resp) => {
-          let data = resp.data.data;
+          let data = resp.data;
           return data;
         }),
     ]);
     return {
-      lists: res.dynamics.infos,
-      phone: res.phone,
+      lists: res.data,
+      phone: res.common.phone,
       checks: false,
       jkl: jkl,
-      title: res.title,
-      description: res.description,
-      keywords: res.keywords,
-      name: res.building.name,
+      title: res.common.header.title,
+      description: res.common.header.description,
+      keywords: res.common.header.keywords,
+      // name: res.building.name,
       city: name,
     };
   },
@@ -226,17 +226,18 @@ export default {
       let ip = this.ip;
       let token = localStorage.getItem("token");
       let id = this.$route.params.id;
-      dynamic({
+      newdynamic({
         page: this.page,
         city: city,
         platform: 2,
         token: token,
         ip: ip,
-        project: id,
+        id: id,
+        limit: 50
       })
         .then((resp) => {
           that.ting = true;
-          let data = resp.data.data.dynamics.infos;
+          let data = resp.data.data;
           let l = that.lists.concat(data);
           that.lists = l;
           that.page = that.page + 1;

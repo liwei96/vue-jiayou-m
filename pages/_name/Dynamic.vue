@@ -11,21 +11,21 @@
         <router-link :to="'/'+jkl+'/content/'+m.bid">
           <p class="tit">
             <i class="round"></i>
-            {{m.createtime}}
+            {{m.time}}
           </p>
         </router-link>
         <div class="lcon">
           <router-link :to="'/'+jkl+'/content/'+m.bid">
-            <h4>{{m.building_name}}最新房源动态</h4>
+            <h4>{{m.name}}最新房源动态</h4>
           </router-link>
           <div class="lcon-con">
             <router-link :to="'/'+jkl+'/content/'+m.bid">
               <div class="left">
-                <img :src="m.building_img" alt />
+                <img :src="m.img" alt />
               </div>
             </router-link>
             <div class="right">
-              <p>{{m.introduce}}</p>
+              <p>{{m.content}}</p>
               <span class="all" @click="all($event)">全文</span>
             </div>
           </div>
@@ -94,7 +94,7 @@
 <script>
 import {
   dynamic_start,
-  dynamic,
+  newdynamic,
   ip,
   msg,
   verification,
@@ -113,27 +113,28 @@ export default {
     let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res] = await Promise.all([
       context.$axios
-        .post("/api/project/dynamic", {
+        .get("/yun_jia/dynamic/phone/info", {params:{
           city: city,
           platform: 2,
           token: token,
           ip: ip,
           kid:kid,
-          other:other
-        })
+          other:other,
+          limit: 20
+        }})
         .then(resp => {
-          let data = resp.data.data;
+          let data = resp.data;
 
           return data;
         })
     ]);
     return {
-      lists: res.dynamics.infos,
-      phone: res.phone,
+      lists: res.data,
+      phone: res.common.phone,
       jkl: jkl,
-      title: res.title,
-      description: res.description,
-      keywords: res.keywords
+      title: res.common.header.title,
+      description: res.common.header.description,
+      keywords: res.common.header.keywords,
     };
   },
   data() {
@@ -208,16 +209,17 @@ export default {
       }
       let ip = this.ip;
       let token = localStorage.getItem("token");
-      dynamic({
+      newdynamic({
         page: this.page,
         city: city,
         platform: 2,
         token: token,
-        ip: ip
+        ip: ip,
+        limit: 20
       })
         .then(resp => {
           that.ting = true;
-          let data = resp.data.data.dynamics.infos;
+          let data = resp.data.data;
           let l = that.lists.concat(data);
           that.lists = l;
           that.page = that.page + 1;

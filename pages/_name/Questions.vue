@@ -139,7 +139,7 @@ import {
   ip,
   question_data,
   encyclopediaarticle_agree,
-  getquestions,
+  newgetquestions,
   trend_put,
   msg,
   verification,
@@ -155,7 +155,7 @@ export default {
     let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res] = await Promise.all([
       context.$axios
-        .get("/question/page", {
+        .get("/yun_jia/question/phone/list", {
           params: {
             page: 1,
             limit: 10,
@@ -319,9 +319,10 @@ export default {
         localStorage.getItem("ip");
         let token = localStorage.getItem("token");
         let city = localStorage.getItem("city");
-        getquestions({
+        newgetquestions({
           page: that.page,
           limit: 10,
+          city: city
         })
           .then((resp) => {
             let l = resp.data.data;

@@ -221,11 +221,24 @@ export default {
       pathRewrite: {
         "^/mobile": "/mobile" // 去掉接口地址中的api字符串
       }
+    },
+    "/yun_jia": {
+      target: "http://39.98.227.114:9560/", // 重新映射的新地址 
+      changeOrigin: true, // 是否跨域
+      pathRewrite: {
+        "^/yun_jia": "/yun_jia" // 去掉接口地址中的api字符串
+      }
+    },
+    "/applets": {
+      target: "http://39.98.227.114:9560/", // 重新映射的新地址 
+      changeOrigin: true, // 是否跨域
+      pathRewrite: {
+        "^/applets": "/applets" // 去掉接口地址中的api字符串
+      }
     }
   },
   axios: {
-    proxy: true, // 表示开启代理
-    credentials: true // 表示跨域请求时是否需要使用凭证
+    proxy: true // 表示开启代理
   },
 
   router: {

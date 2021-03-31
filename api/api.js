@@ -14,6 +14,7 @@ axios.interceptors.request.use(function (config) {
     }
   }
   if (config.method == 'get') {
+    console.log(config)
     config.params.uuid = $cookies.get('uuid')
   } else {
     if (config.data) {
@@ -136,6 +137,14 @@ export const dynamic = (msg) => {
     method: 'post',
     url: '/api/project/dynamic',
     data: msg
+  })
+}
+
+export const newdynamic = (msg) => {
+  return axios.request({
+    method: 'get',
+    url: '/yun_jia/dynamic/phone/info',
+    params: msg
   })
 }
 
@@ -548,6 +557,14 @@ export const getquestions = (msg) => {
   return axios.request({
     method: 'get',
     url: '/question/page',
+    params: msg
+  })
+}
+
+export const newgetquestions = (msg) => {
+  return axios.request({
+    method: 'get',
+    url: '/yun_jia/question/phone/list',
     params: msg
   })
 }

@@ -131,6 +131,13 @@ export default ({
         $cookies.set('city', 191)
       }
       store.state.city = 191
+        break;
+      case 'qiannan':
+      if (process.server == false) {
+        localStorage.setItem('city', 129)
+        $cookies.set('city', 129)
+      }
+      store.state.city = 129
       break;
     }
     // let city = localStorage.getItem('city')

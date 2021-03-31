@@ -16,7 +16,7 @@
         <!-- <img :src="img" alt /> -->
         <p v-html="con">{{con}}</p>
       </div>
-      <div class="con-list" v-show="building={}?false:ture">
+      <div class="con-list" v-show="building=={}?false:true">
         <router-link :to="'/'+jkl+'/content/'+building.id">
           <div class="con-list-top">
             <div class="list-top-left">
@@ -29,15 +29,15 @@
             <div class="list-top-right">
               <h5>
                 {{building.name}}
-                <span>{{building.status}}</span>
+                <span>{{building.state}}</span>
               </h5>
               <p class="price">
-                <span>{{building.single_price}}</span>元/m²
+                <span>{{building.price}}</span>元/m²
               </p>
               <p class="area">
                 <span>{{building.city}}-{{building.country}}</span>
                 <span>建面</span>
-                <span>{{building.area_min}}-{{building.area_max}}m²</span>
+                <span>{{building.area}}m²</span>
               </p>
               <p class="tabs">
                 <strong>{{building.decorate}}</strong>
@@ -150,7 +150,7 @@ export default {
     let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
     let [res] = await Promise.all([
       context.$axios
-        .post("/api/article/detail", {
+        .get("/applets/article/detail", {params:{
           ip: ip,
           city: city,
           id: id,
@@ -159,7 +159,7 @@ export default {
           token: token,
           kid:kid,
           other:other
-        })
+        }})
         .then(resp => {
           let data = resp.data;
           return data;
@@ -167,21 +167,21 @@ export default {
     ]);
     return {
       jkl: jkl,
-      building: res.data.project,
-      tit: res.data.title,
-      img: res.data.img,
-      dis: res.data.description,
-      con: res.data.content,
-      num: res.data.visit_count,
-      like: res.data.like_count,
-      recommands: res.data.recommands,
-      type: res.data.source_type,
-      source: res.data.source,
-      time: res.data.time,
-      title: res.data.position_name,
-      keywords: res.header.keywords,
-      description: res.header.description,
-      youlike: res.data.your_like
+      building: res.project_info,
+      tit: res.article.title,
+      img: res.article.img,
+      dis: res.article.description,
+      con: res.article.content,
+      num: res.article.visit_num,
+      like: res.article.like_num,
+      recommands: res.others,
+      // type: res.article.source_type,
+      source: res.article.source,
+      time: res.article.time,
+      title: res.common.header.title,
+      keywords: res.common.header.keywords,
+      description: res.common.header.description,
+      youlike: res.article.my_like
     };
   },
   head() {

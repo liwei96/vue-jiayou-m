@@ -5,19 +5,21 @@
       <img src="~/assets/top-house.png" alt class="home" @click="gohome" />
     </h3>
     <div class="bg">
-      <img :src="one.img" alt />
-      <span>共1张</span>
+      <img :src="one.small" alt />
+      <!-- <span>共1张</span> -->
     </div>
     <div class="con">
       <h4>
-        {{one.house}}
-        <span class="con-tab">{{one.status}}</span>
-        <span class="con-msg">房贷计算</span>
+        {{one.title}}
+        <span class="con-tab">{{one.state}}</span>
+        <!-- <span class="con-msg">房贷计算</span> -->
       </h4>
-      <div class="con-left">
+      <div class="con-con">
+        <div class="con-left">
         <p>
           单价：
-          <span>{{one.single_price}}元/m²起</span>
+          <span v-if="one.single_price!=0">{{one.single_price}}元/m²起</span>
+          <span v-else>未知</span>
         </p>
         <p>
           建面：
@@ -31,17 +33,20 @@
       <div class="con-right">
         <p>
           总价：
-          <span>{{one.price}}万</span>
+          <span v-if="one.price!=0">{{one.price}}万</span>
+          <span v-else>未知</span>
         </p>
-        <p>
+        <!-- <p>
           层高：
           <strong>{{one.height}}米</strong>
-        </p>
+        </p> -->
         <p>
           类型：
           <strong id="hu-tag">{{one.type}}</strong>
         </p>
       </div>
+      </div>
+      
       <div class="con-bom">
         <button class="p1" data-v="降价通知">
           <img src="~/assets/force.png" alt />降价通知
@@ -53,10 +58,10 @@
     </div>
     <div class="line"></div>
     <div class="peo">
-      <img src="~/assets/people.png" alt />
+      <img :src="staff.head_img" alt />
       <div class="peo-con">
         <h6>
-          李晓峰
+          {{staff.name}}
           <span>允家分析师</span>
         </h6>
         <p class="ping">评分 5.0</p>
@@ -77,11 +82,11 @@
       <ul>
         <li v-for="(item,key) in others" :key="key">
           <router-link :to="'/'+jkl+'/HuAnalysis/'+item.id">
-            <img :src="item.img" alt />
+            <img :src="item.small" alt />
             <div class="h-right">
               <h5>
-                {{item.house}}
-                <span class="now">{{item.status}}</span>
+                {{item.title}}
+                <span class="now">{{item.state}}</span>
                 <span class="price">{{item.price}}万起</span>
               </h5>
               <p>特点：{{item.special}}</p>
@@ -101,10 +106,10 @@
             <router-link :to="'/'+jkl+'/content/'+item.id">
               <div class="re-con-left">
                 <img :src="item.img" alt />
-                <span>
+                <!-- <span>
                   <i class="iconfont iconyanjing"></i>
                   {{item.num}}
-                </span>
+                </span> -->
               </div>
               <div class="re-con-right">
                 <h5>
@@ -241,7 +246,7 @@ export default {
       : "";
     let [res] = await Promise.all([
       context.$axios
-        .post("/api/project/apartment", {
+        .get("/yun_jia/houses/phone/detail", {params:{
           ip: ip,
           city: city,
           id: id,
@@ -249,43 +254,24 @@ export default {
           kid: kid,
           other: other,
           platform: 2,
-        })
+        }})
         .then((resp) => {
-          let dd = resp.data;
-          let data = resp.data.data;
-          if (data.this_one[1]) {
-            data.one = data.this_one[1];
-          } else if (data.this_one[2]) {
-            data.one = data.this_one[2];
-          } else if (data.this_one[3]) {
-            data.one = data.this_one[3];
-          } else if (data.this_one[4]) {
-            data.one = data.this_one[4];
-          } else if (data.this_one[5]) {
-            data.one = data.this_one[5];
-          } else if (data.this_one[6]) {
-            data.one = data.this_one[6];
-          } else if (data.this_one[7]) {
-            data.one = data.this_one[7];
-          } else if (data.this_one[8]) {
-            data.one = data.this_one[8];
-          } else if (data.this_one[0]) {
-            data.one = data.this_one[0];
-          }
-          return dd;
+          let data = resp.data;
+          return data;
         }),
     ]);
     return {
-      others: res.data.others,
-      likes: res.data.would_likes,
-      one: res.data.one,
+      others: res.other_rooms,
+      likes: res.recommends,
+      one: res.one,
       jkl: jkl,
-      title: res.head.title,
-      description: res.head.description,
-      keywords: res.head.keywords,
+      title: res.common.header.title,
+      description: res.common.header.description,
+      keywords: res.common.header.keywords,
       city: name,
       name: bud,
-      call: res.head.phone,
+      call: res.common.phone,
+      staff: res.common.staff
     };
   },
   components: {
@@ -707,6 +693,9 @@ h3 .home {
   font-size: 14px;
   margin-top: 4px;
 }
+.con .con-con {
+  display: flex;
+}
 .con .con-left {
   width: 49%;
   display: inline-block;
@@ -769,6 +758,7 @@ h3 .home {
   float: left;
   margin-right: 4.5%;
   padding-bottom: 20px;
+  border-radius: 50%;
 }
 .peo .peo-con {
   float: left;

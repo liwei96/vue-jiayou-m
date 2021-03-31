@@ -8,11 +8,11 @@
       <ul>
         <li v-for="(item,key) in lists" :key="key">
           <router-link :to="'/'+jkl+'/HuAnalysis/'+item.id+'/'+id">
-            <img :src="item.img" :alt="name+'户型图'" :title="name+'户型图'" />
+            <img :src="item.small" :alt="name+'户型图'" :title="name+'户型图'" />
             <div class="h-right">
               <h5>
-                {{item.house}}
-                <span class="now">{{item.status}}</span>
+                {{item.title}}
+                <span class="now">{{item.state}}</span>
                 <span class="price">{{item.price}}万起</span>
               </h5>
               <p>特点：{{item.special}}</p>
@@ -130,12 +130,14 @@ export default {
       : "";
     let [res] = await Promise.all([
       context.$axios
-        .post("/api/project/apartments", {
+        .get("/yun_jia/houses/phone/list", {
+          params:{
           id: id,
           platform: 2,
           ip: ip,
           kid: kid,
           other: other,
+        }
         })
         .then((resp) => {
           let data = resp.data;
@@ -144,15 +146,15 @@ export default {
         }),
     ]);
     return {
-      lists: res.data,
+      lists: res.other_rooms,
       checks: res.check,
       jkl: jkl,
-      name: res.detail.name,
-      title: res.head.title,
-      description: res.head.description,
-      keywords: res.head.keywords,
+      name: res.building.name,
+      title: res.common.header.title,
+      description: res.common.header.description,
+      keywords: res.common.header.keywords,
       city: name,
-      call: res.head.phone,
+      call: res.common.phone,
     };
   },
   components: {

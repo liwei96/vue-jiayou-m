@@ -268,21 +268,19 @@
                           :title="hot.name"
                         />
                         <span>TOP{{ key + 1 }}</span>
-                        <p>
+                        <!-- <p>
                           <img src="~/assets/weight.png" alt />
                           {{ hot.num }}
-                        </p>
+                        </p> -->
                       </div>
                       <div class="hf-con">
                         <h1>{{ hot.name }}</h1>
                         <p>
                           {{ hot.country }}&nbsp;&nbsp;&nbsp;{{
-                            parseInt(hot.area_min)
-                          }}
-                          <span v-if="hot.area_max">-</span>
-                          {{ parseInt(hot.area_max) }}m²
+                            parseInt(hot.area)
+                          }}m²
                         </p>
-                        <h6>{{ parseInt(hot.single_price) }}元/m²起</h6>
+                        <h6>{{ parseInt(hot.price) }}元/m²起</h6>
                       </div>
                     </div>
                   </nuxt-link>
@@ -307,10 +305,10 @@
                           :title="hot.name"
                         />
                         <span>TOP{{ key + 1 }}</span>
-                        <p>
+                        <!-- <p>
                           <img src="~/assets/indexhot.png" alt />
                           {{ hot.num }}
-                        </p>
+                        </p> -->
                       </div>
                       <div class="hf-con">
                         <h1>{{ hot.name }}</h1>
@@ -321,7 +319,7 @@
                           <span v-if="hot.area_max">-</span>
                           {{ parseInt(hot.area_max) }}m²
                         </p>
-                        <h6>{{ parseInt(hot.single_price) }}元/m²起</h6>
+                        <h6>{{ parseInt(hot.price) }}元/m²起</h6>
                       </div>
                     </div>
                   </nuxt-link>
@@ -346,10 +344,10 @@
                           :title="hot.name"
                         />
                         <span>TOP{{ key + 1 }}</span>
-                        <p>
+                        <!-- <p>
                           <img src="~/assets/indexsuc.png" alt />
                           {{ hot.num }}
-                        </p>
+                        </p> -->
                       </div>
                       <div class="hf-con">
                         <h1>{{ hot.name }}</h1>
@@ -360,7 +358,7 @@
                           <span v-if="hot.area_max">-</span>
                           {{ parseInt(hot.area_max) }}m²
                         </p>
-                        <h6>{{ parseInt(hot.single_price) }}元/m²起</h6>
+                        <h6>{{ parseInt(hot.price) }}元/m²起</h6>
                       </div>
                     </div>
                   </nuxt-link>
@@ -782,27 +780,25 @@
           <nuxt-link :to="'/' + pinyin + '/content/' + b.id">
             <div class="re-con-left">
               <img v-lazy="b.img" :alt="b.name" :title="b.name" />
-              <span>
+              <!-- <span>
                 <i class="iconfont iconyanjing"></i>
                 {{ b.num }}
-              </span>
+              </span> -->
             </div>
             <div class="re-con-right">
               <h5>
                 {{ b.name }}
-                <span>{{ b.status }}</span>
+                <span>{{ b.state }}</span>
               </h5>
               <p class="price">
-                <span>{{ b.single_price }}</span
+                <span>{{ b.price }}</span
                 >元/m²
               </p>
               <p class="area">
                 <span>{{ b.city }}-{{ b.country }}</span>
                 <span>建面</span>
-                <span v-if="b.area_max">
-                  {{ parseInt(b.area_min) }}
-                  <span id="arealine" v-if="b.area_max">-</span>
-                  {{ parseInt(b.area_max) }}m²
+                <span>
+                  {{ parseInt(b.area) }}m²
                 </span>
               </p>
               <p class="tabs">
@@ -853,73 +849,73 @@ export default {
     }
     let [res] = await Promise.all([
       context.$axios
-        .post("/api/first/index_mobile", {
+        .get("/yun_jia/phone", {params:{
           city: city,
           platform: 2,
           token: token,
           ip: ip,
           other: other,
           kid: kid,
-        })
+        }})
         .then((resp) => {
           let data = resp.data.data;
           let back = resp.data;
           let tel = data.phone;
           context.store.commit("setcall", { call: tel });
-          if (Number(data.price_trend.rate) > 0) {
-            data.price_trend.rate = "下跌" + data.price_trend.rate;
+          if (Number(data.avg_prices.last_month_rate) > 0) {
+            data.avg_prices.last_month_rate = "下跌" + data.avg_prices.last_month_rate;
           } else {
-            data.price_trend.rate = "涨幅" + Math.abs(data.price_trend.rate);
+            data.avg_prices.last_month_rate = "涨幅" + Math.abs(data.avg_prices.last_month_rate);
           }
 
-          if (Number(data.price_trend.rate_lastyear) < 0) {
-            data.price_trend.rate_lastyear =
-              "下跌" + Math.abs(data.price_trend.rate_lastyear);
+          if (Number(data.avg_prices.last_year_rate) < 0) {
+            data.avg_prices.last_year_rate =
+              "下跌" + Math.abs(data.avg_prices.last_year_rate);
           } else {
-            data.price_trend.rate_lastyear =
-              "涨幅" + data.price_trend.rate_lastyear;
+            data.avg_prices.last_year_rate =
+              "涨幅" + data.avg_prices.last_year_rate;
           }
 
-          if (data.features.existing.length != 0) {
-            data.existing1 = data.features.existing[0].img;
-            if (data.features.existing[1]) {
-              data.existing2 = data.features.existing[1].img;
+          if (data.completed_houses.length != 0) {
+            data.existing1 = data.completed_houses[0].img;
+            if (data.completed_houses[1]) {
+              data.existing2 = data.completed_houses[1].img;
             }
           }
-          if (data.features.invest.length != 0) {
-            data.invest1 = data.features.invest[0].img;
-            if (data.features.invest[1]) {
-              data.invest2 = data.features.invest[1].img;
+          if (data.investment.length != 0) {
+            data.invest1 = data.investment[0].img;
+            if (data.investment[1]) {
+              data.invest2 = data.investment[1].img;
             }
           }
-          if (data.features.rigid_demand.length != 0) {
-            data.rigid_demand1 = data.features.rigid_demand[0].img;
-            if (data.features.rigid_demand[1]) {
-              data.rigid_demand2 = data.features.rigid_demand[1].img;
+          if (data.rigid_demand.length != 0) {
+            data.rigid_demand1 = data.rigid_demand[0].img;
+            if (data.rigid_demand[1]) {
+              data.rigid_demand2 = data.rigid_demand[1].img;
             }
           }
-          if (data.features.improve.length != 0) {
-            data.improve1 = data.features.improve[0].img;
-            if (data.features.improve[1]) {
-              data.improve2 = data.features.improve[1].img;
+          if (data.improvement.length != 0) {
+            data.improve1 = data.improvement[0].img;
+            if (data.improvement[1]) {
+              data.improve2 = data.improvement[1].img;
             }
           }
 
-          if (data.dynaminc.dynamic_list.length != 0) {
-            data.dong = data.dynaminc.dynamic_list[0];
+          if (data.dynamics.length != 0) {
+            data.dong = data.dynamics[0];
           }
 
           if (data.dong) {
-            data.dong.num = data.dynaminc.dynamic_list_count;
+            data.dong.num = data.dynamic_num;
           }
           data.left_info =
-            data.article.focus_1.length > 0 ? data.article.focus_1[0] : "";
+            data.articles.focus_1.length > 0 ? data.articles.focus_1[0] : "";
           data.right_info1 =
-            data.article.focus_2.length > 0 ? data.article.focus_2[0] : "";
+            data.articles.focus_2.length > 0 ? data.articles.focus_2[0] : "";
           data.right_info2 =
-            data.article.focus_3.length > 0 ? data.article.focus_3[0] : "";
+            data.articles.focus_3.length > 0 ? data.articles.focus_3[0] : "";
 
-          for (let item of data.recommand.data) {
+          for (let item of data.recommends) {
             if (item.railway) {
               item.railway = item.railway.split(",")[0];
             }
@@ -929,24 +925,24 @@ export default {
         }),
     ]);
     return {
-      trend_price: res.data.price_trend.price,
-      trend_down: res.data.price_trend.rate,
-      trend_up: res.data.price_trend.rate_lastyear,
-      trend_mounth: res.data.price_trend.time,
-      hots: res.data.tops.hot_search,
+      trend_price: res.data.avg_prices.current_price,
+      trend_down: res.data.avg_prices.last_month_rate,
+      trend_up: res.data.avg_prices.last_year_rate,
+      trend_mounth: res.data.avg_prices.time,
+      hots: res.data.hot_searches,
       questions: res.data.answer,
-      buildings: res.data.recommand.data,
-      count: res.data.recommand.count,
-      tuis: res.data.tops.popular,
-      nows: res.data.tops.finish_deal,
-      trends: res.data.top_article,
-      s1_con: res.data.article.guide,
-      s5_con: res.data.article.hot_news,
-      s6_con: res.data.article.daily,
-      s7_con: res.data.article.land_auction,
-      s3_con: res.data.article.local,
-      s4_con: res.data.article.bulders,
-      s2_con: res.data.article.weiki,
+      buildings: res.data.recommends,
+      count: res.data.total,
+      tuis: res.data.popularity,
+      nows: res.data.deals,
+      trends: res.data.tops,
+      s1_con: res.data.articles.guides,
+      s5_con: res.data.articles.hots,
+      s6_con: res.data.articles.deal_report,
+      s7_con: res.data.articles.land_sale,
+      s3_con: res.data.articles.local,
+      s4_con: res.data.articles.enterprises,
+      s2_con: res.data.articles.encyclopedias,
       existing1: res.data.existing1,
       existing2: res.data.existing2,
       invest1: res.data.invest1,
@@ -959,14 +955,14 @@ export default {
       left_info: res.data.left_info,
       right_info1: res.data.right_info1,
       right_info2: res.data.right_info2,
-      title: res.data.title,
-      description: res.data.description,
-      keywords: res.data.keywords,
-      pinyin: res.city.pinyin,
-      tel: res.data.phone,
-      cityname: res.city.name,
-      city: res.city.id,
-      banner: res.data.banner,
+      title: res.common.header.title,
+      description: res.common.header.description,
+      keywords: res.common.header.keywords,
+      pinyin: res.data.city_info.pin,
+      tel: res.common.phone,
+      cityname: res.data.city_info.name,
+      city: res.data.city_info.id,
+      banner: [],
     };
   },
   data() {

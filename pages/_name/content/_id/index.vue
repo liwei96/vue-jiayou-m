@@ -58,7 +58,7 @@
         </h2>
       </div>
 
-      <div class="m-lun visible-xs-block .visible-sm-block">
+      <div class="m-lun">
         <div class="zao"></div>
         <div class="m-luns">
           <img
@@ -114,14 +114,14 @@
           </div>
         </div>
       </div>
-      <div class="m-incro visible-xs-block .visible-sm-block">
+      <div class="m-incro ">
         <h3>{{ building.name }}</h3>
 
         <div class="m-ic-icons">
           <span class="m-zai">{{ building.status }}</span>
           <span class="m-jing">{{ building.decorate }}</span>
-          <span v-show="building.railway">{{ building.railway }}</span>
-          <span>{{ building.features[0] }}</span>
+          <!-- <span v-show="building.railway">{{ building.railway }}</span> -->
+          <span>{{ building.feature }}</span>
           <strong v-show="tuan == 1">限时优惠</strong>
           <div class="build-icons" v-show="!iswx">
             <div class="icons-left">
@@ -202,7 +202,7 @@
             </li>
             <li>
               开盘：
-              <span>{{ building.timeline.first_open_time }}</span>
+              <span>{{ building.firstopentime }}</span>
             </li>
           </ul>
           <nuxt-link :to="'/' + jkl + '/detail/' + id">
@@ -228,7 +228,7 @@
         </div>
       </div>
 
-      <div class="m-image visible-xs-block .visible-sm-block">
+      <div class="m-image">
         <!-- <a data-agl-cvt="2" :href="'tel:'+call" v-show="!iswxsid">
           <img src="~/assets/mj-tell.png" alt />
         </a>-->
@@ -349,18 +349,18 @@
           </div>
         </div>
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block"></div>
+      <div class="m-line"></div>
       <div class="top-num" v-show="false">
         <img src="~/assets/content-top.png" alt class="content-top" />
         <span>刚需楼盘榜第4名</span>
         <img class="totop" src="~/assets/m-go.png" alt />
       </div>
 
-      <div class="banner" v-if="banner.length != 0" @click="gobanner">
+      <!-- <div class="banner" v-if="banner.length != 0" @click="gobanner">
         <img :src="banner.img" alt />
       </div>
-      <div class="m-line" v-if="banner.length != 0"></div>
-      <div class="m-dong visible-xs-block .visible-sm-block">
+      <div class="m-line" v-if="banner.length != 0"></div> -->
+      <div class="m-dong">
         <h3 id="m_dong">
           楼盘动态
           <nuxt-link :to="'/' + jkl + '/contentdynamic/' + id">
@@ -377,7 +377,7 @@
             <i>最新</i>
           </span>
           <h4>最新房源动态</h4>
-          <p>{{ nowdong.introduce }}</p>
+          <p>{{ nowdong.content }}</p>
         </div>
         <div class="m-jia m-d" v-show="tui">
           <span>
@@ -385,7 +385,7 @@
             <i>加推</i>
           </span>
           <h4>最新加推楼盘</h4>
-          <p>{{ tui.introduce }}</p>
+          <p>{{ tui.content }}</p>
         </div>
 
         <div class="t-o o1"></div>
@@ -430,9 +430,9 @@
         <button class="p1" data-v="订阅最新动态">获取最新动态</button>
       </div>
 
-      <div class="m-line visible-xs-block .visible-sm-block" v-show="hu"></div>
+      <div class="m-line" v-show="hu"></div>
 
-      <div class="m-hu visible-xs-block .visible-sm-block" v-show="hu">
+      <div class="m-hu" v-show="hu">
         <h3>
           主力户型
           <nuxt-link :to="'/' + jkl + '/morehus/' + id">
@@ -451,7 +451,7 @@
                 >
                   <div class="top">
                     <img
-                      :src="h.small ? h.small : defaultimg"
+                      :src="h.img ? h.img : defaultimg"
                       :alt="building.name + '户型图'"
                       :title="building.name + '户型图'"
                     />
@@ -483,10 +483,10 @@
         <span>876人已领取</span>
       </div> -->
 
-      <div class="m-line visible-xs-block .visible-sm-block"></div>
+      <div class="m-line "></div>
 
       <!--对比分析资料 -->
-      <div class="m-fen visible-xs-block .visible-sm-block">
+      <div class="m-fen ">
         <h3>
           项目分析资料
           <nuxt-link :to="'/' + jkl + '/analysis/' + id">
@@ -505,7 +505,7 @@
                 <div class="tou-con">
                   <h4>投资分析</h4>
                   <p v-for="(v, key) in invest" :key="key">
-                    {{ key + 1 }}、{{ v }}
+                    {{ key + 1 }}、{{ v.content }}
                   </p>
                 </div>
                 <div class="tou-img">
@@ -518,7 +518,7 @@
                 <div class="tou-con">
                   <h4>宜居分析</h4>
                   <p v-for="(v, key) in live" :key="key">
-                    {{ key + 1 }}、{{ v }}
+                    {{ key + 1 }}、{{ v.content }}
                   </p>
                 </div>
                 <div class="tou-img">
@@ -533,7 +533,7 @@
         <button class="p1" data-v="获取楼盘分析资料">获取楼盘分析资料</button>
       </div>
       <div
-        class="m-line visible-xs-block .visible-sm-block"
+        class="m-line"
         v-show="tuan == 1"
       ></div>
       <!-- <div class="tuan-qiang" v-show="tuan==1">
@@ -548,7 +548,7 @@
         </div>
       </div>
       <div class="m-line visible-xs-block .visible-sm-block"></div>-->
-      <div class="m-ling visible-xs-block .visible-sm-block">
+      <div class="m-ling">
         <h3>
           领取免费地图
           <span>
@@ -572,8 +572,8 @@
         </div>
         <button class="p1" data-v="领取免费地图">我要领取地图</button>
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block"  v-if="chengjiao.length>0"></div>
-      <div class="m-huo visible-xs-block .visible-sm-block" v-if="chengjiao.length>0">
+      <div class="m-line"  v-if="chengjiao.length>0&&isnow"></div>
+      <div class="m-huo" v-if="chengjiao.length>0&&isnow">
         <h3>
           查询最新成交价
           <p>
@@ -606,8 +606,8 @@
           <button class="p1" data-v="获取最新成交价">获取最新成交价</button>
         </div>
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block"></div>
-      <div class="m-dai visible-xs-block .visible-sm-block">
+      <div class="m-line"></div>
+      <div class="m-dai">
         <h3>
           楼盘问答
           <nuxt-link :to="'/' + jkl + '/question/' + id">
@@ -758,9 +758,9 @@
         </div>
         <button class="p1" data-v="获取详细周边配套">获取详细周边配套</button>
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block"></div>
+      <div class="m-line"></div>
       <!-- 房价趋势 -->
-      <div class="m-trend visible-xs-block .visible-sm-block">
+      <div class="m-trend">
         <h4>房价趋势</h4>
         <div id="pic"></div>
         <div class="m-mark">
@@ -777,7 +777,7 @@
         </p>
         <button class="p1" data-v="最新房价趋势解读">最新房价趋势解读</button>
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block"></div>
+      <div class="m-line"></div>
       <!-- 楼盘对比 -->
       <div class="m-contrast">
         <h4>楼盘对比</h4>
@@ -805,9 +805,9 @@
           </div>
         </div>
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block"></div>
+      <div class="m-line"></div>
       <!-- 楼盘点评 -->
-      <div class="m-dian visible-xs-block .visible-sm-block" id="dianping">
+      <div class="m-dian" id="dianping">
         <h4>
           楼盘点评
           <nuxt-link :to="'/' + jkl + '/morecomments/' + id">
@@ -874,7 +874,7 @@
         <button class="m-d-x" @click="gocomment">我要点评</button>
         <!-- </nuxt-link> -->
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block"></div>
+      <div class="m-line" v-if="infos.length>0"></div>
       <!-- 相关资讯 -->
       <div class="my-infos" v-if="infos.length>0">
         <h4>
@@ -886,9 +886,9 @@
           </nuxt-link>
         </ul>
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block"></div>
+      <div class="m-line"></div>
       <!-- 同价位、区位 -->
-      <div class="m-tui visible-xs-block .visible-sm-block">
+      <div class="m-tui">
         <div class="m-nav">
           <p class="n-active" @click="n1s">
             同价位楼盘
@@ -919,7 +919,7 @@
                   <span>{{ list.status }}</span>
                 </h5>
                 <p class="price">
-                  <span>{{ list.price }}</span
+                  <span>{{ list.single_price }}</span
                   >元/m²
                 </p>
                 <p class="area">
@@ -962,7 +962,7 @@
                   <span>{{ list.status }}</span>
                 </h5>
                 <p class="price">
-                  <span>{{ list.price }}</span
+                  <span>{{ list.single_price }}</span
                   >元/m²
                 </p>
                 <p class="area">
@@ -986,7 +986,7 @@
           </div>
         </div>
       </div>
-      <div class="visible-xs-block .visible-sm-block m-ll"></div>
+      <div class=" m-ll"></div>
       <!-- 微信环境的浏览记录 -->
       <div class="wxlu" v-show="iswxsid">
         <div class="swiper-wrapper">
@@ -1007,7 +1007,7 @@
       </div>
       <!-- 底部悬浮 -->
       <div
-        class="m-botnav visible-xs-block .visible-sm-block"
+        class="m-botnav"
         v-show="!iswxsid"
       >
         <p id="m_shou" @click="gotalk" v-if="totalnum <= 0 || !totalnum">
@@ -1372,30 +1372,30 @@ export default {
 
     let jkl = context.params.name;
     let [res1] = await Promise.all([
-      context.$axios.post("/api/detail/mobile", data).then(res => {
+      context.$axios.get("/yun_jia/building/mobile/detail", {params:data}).then(res => {
         if (res) {
           if (res.data.code === 200) {
             let data = res.data;
-            data.topimg = data.info.constant.img;
+            data.topimg = data.data.img;
             let times = [];
-            for (let item of data.info.constant.deals) {
+            for (let item of data.data.deals) {
               times.push(item.date.replace(/-/g, "/").substr(5));
             }
             let prices = [];
-            for (let item of data.info.constant.deals) {
+            for (let item of data.data.deals) {
               prices.push(item.money);
             }
             data.prices = prices;
             data.times = times;
-            let trend = data.info.constant.avg_prices;
+            let trend = data.data.price_trend;
             let p1 = [];
             let p2 = [];
             let p3 = [];
             let t = [];
             for (let item in trend) {
-              p1.unshift(Number(trend[item]["city"]).toFixed(0));
-              p2.unshift(Number(trend[item]["country"]).toFixed(0));
-              p3.unshift(Number(trend[item]["project"]).toFixed(0));
+              p1.unshift(Number(trend[item]["city_price"]).toFixed(0));
+              p2.unshift(Number(trend[item]["country_price"]).toFixed(0));
+              p3.unshift(Number(trend[item]["project_price"]).toFixed(0));
               let d = trend[item]["time"].replace(/-/g, "/");
               t.unshift(d);
             }
@@ -1408,7 +1408,7 @@ export default {
 
             if (
               new Date(
-                data.info.constant.timeline.get_land_time.replace(/-/g, "/")
+                data.data.getlandtime.replace(/-/g, "/")
               ).getTime() < now
             ) {
               data.jfss = "tegood";
@@ -1418,7 +1418,7 @@ export default {
             }
             if (
               new Date(
-                data.info.constant.timeline.add_push_time.replace(/-/g, "/")
+                data.data.push_time.replace(/-/g, "/")
               ).getTime() < now
             ) {
               data.jtss = "dactive tegood";
@@ -1430,19 +1430,21 @@ export default {
             }
             if (
               new Date(
-                data.info.constant.timeline.first_open_time.replace(/-/g, "/")
+                data.data.firstopentime.replace(/-/g, "/")
               ).getTime() < now
             ) {
               data.skss = "dactive tegood";
               data.jfss = "tegood";
               data.ndss = "tegood";
               data.jtss = "tegood";
+              data.isnow = true
             } else {
               data.skss = "tegood";
+              data.isnow = false
             }
             if (
               new Date(
-                data.info.constant.timeline.give_time.replace(/-/g, "/")
+                data.data.givetime.replace(/-/g, "/")
               ).getTime() < now
             ) {
               data.jfss = "dactive tegood";
@@ -1454,23 +1456,23 @@ export default {
             }
             data.nowdong = {};
             data.tui = {};
-            if (data.info.varialble.dynamics.length != 0) {
-              data.nowdong = data.info.varialble.dynamics[0];
-              if (data.info.varialble.dynamics.length === 2) {
-                data.tui = data.info.varialble.dynamics[1];
+            if (data.data.dynamics.length != 0) {
+              data.nowdong = data.data.dynamics[0];
+              if (data.data.dynamics.length === 2) {
+                data.tui = data.data.dynamics[1];
               }
             }
-            let p = parseInt(data.info.constant.single_price / 10000);
+            let p = parseInt(data.data.single_price / 10000);
             data.max = p + 3;
-
-            if (!data.hasOwnProperty("head")) {
-              data.head.phone = "400-718-6686";
-              data.head.title = "允家新房";
-              data.head.description = "允家新房";
-              data.head.keywords = "允家新房";
-              data.head.open = 0;
+            
+            if (!data.hasOwnProperty("common")) {
+              data.common.phone = "400-718-6686";
+              data.common.header.title = "允家新房";
+              data.common.header.description = "允家新房";
+              data.common.header.keywords = "允家新房";
+              data.common.header.open = 0;
             }
-            if (Object.keys(data.share_info).length == 0) {
+            if (Object.keys(data.common.share_info).length == 0) {
               data.share_info = {
                 staff: {
                   tel: 123,
@@ -1480,65 +1482,75 @@ export default {
                 visitors: []
               };
             }
+            data.live = []
+            data.invest = []
+            for (let item of data.data.analysises) {
+              if(item.type ==1) {
+                data.live.push(item)
+              }else{
+                data.invest.push(item)
+              }
+            }
             return data;
           }
         }
       })
     ]);
     return {
-      jkl: res1.head.city_data.pinyin,
-      call: res1.head.phone,
-      la: res1.info.constant.location.latitude,
-      ln: res1.info.constant.location.longitude,
-      topnum: res1.info.constant.img_count,
-      building: res1.info.constant,
-      tit: res1.info.constant.name,
-      ds: res1.info.varialble.dynamics_count,
-      phone: res1.head.phone,
+      jkl: res1.common.city.pin,
+      call: res1.common.phone,
+      la: res1.data.latitude,
+      ln: res1.data.longitude,
+      topnum: res1.data.imgs_num,
+      building: res1.data,
+      tit: res1.data.name,
+      ds: res1.data.dynamic_num,
+      phone: res1.common.phone,
       nowdong: res1.nowdong,
       tui: res1.tui,
-      hu: res1.info.constant.apartments,
-      live: res1.info.constant.analysis.live,
-      invest: res1.info.constant.analysis.invest,
-      // searchnum: res1.info.varialble.num.search_num,
-      chengjiao: res1.info.constant.deals,
+      hu: res1.data.appartments,
+      live: res1.live,
+      invest: res1.invest,
+      // searchnum: res1.num.search_num,
+      chengjiao: res1.data.deals,
       times: res1.times,
       prices: res1.prices,
-      questions: res1.info.varialble.questions,
-      location: res1.info.constant.location,
-      compares: res1.info.varialble.compares,
-      comments: res1.info.varialble.comments,
-      same_price: res1.info.constant.same_price,
-      same_area: res1.info.constant.same_area,
+      questions: res1.data.questions,
+      location: res1.data.location,
+      compares: res1.data.contrast,
+      comments: res1.data.comments,
+      same_price: res1.data.same_prices,
+      same_area: res1.data.same_areas,
       trend_time: res1.t,
       trend_price1: res1.p1,
       trend_price2: res1.p2,
       trend_price3: res1.p3,
-      ndtime: res1.info.constant.timeline.get_land_time,
-      jftime: res1.info.constant.timeline.give_time,
-      sktime: res1.info.constant.timeline.first_open_time,
-      jttime: res1.info.constant.timeline.add_push_time,
+      ndtime: res1.data.getlandtime,
+      jftime: res1.data.givetime,
+      sktime: res1.data.firstopentime,
+      jttime: res1.data.push_time,
       ndss: res1.ndss,
       jtss: res1.jtss,
       skss: res1.skss,
       jfss: res1.jfss,
-      title: res1.head.title,
-      description: res1.head.description,
-      keywords: res1.head.keywords,
-      collect: res1.info.varialble.collect,
+      title: res1.common.header.title,
+      description: res1.common.header.description,
+      keywords: res1.common.header.keywords,
+      collect: res1.data.collect,
       checks: true,
-      city: res1.info.constant.city,
+      city: res1.common.city.id,
       // tuan: res1.activity.group.flag,
       // group_buy: res1.activity.group.info,
       // sign: res1.activity.sign,
-      open: res1.head.open,
+      // open: res1.head.open,
       topimg: res1.topimg,
       max: res1.max,
       ws: false,
       share: res1.share_info,
       banner: res1.banner,
       activity: res1.activity || [],
-      infos: res1.article
+      infos: res1.data.articles,
+      isnow: res1.isnow
     };
   },
   data() {
@@ -3159,6 +3171,7 @@ export default {
   },
   mounted() {
     let that = this;
+    console.log(99)
     $cookies.set("cityname", this.building.city_fullname);
     localStorage.setItem("call", this.call);
     this.ws = this.$store.state.ws;
@@ -3257,7 +3270,7 @@ export default {
     if (!sessionStorage.getItem(that.building.id + "kk")) {
       setTimeout(() => {
         sessionStorage.setItem(that.building.id + "kk", 1);
-        that.shouping = true;
+        // that.shouping = true;
       }, 2000);
       setTimeout(() => {
         if (this.sp) {
