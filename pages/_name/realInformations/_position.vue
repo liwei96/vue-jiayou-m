@@ -3,291 +3,238 @@
     <h3>
       <img src="~/assets/return.png" @click="goback" />房产楼讯
     </h3>
-    <div class="m-luns">
-      <div class="swiper-top">
+    <div class="input">
+      <nuxt-link :to="'/'+jkl+'/searcharitype'">
+      <input type="text" placeholder="搜搜你想要了解的房产咨询吧" disabled/>
+      <img src="~/assets/search.png" alt />
+      </nuxt-link>
+    </div>
+    <div class="topimgs">
+      <div class="swiper-topimg">
         <div class="swiper-wrapper">
-          <div class="swiper-slide" v-for="(lun,key) in luns" :key="key">
-            <router-link :to="'/'+jkl+'/encyclopediaArticle/'+lun.position+'/'+lun.id">
-              <img :src="lun.img" style="width:100%" />
-              <div class="zhe"></div>
-            </router-link>
-            <p>{{lun.title}}</p>
+          <div class="swiper-slide" v-for="(item,key) in tops" :key="key">
+            <nuxt-link :to="'/'+jkl+'/realinformations/'+item.id">
+            <img :src="item.img" :alt="item.title" />
+            <p>{{item.title}}</p>
+            </nuxt-link>
           </div>
         </div>
-        <div id="swiper-pagination1"></div>
+        <div class="swiper-pagination"></div>
       </div>
     </div>
-    <div class="nav">
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide" data-v="46">
-              <router-link :to="'/'+jkl+'/realinformations/46'">
-            <div class="tegood">
-              <p :class="position == 46 ? 'active' : ''" @click="get($event)" data-v="46">
-                楼盘导购
-                <i></i>
-              </p>
-            </div>
-            </router-link>
-          </div>
-          <div class="swiper-slide" data-v="48">
-              <router-link :to="'/'+jkl+'/realinformations/48'">
-            <div class="tegood">
-              <p :class="position == 48 ? 'active' : ''" @click="get($event)" data-v="48">
-                本地楼市
-                <i></i>
-              </p>
-            </div>
-            </router-link>
-          </div>
-          <div class="swiper-slide" data-v="49">
-              <router-link :to="'/'+jkl+'/realinformations/49'">
-            <div class="tegood">
-              <p :class="position == 49 ? 'active' : ''" @click="get($event)" data-v="49">
-                房企资讯
-                <i></i>
-              </p>
-            </div>
-            </router-link>
-          </div>
-          <div class="swiper-slide" data-v="50">
-              <router-link :to="'/'+jkl+'/realinformations/50'">
-            <div class="tegood">
-              <p :class="position == 50 ? 'active' : ''" @click="get($event)" data-v="50">
-                热点新闻
-                <i></i>
-              </p>
-            </div>
-            </router-link>
-          </div>
-          <div class="swiper-slide" data-v="51">
-              <router-link :to="'/'+jkl+'/realinformations/51'">
-            <div class="tegood">
-              <p :class="position == 51 ? 'active' : ''" @click="get($event)" data-v="51">
-                成交报告
-                <i></i>
-              </p>
-            </div>
-            </router-link>
-          </div>
-          <div class="swiper-slide" data-v="52">
-              <router-link :to="'/'+jkl+'/realinformations/52'">
-            <div class="tegood">
-              <p :class="position == 52 ? 'active' : ''" @click="get($event)" data-v="52">
-                土拍成交
-                <i></i>
-              </p>
-            </div>
-            </router-link>
-          </div>
-          <div class="swiper-slide" data-v="99">
-              <router-link :to="'/'+jkl+'/realinformations/99'">
-            <div class="tegood">
-              <p :class="position == 99 ? 'active' : ''" @click="get($event)" data-v="99">
-                楼盘动态
-                <i></i>
-              </p>
-            </div>
-            </router-link>
-          </div>
+    <div class="swiper-nav">
+      <div class="swiper-wrapper">
+        <div
+          :class="navnum == item.id?'swiper-slide active':'swiper-slide'"
+          @click="setnavnum(item.id)"
+          v-for="(item,key) in navs"
+          :key="key"
+        >
+          {{item.name}}
+          <p></p>
         </div>
       </div>
     </div>
-    <ul class="lists">
-      <li v-for="(list,key) in lists" :key="key">
-        <router-link :to="'/'+jkl+'/encyclopediaArticle/'+list.position+'/'+list.id">
-          <div class="list">
+    <div class="con">
+      <template v-for="(item,key) in lists">
+        <nuxt-link :to="'/'+jkl+'/encyclopediaArticle/'+navnum+'/'+item.id" :key="key">
+          <div class="li">
             <div class="left">
-              <h5>{{list.title}}</h5>
-              <p>{{ list.source==''?'允家新房':list.source }} &nbsp;{{list.time}}</p>
+              <h5>
+                <span v-if="key==0">新</span>
+                {{item.title}}
+              </h5>
+              <p>
+                {{item.source}}
+                <span>{{item.begin}}</span>
+              </p>
             </div>
             <div class="right">
-              <img :src="list.img" alt />
+              <img :src="item.img" :alt="item.title" />
             </div>
           </div>
-        </router-link>
-      </li>
-    </ul>
-    <foot-view :pinyin="jkl"></foot-view>
+        </nuxt-link>
+      </template>
+    </div>
   </div>
 </template>
 <script>
 import Swiper from "swiper";
 import "swiper/css/swiper.min.css";
-import footView from "@/components/Foot.vue";
-import { realInformations_data, realInformations_start, ip } from "~/api/api";
+import { aritles } from "~/api/api";
 export default {
   name: "RealInformations",
-  async asyncData (context) {
-    let ip=context.store.state.cookie.ip;
+ async asyncData(context) {
+    let other = context.query.other;
     let city = context.store.state.city;
-    let token=context.store.state.cookie.token;
-    let jkl=context.params.name;
+    let token = context.store.state.cookie.token;
+    let jkl = context.params.name;
     let position = context.params.position;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res1,res2]= await Promise.all([
-      context.$axios.post('/api/article/info',{
-        city: city,
-        ip: ip,
-        platform: 2,
-        token: token,
-        kid:kid,
-        other:other
-      })
-      .then((resp)=>{
-        let data = resp.data;
+    let [res,res1] = await Promise.all([
+      context.$axios
+        .get("/jy/article/info", {
+          params: {
+            city: city,
+            position: position,
+            page: 1,
+            limit: 10,
+          },
+        })
+        .then((resp) => {
+          let data = resp.data;
+          //   console.log(data);
           return data;
-      }),
-      context.$axios.post('/api/article/page',{
-        city: city,
-        platform: 2,
-        position: position,
-        token: token,
-        page: 1,
-        limit: 10,
-        kid:kid,
-        other:other
-      })
-      .then((resp)=>{
-        let data = resp.data.data.data;
+        }),
+        context.$axios
+        .get("/jy/article/phone/news", {
+          params: {
+            city: city,
+            token:token
+          },
+        })
+        .then((resp) => {
+          let data = resp.data;
+          //   console.log(data);
           return data;
-      }),
-    ]) 
-    return{
-      luns : res1.data[0].imgs,
-          nav : res1.data[0].title,
-          lists : res2,
-          tit:res1.header.title,
-          key:res1.header.keywords,
-          des:res1.header.description,
-          jkl:jkl,
-          city:city,
-          position : position
-    }
-  },
-  data() {
+        }),
+    ]);
     return {
-      lists: [],
-      luns: [],
-      nav: [],
-      ip: "",
-      n: "",
-      tit:'',
-      des:'',
-      key:'',
-      jkl:'',
-      position:'',
-      city:''
+      jkl: jkl,
+      lists: res.data,
+      position: position,
+      navnum: position,
+      isok: true,
+      tops:res1.tops,
+      title:res1.common.header.title,
+      description:res1.common.header.description,
+      keywords:res1.common.header.keywords
     };
   },
-  components: {
-    "foot-view": footView
-  },
-  head(){
+  head() {
     return {
-      title:this.tit,
-      meta:[
+      title: this.title || "家园新房-咨询列表",
+      meta: [
         {
           name: "description",
-          content: this.des
+          content: this.description || 
+            "家园新房"
         },
         {
           name: "Keywords",
-          content: this.key
+          content: this.keywords || "家园新房"
         }
       ]
-    }
+    };
+  },
+  data() {
+    return {
+      navnum: 0,
+      isnew: 1,
+      navs: [
+        {
+          id: "46",
+          name: "楼盘导购",
+        },
+        {
+          id: "48",
+          name: "本地楼市",
+        },
+        {
+          id: "49",
+          name: "房企资讯",
+        },
+        {
+          id: "50",
+          name: "热点新闻",
+        },
+        {
+          id: "54",
+          name: "日报",
+        },
+        {
+          id: "75",
+          name: "周报",
+        },
+        {
+          id: "55",
+          name: "月报",
+        },
+        {
+          id: "52",
+          name: "土拍成交",
+        },
+        {
+          id: "52",
+          name: "楼盘动态",
+        },
+      ],
+      lists: [],
+      page: 2,
+      isok: true,
+      tops:[],
+      position: 0,
+    };
   },
   methods: {
-    start() {
-      this.n = this.$route.params.name;
-      let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
-      this.ip = ip;
-      $cookies.set('ip',ip);
-      $cookies.set('pinyin',this.n);
-    },
-    get(e) {
-      let id = e.target.getAttribute("data-v");
-      let ip = this.ip;
-      let city = this.city;
-      let token = localStorage.getItem("token");
-      let that = this;
-      realInformations_data({
-        city: city,
-        platform: 2,
-        position: id,
-        token: token,
-        page: 1,
-        limit: 10
-      })
-        .then(resp => {
-          that.lists = resp.data.data.data;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
     goback() {
-      // this.$router.push('/'+this.jkl);
       this.$router.go(-1)
     },
-    scroll() {
-      let Y = window.scrollY;
-      if (Y <= 254) {
-        $(".nav").css("position", "relative");
-      } else {
-        $(".nav").css({ position: "fixed", top: 0 });
+    setnavnum(n) {
+      this.$router.push("/" + this.jkl + "/realinformations/" + n);
+    },
+    getmore() {
+      let that = this;
+      var scrollTop = window.scrollY;
+      var scrollHeight = window.screen.availHeight;
+      var windowHeight = document.body.scrollHeight;
+      if (scrollTop + scrollHeight >= windowHeight) {
+        if (that.isok) {
+          that.isok = false;
+          let city = $cookies.get("city");
+          aritles({
+            position: that.position,
+            page: that.page,
+            limit: 10,
+            city: city,
+          }).then((res) => {
+            that.lists = that.lists.concat(res.data.data);
+            that.page = that.page + 1;
+            that.isok = true;
+          });
+        }
       }
-    }
+    },
   },
   mounted() {
-    $('html').css('overflow','initial')
-    let width = document.documentElement.clientWidth;
-    width = width * 0.96;
-    $(".nav").css("width", width + "px");
-    this.start();
-    /*头部轮播*/
-    var swiper = new Swiper(".swiper-top", {
-      // eslint-disable-line no-unused-vars
-      spaceBetween: 0,
-      observer: true, //修改swiper自己或子元素时，自动初始化swiper
-      observeParents: true, //修改swiper的父元素时，自动初始化swiper
-      autoplay: true,
-      pagination: {
-        el: "#swiper-pagination1",
-        clickable: true
-      }
-    });
-    var swiper05 = new Swiper(".swiper-container", {
-      // eslint-disable-line no-unused-vars
-      slidesPerView: 4.5,
-      spaceBetween: 0,
-      pagination: {
-        clickable: true
-      },
+    let that = this;
+    var mySwiper1 = new Swiper(".swiper-topimg", {
+      slidesPerView: 1.3,
+      spaceBetween: 15,
       observer: true,
-      observeParents: true
+      slidesOffsetAfter: 2,
+      resistanceRatio: 0.1,
+      slidesOffsetBefore: 44,
+      loop: true,
+      pagination: {
+        el: ".swiper-pagination",
+      },
     });
-    $(".tegood p").on("click", function() {
-      $(this)
-        .addClass("active")
-        .parent()
-        .parent()
-        .siblings("div")
-        .find("div")
-        .find("p")
-        .removeClass("active");
+    var mySwiper2 = new Swiper(".swiper-nav", {
+      slidesPerView: 4.8,
+      spaceBetween: 15,
+      observer: true,
+      slidesOffsetAfter: 2,
+      resistanceRatio: 0.1,
+      slidesOffsetBefore: 14,
     });
-    window.addEventListener("scroll", this.scroll);
+    window.addEventListener("scroll", this.getmore);
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.scroll);
+    window.removeEventListener("scroll", this.getmore);
   },
 };
 </script>
-<style scoped>
+<style lang="less" scoped>
 * {
   padding: 0;
   margin: 0;
@@ -311,124 +258,170 @@ h3 img {
   margin-top: 14px;
   left: 5.33%;
 }
-.m-luns {
-  height: 180px;
-  margin-bottom: 14px;
-  overflow: hidden;
-}
-.m-luns .swiper-top {
-  position: relative;
-}
-.m-luns #swiper-pagination1 {
-  text-align: center;
-  position: absolute;
-  z-index: 2;
-  bottom: 1%;
-  width: 100%;
-}
-.m-luns >>> .swiper-pagination-bullet {
-  background-color: #808080;
-}
-.m-luns >>> .swiper-pagination-bullet-active {
-  background-color: #f7f7f7;
-}
-.m-luns >>> .zhe {
-  width: 100%;
-  height: 180px;
-  background: rgba(0, 0, 0, 0.4);
-  position: absolute;
-  z-index: 2;
-  top: 0;
-}
-.m-luns .swiper-slide {
-  position: relative;
-}
-.m-luns .swiper-slide p {
-  position: absolute;
-  color: #ffffff;
-  font-size: 15px;
-  bottom: 8%;
-  width: 92%;
-  left: 4%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  z-index: 3;
-}
-.m-luns .swiper-slide img {
-  height: 180px;
-}
 
-.nav {
-  margin-left: 4%;
-  background-color: #fff;
+li {
+  list-style: none;
 }
-.nav .swiper-container {
-  height: 40px;
-  padding-top: 8px;
-  -webkit-box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.05);
-  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.05);
-}
-.tegood p {
-  color: #919499;
-  font-size: 16px;
+.input {
+  height: 2.5rem;
+  padding: 0.25rem 4%;
   position: relative;
+  input {
+    border: 0;
+    outline: none;
+    width: 100%;
+    height: 2rem;
+    margin-top: 0.25rem;
+    border-radius: 0.25rem;
+    background-color: rgba(245, 245, 245, 1);
+    text-align: center;
+  }
+  ::-webkit-input-placeholder {
+    /* WebKit browsers */
+    color: #969799;
+    font-size: 0.875rem;
+  }
+
+  ::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #969799;
+    font-size: 0.875rem;
+  }
+
+  :-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: #969799;
+    font-size: 0.875rem;
+  }
+  img {
+    width: 1rem;
+    position: absolute;
+    top: 3.8rem;
+    left: 4.8rem;
+  }
 }
-.tegood p.active {
-  color: #2e3033;
-  font-weight: bold;
+.topimgs {
+  margin-top: 1rem;
+  .swiper-topimg {
+    overflow: hidden;
+    padding-bottom: 1.875rem;
+    margin-bottom: 0.4375rem;
+    position: relative;
+    .swiper-slide {
+      position: relative;
+      overflow: hidden;
+      height: 8.75rem;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 0.375rem;
+      }
+      p {
+        background: rgba(0, 0, 0, 0.4);
+        height: 1.625rem;
+        color: #fff;
+        font-size: 0.8125rem;
+        line-height: 1.625rem;
+        position: absolute;
+        bottom: 0;
+        width: 92%;
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding: 0 4%;
+        border-radius: 0 0 0.375rem 0.375rem;
+      }
+    }
+    .swiper-pagination {
+      bottom: 0.75rem;
+      /deep/.swiper-pagination-bullet {
+        width: 0.375rem;
+        height: 0.125rem;
+        border-radius: 0.0625rem;
+        background-color: #cacacc;
+      }
+      /deep/.swiper-pagination-bullet-active {
+        width: 0.75rem;
+        height: 0.125rem;
+        background-color: #4db5ff;
+      }
+    }
+  }
 }
-.tegood p.active i {
-  display: block;
-  position: absolute;
-  bottom: -7px;
-  width: 31.5%;
-  height: 2.5px;
-  background-color: #40a2f4;
-  left: 50%;
-  margin-left: -21.75%;
-}
-.lists {
-  margin-top: 20px;
-  padding: 0 4%;
-}
-.lists li {
-  margin-bottom: 14px;
-  width: 100%;
-}
-.lists .list {
-  padding-bottom: 9px;
-  height: 84px;
-  border-bottom: 1px solid #f3f5fb;
-}
-.lists .list .left {
-  float: left;
-}
-.lists .list .left h5 {
-  color: #2e3033;
-  font-size: 16px;
-  height: 45px;
-  margin-bottom: 15px;
-  width: 225px;
-  font-weight: normal;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+.swiper-nav {
   overflow: hidden;
-  line-height: 23px;
+  padding-bottom: 1.9375rem;
+  .swiper-slide {
+    color: #626466;
+    font-size: 0.9375rem;
+    text-align: center;
+  }
+  .active {
+    color: #4db5ff;
+    font-weight: bold;
+    position: relative;
+    p {
+      background-color: #4db5ff;
+      width: 1.5625rem;
+      height: 0.15625rem;
+      border-radius: 0.09375rem;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -0.375rem;
+    }
+  }
 }
-.lists .list .left p {
-  color: #919499;
-  margin-right: 4px;
-  font-size: 11px;
-}
-.lists .list .right {
-  display: inline-block;
-  float: right;
-}
-.lists .list .right img {
-  width: 100px;
-  height: 74px;
-  border-radius: 5px;
+.con {
+  padding: 0 4%;
+  .li {
+    display: flex;
+    margin-bottom: 0.625rem;
+    height: 4.375rem;
+    .left {
+      position: relative;
+      width: 14.0625rem;
+      h5 {
+        color: #303234;
+        font-size: 0.878rem;
+        line-height: 1.25rem;
+        font-weight: 400;
+        height: 2.5rem;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        position: relative;
+        top: -0.1875rem;
+        span {
+          padding: 0.0625rem 0.125rem;
+          border-radius: 0.125rem;
+          font-size: 0.75rem;
+          font-weight: 400;
+          color: #fff;
+          background-color: #ff4040;
+          margin-right: 0.125rem;
+        }
+      }
+      p {
+        color: #969899;
+        font-size: 0.6875rem;
+        position: absolute;
+        bottom: 0.625rem;
+        span {
+          margin-left: 0.25rem;
+        }
+      }
+    }
+    .right {
+      margin-left: 1.25rem;
+      img {
+        width: 6.25rem;
+        height: 4.375rem;
+        border-radius: 0.1875rem;
+      }
+    }
+  }
 }
 </style>

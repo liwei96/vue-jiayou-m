@@ -561,10 +561,26 @@ export const getquestions = (msg) => {
   })
 }
 
+export const souari = (name) => {
+  return axios.request({
+    method: 'get',
+    url: '/api/article/e_search',
+    params: name
+  })
+}
+
 export const newgetquestions = (msg) => {
   return axios.request({
     method: 'get',
     url: '/yun_jia/question/phone/list',
+    params: msg
+  })
+}
+
+export const aritles = (msg) => {
+  return axios.request({
+    method: 'get',
+    url: '/jy/article/info',
     params: msg
   })
 }

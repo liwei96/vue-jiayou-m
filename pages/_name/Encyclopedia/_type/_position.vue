@@ -3,219 +3,73 @@
     <h3>
       <img src="~/assets/return.png" @click="goback" />买房百科
     </h3>
-    <ul class="nav">
-      <router-link :to="'/'+jkl+'/encyclopedia/before/56'">
-      <li :class="type=='before'?'active':''" style="margin-left: 50px;">
-        买房前
-        <i></i>
-      </li>
-      </router-link>
-      <router-link :to="'/'+jkl+'/encyclopedia/hand/60'">
-      <li :class="type=='hand'?'active':''">
-        买房中
-        <i></i>
-      </li>
-      </router-link>
-      <router-link :to="'/'+jkl+'/encyclopedia/after/65'">
-      <li :class="type=='after'?'active':''">
-        买房后
-        <i></i>
-      </li>
-      </router-link>
-    </ul>
-    <div class="q" v-show="q1">
-      <div class="fubox">
-        <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/before/56'">
-              <p :class="position==56?'active':''" data-v="56">买房资格</p>
-              </router-link>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/before/57'">
-              <p :class="position==57?'active':''" data-v="57">买房能力</p>
-              </router-link>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/before/58'">
-              <p :class="position==58?'active':''"  data-v="58">买房政策</p>
-              </router-link>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/before/59'">
-              <p :class="position==59?'active':''"  data-v="59">买房流程</p>
-              </router-link>
-            </div>
-          </div>
+    <div class="all">
+      <div class="input">
+        <nuxt-link :to="'/' + jkl + '/searcharitype'">
+          <input
+            type="text"
+            placeholder="搜搜你想要了解的房产知识吧"
+            @click="gos"
+            disabled
+          />
+          <img src="~/assets/search.png" alt />
+        </nuxt-link>
+      </div>
+      <div class="nav">
+        <ul>
+          <li :class="navnum == 0 ? 'active' : ''" @click="setnavnum(0)">
+            <div class="nav-top">买房前</div>
+            <p>相关政策、买房流程</p>
+          </li>
+          <li :class="navnum == 1 ? 'active1' : ''" @click="setnavnum(1)">
+            <div class="nav-top">买房中</div>
+            <p>新房签约、贷款政策</p>
+          </li>
+          <li :class="navnum == 2 ? 'active2' : ''" @click="setnavnum(2)">
+            <div class="nav-top">买房后</div>
+            <p>新房验房、还款落户</p>
+          </li>
+        </ul>
+      </div>
+      <div class="con">
+        <div class="left">
+          <ul>
+            <li
+              :class="item.id == position ? 'active' : ''"
+              @click="setleftnum(key, item.id)"
+              v-for="(item, key) in navs"
+              :key="key"
+            >
+              <span>{{ item.name }}</span>
+              <i></i>
+            </li>
+          </ul>
+        </div>
+        <div class="right" id="list">
+          <ul id="all">
+            <template v-for="(item, key) in lists">
+              <nuxt-link :key="key" :to="'/' + jkl + '/encyclopediaArticle/'+position+'/' + item.id">
+                <li>
+                  <h6>{{ item.title }}</h6>
+                  <p>
+                    {{ item.begin }}
+                  </p>
+                  <p>
+                    <span v-for="(val, k) in item.tags" :key="k">{{
+                      val
+                    }}</span>
+                  </p>
+                </li>
+              </nuxt-link>
+            </template>
+          </ul>
         </div>
       </div>
-      </div>
-      
-      <ul class="lists">
-        <li v-for="(list,key) in lists" :key="key">
-          <router-link :to="'/'+jkl+'/encyclopediaArticle/'+list.position+'/'+list.id">
-            <div class="list">
-              <div class="left">
-                <h5>{{list.title}}</h5>
-                <p v-if="list.labels" >
-                  <span v-for="(kk,key) in list.labels" :key="key">{{kk.name}}</span>
-                </p>
-              </div>
-              <div class="right">
-                <img :src="list.img" alt />
-              </div>
-            </div>
-          </router-link>
-        </li>
-      </ul>
-      
     </div>
-    <div class="z" v-show="z1">
-      <div class="fubox">
-        <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/hand/60'">
-              <p :class="position==60?'active':''" data-v="60">新房签约</p>
-              </router-link>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/hand/61'">
-              <p :class="position==61?'active':''" data-v="61">缴纳定金</p>
-              </router-link>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/hand/62'">
-              <p :class="position==62?'active':''" data-v="62">贷款政策</p>
-              </router-link>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/hand/63'">
-              <p :class="position==63?'active':''" data-v="63">商业贷款</p>
-              </router-link>
-            </div>
-          </div>
-           <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/hand/64'">
-              <p :class="position==64?'active':''" data-v="64">公积金贷款</p>
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </div>
-      </div>
-      
-      <ul class="lists">
-        <li v-for="(list,key) in list1" :key="key">
-          <router-link :to="'/'+jkl+'/encyclopediaArticle/'+list.position+'/'+list.id">
-            <div class="list">
-              <div class="left">
-                <h5>{{list.title}}</h5>
-                <p v-if="list.labels" >
-                  <span v-for="(kk,key) in list.labels" :key="key">{{kk.name}}</span>
-                </p>
-              </div>
-              <div class="right">
-                <img :src="list.img" alt />
-              </div>
-            </div>
-          </router-link>
-        </li>
-      </ul>
-      
-    </div>
-    <div class="h" v-show="h1">
-      <div class="fubox">
-        <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/after/65'">
-              <p :class="position==65?'active':''" data-v="65">还款</p>
-              </router-link>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/after/66'">
-              <p :class="position==66?'active':''" data-v="66">全款</p>
-              </router-link>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/after/67'">
-              <p :class="position==67?'active':''" data-v="67">新房验房</p>
-              </router-link>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/after/68'">
-              <p :class="position==68?'active':''" data-v="68">物业</p>
-              </router-link>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/after/69'">
-              <p :class="position==69?'active':''" data-v="69">退房流程</p>
-              </router-link>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="tegood">
-                <router-link :to="'/'+jkl+'/encyclopedia/after/70'">
-              <p :class="position==70?'active':''" data-v="70">落户</p>
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </div>
-      </div>
-      
-      <ul class="lists">
-        <li v-for="(list,key) in list2" :key="key">
-          <router-link :to="'/'+jkl+'/encyclopediaArticle/'+list.position+'/'+list.id">
-            <div class="list">
-              <div class="left">
-                <h5>{{list.title}}</h5>
-                <p v-if="list.labels" >
-                  <span v-for="(kk,key) in list.labels" :key="key">{{kk.name}}</span>
-                </p>
-              </div>
-              <div class="right">
-                <img :src="list.img" alt />
-              </div>
-            </div>
-          </router-link>
-        </li>
-      </ul>
-      
-    </div>
-    <foot-view :pinyin="jkl"></foot-view>
   </div>
 </template>
 <script>
-import {ip,encyclopedia_data} from '~/api/api' 
-import Swiper from "swiper";
-import "swiper/css/swiper.min.css";
+import {aritles} from '~/api/api' 
 import Loadings from "@/components/loading";
 import footView from "@/components/Foot.vue";
 export default {
@@ -224,169 +78,114 @@ export default {
     loadView: Loadings,
     'foot-view':footView
   },
-  async asyncData (context) {
-   let ip=context.store.state.cookie.ip;
+  async asyncData(context) {
+    let other = context.query.other;
     let city = context.store.state.city;
-    let token=context.store.state.cookie.token;
-    let type = context.params.type;
-    let p1 = '56';
-    let p2 = '60';
-    let p3 = '65'
-    let position = context.params.position
-    let q1 = true;
-    let z1 = true;
-    let h1 = true;
-    if(type=='before'){
-      p1 = position
-      z1 = false
-      h1 = false
-    }else if(type =='hand'){
-      p2 = position
-      q1 = false
-      h1 = false
-    }else if(type == 'after') {
-      p3 = position
-      q1 = false
-      z1 = false
-    }
     let jkl = context.params.name;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res1,res2,res3,res4]= await Promise.all([
-      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:p1,platform:2,token:token,kid:kid,other:other})
-      .then((resp)=>{
-          let data=resp.data.data.data;
-          data.n=context.store.state.pinyin;
+    let position = context.params.position;
+    let type = context.params.type;
+    let [res] = await Promise.all([
+      context.$axios
+        .get("/jy/article/info", {
+          params: {
+            city: city,
+            position: position,
+            page: 1,
+            limit: 10,
+          },
+        })
+        .then((resp) => {
+          let data = resp.data;
+          //   console.log(data)
           return data;
-      }),
-      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:p2,platform:2,token:token,kid:kid,other:other})
-      .then((resp)=>{
-          let data=resp.data.data.data;
-          return data;
-      }),
-      context.$axios.post('/api/article/page',{ip:ip,city:city,page:1,limit:10,position:p3,platform:2,token:token,kid:kid,other:other})
-      .then((resp)=>{
-          let data=resp.data.data.data;
-          data.n=context.store.state.pinyin;
-          return data;
-      }),
-      context.$axios.post('/api/article/wiki',{ip:ip,city:city,platform:2,token:token,kid:kid,other:other})
-      .then((resp)=>{
-          let data=resp.data.header;
-          return data;
-      })
-    ])
-    return{
-          lists:res1,
-          list1:res2,
-          list2:res3,
-          jkl:jkl,
-          city:city,
-          title:res4.title,
-          keywords:res4.keywords,
-          description:res4.description,
-          type:type,
-          z1:z1,
-          h1:h1,
-          q1:q1,
-          position:position
-    }
+        }),
+    ]);
+    return {
+      jkl: jkl,
+      lists: res.data,
+      type: type,
+      position: position,
+      title:res.common.header.title,
+      description:res.common.header.description,
+      keywords:res.common.header.keywords
+    };
   },
   data() {
     return {
-      q1: true,
-      z1: false,
-      h1: false,
-      lists: [
+      navnum: 0,
+      leftnum: 0,
+      lists: [],
+      num: 56,
+      before: [
         {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          lab1: "楼盘签约",
-          lab2: "新房签约",
-          img: require("~/assets/lou1.png")
+          name: "买房资格",
+          id: 56,
         },
         {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          lab1: "楼盘签约",
-          lab2: "新房签约",
-          img: require("~/assets/lou1.png")
+          name: "买房能力",
+          id: 57,
         },
         {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          lab1: "楼盘签约",
-          lab2: "新房签约",
-          img: require("~/assets/lou1.png")
+          name: "买房政策",
+          id: 58,
         },
         {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          lab1: "楼盘签约",
-          lab2: "新房签约",
-          img: require("~/assets/lou1.png")
+          name: "买房流程",
+          id: 59,
         },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          lab1: "楼盘签约",
-          lab2: "新房签约",
-          img: require("~/assets/lou1.png")
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          lab1: "楼盘签约",
-          lab2: "新房签约",
-          img: require("~/assets/lou1.png")
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          lab1: "楼盘签约",
-          lab2: "新房签约",
-          img: require("~/assets/lou1.png")
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          lab1: "楼盘签约",
-          lab2: "新房签约",
-          img: require("~/assets/lou1.png")
-        },
-        {
-          tit: "房地产行业集中度进一步提高百强 房企市场份额升",
-          lab1: "楼盘签约",
-          lab2: "新房签约",
-          img: require("~/assets/lou1.png")
-        }
       ],
-      list1:[],
-      list2:[],
-      id1:'56',
-      id2:'60',
-      id3:'65',
-      pages:{
-        '56':2,
-        '57':2,
-        '58':2,
-        '59':2,
-        '60':2,
-        '61':2,
-        '62':2,
-        '63':2,
-        '64':2,
-        '65':2,
-        '66':2,
-        '67':2,
-        '68':2,
-        '69':2,
-        '70':2,
-      },
-      p1:2,
-      p2:2,
-      p3:2,
-      n:'',
-      load:true,
-      jkl:'',
-      city:'',
-      title:'',
-      keywords:'',
-      description:'',
-      type:0,
-      position:56
+      going: [
+        {
+          name: "新房签约",
+          id: 60,
+        },
+        {
+          name: "缴纳定金",
+          id: 61,
+        },
+        {
+          name: "贷款政策",
+          id: 62,
+        },
+        {
+          name: "商业贷款",
+          id: 63,
+        },
+        {
+          name: "公积金贷款",
+          id: 64,
+        },
+      ],
+      after: [
+        {
+          name: "还款",
+          id: 65,
+        },
+        {
+          name: "全款",
+          id: 66,
+        },
+        {
+          name: "新房验房",
+          id: 67,
+        },
+        {
+          name: "物业",
+          id: 68,
+        },
+        {
+          name: "退房流程",
+          id: 69,
+        },
+        {
+          name: "落户",
+          id: 70,
+        },
+      ],
+      type: "before",
+      navs: [],
+      page: 2,
+      isok: true,
     };
   },
   head() {
@@ -409,171 +208,66 @@ export default {
     "foot-view": footView
   },
   methods: {
-    getb(e){
-      let id=e.target.getAttribute('data-v');
-      this.id1=id;
-      this.p1=2;
-      let token=localStorage.getItem('token');
-      let city=this.city;
-      let ip=this.ip;
-      let that=this;
-      encyclopedia_data({ip:ip,city:city,page:1,limit:10,position:id,platform:2,token:token}).then(resp=>{
-        that.lists=resp.data.data.data;
-      }).catch(error=>{
-        console.log(error)
-      })
-      // $='/'+this.jkl+'/encyclopedia/0/'+id
-    },
-    geti(e){
-      let id=e.target.getAttribute('data-v');
-      this.id2=id;
-      this.p2=2;
-      let token=localStorage.getItem('token');
-      let city=this.city;
-      let ip=this.ip;
-      let that=this;
-      encyclopedia_data({ip:ip,city:city,page:1,limit:10,position:id,platform:2,token:token}).then(resp=>{
-        that.list1=resp.data.data.data;
-      }).catch(error=>{
-        console.log(error)
-      })
-    },
-    geta(e){
-      let id=e.target.getAttribute('data-v');
-      this.id3=id;
-      this.p3=2;
-      let token=localStorage.getItem('token');
-      let city=this.city;
-      let ip=this.ip;
-      let that=this;
-      encyclopedia_data({ip:ip,city:city,page:1,limit:10,position:id,platform:2,token:token}).then(resp=>{
-        that.list2=resp.data.data.data;
-      }).catch(error=>{
-        console.log(error)
-      })
-    },
-    start(){
-      this.n=this.$route.params.name
-      let token=localStorage.getItem('token');
-      let city=this.city;
-      let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
-      this.ip=ip;
-      localStorage.getItem('ip');
-      this.load=false
-    },
-    more3(id,page){
-      let token=localStorage.getItem('token');
-      let city=this.city;
-      let ip=this.ip;
-      let that=this;
-      encyclopedia_data({ip:ip,city:city,page:page,limit:10,position:id,platform:2,token:token}).then(resp=>{
-        let list2=resp.data.data.data;
-        let k=that.list2.concat(list2);
-        that.list2=k;
-        that.p3=page+1;
-      }).catch(error=>{
-        console.log(error)
-      })
-    },
-    more2 (id,page){
-      let token=localStorage.getItem('token');
-      let city=this.city;
-      let ip=this.ip;
-      let that=this;
-      encyclopedia_data({ip:ip,city:city,page:page,limit:10,position:id,platform:2,token:token}).then(resp=>{
-        let list1=resp.data.data.data;
-        let k=that.list1.concat(list1);
-        that.list1=k;
-        that.p2=page+1;
-      }).catch(error=>{
-        console.log(error)
-      })
-    },
-    more1(id,page){
-      let token=localStorage.getItem('token');
-      let city=this.city;
-      let ip=this.ip;
-      let that=this;
-      encyclopedia_data({ip:ip,city:city,page:page,limit:10,position:id,platform:2,token:token}).then(resp=>{
-        let list2=resp.data.data.data;
-        let k=that.lists.concat(list2);
-        that.lists=k;
-        that.p1=page+1;
-      }).catch(error=>{
-        console.log(error)
-      })
-    },
     goback(){
       this.$router.push('/'+this.jkl)
     },
-    scroll(){
-      let Y = window.scrollY;
-      if(Y<=42){
-        $('.fubox').css({'position':'relative','height':'50px','paddingTop':'10px'})
-      }else{
-        $('.fubox').css({'position':'fixed','top':0,'height':'50px','paddingTop':'12px','background':'#fff'})
+    setnavnum(n) {
+      this.navnum = n;
+      if (n == 0) {
+        this.$router.push("/" + this.jkl + "/encyclopedia/before/56");
+      } else if (n == 1) {
+        this.$router.push("/" + this.jkl + "/encyclopedia/going/60");
+      } else {
+        this.$router.push("/" + this.jkl + "/encyclopedia/after/65");
       }
-      var scrollTop = window.scrollY;
-      var scrollHeight = window.screen.availHeight;
-      var windowHeight = document.body.scrollHeight;
-      if (scrollTop + scrollHeight >= windowHeight) {
-        if(this.q1){
-          let id=this.id1;
-          let page=this.p1;
-          this.more1(id,page)
-        }else if(this.z1){
-          let id=this.id2;
-          let page=this.p2;
-          this.more2(id,page)
-        }else{
-          let id=this.id3;
-          let page=this.p3
-          this.more3(id,page)
-        }
-      }
-    }
+    },
+    setleftnum(n, id) {
+      this.leftnum = n;
+      this.$router.push("/" + this.jkl + "/encyclopedia/" + this.type + "/" + id);
+    },
+    gos() {
+      this.$router.push("/" + this.jkl + "/searcharitype");
+    },
   },
   mounted() {
-    $('html').css('overflow','initial')
-    let width=document.documentElement.clientWidth;
-    $('.fubox').css('width',width+'px')
-    this.start();
-    let that=this
-    var swiper05 = new Swiper(".swiper-container", {
-      // eslint-disable-line no-unused-vars
-      slidesPerView: 4,
-      spaceBetween: 10,
-      pagination: {
-        clickable: true
-      },
-      observer: true,
-      observeParents: true
+    if (this.type == "before") {
+      this.navnum = 0;
+      this.navs = this.before;
+    } else if (this.type == "going") {
+      this.navnum = 1;
+      this.navs = this.going;
+    } else {
+      this.navnum = 2;
+      this.navs = this.after;
+    }
+    let that = this;
+    let city = $cookies.get("city");
+    $("#list").on("scroll", function () {
+      console.log($(this).scrollTop(), $("#list").height(), $("#all").height());
+      if ($(this).scrollTop() + $("#list").height() >= $("#all").height()) {
+        if (that.isok) {
+          that.isok = false;
+          aritles({
+            position: that.position,
+            page: that.page,
+            limit: 10,
+            city: city,
+          }).then((res) => {
+            console.log(res);
+            that.lists = that.lists.concat(res.data.data);
+            that.page = that.page + 1;
+            that.isok = true;
+          });
+        }
+      }
     });
-    $(".nav li").on("click", function() {
-      $(this)
-        .addClass("active")
-        .siblings("li")
-        .removeClass("active");
-    });
-    $(".tegood p").on("click", function() {
-      $(this)
-        .addClass("active")
-        .parent()
-        .parent()
-        .siblings("div")
-        .find("div")
-        .find("p")
-        .removeClass("active");
-    });
-    window.addEventListener("scroll", this.scroll);
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.scroll);
   },
 };
 </script>
-<style scoped>
+<style lang="less" scoped>
 * {
   padding: 0;
   margin: 0;
@@ -599,106 +293,189 @@ h3 img {
   margin-top: 14px;
   left: 5.33%;
 }
-.fubox{
-    -webkit-box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.05);
-    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.05);
-    height: 50px;
-    padding-top: 10px;
+
+li {
+  list-style: none;
+}
+.Encyclopedia {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.all {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.input {
+  height: 2.5rem;
+  padding: 0.25rem 4%;
+  position: relative;
+  input {
+    border: 0;
+    outline: none;
+    width: 100%;
+    height: 2rem;
+    margin-top: 0.25rem;
+    border-radius: 0.25rem;
+    background-color: rgba(245, 245, 245, 1);
+    text-align: center;
+  }
+  ::-webkit-input-placeholder {
+    /* WebKit browsers */
+    color: #969799;
+    font-size: 0.875rem;
+  }
+
+  ::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #969799;
+    font-size: 0.875rem;
+  }
+
+  :-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: #969799;
+    font-size: 0.875rem;
+  }
+  img {
+    width: 1rem;
+    position: absolute;
+    top: 1rem;
+    left: 4.8rem;
+  }
 }
 .nav {
-  width: 100%;
-  height: 40px;
-  border-bottom: 0.5px solid #f5f5f7;
-  background-color: #fff;
+  padding: 1rem 4% 1.0625rem 4%;
+  ul {
+    display: flex;
+    li {
+      width: 6.6875rem;
+      height: 4rem;
+      margin-right: 0.75rem;
+      .nav-top {
+        height: 2.6rem;
+        border: 0.0625rem solid rgba(242, 242, 242, 1);
+        text-align: center;
+        line-height: 2.6rem;
+        color: rgba(98, 100, 102, 1);
+        font-size: 1rem;
+        border-radius: 0.34375rem 0.34375rem 0 0;
+        font-weight: bold;
+      }
+      p {
+        background-color: rgba(42, 198, 109, 1);
+        height: 1.125rem;
+        text-align: center;
+        line-height: 1.125rem;
+        border-radius: 0 0 0.25rem 0.25rem;
+        color: #fff;
+        font-size: 0.625rem;
+      }
+    }
+    .active {
+      .nav-top {
+        border: 0.0625rem solid rgba(42, 198, 109, 1);
+        color: rgba(47, 49, 51, 1);
+      }
+    }
+    .active1 {
+      .nav-top {
+        border: 0.0625rem solid rgba(64, 162, 244, 1);
+        color: rgba(47, 49, 51, 1);
+      }
+    }
+    .active2 {
+      .nav-top {
+        border: 0.0625rem solid rgba(255, 125, 38, 1);
+        color: rgba(47, 49, 51, 1);
+      }
+    }
+    li:nth-of-type(2) {
+      p {
+        background-color: rgba(64, 162, 244, 1);
+      }
+    }
+    li:nth-of-type(3) {
+      margin: 0;
+      p {
+        background-color: rgba(255, 125, 38, 1);
+      }
+    }
+  }
 }
-.nav li {
-  color: #919499;
-  font-size: 16px;
-  height: 40px;
-  line-height: 40px;
-  margin-left: 68px;
-  float: left;
-  position: relative;
-}
-.nav li.active {
-  color: #2e3033;
-  font-weight: bold;
-}
-.nav li.active i {
-  position: absolute;
-  display: block;
-  width: 25px;
-  height: 2.5px;
-  background-color: #40a2f4;
-  bottom: 0;
-  left: 50%;
-  margin-left: -12.5px;
-}
-
-.swiper-wrapper {
-  left: 4%;
-}
-.tegood p {
-  width: 78px;
-  height: 26px;
-  border-radius: 2px;
-
-  background-color: #f2f4f7;
-  color: #5e6166;
-  font-size: 14px;
-  text-align: center;
-  line-height: 26px;
-}
-.tegood p.active {
-  background: linear-gradient(
-    270deg,
-    rgba(102, 207, 255, 1),
-    rgba(76, 181, 255, 1)
-  );
-  color: #fff;
-}
-
-.lists {
-  margin-top: 10px;
-}
-.lists li {
-  padding: 0 4%;
-  margin-bottom: 14px;
-}
-.lists .list {
-  padding-bottom: 9px;
-  border-bottom: 1px solid #f3f5fb;
-  height: 90px;
-}
-.lists .list .left {
-  display: inline-block;
-}
-.lists .list .left h5 {
-  color: #2e3033;
-  font-size: 15px;
-  margin-bottom: 22px;
-  width: 225px;
-  line-height: 18px;
-}
-.lists .list .left p span {
-  display: inline-block;
-  width: 54px;
-  height: 17px;
-  text-align: center;
-  line-height: 17px;
-  background-color: #f2f4f7;
-  color: #919499;
-  margin-right: 4%;
-  font-size: 11px;
-  overflow: hidden;
-}
-.lists .list .right {
-  display: inline-block;
-  float: right;
-}
-.lists .list .right img {
-  width: 100px;
-  height: 74px;
-  border-radius: 5px;
+.con {
+  display: flex;
+  border-top: 0.03125rem solid rgba(242, 242, 242, 1);
+  flex: 1;
+  overflow: auto;
+  .left {
+    width: 5rem;
+    background-color: rgba(242, 242, 242, 1);
+    ul {
+      li {
+        text-align: center;
+        height: 3.125rem;
+        color: rgba(98, 100, 102, 1);
+        font-size: 0.8125rem;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .active {
+        background-color: #fff;
+        color: #4db5ff;
+        font-weight: bold;
+        span {
+          display: inline-block;
+          width: 100%;
+          // border-left: 0.1875rem solid rgba(42, 198, 109, 1);
+          height: 0.9375rem;
+        }
+        i {
+          position: absolute;
+          display: block;
+          width: 0.1875rem;
+          height: 0.9375rem;
+          background-color: #4db5ff;
+          left:0
+        }
+      }
+    }
+  }
+  .right {
+    flex: 1;
+    padding-left: 0.875rem;
+    overflow: auto;
+    ul {
+      li {
+        position: relative;
+        border-bottom: 0.03125rem solid rgba(245, 245, 245, 1);
+        padding-right: 0.9375rem;
+        h6 {
+          color: rgba(50, 50, 51, 1);
+          font-size: 0.875rem;
+          font-weight: 400;
+          padding-top: 0.6875rem;
+          margin-bottom: 0.625rem;
+        }
+        p {
+          color: rgba(98, 100, 102, 1);
+          font-size: 0.625rem;
+          margin-bottom: 0.875rem;
+          span {
+            color: rgba(98, 100, 102, 1);
+            font-size: 0.625rem;
+            padding: 0.1875rem 0.3125rem;
+            background-color: rgba(245, 245, 245, 1);
+            border-radius: 0.125rem;
+            margin-right: 0.375rem;
+          }
+        }
+      }
+    }
+  }
 }
 </style>
