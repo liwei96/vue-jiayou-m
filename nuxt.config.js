@@ -223,21 +223,21 @@ export default {
       }
     },
     "/yun_jia": {
-      target: "http://39.98.227.114:9560/", // 重新映射的新地址 
+      target: "http://api.edefang.net/", // 重新映射的新地址 
       changeOrigin: true, // 是否跨域
       pathRewrite: {
         "^/yun_jia": "/yun_jia" // 去掉接口地址中的api字符串
       }
     },
     "/applets": {
-      target: "http://39.98.227.114:9560/", // 重新映射的新地址 
+      target: "http://api.edefang.net/", // 重新映射的新地址 
       changeOrigin: true, // 是否跨域
       pathRewrite: {
         "^/applets": "/applets" // 去掉接口地址中的api字符串
       }
     },
     "/jy": {
-      target: "http://39.98.227.114:9560/", // 重新映射的新地址 
+      target: "http://api.edefang.net/", // 重新映射的新地址 
       changeOrigin: true, // 是否跨域
       pathRewrite: {
         "^/jy": "/jy" // 去掉接口地址中的api字符串

@@ -6,43 +6,44 @@
       <img class="con-img" src="~/assets/ency-img.png" />
     </h3>
     <div class="con">
-      <h2>{{tit}}</h2>
+      <h2>{{ tit }}</h2>
       <p class="msg">
-        {{source}}
-        <span>{{time}}</span>
-        &nbsp;&nbsp;&nbsp;&nbsp;阅读:{{num}}
+        {{ source }}
+        <span>{{ time }}</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;阅读:{{ num }}
       </p>
       <div class="tit">
         <!-- <img :src="img" alt /> -->
-        <p v-html="con">{{con}}</p>
+        <p v-html="con">{{ con }}</p>
       </div>
-      <div class="con-list" v-show="building=={}?false:true">
-        <router-link :to="'/'+jkl+'/content/'+building.id">
+      <div class="con-list" v-show="building.length != 0">
+        <router-link :to="'/' + jkl + '/content/' + building.id">
           <div class="con-list-top">
             <div class="list-top-left">
               <img :src="building.img" alt />
               <span>
                 <i class="iconfont iconyanjing"></i>
-                {{building.num}}
+                {{ building.num }}
               </span>
             </div>
             <div class="list-top-right">
               <h5>
-                {{building.name}}
-                <span>{{building.state}}</span>
+                {{ building.name }}
+                <span>{{ building.state }}</span>
               </h5>
               <p class="price">
-                <span>{{building.price}}</span>元/m²
+                <span>{{ building.price }}</span
+                >元/m²
               </p>
               <p class="area">
-                <span>{{building.city}}-{{building.country}}</span>
+                <span>{{ building.city }}-{{ building.country }}</span>
                 <span>建面</span>
-                <span>{{building.area}}m²</span>
+                <span>{{ building.area }}m²</span>
               </p>
               <p class="tabs">
-                <strong>{{building.decorate}}</strong>
-                <span>{{building.railway}}</span>
-                <span>{{building.type}}</span>
+                <strong>{{ building.decorate }}</strong>
+                <span>{{ building.railway }}</span>
+                <span>{{ building.type }}</span>
               </p>
             </div>
           </div>
@@ -54,22 +55,46 @@
             刚需榜第1名
           </div>
           <button class="appointment" :data-v="building.id">预约看房</button>
-          <a :href="'tel:'+call" class="tel">电话咨询</a>
+          <a :href="'tel:' + call" class="tel">电话咨询</a>
         </div>
       </div>
       <div class="up" @click="agree($event)" :data-v="youlike">
-        <img src="~/assets/giveup.png" :data-v="youlike" alt />
-        <p id="nn" :data-v="youlike">{{like}}</p>
+        <img
+          src="~/assets/giveup.png"
+          :data-v="youlike"
+          alt
+          v-if="youlike == 0"
+        />
+        <img
+          src="~/assets/clicked.png"
+          :data-v="youlike"
+          alt
+          v-if="youlike == 1"
+        />
+        <p id="nn" :data-v="youlike">{{ like }}</p>
       </div>
       <div class="recommend">
         <h4>人气推荐</h4>
         <ul class="lists">
-          <li v-for="(list,key) in recommands" :key="key" :data-v="list.id">
+          <li v-for="(list, key) in recommands" :key="key" :data-v="list.id">
             <div class="list">
-              <router-link :to="'/'+jkl+'/encyclopediaArticle/'+list.position+'/'+list.id">
+              <router-link
+                :to="
+                  '/' +
+                  jkl +
+                  '/encyclopediaArticle/' +
+                  list.position +
+                  '/' +
+                  list.id
+                "
+              >
                 <div class="left">
-                  <h5>{{list.title}}</h5>
-                  <p>{{list.source?list.source:'允家新房'}} &nbsp;{{list.time}}</p>
+                  <h5>{{ list.title }}</h5>
+                  <p>
+                    {{ list.source ? list.source : "允家新房" }} &nbsp;{{
+                      list.time
+                    }}
+                  </p>
                 </div>
                 <div class="right">
                   <img :src="list.img" alt />
@@ -89,10 +114,13 @@
       </div>
       <div class="t-bottom">
         <div class="t-b-first">
-          <p>
-            <img src="~/assets/linshi.png" />允家严格保障您的信息安全
-          </p>
-          <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
+          <p><img src="~/assets/linshi.png" />允家严格保障您的信息安全</p>
+          <input
+            class="l-p"
+            type="tel"
+            placeholder="输入预约手机号码"
+            v-model="baoming"
+          />
           <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">立即订阅</button>
         </div>
         <div class="t-b-second">
@@ -131,58 +159,69 @@ import {
   msg,
   verification,
   trend_put,
-  getsdk
+  getsdk,
 } from "~/api/api";
 export default {
   name: "EncyclopediaArticles",
   components: {
     load: Loading,
-    "foot-view": footView
+    "foot-view": footView,
   },
   async asyncData(context) {
-    let ip = context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
-    let token = context.store.state.cookie.token;
-    let id = context.params.id;
-    let t = context.params.position;
-    let jkl = context.store.state.cookie.pinyin;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res] = await Promise.all([
-      context.$axios
-        .get("/applets/article/detail", {params:{
-          ip: ip,
-          city: city,
-          id: id,
-          platform: 2,
-          position: t,
-          token: token,
-          kid:kid,
-          other:other
-        }})
-        .then(resp => {
-          let data = resp.data;
-          return data;
-        })
-    ]);
-    return {
-      jkl: jkl,
-      building: res.project_info,
-      tit: res.article.title,
-      img: res.article.img,
-      dis: res.article.description,
-      con: res.article.content,
-      num: res.article.visit_num,
-      like: res.article.like_num,
-      recommands: res.others,
-      // type: res.article.source_type,
-      source: res.article.source,
-      time: res.article.time,
-      title: res.common.header.title,
-      keywords: res.common.header.keywords,
-      description: res.common.header.description,
-      youlike: res.article.my_like
-    };
+    try {
+      let ip = context.store.state.cookie.ip;
+      let city = context.store.state.cookie.city;
+      let token = context.store.state.cookie.token;
+      let id = context.params.id;
+      let t = context.params.position;
+      let jkl = context.store.state.cookie.pinyin;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .get("/applets/article/detail", {
+            params: {
+              ip: ip,
+              city: city,
+              id: id,
+              platform: 2,
+              position: t,
+              token: token,
+              kid: kid,
+              other: other,
+            },
+          })
+          .then((resp) => {
+            let data = resp.data;
+            return data;
+          }),
+      ]);
+      return {
+        jkl: jkl,
+        building: res.project_info,
+        tit: res.article.title,
+        img: res.article.img,
+        dis: res.article.description,
+        con: res.article.content,
+        num: res.article.visit_num,
+        like: res.article.like_num,
+        recommands: res.others,
+        // type: res.article.source_type,
+        source: res.article.source,
+        time: res.article.time,
+        title: res.common.header.title,
+        keywords: res.common.header.keywords,
+        description: res.common.header.description,
+        youlike: res.article.my_like,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   head() {
     return {
@@ -190,13 +229,13 @@ export default {
       meta: [
         {
           name: "description",
-          content: this.dis
+          content: this.dis,
         },
         {
           name: "Keywords",
-          content: this.keywords
-        }
-      ]
+          content: this.keywords,
+        },
+      ],
     };
   },
   data() {
@@ -208,33 +247,33 @@ export default {
         {
           tit: "房地产行业集中度进一步提高百强 房企市场份额升",
           time: "2019-05-24",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           tit: "房地产行业集中度进一步提高百强 房企市场份额升",
           time: "2019-05-24",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           tit: "房地产行业集中度进一步提高百强 房企市场份额升",
           time: "2019-05-24",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           tit: "房地产行业集中度进一步提高百强 房企市场份额升",
           time: "2019-05-24",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           tit: "房地产行业集中度进一步提高百强 房企市场份额升",
           time: "2019-05-24",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           tit: "房地产行业集中度进一步提高百强 房企市场份额升",
           time: "2019-05-24",
-          img: require("~/assets/lou1.png")
-        }
+          img: require("~/assets/lou1.png"),
+        },
       ],
       building: {},
       tit: "",
@@ -257,7 +296,7 @@ export default {
       load: true,
       keywords: "",
       description: "",
-      youlike: ""
+      youlike: "",
     };
   },
   methods: {
@@ -288,9 +327,9 @@ export default {
           id: id,
           platform: 2,
           token: token,
-          type: 3
+          type: 3,
         })
-          .then(resp => {
+          .then((resp) => {
             if (resp.data.code == 500) {
               that.$router.push("/" + that.n + "/login");
             } else {
@@ -305,7 +344,7 @@ export default {
               }
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
           });
       } else {
@@ -315,13 +354,13 @@ export default {
     sendmsg(p) {
       this.phone = p;
       msg({ phone: p, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             $(".t-b-first").hide();
             $(".t-b-second").show();
             var time = 60;
             var tel = p.substr(0, 3) + "****" + p.substr(7, 11);
-            var fn = function() {
+            var fn = function () {
               time--;
               if (time > 0) {
                 $(".t-b-scode").html("重新发送" + time + "s");
@@ -340,7 +379,7 @@ export default {
             $(".l-p").attr("placeholder", "报名失败");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -348,7 +387,7 @@ export default {
       let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             let ip = that.ip;
             let c = localStorage.getItem("city");
@@ -360,15 +399,15 @@ export default {
               city: c,
               position: 5,
               page: 3,
-              project: pro
+              project: pro,
             })
-              .then(resp => {
+              .then((resp) => {
                 if (resp.data.code == 200) {
                   $(".weiter").hide();
                   $(".m-o-succ").show();
                 }
               })
-              .catch(error => {
+              .catch((error) => {
                 console.log(error);
               });
           } else {
@@ -376,14 +415,19 @@ export default {
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     goback() {
-      if (window.history.length <= 1) {
-        this.$router.push({ path: "/" });
-        return false;
+      console.log(document.referrer);
+      // return
+      if (
+        document.referrer == window.location.href ||
+        document.referrer == ""
+      ) {
+        this.$router.push("/");
+        return;
       } else {
         this.$router.go(-1);
       }
@@ -396,9 +440,9 @@ export default {
         "onMenuShareQQ",
         "onMenuShareWeibo",
         "updateAppMessageShareData",
-        "updateTimelineShareData"
+        "updateTimelineShareData",
       ];
-      getsdk(url).then(res => {
+      getsdk(url).then((res) => {
         let that = this;
         wx.config({
           debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -406,9 +450,9 @@ export default {
           timestamp: res.data.data.timestamp, // 必填，生成签名的时间戳
           nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
           signature: res.data.data.signature, // 必填，签名
-          jsApiList: jsApiList // 必填，需要使用的JS接口列表
+          jsApiList: jsApiList, // 必填，需要使用的JS接口列表
         });
-        wx.ready(function() {
+        wx.ready(function () {
           if (wx.onMenuShareAppMessage) {
             wx.onMenuShareAppMessage({
               title: that.tit, // 分享标题
@@ -417,13 +461,13 @@ export default {
               imgUrl: that.img, // 分享图标
               type: "", // 分享类型,music、video或link，不填默认为link
               dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
-              success: function() {
+              success: function () {
                 // 用户确认分享后执行的回调函数
                 // alert('1.01')
               },
-              cancel: function() {
+              cancel: function () {
                 // 用户取消分享后执行的回调函数
-              }
+              },
             });
           } else {
             wx.updateAppMessageShareData({
@@ -431,26 +475,26 @@ export default {
               desc: that.dis, // 分享描述
               link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
               imgUrl: that.img, // 分享图标
-              success: function() {
+              success: function () {
                 // 设置成功
                 // alert('1.40')
-              }
+              },
             });
             wx.updateTimelineShareData({
               title: that.tit, // 分享标题
               link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
               imgUrl: that.img, // 分享图标
-              success: function() {
+              success: function () {
                 // 设置成功
-              }
+              },
             });
           }
         });
-        wx.error(res=>{
-          console.log(res)
-        })
+        wx.error((res) => {
+          console.log(res);
+        });
       });
-    }
+    },
   },
   mounted() {
     var ua = navigator.userAgent.toLowerCase();
@@ -459,33 +503,22 @@ export default {
     }
     let that = this;
     this.start();
-    $(".appointment").on("click", function() {
+    $(".appointment").on("click", function () {
       let pro = $(this).attr("data-v");
       that.pro = pro;
       $(".m-chang").show();
       $(".weiter").show();
     });
-    $(".m-chang").on("click", function() {
+    $(".m-chang").on("click", function () {
       $(".m-chang").hide();
       $(".weiter").hide();
       $(".m-o-succ").hide();
     });
     // 接口验证码
-    $(".t-b-btn2").on("click", function() {
-      var phone = $(this)
-        .prev()
-        .val();
-      var type = $(this)
-        .parent()
-        .parent()
-        .prev()
-        .find("h6")
-        .html();
-      var building_name = $(this)
-        .parent()
-        .next()
-        .find("#building_name")
-        .val();
+    $(".t-b-btn2").on("click", function () {
+      var phone = $(this).prev().val();
+      var type = $(this).parent().parent().prev().find("h6").html();
+      var building_name = $(this).parent().next().find("#building_name").val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -497,25 +530,21 @@ export default {
       }
       that.sendmsg(phone);
     });
-    $(".port1").on("click", function() {
-      var ma = $(this)
-        .prev()
-        .val();
+    $(".port1").on("click", function () {
+      var ma = $(this).prev().val();
       if (!ma) {
-        $(this)
-          .prev()
-          .attr("placeholder", "验证码不能为空");
+        $(this).prev().attr("placeholder", "验证码不能为空");
         return;
       }
       that.check(ma);
       $(".weiter").hide();
       $(".m-o-succ").show();
     });
-    $("#o_btn").on("click", function() {
+    $("#o_btn").on("click", function () {
       $(".m-o-succ").hide();
       $(".m-chang").hide();
     });
-    $(".o-esc").on("click", function() {
+    $(".o-esc").on("click", function () {
       $(".m-o-succ").hide();
       $(".m-chang").hide();
     });
@@ -535,8 +564,8 @@ export default {
 
       document.head.appendChild(keywordsEl);
       document.head.appendChild(descriptionEl);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -562,6 +591,7 @@ h3 {
   background-color: #fff;
   -webkit-box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.05);
   box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.05);
+  max-width: 450px;
 }
 h3 img.goback {
   position: absolute;

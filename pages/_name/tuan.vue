@@ -28,10 +28,11 @@
         <h3>拼团优惠</h3>
         <p>
           距离活动结束
-          <span>{{day}}</span>天
-          <span>{{hour}}</span>:
-          <span>{{min}}</span>:
-          <span>{{second}}</span>
+          <span>{{ day }}</span
+          >天 <span>{{ hour }}</span
+          >: <span>{{ min }}</span
+          >:
+          <span>{{ second }}</span>
         </p>
       </nav>
       <img src="~/assets/tuan-pin.png" alt />
@@ -41,13 +42,20 @@
         <div class="trend-con">
           <div class="swiper-container9">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" v-for="(trend,key) in last_tel" :key="key">{{trend}}领取了优惠券</div>
+              <div
+                class="swiper-slide"
+                v-for="(trend, key) in last_tel"
+                :key="key"
+              >
+                {{ trend }}领取了优惠券
+              </div>
             </div>
           </div>
         </div>
         <p>
           已有
-          <span>{{participate_num}}</span>人领取了优惠券
+          <span>{{ participate_num }}</span
+          >人领取了优惠券
         </p>
       </div>
     </div>
@@ -58,40 +66,45 @@
         <button @click="showgui">活动规则</button>
       </nav>
       <div class="con">
-        <div class="contanter" v-for="(val,key) in cons" :key="key">
+        <div class="contanter" v-for="(val, key) in cons" :key="key">
           <div class="con-top">
-            <router-link :to="'/hangzhou/content/'+val.id">
+            <router-link :to="'/hangzhou/content/' + val.id">
               <div class="top-left">
                 <div class="left-img">
                   <span>团购优惠</span>
                   <img :src="val.img" alt />
                 </div>
 
-                <p>已售{{val.saled_num}}套</p>
+                <p>已售{{ val.saled_num }}套</p>
               </div>
             </router-link>
             <div class="top-right">
               <h4>
-                {{val.name}}
-                <p>{{val.type}}</p>
+                {{ val.name }}
+                <p>{{ val.type }}</p>
               </h4>
               <h5>
-                <span>{{val.price}}</span>元/m²起
+                <span>{{ val.price }}</span
+                >元/m²起
               </h5>
               <p>
-                {{val.country}}&nbsp;|&nbsp;{{val.area_min}}-{{val.area_max}}m²
-                <span
-                  v-if="val.distance"
-                >
+                {{ val.country }}&nbsp;|&nbsp;{{ val.area_min }}-{{
+                  val.area_max
+                }}m²
+                <span v-if="val.distance">
                   <img src="~/assets/tuan-ju.png" alt />
-                  {{val.distance}}m
+                  {{ val.distance }}m
                 </span>
               </p>
               <p class="te">
-                特色：{{flag!=key?val.content.substr(0,26):val.content}}
-                <i v-if="flag!=key">...</i>
+                特色：{{
+                  flag != key ? val.content.substr(0, 26) : val.content
+                }}
+                <i v-if="flag != key">...</i>
               </p>
-              <span class="zhan" v-if="flag!=key" @click="showmore(key)">展开</span>
+              <span class="zhan" v-if="flag != key" @click="showmore(key)"
+                >展开</span
+              >
             </div>
           </div>
           <div class="con-bom">
@@ -100,9 +113,11 @@
                 <div class="swiper-wrapper">
                   <div
                     class="swiper-slide"
-                    v-for="(trend,key) in val.saled_phones"
+                    v-for="(trend, key) in val.saled_phones"
                     :key="key"
-                  >{{trend}}优惠1000元</div>
+                  >
+                    {{ trend }}优惠1000元
+                  </div>
                 </div>
               </div>
             </div>
@@ -135,15 +150,27 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
+            <input
+              class="l-p"
+              type="tel"
+              placeholder="输入预约手机号码"
+              v-model="baoming"
+            />
             <div class="w-mg">
-              <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
+              <input
+                class="w-mg-c"
+                type="checkbox"
+                checked
+                v-model="checks"
+              />我已阅读并同意
               <!-- <router-link :to="'/'+jkl+'/server'"> -->
-              <a :href="'/'+jkl+'/server'">《允家新房用户协议》</a>
+              <a :href="'/' + jkl + '/server'">《允家新房用户协议》</a>
               <!-- </router-link> -->
             </div>
             <p class="tishi">请勾选用户协议</p>
-            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="ding">立即订阅</button>
+            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="ding">
+              立即订阅
+            </button>
             <p class="w-tit">
               <img src="~/assets/tuan-tel.png" />允家严格保障您的信息安全
             </p>
@@ -153,7 +180,12 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="tel" placeholder="请输入验证码" v-model="ma" class="yanzheng" />
+            <input
+              type="tel"
+              placeholder="请输入验证码"
+              v-model="ma"
+              class="yanzheng"
+            />
             <button class="port1" @click="yan">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -168,9 +200,13 @@
         <h4>活动规则</h4>
         <img src="~/assets/w-del.png" alt @click="hidegui" />
         <p>1、本次团购活动以分档累计补发的方案执行，通过允家网站成交该项目</p>
-        <p>2、结算时间：网签成功后次月20号发放。补发费用待该范围内的最后一套网签成功后次月20号发放</p>
+        <p>
+          2、结算时间：网签成功后次月20号发放。补发费用待该范围内的最后一套网签成功后次月20号发放
+        </p>
         <p>3、核算方式：由开发商或代理公司判定为允家平台客户即可享受这个优惠</p>
-        <p>4、结算方式：提供已实名的支付宝账户给与您对接的允家咨询师，规定时间内会将优惠费用打至该账户</p>
+        <p>
+          4、结算方式：提供已实名的支付宝账户给与您对接的允家咨询师，规定时间内会将优惠费用打至该账户
+        </p>
         <p>
           详细活动方案请致电允家客服电话：
           <span>400-718-6686</span> 注：活动最终解释权归允家所有
@@ -193,51 +229,74 @@
 <script>
 import Swiper from "swiper";
 import "swiper/css/swiper.min.css";
-import img1 from '~/assets/lou1.png';
-import img2 from '~/assets/lou2.png';
+import img1 from "~/assets/lou1.png";
+import img2 from "~/assets/lou2.png";
 import Loading from "@/components/loading.vue";
 import { tuanmsg, msg, verification, tuandata } from "~/api/api";
 export default {
   name: "Tuan",
   components: {
-    "my-loading": Loading
+    "my-loading": Loading,
   },
   async asyncData(context) {
-    let jkl = context.store.state.cookie.pinyin;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res, res1] = await Promise.all([
-      context.$axios.post("/api/group_buy/first", { id: 2,kid:kid,other:other,platform:2 }).then(resp => {
-        let data = resp.data;
-        return data;
-      }),
-      context.$axios
-        .post("/api/group_buy/info", { id: 2, page: 1, limit: 5,kid:kid,other:other,platform:2 })
-        .then(resp => {
-          let data = resp.data.data;
-          return data;
-        })
-    ]);
-    return {
-      jkl: jkl,
-      title: res.data.title,
-      description: res.data.description,
-      img: res.data.img,
-      tel: res.data.tel,
-      participate_num: res.data.participate_num,
-      last_tel: res.data.last_tel,
-      end: res.data.end,
-      begin: res.data.begin,
-      city: res.data.city,
-      endline: res.data.endline,
-      open: res.open,
-      cons: res1,
-      flag: 100
-    };
+    try {
+      let jkl = context.store.state.cookie.pinyin;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res, res1] = await Promise.all([
+        context.$axios
+          .post("/api/group_buy/first", {
+            id: 2,
+            kid: kid,
+            other: other,
+            platform: 2,
+          })
+          .then((resp) => {
+            let data = resp.data;
+            return data;
+          }),
+        context.$axios
+          .post("/api/group_buy/info", {
+            id: 2,
+            page: 1,
+            limit: 5,
+            kid: kid,
+            other: other,
+            platform: 2,
+          })
+          .then((resp) => {
+            let data = resp.data.data;
+            return data;
+          }),
+      ]);
+      return {
+        jkl: jkl,
+        title: res.data.title,
+        description: res.data.description,
+        img: res.data.img,
+        tel: res.data.tel,
+        participate_num: res.data.participate_num,
+        last_tel: res.data.last_tel,
+        end: res.data.end,
+        begin: res.data.begin,
+        city: res.data.city,
+        endline: res.data.endline,
+        open: res.open,
+        cons: res1,
+        flag: 100,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   data() {
     return {
-      imgs:[img1,img2],
+      imgs: [img1, img2],
       text: "向右滑",
       msg: "",
       jkl: "",
@@ -271,7 +330,7 @@ export default {
       load: true,
       open: 0,
       tu: false,
-      position:''
+      position: "",
     };
   },
   head() {
@@ -280,9 +339,9 @@ export default {
       meta: [
         {
           name: "description",
-          content: this.description
-        }
-      ]
+          content: this.description,
+        },
+      ],
     };
   },
   methods: {
@@ -343,13 +402,13 @@ export default {
     send(tel) {
       localStorage.setItem("phone", tel);
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       let id = this.id;
       let data = { channel: 2, phone: tel, ip: ip };
       let kid = sessionStorage.getItem("kid");
       let other = sessionStorage.getItem("other");
       let city = localStorage.getItem("city1");
-      let position= this.position
+      let position = this.position;
       tuanmsg({
         city: city,
         ip: ip,
@@ -359,19 +418,19 @@ export default {
         project: id,
         remark: "团购2",
         kid: kid,
-        other: other
+        other: other,
       })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             msg(data)
-              .then(resp => {
+              .then((resp) => {
                 let code = resp.data.code;
                 if (code == 200) {
                   $(".t-b-first").hide();
                   $(".t-b-second").show();
                   var time = 60;
                   var phone = tel.substr(0, 3) + "****" + tel.substr(7, 11);
-                  var fn = function() {
+                  var fn = function () {
                     time--;
                     if (time > 0) {
                       $(".t-b-scode").html("重新发送" + time + "s");
@@ -387,15 +446,15 @@ export default {
                   $("#ytel").html(phone);
                 }
               })
-              .catch(error => {
+              .catch((error) => {
                 console.log(error);
               });
-          }else{
-            $('.l-p').val('')
+          } else {
+            $(".l-p").val("");
             $(".l-p").attr("placeholder", "报名失败");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -430,16 +489,16 @@ export default {
       $(".m-chang").show();
       this.change = true;
       this.id = id;
-      this.position= 23;
+      this.position = 23;
     },
     again() {
       let tel = this.baoming;
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       let id = this.id;
       let data = { channel: 2, phone: tel, ip: ip };
       msg(data)
-        .then(resp => {
+        .then((resp) => {
           let code = resp.data.code;
           if (code == 200) {
             let city = localStorage.getItem("city");
@@ -448,7 +507,7 @@ export default {
               localStorage.setItem("city", 1);
             }
             var time = 60;
-            var fn = function() {
+            var fn = function () {
               time--;
               if (time > 0) {
                 $(".t-b-scode").html("重新发送" + time + "s");
@@ -463,13 +522,13 @@ export default {
             var interval = setInterval(fn, 1000);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     xiang() {
       this.li = 1;
-      this.position=22
+      this.position = 22;
       $(".m-chang").show();
       this.change = true;
     },
@@ -483,7 +542,7 @@ export default {
       let that = this;
 
       verification({ phone: tel, code: e, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             if (this.li == 1) {
               this.newimg = true;
@@ -491,12 +550,12 @@ export default {
             }
             that.change = false;
             that.succ = true;
-          }else{
-            $("#ma-ll").val('');
+          } else {
+            $("#ma-ll").val("");
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -504,7 +563,7 @@ export default {
       let page = this.page;
       this.ting = false;
       tuandata({ id: 2, page: page, limit: 5 })
-        .then(res => {
+        .then((res) => {
           this.page = page + 1;
           this.ting = true;
           let data = res.data.data;
@@ -514,7 +573,7 @@ export default {
           let l = this.cons.concat(data);
           this.cons = l;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -550,12 +609,12 @@ export default {
     },
     onRefresh() {
       this.msg = "";
-    }
+    },
   },
   mounted() {
     if (process.server == false) {
       let that = this;
-      setTimeout(function() {
+      setTimeout(function () {
         that.load = false;
       }, 100);
       this.baoming = localStorage.getItem("phone");
@@ -577,14 +636,14 @@ export default {
         direction: "vertical", // 垂直切换选项
         autoplay: true,
         observer: true, //修改swiper自己或子元素时，自动初始化swiper
-        observeParents: true //修改swiper的父元素时，自动初始化swiper
+        observeParents: true, //修改swiper的父元素时，自动初始化swiper
       });
       // $("#w-esc").on("click", function() {
       //   $(".m-chang").hide();
       //   that.change = false;
       // });
 
-      $(".m-chang").on("click", function() {
+      $(".m-chang").on("click", function () {
         $(".t-b-first").show();
         $(".t-b-second").hide();
         $(".m-chang").hide();
@@ -594,11 +653,11 @@ export default {
         that.tu = false;
       });
 
-      $("#o_btn").on("click", function() {
+      $("#o_btn").on("click", function () {
         that.succ = false;
         $(".m-chang").hide();
       });
-      $(".o-esc").on("click", function() {
+      $(".o-esc").on("click", function () {
         that.succ = false;
         $(".m-chang").hide();
       });
@@ -609,16 +668,16 @@ export default {
   },
   watch: {
     cons(val) {
-      setTimeout(function() {
+      setTimeout(function () {
         var mySwiper = new Swiper(".swiper-container9", {
           direction: "vertical", // 垂直切换选项
           autoplay: true,
           observer: true, //修改swiper自己或子元素时，自动初始化swiper
-          observeParents: true //修改swiper的父元素时，自动初始化swiper
+          observeParents: true, //修改swiper的父元素时，自动初始化swiper
         });
       }, 300);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

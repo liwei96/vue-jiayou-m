@@ -141,7 +141,7 @@
             <div class="t-top">
               <h6>预约看房</h6>
               <p>一键预约看房免费小车上门接送，可带家人一起参观多个热门楼盘</p>
-              <img id="w-esc" src="~/assets/w-del.png" alt />
+              <img id="w-esc" src="~/assets/w-del.png" alt @click="close"/>
             </div>
             <div class="t-bottom">
               <div class="t-b-first">
@@ -314,6 +314,10 @@ export default {
     };
   },
   methods: {
+    close(){
+      this.change=false
+      $(".m-chang").hide();
+    },
     setmap(id, name) {
       this.mapnum = id;
       this.mapname = name;

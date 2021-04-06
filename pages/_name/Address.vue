@@ -10,7 +10,7 @@
       <img src="~/assets/cur.png" alt class="cur" />
       <span class="city">{{ city }}</span>
       <span class="msg">当前城市</span>
-      <span class="btn" @click="getcity($event)">{{ btn }}</span>
+      <!-- <span class="btn" @click="getcity($event)">{{ btn }}</span> -->
     </div>
     <div class="hot">
       <h5>支持城市</h5>

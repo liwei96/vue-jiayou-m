@@ -2,17 +2,17 @@
   <div class="MoreComments">
     <h3>
       <img class="back" src="~/assets/return.png" @click="goback" />更多评论
-      <img src="~/assets/top-house.png" alt="" class="home" @click="gohome">
+      <img src="~/assets/top-house.png" alt="" class="home" @click="gohome" />
     </h3>
     <div class="con">
       <ul>
-        <li v-for="(item,key) in lists" :key="key">
+        <li v-for="(item, key) in lists" :key="key">
           <div class="left">
             <img src="~/assets/jiapeo.png" alt />
           </div>
           <div class="right">
             <h6>
-              {{item.name}}
+              {{ item.name }}
               <van-rate
                 v-model="item.score"
                 :size="13"
@@ -22,10 +22,15 @@
                 :readonly="read"
               />
             </h6>
-            <p class="txt">{{item.content}}</p>
+            <p class="txt">{{ item.content }}</p>
             <div class="btn">
-              <span>{{item.time}}</span>
-              <strong :data-v="item.id" @click="del($event)" v-if="tel==item.name">删除</strong>
+              <span>{{ item.time }}</span>
+              <strong
+                :data-v="item.id"
+                @click="del($event)"
+                v-if="tel == item.name"
+                >删除</strong
+              >
               <p class="interaction">
                 <img
                   id="agree"
@@ -42,22 +47,26 @@
                   :data-n="item.like_num"
                   data-y="2"
                   @click="agrees($event)"
-                >点赞({{item.like_num}})</span>
-                <span @click="commentback(item.id)">回复({{item.children.length}})</span>
+                  >点赞({{ item.like_num }})</span
+                >
+                <span @click="commentback(item.id)"
+                  >回复({{ item.children.length }})</span
+                >
               </p>
             </div>
-            <div class="reply" v-if="item.children.length>0">
+            <div class="reply" v-if="item.children.length > 0">
               <p class="msg">
-                <strong>{{item.children[0].mobile}}:</strong>
-                {{item.children[0].content}}
+                <strong>{{ item.children[0].name }}:</strong>
+                {{ item.children[0].content }}
               </p>
               <p class="time">
-                {{item.children[0].time}}
+                {{ item.children[0].time }}
                 <span
                   :data-v="item.children[0].id"
                   @click="del($event)"
-                  v-if="tel==item.children[0].mobile"
-                >删除</span>
+                  v-if="tel == item.children[0].name"
+                  >删除</span
+                >
               </p>
             </div>
           </div>
@@ -65,22 +74,18 @@
       </ul>
     </div>
     <div class="m-botnav">
-      <p id="m_shou">
+      <!-- <p id="m_shou">
         <img id="fork" src="~/assets/forks.png" alt :data-v="id" @click="collection($event)" />
         <img id="forked" src="~/assets/heart.gif" />收藏
-      </p>
-      <a :href="'tel:'+call">
+      </p> -->
+      <a :href="'tel:' + call">
         <button class="m-pho">
-          <p class="ph1">
-            <img src="~/assets/phicon.png" alt />电话咨询
-          </p>
+          <p class="ph1"><img src="~/assets/phicon.png" alt />电话咨询</p>
           <p class="ph2">保护您的号码安全</p>
         </button>
       </a>
       <button class="m-y p1" data-v="预约看房">
-        <p class="ph1">
-          <img src="~/assets/promsg.png" />预约看房
-        </p>
+        <p class="ph1"><img src="~/assets/promsg.png" />预约看房</p>
         <p class="ph2">置业顾问一对一服务</p>
       </button>
     </div>
@@ -95,15 +100,27 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
+            <input
+              class="l-p"
+              type="tel"
+              placeholder="输入预约手机号码"
+              v-model="baoming"
+            />
             <p class="w-mg">
-              <input class="w-mg-c" type="radio" checked v-model="checks" />我已阅读并同意
-              <router-link :to="'/'+jkl+'/server'">
+              <input
+                class="w-mg-c"
+                type="radio"
+                checked
+                v-model="checks"
+              />我已阅读并同意
+              <router-link :to="'/' + jkl + '/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
             </p>
             <p class="tishi">请选择用户协议</p>
-            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">立即订阅</button>
+            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">
+              立即订阅
+            </button>
             <p class="w-tit">
               <img src="~/assets/w-call.png" />允家严格保障您的信息安全
             </p>
@@ -150,38 +167,49 @@ import {
 export default {
   name: "MoreComments",
   async asyncData(context) {
-    let ip = context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
-    let token = context.store.state.cookie.token;
-    let jkl = context.store.state.cookie.pinyin;
-    let id = context.params.id;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res] = await Promise.all([
-      context.$axios
-        .get("/applets/comment/list", {params:{
-          city: city,
-          id: id,
-          page: 1,
-          limit: 10,
-          token:token,
-          kid:kid,
-          other:other,
-          platform:2
-        }})
-        .then((resp) => {
-          let data = resp.data;
-          return data;
-        }),
-    ]);
-    return {
-      lists: res.data,
-      jkl: jkl,
-      title: res.common.header.title,
-      description: res.common.header.description,
-      keywords: res.common.header.keywords,
-      call:res.common.phone
-    };
+    try {
+      let ip = context.store.state.cookie.ip;
+      let city = context.store.state.cookie.city;
+      let token = context.store.state.cookie.token;
+      let jkl = context.store.state.cookie.pinyin;
+      let id = context.params.id;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .get("/applets/comment/list", {
+            params: {
+              city: city,
+              id: id,
+              page: 1,
+              limit: 10,
+              token: token,
+              kid: kid,
+              other: other,
+              platform: 2,
+            },
+          })
+          .then((resp) => {
+            let data = resp.data;
+            return data;
+          }),
+      ]);
+      return {
+        lists: res.data,
+        jkl: jkl,
+        title: res.common.header.title,
+        description: res.common.header.description,
+        keywords: res.common.header.keywords,
+        call: res.common.phone,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   data() {
     return {
@@ -206,8 +234,8 @@ export default {
       keywords: "",
       isag: true,
       isagrees: true,
-      beforeck:require('~/assets/giveup.png'),
-      cked:require('~/assets/clicked.png')
+      beforeck: require("~/assets/giveup.png"),
+      cked: require("~/assets/clicked.png"),
     };
   },
   head() {
@@ -264,10 +292,10 @@ export default {
           });
       }
     },
-    gohome(){
-      let id = this.$route.params.id
-      let name = this.$route.params.name
-      this.$router.push(`/${name}/content/${id}`)
+    gohome() {
+      let id = this.$route.params.id;
+      let name = this.$route.params.name;
+      this.$router.push(`/${name}/content/${id}`);
     },
     sendmsg(t) {
       this.phone = t;
@@ -674,6 +702,7 @@ h3 .home {
 /* 页面底部悬浮 */
 /* m-botnav */
 .m-botnav {
+  max-width: 450px;
   width: 100%;
   height: 64px;
   position: fixed;
@@ -711,6 +740,7 @@ h3 .home {
 .m-botnav .m-pho {
   background-color: #ff7866;
   color: #fff;
+  left: 11%;
 }
 .m-botnav .m-pho .ph1 {
   color: #ffffff;
@@ -734,7 +764,7 @@ h3 .home {
 .m-botnav .m-y {
   background-color: #58bbec;
   color: #fff;
-  left: 62%;
+  left: 59%;
 }
 .m-botnav .m-y .ph1 {
   color: #ffffff;

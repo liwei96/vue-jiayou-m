@@ -1,8 +1,6 @@
 <template>
   <div class="Encyclopedia">
-    <h3>
-      <img src="~/assets/return.png" @click="goback" />买房百科
-    </h3>
+    <h3><img src="~/assets/return.png" @click="goback" />买房百科</h3>
     <div class="all">
       <div class="input">
         <nuxt-link :to="'/' + jkl + '/searcharitype'">
@@ -48,7 +46,12 @@
         <div class="right" id="list">
           <ul id="all">
             <template v-for="(item, key) in lists">
-              <nuxt-link :key="key" :to="'/' + jkl + '/encyclopediaArticle/'+position+'/' + item.id">
+              <nuxt-link
+                :key="key"
+                :to="
+                  '/' + jkl + '/encyclopediaArticle/' + position + '/' + item.id
+                "
+              >
                 <li>
                   <h6>{{ item.title }}</h6>
                   <p>
@@ -69,46 +72,51 @@
   </div>
 </template>
 <script>
-import {aritles} from '~/api/api' 
+import { aritles } from "~/api/api";
 import Loadings from "@/components/loading";
 import footView from "@/components/Foot.vue";
 export default {
   name: "Encyclopedia",
   components: {
     loadView: Loadings,
-    'foot-view':footView
+    "foot-view": footView,
   },
   async asyncData(context) {
-    let other = context.query.other;
-    let city = context.store.state.city;
-    let jkl = context.params.name;
-    let position = context.params.position;
-    let type = context.params.type;
-    let [res] = await Promise.all([
-      context.$axios
-        .get("/jy/article/info", {
-          params: {
-            city: city,
-            position: position,
-            page: 1,
-            limit: 10,
-          },
-        })
-        .then((resp) => {
-          let data = resp.data;
-          //   console.log(data)
-          return data;
-        }),
-    ]);
-    return {
-      jkl: jkl,
-      lists: res.data,
-      type: type,
-      position: position,
-      title:res.common.header.title,
-      description:res.common.header.description,
-      keywords:res.common.header.keywords
-    };
+    try {
+      let other = context.query.other;
+      let city = context.store.state.city;
+      let jkl = context.params.name;
+      let position = context.params.position;
+      let type = context.params.type;
+      let [res] = await Promise.all([
+        context.$axios
+          .get("/jy/article/info", {
+            params: {
+              city: city,
+              position: position,
+              page: 1,
+              limit: 10,
+            },
+          })
+          .then((resp) => {
+            let data = resp.data;
+            //   console.log(data)
+            return data;
+          }),
+      ]);
+      return {
+        jkl: jkl,
+        lists: res.data,
+        type: type,
+        position: position,
+        title: res.common.header.title,
+        description: res.common.header.description,
+        keywords: res.common.header.keywords,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   data() {
     return {
@@ -194,22 +202,21 @@ export default {
       meta: [
         {
           name: "description",
-          content:
-            this.description
+          content: this.description,
         },
         {
           name: "Keywords",
-          content: this.keywords
-        }
-      ]
+          content: this.keywords,
+        },
+      ],
     };
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
   methods: {
-    goback(){
-      this.$router.push('/'+this.jkl)
+    goback() {
+      this.$router.push("/" + this.jkl);
     },
     setnavnum(n) {
       this.navnum = n;
@@ -223,7 +230,9 @@ export default {
     },
     setleftnum(n, id) {
       this.leftnum = n;
-      this.$router.push("/" + this.jkl + "/encyclopedia/" + this.type + "/" + id);
+      this.$router.push(
+        "/" + this.jkl + "/encyclopedia/" + this.type + "/" + id
+      );
     },
     gos() {
       this.$router.push("/" + this.jkl + "/searcharitype");
@@ -263,7 +272,7 @@ export default {
     });
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.scroll);
+    window.removeEventListener("scroll", this.scroll);
   },
 };
 </script>
@@ -272,8 +281,8 @@ export default {
   padding: 0;
   margin: 0;
 }
-.swiper-wrapper{
-  width:375px;
+.swiper-wrapper {
+  width: 375px;
 }
 li {
   list-style: none;
@@ -440,7 +449,7 @@ li {
           width: 0.1875rem;
           height: 0.9375rem;
           background-color: #4db5ff;
-          left:0
+          left: 0;
         }
       }
     }

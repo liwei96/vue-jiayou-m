@@ -2,123 +2,131 @@
   <div id="question_id">
     <div class="h-con">
       <h3>
-      <img class="back" src="~/assets/return.png" @click="goback" />
-      <img class="logo" src="~/assets/content-logo.png" alt />
-      <img src="~/assets/mapcai.png" alt class="cai" @click="taggle" />
-      <ul class="cailist" v-if="list">
-        <li class="cmn">
-          <router-link :to="'/'+jkl">
-            <span></span>
-            <img src="~/assets/barhome.png" />
-            <p>首 页</p>
+        <img class="back" src="~/assets/return.png" @click="goback" />
+        <img class="logo" src="~/assets/content-logo.png" alt />
+        <img src="~/assets/mapcai.png" alt class="cai" @click="taggle" />
+        <ul class="cailist" v-if="list">
+          <li class="cmn">
+            <router-link :to="'/' + jkl">
+              <span></span>
+              <img src="~/assets/barhome.png" />
+              <p>首 页</p>
+            </router-link>
+          </li>
+          <li>
+            <router-link :to="'/' + jkl + '/search'">
+              <img src="~/assets/barsearch.png" />
+              <p>楼盘查询</p>
+            </router-link>
+          </li>
+          <li>
+            <router-link :to="'/' + jkl + '/participate'">
+              <img src="~/assets/tegother.png" />
+              <!-- <img src="~/assets/barsearch.png" /> -->
+              <p>平台合作</p>
+            </router-link>
+          </li>
+          <li>
+            <router-link :to="'/' + jkl + '/encyclopedia/before/56'">
+              <img src="~/assets/barke.png" />
+              <p>买房百科</p>
+            </router-link>
+          </li>
+          <li>
+            <router-link :to="'/' + jkl + '/realinformations/46'">
+              <img src="~/assets/barxun.png" />
+              <p>房产资讯</p>
+            </router-link>
+          </li>
+        </ul>
+      </h3>
+      <div class="all">
+        <h4>
+          <span>问</span>
+          {{ question.question }}
+        </h4>
+        <div class="pro">
+          <router-link :to="`/${jkl}/content/${building.id}`">
+            <div class="pro-left">
+              <img :src="building.img" alt />
+            </div>
+            <div class="pro-msg">
+              <h5>
+                {{ building.name }}
+                <span>{{ building.state }}</span>
+              </h5>
+              <p class="price">
+                <span>{{ building.price }}</span>
+                <i>元/m²</i>起
+              </p>
+              <p class="info">
+                住宅 | {{ building.city_name }}-{{
+                  building.country.substr(0, 2)
+                }}
+                | {{ building.area }}m²
+              </p>
+              <p class="type">
+                <span class="zhuang">{{ building.decorate }}</span>
+                <span
+                  class="type-icon"
+                  v-for="(item, key) in building.feature"
+                  :key="key"
+                  >{{ item }}</span
+                >
+              </p>
+            </div>
           </router-link>
-        </li>
-        <li>
-          <router-link :to="'/'+jkl+'/search'">
-            <img src="~/assets/barsearch.png" />
-            <p>楼盘查询</p>
-          </router-link>
-        </li>
-        <li>
-          <router-link :to="'/'+jkl+'/participate'">
-            <img src="~/assets/tegother.png" />
-            <!-- <img src="~/assets/barsearch.png" /> -->
-            <p>平台合作</p>
-          </router-link>
-        </li>
-        <li>
-          <router-link :to="'/'+jkl+'/encyclopedia/before/56'">
-            <img src="~/assets/barke.png" />
-            <p>买房百科</p>
-          </router-link>
-        </li>
-        <li>
-          <router-link :to="'/'+jkl+'/realinformations/46'">
-            <img src="~/assets/barxun.png" />
-            <p>房产资讯</p>
-          </router-link>
-        </li>
-      </ul>
-    </h3>
-    <div class="all">
-      <h4>
-        <span>问</span>
-        {{question.question}}
-      </h4>
-      <div class="pro">
-        <router-link :to="`/${jkl}/content/${building.id}`">
-          <div class="pro-left">
-            <img :src="building.img" alt />
-          </div>
-          <div class="pro-msg">
-            <h5>
-              {{building.name}}
-              <span>{{building.state}}</span>
-            </h5>
-            <p class="price">
-              <span>{{building.price}}</span>
-              <i>元/m²</i>起
-            </p>
-            <p
-              class="info"
-            >住宅 | {{building.city_name}}-{{building.country.substr(0,2)}} | {{building.area}}m²</p>
-            <p class="type">
-              <span class="zhuang">{{building.decorate}}</span>
-              <span class="type-icon" v-for="(item,key) in building.feature" :key="key">{{item}}</span>
-            </p>
-          </div>
-        </router-link>
+        </div>
       </div>
-    </div>
-    <div class="line"></div>
-    <div class="answer">
-      <div class="answer-title">
-        <p class="title-tit">答</p>
-        <img :src="staff.staff.head_img" alt />
-        <div class="answer-msg">
-          <h6>
-            {{staff.staff.name}}
-            <span>专业解答</span>
-          </h6>
+      <div class="line"></div>
+      <div class="answer">
+        <div class="answer-title" v-if="staff.staff">
+          <p class="title-tit">答</p>
+          <img :src="staff.staff.head_img" alt />
+          <div class="answer-msg">
+            <h6>
+              {{ staff.staff.name }}
+              <span>专业解答</span>
+            </h6>
+            <p>
+              最近咨询
+              <span>{{ staff.num }}人</span>
+            </p>
+          </div>
+          <button @click="show">免费咨询</button>
+        </div>
+        <p class="answer-con">{{ question.answer }}</p>
+        <div class="answer-time">
+          <span class="time">{{ question.time.substr(0, 10) }}</span>
           <p>
-            最近咨询
-            <span>{{staff.num}}人</span>
+            <img
+              :src="question.my_like == 0 ? beforeck : cked"
+              alt
+              @click="agree($event)"
+              :data-v="question.id"
+              :data-n="question.like_num"
+              data-y="2"
+              :type="question.my_like"
+            />
+            <span>有用({{ question.like_num }})</span>
           </p>
         </div>
-        <button @click="show">免费咨询</button>
       </div>
-      <p class="answer-con">{{question.answer}}</p>
-      <div class="answer-time">
-        <span class="time">{{question.time.substr(0,10)}}</span>
-        <p>
-          <img
-            :src="question.my_like == 0 ? beforeck : cked"
-            alt
-            @click="agree($event)"
-            :data-v="question.id"
-            :data-n="question.like_num"
-            data-y="2"
-            :type="question.my_like"
-          />
-          <span>有用({{question.like_num}})</span>
-        </p>
+      <div class="line"></div>
+      <div class="other">
+        <h5>相关楼盘问答</h5>
+        <ul>
+          <li v-for="(item, key) in other" :key="key">
+            <router-link :to="'/' + jkl + '/questions/' + item.id">
+              <span>问</span>
+              {{ item.question }}
+            </router-link>
+          </li>
+        </ul>
+        <button @click="gomore">查看{{ cityname }}全部楼盘问答</button>
       </div>
     </div>
-    <div class="line"></div>
-    <div class="other">
-      <h5>相关楼盘问答</h5>
-      <ul>
-        <li v-for="(item,key) in other" :key="key">
-          <router-link :to="'/'+jkl+'/questions/'+item.id">
-            <span>问</span>
-            {{item.question}}
-          </router-link>
-        </li>
-      </ul>
-      <button @click="gomore">查看{{cityname}}全部楼盘问答</button>
-    </div>
-    </div>
-    
+
     <foot-view :pinyin="jkl"></foot-view>
 
     <transition name="change">
@@ -130,15 +138,27 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
+            <input
+              class="l-p"
+              type="tel"
+              placeholder="输入预约手机号码"
+              v-model="baoming"
+            />
             <p class="w-mg">
-              <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
-              <router-link :to="'/'+jkl+'/server'">
+              <input
+                class="w-mg-c"
+                type="checkbox"
+                checked
+                v-model="checks"
+              />我已阅读并同意
+              <router-link :to="'/' + jkl + '/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
             </p>
             <p class="tishi">请勾选用户协议</p>
-            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="send">立即订阅</button>
+            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="send">
+              立即订阅
+            </button>
             <p class="w-tit">
               <img src="~/assets/w-call.png" />允家严格保障您的信息安全
             </p>
@@ -148,7 +168,12 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" v-model="ma" id="ma-ll" />
+            <input
+              type="text"
+              placeholder="请输入验证码"
+              v-model="ma"
+              id="ma-ll"
+            />
             <button class="port1" @click="yan">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -181,37 +206,46 @@ import {
 import footView from "@/components/Foot.vue";
 export default {
   async asyncData(context) {
-    let jkl = context.store.state.cookie.pinyin;
-    let id = context.route.params.id;
-    let token = context.store.state.cookie.token;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res] = await Promise.all([
-      context.$axios
-        .get("/applets/question/detail", {
-          params: {
-            id: id,
-            token: token,
-            kid:kid,
-            other:other,
-            platform:2
-          },
-        })
-        .then((resp) => {
-          let data = resp.data;
-          return data;
-        }),
-    ]);
-    return {
-      staff: res.common.staff,
-      building: res.building,
-      question: res.data,
-      other: res.relevant,
-      jkl: jkl,
-      title: res.common.header.title,
-      description: res.common.header.description,
-      keywords: res.common.header.keywords,
-    };
+    try {
+      let jkl = context.store.state.cookie.pinyin;
+      let id = context.route.params.id;
+      let token = context.store.state.cookie.token;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .get("/applets/question/detail", {
+            params: {
+              id: id,
+              token: token,
+              kid: kid,
+              other: other,
+              platform: 2,
+            },
+          })
+          .then((resp) => {
+            let data = resp.data;
+            return data;
+          }),
+      ]);
+      return {
+        staff: res.common.staff,
+        building: res.building,
+        question: res.data,
+        other: res.relevant,
+        jkl: jkl,
+        title: res.common.header.title,
+        description: res.common.header.description,
+        keywords: res.common.header.keywords,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   data() {
     return {
@@ -329,7 +363,7 @@ export default {
                 console.log(error);
               });
           } else {
-            this.$toast('请不要重复报名');
+            this.$toast("请不要重复报名");
           }
         })
         .catch((error) => {
@@ -455,6 +489,7 @@ h3 {
   width: 100%;
   top: 0;
   z-index: 2;
+  max-width: 450px;
 }
 h3 .back {
   position: absolute;
@@ -482,7 +517,7 @@ h3 .cailist {
 }
 h3 .cailist li {
   position: relative;
-  
+
   font-size: 0.9375rem;
   line-height: 3.125rem;
   border: 0;

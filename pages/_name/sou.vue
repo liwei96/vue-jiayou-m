@@ -21,25 +21,29 @@
       <div class="m-list">
         <p class="title">楼盘</p>
         <div>
-          <router-link
+          <!-- <router-link
             :to="'/'+jkl+'/content/'+hot_id[key]"
-            v-for="(name , key) in names"
+          > -->
+          <span
+            v-for="(name, key) in names"
             :data-v="hot_id[key]"
             :key="key"
+            @click="goto(hot_id[key])"
+            >{{ name }}</span
           >
-            <span>{{name}}</span>
-          </router-link>
+          <!-- </router-link> -->
         </div>
       </div>
       <div class="m-list">
         <p class="title y">特色</p>
         <div id="ys">
           <span
-            v-for="(item,key) in tes"
+            v-for="(item, key) in tes"
             :key="key"
             :data-v="te_id[key]"
             @click="put($event)"
-          >{{item}}</span>
+            >{{ item }}</span
+          >
         </div>
       </div>
     </div>
@@ -54,10 +58,10 @@
         >{{item.name}}</li>
       </ul> -->
       <ul>
-        <li v-for="(item,key) in lists" :key="key" @click="aa(item.id)">
+        <li v-for="(item, key) in lists" :key="key" @click="aa(item.id)">
           <p class="name">
             <span v-html="item.name"></span>
-            <i>{{item.city}}</i>
+            <i>{{ item.city }}</i>
           </p>
           <p class="where" v-html="item.where"></p>
         </li>
@@ -84,8 +88,12 @@ export default {
     let city = context.store.state.cookie.city;
     let token = context.store.state.cookie.token;
     let jkl = context.store.state.cookie.pinyin;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
+    let kid = context.store.state.cookie.kid
+      ? context.store.state.cookie.kid
+      : "";
+    let other = context.store.state.cookie.other
+      ? context.store.state.cookie.other
+      : "";
     let [res] = await Promise.all([
       context.$axios
         .post("/api/project/quick_search", {
@@ -93,8 +101,8 @@ export default {
           city: city,
           ip: ip,
           platform: 2,
-          kid:kid,
-          other:other
+          kid: kid,
+          other: other,
         })
         .then((resp) => {
           let data = resp.data.data;
@@ -145,10 +153,28 @@ export default {
       title: "",
       description: "",
       keywords: "",
-      lists:[]
+      lists: [],
     };
   },
   methods: {
+    goto(n) {
+      if (sessionStorage.getItem("ispk")) {
+        let ids = localStorage.getItem("ids");
+        let id = sessionStorage.getItem("pkid");
+        let ds = [];
+        if (ids) {
+          ds = ids.split(",");
+        }
+        ds.push(n);
+        ids = ds.join(",");
+        localStorage.setItem("ids", ids);
+        sessionStorage.removeItem('ispk')
+        sessionStorage.removeItem('pkid')
+        this.$router.push("/" + this.n + "/pk/" + ids + "/" + id);
+      } else {
+        this.$router.push("/" + this.n + "/content/" + n);
+      }
+    },
     start() {
       let token = localStorage.getItem("token");
       let city = localStorage.getItem("city");
@@ -190,15 +216,30 @@ export default {
         //   }
         // }
         // this.bbs = dd;
-        let city = localStorage.getItem('cityname')
-        souname(name,1,city).then((res) => {
+        let city = localStorage.getItem("cityname");
+        souname(name, 1, city).then((res) => {
           console.log(res);
-          this.lists = res.data.data
+          this.lists = res.data.data;
         });
       }
     },
-    aa(id) {
-      this.$router.push("/" + this.n + "/content/" + id);
+    aa(n) {
+      if (sessionStorage.getItem("ispk")) {
+        let ids = localStorage.getItem("ids");
+        let id = sessionStorage.getItem("pkid");
+        let ds = [];
+        if (ids) {
+          ds = ids.split(",");
+        }
+        ds.push(n);
+        ids = ds.join(",");
+        localStorage.setItem("ids", ids);
+        sessionStorage.removeItem('ispk')
+        sessionStorage.removeItem('pkid')
+        this.$router.push("/" + this.n + "/pk/" + ids + "/" + id);
+      } else {
+        this.$router.push("/" + this.n + "/content/" + n);
+      }
       // window.location.href='/'+this.n+"/content/"+id
     },
     goback() {
@@ -240,6 +281,10 @@ export default {
       this.sou();
     },
   },
+  beforeDestroy(){
+    sessionStorage.removeItem('ispk')
+    sessionStorage.removeItem('pkid')
+  }
 };
 </script>
 <style scoped>
@@ -279,24 +324,24 @@ li {
   color: #424345;
   font-size: 1rem;
   font-weight: bold;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 .sou ul li .name span >>> strong {
   font-style: normal;
-  color:#AFB1B3
+  color: #afb1b3;
 }
 .sou ul li .name i {
   font-style: normal;
-  font-size: .75rem;
-  color: #9D9FA6;
+  font-size: 0.75rem;
+  color: #9d9fa6;
 }
 .sou ul li .where {
-  color: #2A2A2B;
-  font-size: .875rem;
+  color: #2a2a2b;
+  font-size: 0.875rem;
 }
 .sou ul li .where >>> strong {
   font-style: normal;
-  color:#AFB1B3
+  color: #afb1b3;
 }
 .sou ul >>> li:hover {
   background-color: #ccc;

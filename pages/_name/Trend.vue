@@ -616,6 +616,7 @@ h3 {
   width: 100%;
   background-color: #fff;
   z-index: 100;
+  max-width: 450px;
 }
 
 h3 img {

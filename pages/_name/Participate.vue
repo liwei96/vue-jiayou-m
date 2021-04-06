@@ -240,7 +240,7 @@
         以城市加盟的形式，低成本启动城市运营，我们保证每个地级市有且仅有一家合作商，保障合作商线上获客的优先性和客户的唯一归属权。
       </p>
     </div>
-    <div class="m-botnav visible-xs-block .visible-sm-block">
+    <div class="m-botnav">
       <a :href="`tel:${call}`">
         <button class="m-pho">
           <p class="ph1"><img src="~/assets/phicon.png" alt />电话咨询</p>
@@ -595,6 +595,7 @@ h3 img {
 }
 .bg {
   width: 100vw;
+  max-width: 450px;
 }
 nav {
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.05);
@@ -974,6 +975,7 @@ nav ul li.active::after {
 }
 
 .m-botnav {
+  max-width: 450px;
   width: 100%;
   height: 64px;
   position: fixed;

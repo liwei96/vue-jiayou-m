@@ -8,24 +8,24 @@
     </nav>
     <div class="con">
       <div class="list" v-for="m in lists" :key="m.id">
-        <router-link :to="'/'+jkl+'/content/'+m.bid">
+        <router-link :to="'/' + jkl + '/content/' + m.bid">
           <p class="tit">
             <i class="round"></i>
-            {{m.time}}
+            {{ m.time }}
           </p>
         </router-link>
         <div class="lcon">
-          <router-link :to="'/'+jkl+'/content/'+m.bid">
-            <h4>{{m.name}}最新房源动态</h4>
+          <router-link :to="'/' + jkl + '/content/' + m.bid">
+            <h4>{{ m.name }}最新房源动态</h4>
           </router-link>
           <div class="lcon-con">
-            <router-link :to="'/'+jkl+'/content/'+m.bid">
+            <router-link :to="'/' + jkl + '/content/' + m.bid">
               <div class="left">
                 <img :src="m.img" alt />
               </div>
             </router-link>
             <div class="right">
-              <p>{{m.content}}</p>
+              <p>{{ m.content }}</p>
               <span class="all" @click="all($event)">全文</span>
             </div>
           </div>
@@ -33,17 +33,13 @@
       </div>
     </div>
     <div class="m-botnav">
-      <a :href="'tel:'+call">
+      <a :href="'tel:' + call">
         <button class="m-pho">
-          <p class="ph1">
-            <img src="~/assets/phicon.png" alt />电话咨询
-          </p>
+          <p class="ph1"><img src="~/assets/phicon.png" alt />电话咨询</p>
         </button>
       </a>
       <button class="m-y p1" data-v="预约看房">
-        <p class="ph1">
-          <img src="~/assets/promsg.png" />预约看房
-        </p>
+        <p class="ph1"><img src="~/assets/promsg.png" />预约看房</p>
       </button>
     </div>
     <foot-view :pinyin="jkl"></foot-view>
@@ -52,17 +48,29 @@
       <div class="t-top">
         <h6>预约看房</h6>
         <p>一键预约看房免费小车上门接送，可带家人一起参观多个热门楼盘</p>
-        <img id="w-esc" src="~/assets/w-del.png" alt @click="hides"/>
+        <img id="w-esc" src="~/assets/w-del.png" alt @click="hides" />
       </div>
       <div class="t-bottom">
         <div class="t-b-first">
-          <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
+          <input
+            class="l-p"
+            type="tel"
+            placeholder="输入预约手机号码"
+            v-model="baoming"
+          />
           <p class="w-mg">
-            <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
+            <input
+              class="w-mg-c"
+              type="checkbox"
+              checked
+              v-model="checks"
+            />我已阅读并同意
             <a href="javasript:;">《允家新房用户协议》</a>
           </p>
           <p class="tishi">请勾选用户协议</p>
-          <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="ding">立即订阅</button>
+          <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="ding">
+            立即订阅
+          </button>
           <p class="w-tit">
             <img src="~/assets/w-call.png" />允家严格保障您的信息安全
           </p>
@@ -72,7 +80,7 @@
             验证码已发送到
             <span id="ytel">187****4376</span>，请注意查看
           </p>
-          <input type="text" placeholder="请输入验证码" id="ma-ll"/>
+          <input type="text" placeholder="请输入验证码" id="ma-ll" />
           <button class="port1">确定</button>
           <input type="hidden" id="building_name" value />
           <input type="hidden" value />
@@ -84,7 +92,7 @@
     <div class="m-chang"></div>
 
     <div class="m-o-succ">
-      <img class="o-esc" src="~/assets/m-esc.png" alt @click="hides"/>
+      <img class="o-esc" src="~/assets/m-esc.png" alt @click="hides" />
       <img src="~/assets/m-success.png" alt class="o-success" />
       <p id="o_p">已成功订阅最新动态，我们会第一时间通过短信通知您！</p>
       <button id="o_btn" @click="hides">确定</button>
@@ -98,48 +106,59 @@ import {
   ip,
   msg,
   verification,
-  trend_put
+  trend_put,
 } from "~/api/api";
 import axios from "axios";
 import footView from "@/components/Foot.vue";
 export default {
   name: "Dynamic",
   async asyncData(context) {
-    let ip = context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
-    let token = context.store.state.cookie.token;
-    let jkl = context.store.state.cookie.pinyin;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res] = await Promise.all([
-      context.$axios
-        .get("/yun_jia/dynamic/phone/info", {params:{
-          city: city,
-          platform: 2,
-          token: token,
-          ip: ip,
-          kid:kid,
-          other:other,
-          limit: 20
-        }})
-        .then(resp => {
-          let data = resp.data;
+    try {
+      let ip = context.store.state.cookie.ip;
+      let city = context.store.state.cookie.city;
+      let token = context.store.state.cookie.token;
+      let jkl = context.store.state.cookie.pinyin;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .get("/yun_jia/dynamic/phone/info", {
+            params: {
+              city: city,
+              platform: 2,
+              token: token,
+              ip: ip,
+              kid: kid,
+              other: other,
+              limit: 20,
+            },
+          })
+          .then((resp) => {
+            let data = resp.data;
 
-          return data;
-        })
-    ]);
-    return {
-      lists: res.data,
-      phone: res.common.phone,
-      jkl: jkl,
-      title: res.common.header.title,
-      description: res.common.header.description,
-      keywords: res.common.header.keywords,
-    };
+            return data;
+          }),
+      ]);
+      return {
+        lists: res.data,
+        phone: res.common.phone,
+        jkl: jkl,
+        title: res.common.header.title,
+        description: res.common.header.description,
+        keywords: res.common.header.keywords,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   data() {
     return {
-      succ:false,
+      succ: false,
       baoming: "",
       page: 2,
       lists: [],
@@ -152,26 +171,26 @@ export default {
       checks: true,
       title: "",
       description: "",
-      keywords: ""
+      keywords: "",
     };
   },
   head() {
     return {
-      title: this.title || '允家新房-楼盘动态',
+      title: this.title || "允家新房-楼盘动态",
       meta: [
         {
           name: "description",
-          content: this.description || '允家新房'
+          content: this.description || "允家新房",
         },
         {
           name: "Keywords",
-          content: this.keywords || '允家新房'
-        }
-      ]
+          content: this.keywords || "允家新房",
+        },
+      ],
     };
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
   methods: {
     start_data() {
@@ -182,7 +201,7 @@ export default {
         localStorage.setItem("city", 1);
       }
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
       this.n = localStorage.getItem("pinyin");
@@ -215,16 +234,16 @@ export default {
         platform: 2,
         token: token,
         ip: ip,
-        limit: 20
+        limit: 20,
       })
-        .then(resp => {
+        .then((resp) => {
           that.ting = true;
           let data = resp.data.data;
           let l = that.lists.concat(data);
           that.lists = l;
           that.page = that.page + 1;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -243,19 +262,19 @@ export default {
         page: 3,
         type: 6,
         kid: kid,
-        other: other
+        other: other,
       })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             msg(data)
-              .then(resp => {
+              .then((resp) => {
                 let code = resp.data.code;
                 if (code == 200) {
                   $(".t-b-first").hide();
                   $(".t-b-second").show();
                   var time = 60;
                   var phone = tel.substr(0, 3) + "****" + tel.substr(7, 11);
-                  var fn = function() {
+                  var fn = function () {
                     time--;
                     if (time > 0) {
                       $(".t-b-scode").html("重新发送" + time + "s");
@@ -271,15 +290,15 @@ export default {
                   $("#ytel").html(phone);
                 }
               })
-              .catch(error => {
+              .catch((error) => {
                 console.log(error);
               });
-          }else{
-            $('.l-p').val('')
+          } else {
+            $(".l-p").val("");
             $(".l-p").attr("placeholder", "报名失败");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -287,16 +306,16 @@ export default {
       let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             $(".weiter").hide();
             $(".m-o-succ").show();
-          }else{
-            $("#ma-ll").val('');
+          } else {
+            $("#ma-ll").val("");
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -338,29 +357,29 @@ export default {
       $(".m-chang").hide();
       $(".t-b-first").show();
       $(".t-b-second").hide();
-      $('.weiter').hide();
-      $('.m-o-succ').hide();
+      $(".weiter").hide();
+      $(".m-o-succ").hide();
     },
   },
   mounted() {
     this.baoming = localStorage.getItem("phone");
     this.start_data();
     let that = this;
-    $("#sea").on("click", function() {
+    $("#sea").on("click", function () {
       that.$router.push("/" + that.n + "/sou");
       // window.location.href = '/'+that.n+"/sou";
     });
-    $(".p1").on("click", function() {
+    $(".p1").on("click", function () {
       $(".m-chang").show();
       $(".weiter").show();
     });
-    $(".m-chang").on("click", function() {
+    $(".m-chang").on("click", function () {
       $(".m-chang").hide();
       $(".weiter").hide();
       $(".m-o-succ").hide();
     });
     // 接口验证码
-    $(".t-b-btn2").on("click", function() {
+    $(".t-b-btn2").on("click", function () {
       let check = that.checks;
       if (!check) {
         $(".tishi").show();
@@ -368,21 +387,9 @@ export default {
       } else {
         $(".tishi").hide();
       }
-      var phone = $(this)
-        .prev()
-        .prev()
-        .val();
-      var type = $(this)
-        .parent()
-        .parent()
-        .prev()
-        .find("h6")
-        .html();
-      var building_name = $(this)
-        .parent()
-        .next()
-        .find("#building_name")
-        .val();
+      var phone = $(this).prev().prev().val();
+      var type = $(this).parent().parent().prev().find("h6").html();
+      var building_name = $(this).parent().next().find("#building_name").val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -394,23 +401,19 @@ export default {
       }
       that.sendmsg(phone);
     });
-    $(".port1").on("click", function() {
-      var ma = $(this)
-        .prev()
-        .val();
+    $(".port1").on("click", function () {
+      var ma = $(this).prev().val();
       if (!ma) {
-        $(this)
-          .prev()
-          .attr("placeholder", "验证码不能为空");
+        $(this).prev().attr("placeholder", "验证码不能为空");
         return;
       }
       that.check(ma);
     });
-    $("#o_btn").on("click", function() {
+    $("#o_btn").on("click", function () {
       $(".m-o-succ").hide();
       $(".m-chang").hide();
     });
-    $(".o-esc").on("click", function() {
+    $(".o-esc").on("click", function () {
       $(".m-o-succ").hide();
       $(".m-chang").hide();
     });
@@ -421,8 +424,8 @@ export default {
     window.removeEventListener("scroll", this.scroll);
   },
   watch: {
-    lists() {}
-  }
+    lists() {},
+  },
 };
 </script>
 <style scoped>
@@ -439,6 +442,7 @@ nav {
   background-color: #fff;
   z-index: 2;
   top: 0;
+  max-width: 450px;
 }
 nav .back {
   position: absolute;
@@ -543,6 +547,7 @@ nav .search {
 
 /* m-botnav */
 .m-botnav {
+  max-width: 450px;
   width: 100%;
   height: 64px;
   position: fixed;

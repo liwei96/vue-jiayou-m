@@ -98,11 +98,9 @@
               </div>
               <div class="swiper-slide">
                 <ul>
-                  <li>
-                    <nuxt-link :to="'/' + pinyin + '/count'">
-                      <img src="~/assets/new-compact.png" alt="房贷计算" />
-                      <p>房贷计算</p>
-                    </nuxt-link>
+                  <li @click="gozhao">
+                    <img src="~/assets/index-zhao.png" alt="招聘英才" />
+                    <p>招聘英才</p>
                   </li>
                 </ul>
               </div>
@@ -742,7 +740,7 @@
               @click.stop="agree($event)"
               data-d="1"
               :data-v="q.id"
-              :data-n="q.num"
+              :data-n="q.like_num"
               :type="q.my_like"
               alt
             />
@@ -750,9 +748,9 @@
               @click.stop="agrees($event)"
               data-d="1"
               :data-v="q.id"
-              :data-n="q.num"
+              :data-n="q.like_num"
               :type="q.my_like"
-              >有用({{ q.num }})</span
+              >有用({{ q.like_num }})</span
             >
           </span>
         </p>
@@ -797,9 +795,7 @@
               <p class="area">
                 <span>{{ b.city }}-{{ b.country }}</span>
                 <span>建面</span>
-                <span>
-                  {{ parseInt(b.area) }}m²
-                </span>
+                <span> {{ parseInt(b.area) }}m² </span>
               </p>
               <p class="tabs">
                 <span class="strong">{{ b.decorate }}</span>
@@ -832,138 +828,147 @@ export default {
     "foot-view": footView,
   },
   async asyncData(context) {
-    let name = context.params.name;
-    let ip = context.store.state.cookie.ip;
-    let city = context.store.state.city;
-    let token = context.store.state.cookie.token;
-    let nn = context.store.state.pinyin;
-    let kid = context.store.state.cookie.kid
-      ? context.store.state.cookie.kid
-      : "";
-    let other = context.store.state.cookie.other
-      ? context.store.state.cookie.other
-      : "";
-    if (!city) {
-      city = 0;
-      context.store.commit("setcity", { city: city });
+    try {
+      let name = context.params.name;
+      let ip = context.store.state.cookie.ip;
+      let city = context.store.state.city;
+      let token = context.store.state.cookie.token;
+      let nn = context.store.state.pinyin;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      if (!city) {
+        city = 0;
+        context.store.commit("setcity", { city: city });
+      }
+      let [res] = await Promise.all([
+        context.$axios
+          .get("/yun_jia/phone", {
+            params: {
+              city: city,
+              platform: 2,
+              token: token,
+              ip: ip,
+              other: other,
+              kid: kid,
+            },
+          })
+          .then((resp) => {
+            let data = resp.data.data;
+            let back = resp.data;
+            let tel = data.phone;
+            context.store.commit("setcall", { call: tel });
+            if (Number(data.avg_prices.last_month_rate) > 0) {
+              data.avg_prices.last_month_rate =
+                "下跌" + data.avg_prices.last_month_rate;
+            } else {
+              data.avg_prices.last_month_rate =
+                "涨幅" + Math.abs(data.avg_prices.last_month_rate);
+            }
+
+            if (Number(data.avg_prices.last_year_rate) < 0) {
+              data.avg_prices.last_year_rate =
+                "下跌" + Math.abs(data.avg_prices.last_year_rate);
+            } else {
+              data.avg_prices.last_year_rate =
+                "涨幅" + data.avg_prices.last_year_rate;
+            }
+
+            if (data.completed_houses.length != 0) {
+              data.existing1 = data.completed_houses[0].img;
+              if (data.completed_houses[1]) {
+                data.existing2 = data.completed_houses[1].img;
+              }
+            }
+            if (data.investment.length != 0) {
+              data.invest1 = data.investment[0].img;
+              if (data.investment[1]) {
+                data.invest2 = data.investment[1].img;
+              }
+            }
+            if (data.rigid_demand.length != 0) {
+              data.rigid_demand1 = data.rigid_demand[0].img;
+              if (data.rigid_demand[1]) {
+                data.rigid_demand2 = data.rigid_demand[1].img;
+              }
+            }
+            if (data.improvement.length != 0) {
+              data.improve1 = data.improvement[0].img;
+              if (data.improvement[1]) {
+                data.improve2 = data.improvement[1].img;
+              }
+            }
+
+            if (data.dynamics.length != 0) {
+              data.dong = data.dynamics[0];
+            }
+
+            if (data.dong) {
+              data.dong.num = data.dynamic_num;
+            }
+            data.left_info =
+              data.articles.focus_1.length > 0 ? data.articles.focus_1[0] : "";
+            data.right_info1 =
+              data.articles.focus_2.length > 0 ? data.articles.focus_2[0] : "";
+            data.right_info2 =
+              data.articles.focus_3.length > 0 ? data.articles.focus_3[0] : "";
+
+            for (let item of data.recommends) {
+              if (item.railway) {
+                item.railway = item.railway.split(",")[0];
+              }
+            }
+            back.data = data;
+            return back;
+          }),
+      ]);
+      return {
+        trend_price: res.data.avg_prices.current_price,
+        trend_down: res.data.avg_prices.last_month_rate,
+        trend_up: res.data.avg_prices.last_year_rate,
+        trend_mounth: res.data.avg_prices.time,
+        hots: res.data.hot_searches,
+        questions: res.data.questions,
+        buildings: res.data.recommends,
+        count: res.data.total,
+        tuis: res.data.popularity,
+        nows: res.data.deals,
+        trends: res.data.tops,
+        s1_con: res.data.articles.guides,
+        s5_con: res.data.articles.hots,
+        s6_con: res.data.articles.deal_report,
+        s7_con: res.data.articles.land_sale,
+        s3_con: res.data.articles.local,
+        s4_con: res.data.articles.enterprises,
+        s2_con: res.data.articles.encyclopedias,
+        existing1: res.data.existing1,
+        existing2: res.data.existing2,
+        invest1: res.data.invest1,
+        invest2: res.data.invest2,
+        rigid_demand1: res.data.rigid_demand1,
+        rigid_demand2: res.data.rigid_demand2,
+        improve1: res.data.improve1,
+        improve2: res.data.improve2,
+        dong: res.data.dong,
+        left_info: res.data.left_info,
+        right_info1: res.data.right_info1,
+        right_info2: res.data.right_info2,
+        title: res.common.header.title,
+        description: res.common.header.description,
+        keywords: res.common.header.keywords,
+        pinyin: res.data.city_info.pin,
+        tel: res.common.phone,
+        cityname: res.data.city_info.name,
+        city: res.data.city_info.id,
+        banner: res.data.banner,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
     }
-    let [res] = await Promise.all([
-      context.$axios
-        .get("/yun_jia/phone", {params:{
-          city: city,
-          platform: 2,
-          token: token,
-          ip: ip,
-          other: other,
-          kid: kid,
-        }})
-        .then((resp) => {
-          let data = resp.data.data;
-          let back = resp.data;
-          let tel = data.phone;
-          context.store.commit("setcall", { call: tel });
-          if (Number(data.avg_prices.last_month_rate) > 0) {
-            data.avg_prices.last_month_rate = "下跌" + data.avg_prices.last_month_rate;
-          } else {
-            data.avg_prices.last_month_rate = "涨幅" + Math.abs(data.avg_prices.last_month_rate);
-          }
-
-          if (Number(data.avg_prices.last_year_rate) < 0) {
-            data.avg_prices.last_year_rate =
-              "下跌" + Math.abs(data.avg_prices.last_year_rate);
-          } else {
-            data.avg_prices.last_year_rate =
-              "涨幅" + data.avg_prices.last_year_rate;
-          }
-
-          if (data.completed_houses.length != 0) {
-            data.existing1 = data.completed_houses[0].img;
-            if (data.completed_houses[1]) {
-              data.existing2 = data.completed_houses[1].img;
-            }
-          }
-          if (data.investment.length != 0) {
-            data.invest1 = data.investment[0].img;
-            if (data.investment[1]) {
-              data.invest2 = data.investment[1].img;
-            }
-          }
-          if (data.rigid_demand.length != 0) {
-            data.rigid_demand1 = data.rigid_demand[0].img;
-            if (data.rigid_demand[1]) {
-              data.rigid_demand2 = data.rigid_demand[1].img;
-            }
-          }
-          if (data.improvement.length != 0) {
-            data.improve1 = data.improvement[0].img;
-            if (data.improvement[1]) {
-              data.improve2 = data.improvement[1].img;
-            }
-          }
-
-          if (data.dynamics.length != 0) {
-            data.dong = data.dynamics[0];
-          }
-
-          if (data.dong) {
-            data.dong.num = data.dynamic_num;
-          }
-          data.left_info =
-            data.articles.focus_1.length > 0 ? data.articles.focus_1[0] : "";
-          data.right_info1 =
-            data.articles.focus_2.length > 0 ? data.articles.focus_2[0] : "";
-          data.right_info2 =
-            data.articles.focus_3.length > 0 ? data.articles.focus_3[0] : "";
-
-          for (let item of data.recommends) {
-            if (item.railway) {
-              item.railway = item.railway.split(",")[0];
-            }
-          }
-          back.data = data;
-          return back;
-        }),
-    ]);
-    return {
-      trend_price: res.data.avg_prices.current_price,
-      trend_down: res.data.avg_prices.last_month_rate,
-      trend_up: res.data.avg_prices.last_year_rate,
-      trend_mounth: res.data.avg_prices.time,
-      hots: res.data.hot_searches,
-      questions: res.data.answer,
-      buildings: res.data.recommends,
-      count: res.data.total,
-      tuis: res.data.popularity,
-      nows: res.data.deals,
-      trends: res.data.tops,
-      s1_con: res.data.articles.guides,
-      s5_con: res.data.articles.hots,
-      s6_con: res.data.articles.deal_report,
-      s7_con: res.data.articles.land_sale,
-      s3_con: res.data.articles.local,
-      s4_con: res.data.articles.enterprises,
-      s2_con: res.data.articles.encyclopedias,
-      existing1: res.data.existing1,
-      existing2: res.data.existing2,
-      invest1: res.data.invest1,
-      invest2: res.data.invest2,
-      rigid_demand1: res.data.rigid_demand1,
-      rigid_demand2: res.data.rigid_demand2,
-      improve1: res.data.improve1,
-      improve2: res.data.improve2,
-      dong: res.data.dong,
-      left_info: res.data.left_info,
-      right_info1: res.data.right_info1,
-      right_info2: res.data.right_info2,
-      title: res.common.header.title,
-      description: res.common.header.description,
-      keywords: res.common.header.keywords,
-      pinyin: res.data.city_info.pin,
-      tel: res.common.phone,
-      cityname: res.data.city_info.name,
-      city: res.data.city_info.id,
-      banner: [],
-    };
   },
   data() {
     return {
@@ -1052,8 +1057,8 @@ export default {
       newsticker();
     },
     gobanner: function () {
-      if(!this.banner.url) {
-        return
+      if (!this.banner.url) {
+        return;
       }
       let url = window.location.href;
       url = url.split("?")[1];
@@ -1192,6 +1197,10 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    gozhao() {
+      window.location.href =
+        "http://recruit.jy8006.com?type=2&city=" + localStorage.getItem("city");
     },
     agrees(e) {
       // console.log(e.target)
@@ -1521,7 +1530,7 @@ li {
 }
 .swiper-pagination1 {
   position: absolute;
-  bottom: 0.5rem!important;
+  bottom: 0.5rem !important;
   display: flex;
   justify-content: center;
   z-index: 1;
@@ -1531,7 +1540,7 @@ li {
   height: 0.125rem;
   border-radius: 0.0625rem;
   background-color: #bfbfbf;
-  margin: 0!important;
+  margin: 0 !important;
 }
 .swiper-pagination1 >>> .swiper-pagination-bullet-active {
   width: 0.875rem;

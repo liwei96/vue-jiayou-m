@@ -6,32 +6,32 @@
       <img src="~/assets/mapcai.png" alt class="cai" @click="taggle" />
       <ul class="cailist" v-if="list">
         <li class="cmn">
-          <router-link :to="'/'+jkl">
+          <router-link :to="'/' + jkl">
             <span></span>
             <img src="~/assets/barhome.png" />
             <p>首 页</p>
           </router-link>
         </li>
         <li>
-          <router-link :to="'/'+jkl+'/search'">
+          <router-link :to="'/' + jkl + '/search'">
             <img src="~/assets/barsearch.png" />
             <p>楼盘查询</p>
           </router-link>
         </li>
         <li>
-          <router-link :to="'/'+jkl+'/myhome'">
+          <router-link :to="'/' + jkl + '/myhome'">
             <img src="~/assets/barsearch.png" />
             <p>个人中心</p>
           </router-link>
         </li>
         <li>
-          <router-link :to="'/'+jkl+'/encyclopedia/before/56'">
+          <router-link :to="'/' + jkl + '/encyclopedia/before/56'">
             <img src="~/assets/barke.png" />
             <p>买房百科</p>
           </router-link>
         </li>
         <li>
-          <router-link :to="'/'+jkl+'/realinformations/46'">
+          <router-link :to="'/' + jkl + '/realinformations/46'">
             <img src="~/assets/barxun.png" />
             <p>房产资讯</p>
           </router-link>
@@ -39,13 +39,12 @@
       </ul>
     </h3>
     <ul>
-      <li v-for="(item,key) in lists" :key="key">
-       
+      <li v-for="(item, key) in lists" :key="key">
         <h4>
           <router-link :to="`/${jkl}/questions/${item.id}`">
             <u>
               <span>问</span>
-              {{item.question}}
+              {{ item.question }}
             </u>
           </router-link>
         </h4>
@@ -54,12 +53,12 @@
           <img :src="item.staff.head_img" alt />
           <div class="peo-msg">
             <h6>
-              {{item.staff.name}}
+              {{ item.staff.name }}
               <span>专业解答</span>
             </h6>
             <p>
               最近咨询
-              <span>{{item.staff.ServeNum}}人</span>
+              <span>{{ item.staff.ServeNum }}人</span>
             </p>
           </div>
           <button @click="show">免费咨询</button>
@@ -67,11 +66,13 @@
         <div class="answer" v-if="item.answer">
           <router-link :to="`/${jkl}/questions/${item.id}`">
             <p>
-              {{item.answer.substr(0,42)}}
-              <i v-if="item.answer.length>42">...</i>
+              {{ item.answer.substr(0, 42) }}
+              <i v-if="item.answer.length > 42">...</i>
             </p>
           </router-link>
-          <span v-if="item.answer.length>42" @click="go(item.id)">[全文]</span>
+          <span v-if="item.answer.length > 42" @click="go(item.id)"
+            >[全文]</span
+          >
         </div>
         <!-- <div class="answer">
           <span>答</span>
@@ -93,15 +94,27 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
+            <input
+              class="l-p"
+              type="tel"
+              placeholder="输入预约手机号码"
+              v-model="baoming"
+            />
             <p class="w-mg">
-              <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
-              <router-link :to="'/'+jkl+'/server'">
+              <input
+                class="w-mg-c"
+                type="checkbox"
+                checked
+                v-model="checks"
+              />我已阅读并同意
+              <router-link :to="'/' + jkl + '/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
             </p>
             <p class="tishi">请勾选用户协议</p>
-            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="send">立即订阅</button>
+            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="send">
+              立即订阅
+            </button>
             <p class="w-tit">
               <img src="~/assets/w-call.png" />允家严格保障您的信息安全
             </p>
@@ -111,7 +124,12 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" v-model="ma" id="ma-ll" />
+            <input
+              type="text"
+              placeholder="请输入验证码"
+              v-model="ma"
+              id="ma-ll"
+            />
             <button class="port1" @click="yan">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -147,36 +165,45 @@ import {
 export default {
   name: "Question",
   async asyncData(context) {
-    let ip = context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
-    let token = context.store.state.cookie.token;
-    let jkl = context.store.state.cookie.pinyin;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res] = await Promise.all([
-      context.$axios
-        .get("/yun_jia/question/phone/list", {
-          params: {
-            page: 1,
-            limit: 10,
-            city: city,
-            kid:kid,
-            other:other,
-            platform:2
-          },
-        })
-        .then((resp) => {
-          let data = resp.data;
-          return data;
-        }),
-    ]);
-    return {
-      lists: res.data,
-      jkl: jkl,
-      title: res.common.header.title,
-      description: res.common.header.description,
-      keywords: res.common.header.keywords,
-    };
+    try {
+      let ip = context.store.state.cookie.ip;
+      let city = context.store.state.cookie.city;
+      let token = context.store.state.cookie.token;
+      let jkl = context.store.state.cookie.pinyin;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .get("/yun_jia/question/phone/list", {
+            params: {
+              page: 1,
+              limit: 10,
+              city: city,
+              kid: kid,
+              other: other,
+              platform: 2,
+            },
+          })
+          .then((resp) => {
+            let data = resp.data;
+            return data;
+          }),
+      ]);
+      return {
+        lists: res.data,
+        jkl: jkl,
+        title: res.common.header.title,
+        description: res.common.header.description,
+        keywords: res.common.header.keywords,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   components: {
     "foot-view": footView,
@@ -322,7 +349,7 @@ export default {
         newgetquestions({
           page: that.page,
           limit: 10,
-          city: city
+          city: city,
         })
           .then((resp) => {
             let l = resp.data.data;
@@ -522,6 +549,7 @@ h3 {
   width: 100%;
   top: 0;
   z-index: 2;
+  max-width: 450px;
 }
 h3 .back {
   position: absolute;
@@ -631,7 +659,7 @@ ul li .answer {
   background-color: #f7f7f7;
   padding: 0.9375rem;
   position: relative;
-  border-radius: .125rem;
+  border-radius: 0.125rem;
 }
 ul li .answer p {
   color: #626466;
@@ -687,7 +715,7 @@ h3 .cailist {
 }
 h3 .cailist li {
   position: relative;
-  
+
   font-size: 0.9375rem;
   line-height: 3.125rem;
   border: 0;

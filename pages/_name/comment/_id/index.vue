@@ -119,9 +119,11 @@ export default {
               if(sessionStorage.getItem('comment')){
                 let id = sessionStorage.getItem('comment').split('/')[3]
                 let n = localStorage.getItem("pinyin");
-                this.$router.push(`/${n}/content/${id}`)
+                this.$router.push(`/${n}/morecomments/${id}`)
               }else{
-                this.$router.go(-1);
+                let i = this.id
+                let n = localStorage.getItem("pinyin");
+                this.$router.push(`/${n}/morecomments/${i}`)
               }
             }
           })

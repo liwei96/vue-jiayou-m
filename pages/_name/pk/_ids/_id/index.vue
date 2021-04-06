@@ -3,29 +3,34 @@
     <h3>
       <img src="~/assets/return.png" @click="goback" />
       楼盘PK
-      <span id="add">添加楼盘</span>
+      <span id="add" @click="addpk">添加楼盘</span>
     </h3>
     <div class="con">
-      <div class="re-con" v-for="(list,key) in lists" :key="key">
+      <div class="re-con" v-for="(list, key) in lists" :key="key">
         <input type="radio" :data-v="list.id" @click="idss($event)" name="pp" />
         <div class="re-list">
           <div class="re-con-left">
             <img :src="list.img" />
           </div>
           <div class="re-con-right">
-            <h5>{{list.name}}</h5>
+            <h5>{{ list.name }}</h5>
             <p class="price">
-              <span>{{list.single_price}}</span>元/m²
+              <span>{{ list.single_price }}</span
+              >元/m²
             </p>
             <p class="area">
-              <span>{{list.city}}-{{list.country}}</span>
+              <span>{{ list.city }}-{{ list.country }}</span>
               <span>建面</span>
-              <span>{{parseInt(list.area_min)}}-{{parseInt(list.area_max)}}m²</span>
+              <span
+                >{{ parseInt(list.area_min) }}-{{
+                  parseInt(list.area_max)
+                }}m²</span
+              >
             </p>
             <p class="tabs">
-              <strong>{{list.decorate}}</strong>
-              <span v-if="list.railway">{{list.railway}}</span>
-              <span>{{list.tag}}</span>
+              <strong>{{ list.decorate }}</strong>
+              <span v-if="list.railway">{{ list.railway }}</span>
+              <span>{{ list.tag }}</span>
             </p>
           </div>
         </div>
@@ -42,53 +47,58 @@ import { ip, PK } from "~/api/api";
 export default {
   name: "Pk",
   async asyncData(context) {
-    let token = context.store.state.cookie.token;
-    let ip = context.store.state.cookie.ip;
-    let id = context.params.id;
-    let ids = context.params.ids;
-    let jkl = context.store.state.cookie.pinyin;
-    let kk = ids.split(",");
-    if (id != ids) {
-      for (let i = kk.length; i >= 0; i--) {
-        if (kk[i] == id) {
-          kk.splice(i, 1);
+    try {
+      let token = context.store.state.cookie.token;
+      let ip = context.store.state.cookie.ip;
+      let id = context.params.id;
+      let ids = context.params.ids;
+      let jkl = context.store.state.cookie.pinyin;
+      let kk = ids.split(",");
+      if (id != ids) {
+        for (let i = kk.length; i >= 0; i--) {
+          if (kk[i] == id) {
+            kk.splice(i, 1);
+          }
         }
-      }
-      ids = kk.join(",");
-      let kid = context.store.state.cookie.kid
-        ? context.store.state.cookie.kid
-        : "";
-      let other = context.store.state.cookie.other
-        ? context.store.state.cookie.other
-        : "";
-      let [res] = await Promise.all([
-        context.$axios
-          .post("/api/project/compare_mobile", {
-            ip: ip,
-            ids: ids,
-            platform: 2,
-            token: token,
-            kid: kid,
-            other: other,
-          })
-          .then((resp) => {
-            // console.log(resp)
-            let data = resp.data.data;
+        ids = kk.join(",");
+        let kid = context.store.state.cookie.kid
+          ? context.store.state.cookie.kid
+          : "";
+        let other = context.store.state.cookie.other
+          ? context.store.state.cookie.other
+          : "";
+        let [res] = await Promise.all([
+          context.$axios
+            .post("/api/project/compare_mobile", {
+              ip: ip,
+              ids: ids,
+              platform: 2,
+              token: token,
+              kid: kid,
+              other: other,
+            })
+            .then((resp) => {
+              // console.log(resp)
+              let data = resp.data.data;
 
-            return data;
-          }),
-      ]);
-      return {
-        lists: res.buildings,
-        jkl: jkl,
-        title: res.title,
-        description: res.description,
-        keywords: res.keywords,
-      };
-    } else {
-      return {
-        jkl: jkl,
-      };
+              return data;
+            }),
+        ]);
+        return {
+          lists: res.buildings,
+          jkl: jkl,
+          title: res.title,
+          description: res.description,
+          keywords: res.keywords,
+        };
+      } else {
+        return {
+          jkl: jkl,
+        };
+      }
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
     }
   },
   data() {
@@ -124,6 +134,12 @@ export default {
     };
   },
   methods: {
+    addpk() {
+      sessionStorage.setItem("pkid", this.id);
+      sessionStorage.setItem("ispk", 1);
+      this.$router.push("/" + this.n + "/sou");
+      // this.$router.push("/" + this.n + "/addcolletion/" + this.id);
+    },
     start() {
       this.n = this.$route.params.name;
       let id = this.$route.params.id;
@@ -177,10 +193,6 @@ export default {
       }
 
       // window.location.href = '/'+that.n+"/pkdetail/" + that.ids + "/" + that.id;
-    });
-    $("#add").on("click", function () {
-      that.$router.push("/" + that.n + "/addcolletion/" + that.id);
-      // window.location.href = '/'+that.n+"/addcolletion";
     });
   },
 };

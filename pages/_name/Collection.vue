@@ -1,37 +1,40 @@
 <template>
   <div class="Collection">
-    <h3>
-      <img @click="returnPage" src="~/assets/return.png" />我的收藏
-    </h3>
+    <h3><img @click="returnPage" src="~/assets/return.png" />我的收藏</h3>
     <div class="recommen">
       <div class="re-con">
-        <div class="re-list" v-for="(list ,index) in lists" :key="index">
-          <router-link :to="'/'+jkl+'/content/'+list.id">
+        <div class="re-list" v-for="(list, index) in lists" :key="index">
+          <router-link :to="'/' + jkl + '/content/' + list.id">
             <div class="re-con-left">
               <img :src="list.img" />
 
               <span>
                 <i class="iconfont iconyanjing"></i>
-                {{list.num}}
+                {{ list.num }}
               </span>
             </div>
             <div class="re-con-right">
               <h5>
-                {{list.name}}
-                <span>{{list.status}}</span>
+                {{ list.name }}
+                <span>{{ list.status }}</span>
               </h5>
               <p class="price">
-                <span>{{list.single_price}}</span>元/m²
+                <span>{{ list.single_price }}</span
+                >元/m²
               </p>
               <p class="area">
-                <span>{{list.city}}-{{list.country}}</span>
+                <span>{{ list.city }}-{{ list.country }}</span>
                 <span>建面</span>
-                <span>{{parseInt(list.area_min)}}-{{parseInt(list.area_max)}}m²</span>
+                <span
+                  >{{ parseInt(list.area_min) }}-{{
+                    parseInt(list.area_max)
+                  }}m²</span
+                >
               </p>
               <p class="tabs">
-                <strong>{{list.decorate}}</strong>
-                <span v-show="list.railway">{{list.railway}}</span>
-                <span id="tag">{{list.tag}}</span>
+                <strong>{{ list.decorate }}</strong>
+                <span v-show="list.railway">{{ list.railway }}</span>
+                <span id="tag">{{ list.tag }}</span>
               </p>
             </div>
           </router-link>
@@ -42,7 +45,7 @@
     <div class="nothing">
       <img src="~/assets/nothing.png" alt />
       <p>您还没有收藏，快去逛逛吧~</p>
-      <router-link :to="'/'+n+'/search'">
+      <router-link :to="'/' + n + '/search'">
         <button>去收藏</button>
       </router-link>
     </div>
@@ -56,59 +59,66 @@ import { collect_data, ip } from "~/api/api";
 export default {
   name: "Collection",
   async asyncData(context) {
-    let ip = context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
-    let token = context.store.state.cookie.token;
-    let jkl = context.store.state.cookie.pinyin;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res] = await Promise.all([
-      context.$axios
-        .post("/api/project/my_collects", {
-          ip: ip,
-          city: city,
-          page: 1,
-          limit: 10,
-          platform: 2,
-          token: token,
-          kid:kid,
-          other:other
-        })
-        .then(resp => {
-          let data = resp.data.data;
-          return data;
-        })
-    ]);
-    return {
-      lists: res,
-      jkl: jkl
-    };
+    try {
+      let ip = context.store.state.cookie.ip;
+      let city = context.store.state.cookie.city;
+      let token = context.store.state.cookie.token;
+      let jkl = context.store.state.cookie.pinyin;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .post("/api/project/my_collects", {
+            ip: ip,
+            city: city,
+            page: 1,
+            limit: 10,
+            platform: 2,
+            token: token,
+            kid: kid,
+            other: other,
+          })
+          .then((resp) => {
+            let data = resp.data.data;
+            return data;
+          }),
+      ]);
+      return {
+        lists: res,
+        jkl: jkl,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
   head() {
     return {
-      title:  "允家新房-我的收藏",
+      title: "允家新房-我的收藏",
       meta: [
         {
           name: "description",
-          content:  '允家新房'
+          content: "允家新房",
         },
         {
           name: "Keywords",
-          content:  '允家新房'
-        }
-      ]
+          content: "允家新房",
+        },
+      ],
     };
   },
   data() {
     return {
-      lists: [
-        
-      ],
+      lists: [],
       n: "",
-      jkl: ""
+      jkl: "",
     };
   },
   methods: {
@@ -125,7 +135,7 @@ export default {
     start() {
       this.n = this.$route.params.name;
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
       if (this.lists) {
         if (!this.lists || this.lists.length == 0) {
@@ -135,33 +145,33 @@ export default {
           $(".nothing").hide();
           $(".recommen").show();
         }
-      }else{
+      } else {
         $(".nothing").show();
         $(".recommen").hide();
       }
-    }
+    },
   },
   mounted() {
-    this.$nextTick(function() {
+    this.$nextTick(function () {
       let h = $(".Collection").height();
       if (h < 700) {
         $("#Foot").css({
           position: "fixed",
           bottom: "0",
           width: "100%",
-          marginBottom: 0
+          marginBottom: 0,
         });
       } else if (h >= 700) {
         $("#Foot").css({
           position: "relative",
           bottom: "0",
           width: "100%",
-          marginBottom: 0
+          marginBottom: 0,
         });
       }
     });
     this.start();
-  }
+  },
 };
 </script>
 

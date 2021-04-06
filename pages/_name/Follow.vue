@@ -1,7 +1,7 @@
 <template>
   <div class="Follow">
     <div class="container-fluid m">
-      <div class="m-title visible-xs-block .visible-sm-block">
+      <div class="m-title">
         <img src="~/assets/return.png" alt @click="goback" />
         <h3>关注公众号</h3>
       </div>

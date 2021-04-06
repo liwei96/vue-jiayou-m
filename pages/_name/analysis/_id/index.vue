@@ -1,40 +1,38 @@
 <template>
   <div class="Analysis">
     <div class="container-fluid m">
-      <div class="m-title visible-xs-block .visible-sm-block">
+      <div class="m-title">
         <img class="back" src="~/assets/return.png" alt @click="goback" />
         <h3>项目深度分析</h3>
         <img src="~/assets/top-house.png" alt class="home" @click="gohome" />
       </div>
-      <img class="m-zhu visible-xs-block .visible-sm-block" src="~/assets/pc-db.png" alt />
-      <div class="m-con visible-xs-block .visible-sm-block">
+      <img class="m-zhu" src="~/assets/pc-db.png" alt />
+      <div class="m-con">
         <div class="m-con-fen">
           <h4>投资分析</h4>
-          <p v-for="(ve,key) in invest" :key="key">{{key+1}}.{{ve}}</p>
+          <p v-for="(ve, key) in invest" :key="key">{{ key + 1 }}.{{ ve }}</p>
           <h4>宜居分析</h4>
-          <p v-for="(ve,key) in live" :key="'in'+key">{{key+1}}.{{ve}}</p>
+          <p v-for="(ve, key) in live" :key="'in' + key">
+            {{ key + 1 }}.{{ ve }}
+          </p>
         </div>
       </div>
-      <div class="m-botnav visible-xs-block .visible-sm-block">
-        <p id="m_shou">
+      <div class="m-botnav">
+        <!-- <p id="m_shou">
           <img id="fork" src="~/assets/forks.png" alt :data-v="id" @click="collection($event)" />
           <img id="forked" src="~/assets/heart.gif" />收藏
-        </p>
-        <a :href="'tel:'+call">
+        </p> -->
+        <a :href="'tel:' + call">
           <button class="m-pho">
-            <p class="ph1">
-              <img src="~/assets/phicon.png" alt />电话咨询
-            </p>
+            <p class="ph1"><img src="~/assets/phicon.png" alt />电话咨询</p>
           </button>
         </a>
         <button class="m-y p1" data-v="预约看房">
-          <p class="ph1">
-            <img src="~/assets/promsg.png" />预约看房
-          </p>
+          <p class="ph1"><img src="~/assets/promsg.png" />预约看房</p>
         </button>
       </div>
       <foot-view :pinyin="jkl"></foot-view>
-      <div class="m-tan visible-xs-block .visible-sm-block">
+      <div class="m-tan">
         <transition name="change">
           <div class="weiter ts" v-show="change">
             <div class="t-top">
@@ -44,15 +42,27 @@
             </div>
             <div class="t-bottom">
               <div class="t-b-first">
-                <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
+                <input
+                  class="l-p"
+                  type="tel"
+                  placeholder="输入预约手机号码"
+                  v-model="baoming"
+                />
                 <p class="w-mg">
-                  <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
-                  <router-link :to="'/'+jkl+'/server'">
+                  <input
+                    class="w-mg-c"
+                    type="checkbox"
+                    checked
+                    v-model="checks"
+                  />我已阅读并同意
+                  <router-link :to="'/' + jkl + '/server'">
                     <a href="javasript:;">《允家新房用户协议》</a>
                   </router-link>
                 </p>
                 <p class="tishi">请勾选用户协议</p>
-                <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">立即订阅</button>
+                <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">
+                  立即订阅
+                </button>
                 <p class="w-tit">
                   <img src="~/assets/w-call.png" />允家严格保障您的信息安全
                 </p>
@@ -84,13 +94,20 @@
         <div id="m_ti"></div>
       </div>
     </div>
-    <div class="tsmsg" v-show="tstype">{{tsmsg}}</div>
+    <div class="tsmsg" v-show="tstype">{{ tsmsg }}</div>
     <transition name="change">
       <div class="hengda" v-show="ishengda">
         <img class="del" src="~/assets/w-del.png" alt @click="guanbi" />
         <img src="~/assets/hengda.png" alt class="topimg" />
-        <input type="text" placeholder="输入身份证号后6位" maxlength="6" v-model="IDcode" />
-        <p class="zhu">注: 根据本楼盘售楼处规定，实地看房需先提前报备 身份证后6位</p>
+        <input
+          type="text"
+          placeholder="输入身份证号后6位"
+          maxlength="6"
+          v-model="IDcode"
+        />
+        <p class="zhu">
+          注: 根据本楼盘售楼处规定，实地看房需先提前报备 身份证后6位
+        </p>
         <button @click="hengda">申请报备</button>
       </div>
     </transition>
@@ -105,46 +122,51 @@ import {
   analysis_put,
   verification,
   collection,
-  hengda
+  hengda,
 } from "~/api/api";
 export default {
   name: "Analysis",
   async asyncData(context) {
-    let jkl = context.store.state.cookie.pinyin;
-    let ip = context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
-    let token = context.store.state.cookie.token;
-    let id = context.params.id;
-    let kid = context.store.state.cookie.kid
-      ? context.store.state.cookie.kid
-      : "";
-    let other = context.store.state.cookie.other
-      ? context.store.state.cookie.other
-      : "";
-    let [res] = await Promise.all([
-      context.$axios
-        .post("/api/project/analysis", {
-          id: id,
-          platform: 2,
-          ip: ip,
-          kid: kid,
-          other: other,
-        })
-        .then((resp) => {
-          let data = resp.data.data;
+    try {
+      let jkl = context.store.state.cookie.pinyin;
+      let ip = context.store.state.cookie.ip;
+      let city = context.store.state.cookie.city;
+      let token = context.store.state.cookie.token;
+      let id = context.params.id;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .post("/api/project/analysis", {
+            id: id,
+            platform: 2,
+            ip: ip,
+            kid: kid,
+            other: other,
+          })
+          .then((resp) => {
+            let data = resp.data.data;
 
-          return data;
-        }),
-    ]);
-    return {
-      invest: res.invest,
-      live: res.live,
-      call: res.phone,
-      jkl: jkl,
-      title: res.title,
-      description: res.description,
-      keywords: res.keywords,
-    };
+            return data;
+          }),
+      ]);
+      return {
+        invest: res.invest,
+        live: res.live,
+        call: res.phone,
+        jkl: jkl,
+        title: res.title,
+        description: res.description,
+        keywords: res.keywords,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   data() {
     return {
@@ -166,10 +188,10 @@ export default {
       title: "",
       description: "",
       keywords: "",
-      ishengda:false,
-      IDcode:'',
-      tstype:false,
-      tsmsg:''
+      ishengda: false,
+      IDcode: "",
+      tstype: false,
+      tsmsg: "",
     };
   },
   components: {
@@ -209,8 +231,8 @@ export default {
       }
     },
     hengda() {
-      let tel = this.baoming
-      let that = this
+      let tel = this.baoming;
+      let that = this;
       if (that.IDcode == "") {
         this.tsmsg = "请输入身份证后六位";
         this.tstype = true;
@@ -225,7 +247,7 @@ export default {
             setTimeout(() => {
               that.tstype = false;
               that.ishengda = false;
-              that.guanbi()
+              that.guanbi();
             }, 1000);
           }
         });
@@ -234,8 +256,8 @@ export default {
     guanbi() {
       $(".t-b-first").show();
       $(".t-b-second").hide();
-      $('.m-chang').hide();
-      $('.hengda').hide();
+      $(".m-chang").hide();
+      $(".hengda").hide();
     },
     gohome() {
       let id = this.$route.params.id;
@@ -332,9 +354,12 @@ export default {
       verification({ phone: t, code: checks, channel: 2 })
         .then((resp) => {
           if (resp.data.code == 200) {
-            if(sessionStorage.getItem('proname')&&sessionStorage.getItem('proname').indexOf('恒大')!==-1){
-              that.ishengda=true
-            }else{
+            if (
+              sessionStorage.getItem("proname") &&
+              sessionStorage.getItem("proname").indexOf("恒大") !== -1
+            ) {
+              that.ishengda = true;
+            } else {
               that.succ = true;
             }
             that.change = false;
@@ -577,6 +602,7 @@ export default {
 /* 页面底部悬浮 */
 /* m-botnav */
 .m-botnav {
+  max-width: 450px;
   width: 100%;
   height: 64px;
   position: fixed;
@@ -619,6 +645,7 @@ export default {
     rgba(255, 152, 106, 1)
   );
   color: #fff;
+  left: 11%;
 }
 .m-botnav .m-pho .ph1 {
   color: #ffffff;
@@ -646,7 +673,7 @@ export default {
     rgba(106, 204, 255, 1)
   );
   color: #fff;
-  left: 62%;
+  left: 59%;
 }
 .m-botnav .m-y .ph1 {
   color: #ffffff;

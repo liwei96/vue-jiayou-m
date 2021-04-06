@@ -6,39 +6,39 @@
     </h3>
     <div class="hus">
       <ul>
-        <li v-for="(item,key) in lists" :key="key">
-          <router-link :to="'/'+jkl+'/HuAnalysis/'+item.id+'/'+id">
-            <img :src="item.small" :alt="name+'户型图'" :title="name+'户型图'" />
+        <li v-for="(item, key) in lists" :key="key">
+          <router-link :to="'/' + jkl + '/HuAnalysis/' + item.id + '/' + id">
+            <img
+              :src="item.small"
+              :alt="name + '户型图'"
+              :title="name + '户型图'"
+            />
             <div class="h-right">
               <h5>
-                {{item.title}}
-                <span class="now">{{item.state}}</span>
-                <span class="price">{{item.price}}万起</span>
+                {{ item.title }}
+                <span class="now">{{ item.state }}</span>
+                <span class="price">{{ item.price }}万起</span>
               </h5>
-              <p>特点：{{item.special}}</p>
-              <p>类型：{{item.type}}</p>
-              <p>户型分析：{{item.analysis}}</p>
+              <p>特点：{{ item.special }}</p>
+              <p>类型：{{ item.type }}</p>
+              <p>户型分析：{{ item.analysis }}</p>
             </div>
           </router-link>
         </li>
       </ul>
     </div>
     <div class="m-botnav">
-      <p id="m_shou">
+      <!-- <p id="m_shou">
         <img id="fork" src="~/assets/forks.png" alt :data-v="id" @click="collect($event)" />
         <img id="forked" src="~/assets/heart.gif" />收藏
-      </p>
-      <a :href="'tel:'+call">
+      </p> -->
+      <a :href="'tel:' + call">
         <button class="m-pho">
-          <p class="ph1">
-            <img src="~/assets/phicon.png" alt />电话咨询
-          </p>
+          <p class="ph1"><img src="~/assets/phicon.png" alt />电话咨询</p>
         </button>
       </a>
       <button class="m-y p1" data-v="预约看房">
-        <p class="ph1">
-          <img src="~/assets/promsg.png" />预约看房
-        </p>
+        <p class="ph1"><img src="~/assets/promsg.png" />预约看房</p>
       </button>
     </div>
     <foot-view :pinyin="jkl"></foot-view>
@@ -52,15 +52,27 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="tel" />
+            <input
+              class="l-p"
+              type="tel"
+              placeholder="输入预约手机号码"
+              v-model="tel"
+            />
             <p class="w-mg">
-              <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
-              <router-link :to="'/'+jkl+'/server'">
+              <input
+                class="w-mg-c"
+                type="checkbox"
+                checked
+                v-model="checks"
+              />我已阅读并同意
+              <router-link :to="'/' + jkl + '/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
             </p>
             <p class="tishi">请勾选用户协议</p>
-            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">立即订阅</button>
+            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">
+              立即订阅
+            </button>
             <p class="w-tit">
               <img src="~/assets/w-call.png" />允家严格保障您的信息安全
             </p>
@@ -93,12 +105,19 @@
       <div class="hengda" v-show="ishengda">
         <img class="del" src="~/assets/w-del.png" alt @click="guanbi" />
         <img src="~/assets/hengda.png" alt class="topimg" />
-        <input type="text" placeholder="输入身份证号后6位" maxlength="6" v-model="IDcode" />
-        <p class="zhu">注: 根据本楼盘售楼处规定，实地看房需先提前报备 身份证后6位</p>
+        <input
+          type="text"
+          placeholder="输入身份证号后6位"
+          maxlength="6"
+          v-model="IDcode"
+        />
+        <p class="zhu">
+          注: 根据本楼盘售楼处规定，实地看房需先提前报备 身份证后6位
+        </p>
         <button @click="hengda">申请报备</button>
       </div>
     </transition>
-    <div class="tsmsg" v-show="tstype">{{tsmsg}}</div>
+    <div class="tsmsg" v-show="tstype">{{ tsmsg }}</div>
   </div>
 </template>
 <script>
@@ -110,62 +129,67 @@ import {
   morehus_put,
   morehus_data,
   collection,
-  hengda
+  hengda,
 } from "~/api/api";
 export default {
   name: "MoreHus",
   async asyncData(context) {
-    let ip = context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
-    let name = context.store.state.cookie.cityname;
-    name = decodeURIComponent(name);
-    let token = context.store.state.cookie.token;
-    let jkl = context.store.state.cookie.pinyin;
-    let id = context.params.id;
-    let kid = context.store.state.cookie.kid
-      ? context.store.state.cookie.kid
-      : "";
-    let other = context.store.state.cookie.other
-      ? context.store.state.cookie.other
-      : "";
-    let [res] = await Promise.all([
-      context.$axios
-        .get("/yun_jia/houses/phone/list", {
-          params:{
-          id: id,
-          platform: 2,
-          ip: ip,
-          kid: kid,
-          other: other,
-        }
-        })
-        .then((resp) => {
-          let data = resp.data;
-          data.check = true;
-          return data;
-        }),
-    ]);
-    return {
-      lists: res.other_rooms,
-      checks: res.check,
-      jkl: jkl,
-      name: res.building.name,
-      title: res.common.header.title,
-      description: res.common.header.description,
-      keywords: res.common.header.keywords,
-      city: name,
-      call: res.common.phone,
-    };
+    try {
+      let ip = context.store.state.cookie.ip;
+      let city = context.store.state.cookie.city;
+      let name = context.store.state.cookie.cityname;
+      name = decodeURIComponent(name);
+      let token = context.store.state.cookie.token;
+      let jkl = context.store.state.cookie.pinyin;
+      let id = context.params.id;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .get("/yun_jia/houses/phone/list", {
+            params: {
+              id: id,
+              platform: 2,
+              ip: ip,
+              kid: kid,
+              other: other,
+            },
+          })
+          .then((resp) => {
+            let data = resp.data;
+            data.check = true;
+            return data;
+          }),
+      ]);
+      return {
+        lists: res.other_rooms,
+        checks: res.check,
+        jkl: jkl,
+        name: res.building.name,
+        title: res.common.header.title,
+        description: res.common.header.description,
+        keywords: res.common.header.keywords,
+        city: name,
+        call: res.common.phone,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   components: {
     "foot-view": footView,
   },
   data() {
     return {
-      tstype:false,
-      tsmsg:'',
-      ishengda:false,
-      IDcode:'',
+      tstype: false,
+      tsmsg: "",
+      ishengda: false,
+      IDcode: "",
       jkl: "",
       change: false,
       succ: false,
@@ -304,9 +328,9 @@ export default {
       verification({ phone: t, code: checks, channel: 2 })
         .then((resp) => {
           if (resp.data.code == 200) {
-            if(that.name.indexOf('恒大') !==-1){
-              that.ishengda = true
-            }else{
+            if (that.name.indexOf("恒大") !== -1) {
+              that.ishengda = true;
+            } else {
               that.succ = true;
             }
             that.change = false;
@@ -322,12 +346,12 @@ export default {
     guanbi() {
       $(".t-b-first").show();
       $(".t-b-second").hide();
-      $('.m-chang').hide();
-      $('.hengda').hide();
+      $(".m-chang").hide();
+      $(".hengda").hide();
     },
     hengda() {
-      let tel = this.tel
-      let that = this
+      let tel = this.tel;
+      let that = this;
       if (that.IDcode == "") {
         this.tsmsg = "请输入身份证后六位";
         this.tstype = true;
@@ -342,7 +366,7 @@ export default {
             setTimeout(() => {
               that.tstype = false;
               that.ishengda = false;
-              that.guanbi()
+              that.guanbi();
             }, 1000);
           }
         });
@@ -565,6 +589,7 @@ h3 .home {
   background-color: #fff;
   z-index: 200;
   box-shadow: 0px 0px 9px 1px rgba(6, 0, 1, 0.04);
+  max-width: 450px;
 }
 
 .m-botnav p {
@@ -600,6 +625,7 @@ h3 .home {
     rgba(255, 152, 106, 1)
   );
   color: #fff;
+  left: 11%;
 }
 .m-botnav .m-pho .ph1 {
   color: #ffffff;
@@ -627,7 +653,7 @@ h3 .home {
     rgba(106, 204, 255, 1)
   );
   color: #fff;
-  left: 62%;
+  left: 59%;
 }
 .m-botnav .m-y .ph1 {
   color: #ffffff;

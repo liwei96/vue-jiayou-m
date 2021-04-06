@@ -5,26 +5,31 @@
       添加楼盘
     </h3>
     <div class="con">
-      <div class="re-con" v-for="(list,key) in lists" :key="key">
+      <div class="re-con" v-for="(list, key) in lists" :key="key">
         <input type="checkbox" :data-v="list.id" @click="add($event)" />
         <div class="re-list">
           <div class="re-con-left">
             <img :src="list.img" />
           </div>
           <div class="re-con-right">
-            <h5>{{list.name}}</h5>
+            <h5>{{ list.name }}</h5>
             <p class="price">
-              <span>{{list.single_price}}</span>元/m²
+              <span>{{ list.single_price }}</span
+              >元/m²
             </p>
             <p class="area">
-              <span>{{list.city}}-{{list.country}}</span>
+              <span>{{ list.city }}-{{ list.country }}</span>
               <span>建面</span>
-              <span>{{parseInt(list.area_min)}}-{{parseInt(list.area_max)}}m²</span>
+              <span
+                >{{ parseInt(list.area_min) }}-{{
+                  parseInt(list.area_max)
+                }}m²</span
+              >
             </p>
             <p class="tabs">
-              <strong>{{list.status}}</strong>
-              <span v-if="list.railway">{{list.railway}}</span>
-              <span>{{list.type}}</span>
+              <strong>{{ list.status }}</strong>
+              <span v-if="list.railway">{{ list.railway }}</span>
+              <span>{{ list.type }}</span>
             </p>
           </div>
         </div>
@@ -47,35 +52,52 @@ export default {
   name: "AddColletion",
   components: {
     "my-loading": Loading,
-    'foot-view':footView
+    "foot-view": footView,
   },
-  async asyncData (context) {
-    let token = context.store.state.cookie.token;
-    let ip = context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
-    let jkl=context.store.state.cookie.pinyin;
-    let id=context.params.id;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res]= await Promise.all([
-      context.$axios.post('/api/project/pk_recommand',{ ip: ip, city: city, id: id, token: token, kid:kid, other:other,platform:2 })
-      .then((resp)=>{
-        let data = resp.data;
-          
-          
-          return data;
-      })
-    ])
-    return{
-          lists:res.data,
-          jkl:jkl,
-          title:res.head.title,
-          description:res.head.description,
-          keywords:res.head.keywords
+  async asyncData(context) {
+    try {
+      let token = context.store.state.cookie.token;
+      let ip = context.store.state.cookie.ip;
+      let city = context.store.state.cookie.city;
+      let jkl = context.store.state.cookie.pinyin;
+      let id = context.params.id;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .post("/api/project/pk_recommand", {
+            ip: ip,
+            city: city,
+            id: id,
+            token: token,
+            kid: kid,
+            other: other,
+            platform: 2,
+          })
+          .then((resp) => {
+            let data = resp.data;
+
+            return data;
+          }),
+      ]);
+      return {
+        lists: res.data,
+        jkl: jkl,
+        title: res.head.title,
+        description: res.head.description,
+        keywords: res.head.keywords,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
     }
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
   data() {
     return {
@@ -90,7 +112,7 @@ export default {
           zhuangxiu: "精装",
           ditie: "地铁沿线",
           tese: "繁华地段",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           tit: "绿地华家池印",
@@ -102,7 +124,7 @@ export default {
           zhuangxiu: "精装",
           ditie: "地铁沿线",
           tese: "繁华地段",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           tit: "绿地华家池印",
@@ -114,32 +136,32 @@ export default {
           zhuangxiu: "精装",
           ditie: "地铁沿线",
           tese: "繁华地段",
-          img: require("~/assets/lou1.png")
-        }
+          img: require("~/assets/lou1.png"),
+        },
       ],
       id: "",
       ip: "",
       load: true,
       n: "",
-      jkl:'',
-      title:'',
-      description:'',
-      keywords:''
+      jkl: "",
+      title: "",
+      description: "",
+      keywords: "",
     };
   },
   head() {
     return {
-      title: this.title || '允家新房-楼盘PK添加',
+      title: this.title || "允家新房-楼盘PK添加",
       meta: [
         {
           name: "description",
-          content: this.description || '允家新房'
+          content: this.description || "允家新房",
         },
         {
           name: "Keywords",
-          content: this.keywords || '允家新房'
-        }
-      ]
+          content: this.keywords || "允家新房",
+        },
+      ],
     };
   },
   methods: {
@@ -147,20 +169,20 @@ export default {
       this.n = this.$route.params.name;
       this.id = this.$route.params.id;
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
-      this.load=false
+      this.load = false;
     },
     add(e) {
       let id = e.target.getAttribute("data-v");
-      let d=this.id;
+      let d = this.id;
       let ids = localStorage.getItem("ids");
       let ds = [];
       if (ids) {
         ds = ids.split(",");
       }
       ds.push(id);
-      
+
       ids = ds.join(",");
       localStorage.setItem("ids", ids);
     },
@@ -172,12 +194,17 @@ export default {
     },
     goback() {
       this.$router.go(-1);
-    }
+    },
   },
   mounted() {
-    $("#Foot").css({ position: "relative", bottom: "0", width: "100%", marginBottom: '80px' });
+    $("#Foot").css({
+      position: "relative",
+      bottom: "0",
+      width: "100%",
+      marginBottom: "80px",
+    });
     this.start();
-  }
+  },
 };
 </script>
 <style scoped>
@@ -197,7 +224,7 @@ h3 {
   background-color: #fff;
   width: 100%;
   z-index: 2;
-  top:0;
+  top: 0;
 }
 h3 img {
   width: 5%;
@@ -213,7 +240,7 @@ h3 span {
 .con {
   padding: 0 4%;
   margin-bottom: 70px;
-  margin-top:50px
+  margin-top: 50px;
 }
 .re-con {
   border-bottom: 0.5px solid #f7f5f5;
@@ -334,11 +361,11 @@ h3 span {
   line-height: 44px;
   border: 0;
 }
-.bom{
+.bom {
   position: fixed;
   bottom: 0;
-  width:100%;
-  padding-top:20px;
+  width: 100%;
+  padding-top: 20px;
   background-color: #fff;
   z-index: 1;
 }

@@ -1,37 +1,40 @@
 <template>
   <div class="Footprint">
-    <h3>
-      <img @click="returnPage" src="~/assets/return.png" />我的足迹
-    </h3>
+    <h3><img @click="returnPage" src="~/assets/return.png" />我的足迹</h3>
     <div class="recommen">
       <div class="re-con">
-        <div class="re-list" v-for="(list ,index) in lists" :key="index">
-          <router-link :to="'/'+jkl+'/content/'+list.id">
+        <div class="re-list" v-for="(list, index) in lists" :key="index">
+          <router-link :to="'/' + jkl + '/content/' + list.id">
             <div class="re-con-left">
               <img :src="list.img" />
 
               <span>
                 <i class="iconfont iconyanjing"></i>
-                {{list.num}}
+                {{ list.num }}
               </span>
             </div>
             <div class="re-con-right">
               <h5>
-                {{list.name}}
-                <span>{{list.status}}</span>
+                {{ list.name }}
+                <span>{{ list.status }}</span>
               </h5>
               <p class="price">
-                <span>{{list.single_price}}</span>元/m²
+                <span>{{ list.single_price }}</span
+                >元/m²
               </p>
               <p class="area">
-                <span>{{list.city}}-{{list.country}}</span>
+                <span>{{ list.city }}-{{ list.country }}</span>
                 <span>建面</span>
-                <span>{{parseInt(list.area_min)}}-{{parseInt(list.area_max)}}m²</span>
+                <span
+                  >{{ parseInt(list.area_min) }}-{{
+                    parseInt(list.area_max)
+                  }}m²</span
+                >
               </p>
               <p class="tabs">
-                <strong>{{list.decorate}}</strong>
-                <span v-if="list.railway">{{list.railway}}</span>
-                <span id="tag">{{list.tag}}</span>
+                <strong>{{ list.decorate }}</strong>
+                <span v-if="list.railway">{{ list.railway }}</span>
+                <span id="tag">{{ list.tag }}</span>
               </p>
             </div>
           </router-link>
@@ -39,10 +42,10 @@
       </div>
     </div>
 
-    <div class="nothing" >
+    <div class="nothing">
       <img src="~/assets/footers.png" alt />
       <p>您还没有浏览记录，快去看看楼盘吧~</p>
-      <router-link :to="'/'+jkl+'/search'">
+      <router-link :to="'/' + jkl + '/search'">
         <button>去看楼盘</button>
       </router-link>
     </div>
@@ -56,36 +59,45 @@ import footView from "@/components/Foot.vue";
 export default {
   name: "Footprint",
   async asyncData(context) {
-    let ip = context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
-    let token = context.store.state.cookie.token;
-    let jkl = context.store.state.cookie.pinyin;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res] = await Promise.all([
-      context.$axios
-        .post("/api/project/my_foot", {
-          ip: ip,
-          city: city,
-          page: 1,
-          limit: 10,
-          platform: 2,
-          token: token,
-          kid:kid,
-          other:other
-        })
-        .then(resp => {
-          let data = resp.data.data;
-          return data;
-        })
-    ]);
-    return {
-      lists: res,
-      jkl: jkl
-    };
+    try {
+      let ip = context.store.state.cookie.ip;
+      let city = context.store.state.cookie.city;
+      let token = context.store.state.cookie.token;
+      let jkl = context.store.state.cookie.pinyin;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .post("/api/project/my_foot", {
+            ip: ip,
+            city: city,
+            page: 1,
+            limit: 10,
+            platform: 2,
+            token: token,
+            kid: kid,
+            other: other,
+          })
+          .then((resp) => {
+            let data = resp.data.data;
+            return data;
+          }),
+      ]);
+      return {
+        lists: res,
+        jkl: jkl,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
   head() {
     return {
@@ -93,13 +105,13 @@ export default {
       meta: [
         {
           name: "description",
-          content: "允家新房"
+          content: "允家新房",
         },
         {
           name: "Keywords",
-          content: "允家新房"
-        }
-      ]
+          content: "允家新房",
+        },
+      ],
     };
   },
   data() {
@@ -108,7 +120,7 @@ export default {
       n: "",
       jkl: "",
       page: 2,
-      ting: true
+      ting: true,
     };
   },
   methods: {
@@ -131,7 +143,7 @@ export default {
           $(".nothing").hide();
           $(".recommen").show();
         }
-      }else{
+      } else {
         $(".nothing").show();
         $(".recommen").hide();
       }
@@ -150,16 +162,16 @@ export default {
         page: page,
         limit: 10,
         platform: 2,
-        token: token
+        token: token,
       })
-        .then(res => {
+        .then((res) => {
           that.ting = true;
           let data = res.data.data;
           let l = that.lists.concat(data);
           that.lists = l;
           that.page = that.page + 1;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -173,24 +185,24 @@ export default {
           this.getmore();
         }
       }
-    }
+    },
   },
   mounted() {
-    this.$nextTick(function() {
+    this.$nextTick(function () {
       let h = $("body").height();
       if (h < 700) {
         $("#Foot").css({
           position: "fixed",
           bottom: "0",
           width: "100%",
-          marginBottom: 0
+          marginBottom: 0,
         });
       } else if (h >= 700) {
         $("#Foot").css({
           position: "relative",
           bottom: "0",
           width: "100%",
-          marginBottom: 0
+          marginBottom: 0,
         });
       }
     });
@@ -200,7 +212,7 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener("scroll", this.scroll);
-  }
+  },
 };
 </script>
 

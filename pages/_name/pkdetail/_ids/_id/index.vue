@@ -107,8 +107,8 @@
       </div>
       <div class="txt">
         <p class="tit">物业费用</p>
-        <p class="msg">{{left.wufei}}元/m²</p>
-        <p class="msg" style="margin-right: 0;">{{right.wufei}}元/m²</p>
+        <p class="msg"><i v-if="left.wufei">{{left.wufei}}元/m²</i><i v-else>未知</i></p>
+        <p class="msg" style="margin-right: 0;"><i v-if="right.wufei">{{right.wufei}}元/m²</i><i v-else>未知</i></p>
       </div>
       <div class="txt">
         <p class="tit">物业公司</p>
@@ -220,9 +220,9 @@
       </div>-->
     </div>
     <div class="m-botnav">
-      <p id="m_shou" data-_v="{$data.id}">
+      <!-- <p id="m_shou" data-_v="{$data.id}">
         <img src="~/assets/forked.png" alt />收藏
-      </p>
+      </p> -->
       <a :href="'tel:'+call">
         <button class="m-pho">
           <p class="ph1">
@@ -743,6 +743,7 @@ h3 img {
   width: 100%;
   background-color: #fff;
   padding: 20px 2%;
+  max-width: 450px;
 }
 .fix .f-top {
   display: flex;
@@ -850,6 +851,9 @@ h3 img {
 .con .txt .msg {
   width: 37%;
 }
+.con .txt .msg i {
+  font-style: normal;
+}
 .con .txt .weight {
   color: #919499;
   font-size: 18px;
@@ -883,6 +887,7 @@ h3 img {
 /* 页面底部悬浮 */
 /* m-botnav */
 .m-botnav {
+  max-width: 450px;
   width: 100%;
   height: 64px;
   position: fixed;
@@ -910,7 +915,7 @@ h3 img {
   display: inline-block;
   position: absolute;
   top: 10px;
-  width: 33.06667%;
+  width: 40%;
   height: 44px;
   font-size: 15px;
   border-radius: 4px;
@@ -924,6 +929,7 @@ h3 img {
     rgba(255, 152, 106, 1)
   );
   color: #fff;
+  left: 5%;
 }
 .m-botnav .m-pho .ph1 {
   color: #ffffff;
@@ -951,7 +957,7 @@ h3 img {
     rgba(106, 204, 255, 1)
   );
   color: #fff;
-  left: 62%;
+  left: 55%;
 }
 .m-botnav .m-y .ph1 {
   color: #ffffff;

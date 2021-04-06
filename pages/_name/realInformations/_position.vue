@@ -1,21 +1,19 @@
 <template>
   <div class="RealInformations">
-    <h3>
-      <img src="~/assets/return.png" @click="goback" />房产楼讯
-    </h3>
+    <h3><img src="~/assets/return.png" @click="goback" />房产楼讯</h3>
     <div class="input">
-      <nuxt-link :to="'/'+jkl+'/searcharitype'">
-      <input type="text" placeholder="搜搜你想要了解的房产咨询吧" disabled/>
-      <img src="~/assets/search.png" alt />
+      <nuxt-link :to="'/' + jkl + '/searcharitype'">
+        <input type="text" placeholder="搜搜你想要了解的房产咨询吧" disabled />
+        <img src="~/assets/search.png" alt />
       </nuxt-link>
     </div>
     <div class="topimgs">
       <div class="swiper-topimg">
         <div class="swiper-wrapper">
-          <div class="swiper-slide" v-for="(item,key) in tops" :key="key">
-            <nuxt-link :to="'/'+jkl+'/realinformations/'+item.id">
-            <img :src="item.img" :alt="item.title" />
-            <p>{{item.title}}</p>
+          <div class="swiper-slide" v-for="(item, key) in tops" :key="key">
+            <nuxt-link :to="'/' + jkl + '/realinformations/' + item.id">
+              <img :src="item.img" :alt="item.title" />
+              <p>{{ item.title }}</p>
             </nuxt-link>
           </div>
         </div>
@@ -25,28 +23,31 @@
     <div class="swiper-nav">
       <div class="swiper-wrapper">
         <div
-          :class="navnum == item.id?'swiper-slide active':'swiper-slide'"
+          :class="navnum == item.id ? 'swiper-slide active' : 'swiper-slide'"
           @click="setnavnum(item.id)"
-          v-for="(item,key) in navs"
+          v-for="(item, key) in navs"
           :key="key"
         >
-          {{item.name}}
+          {{ item.name }}
           <p></p>
         </div>
       </div>
     </div>
     <div class="con">
-      <template v-for="(item,key) in lists">
-        <nuxt-link :to="'/'+jkl+'/encyclopediaArticle/'+navnum+'/'+item.id" :key="key">
+      <template v-for="(item, key) in lists">
+        <nuxt-link
+          :to="'/' + jkl + '/encyclopediaArticle/' + navnum + '/' + item.id"
+          :key="key"
+        >
           <div class="li">
             <div class="left">
               <h5>
-                <span v-if="key==0">新</span>
-                {{item.title}}
+                <span v-if="key == 0">新</span>
+                {{ item.title }}
               </h5>
               <p>
-                {{item.source}}
-                <span>{{item.begin}}</span>
+                {{ item.source }}
+                <span>{{ item.begin }}</span>
               </p>
             </div>
             <div class="right">
@@ -64,51 +65,56 @@ import "swiper/css/swiper.min.css";
 import { aritles } from "~/api/api";
 export default {
   name: "RealInformations",
- async asyncData(context) {
-    let other = context.query.other;
-    let city = context.store.state.city;
-    let token = context.store.state.cookie.token;
-    let jkl = context.params.name;
-    let position = context.params.position;
-    let [res,res1] = await Promise.all([
-      context.$axios
-        .get("/jy/article/info", {
-          params: {
-            city: city,
-            position: position,
-            page: 1,
-            limit: 10,
-          },
-        })
-        .then((resp) => {
-          let data = resp.data;
-          //   console.log(data);
-          return data;
-        }),
+  async asyncData(context) {
+    try {
+      let other = context.query.other;
+      let city = context.store.state.city;
+      let token = context.store.state.cookie.token;
+      let jkl = context.params.name;
+      let position = context.params.position;
+      let [res, res1] = await Promise.all([
         context.$axios
-        .get("/jy/article/phone/news", {
-          params: {
-            city: city,
-            token:token
-          },
-        })
-        .then((resp) => {
-          let data = resp.data;
-          //   console.log(data);
-          return data;
-        }),
-    ]);
-    return {
-      jkl: jkl,
-      lists: res.data,
-      position: position,
-      navnum: position,
-      isok: true,
-      tops:res1.tops,
-      title:res1.common.header.title,
-      description:res1.common.header.description,
-      keywords:res1.common.header.keywords
-    };
+          .get("/jy/article/info", {
+            params: {
+              city: city,
+              position: position,
+              page: 1,
+              limit: 10,
+            },
+          })
+          .then((resp) => {
+            let data = resp.data;
+            //   console.log(data);
+            return data;
+          }),
+        context.$axios
+          .get("/jy/article/phone/news", {
+            params: {
+              city: city,
+              token: token,
+            },
+          })
+          .then((resp) => {
+            let data = resp.data;
+            //   console.log(data);
+            return data;
+          }),
+      ]);
+      return {
+        jkl: jkl,
+        lists: res.data,
+        position: position,
+        navnum: position,
+        isok: true,
+        tops: res1.tops,
+        title: res1.common.header.title,
+        description: res1.common.header.description,
+        keywords: res1.common.header.keywords,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   head() {
     return {
@@ -116,14 +122,13 @@ export default {
       meta: [
         {
           name: "description",
-          content: this.description || 
-            "家园新房"
+          content: this.description || "家园新房",
         },
         {
           name: "Keywords",
-          content: this.keywords || "家园新房"
-        }
-      ]
+          content: this.keywords || "家园新房",
+        },
+      ],
     };
   },
   data() {
@@ -163,21 +168,17 @@ export default {
           id: "52",
           name: "土拍成交",
         },
-        {
-          id: "52",
-          name: "楼盘动态",
-        },
       ],
       lists: [],
       page: 2,
       isok: true,
-      tops:[],
+      tops: [],
       position: 0,
     };
   },
   methods: {
     goback() {
-      this.$router.go(-1)
+      this.$router.go(-1);
     },
     setnavnum(n) {
       this.$router.push("/" + this.jkl + "/realinformations/" + n);
@@ -239,7 +240,7 @@ export default {
   padding: 0;
   margin: 0;
 }
-li{
+li {
   list-style: none;
 }
 h3 {

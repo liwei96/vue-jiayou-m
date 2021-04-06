@@ -7,19 +7,19 @@
       </button>
     </nav>
     <div class="con">
-      <div class="list" v-for="(m,key) in lists" :key="key">
+      <div class="list" v-for="(m, key) in lists" :key="key">
         <p class="tit">
           <i class="round"></i>
-          {{m.time}}
+          {{ m.time }}
         </p>
         <div class="lcon">
-          <h4>{{m.name}}最新房源动态</h4>
+          <h4>{{ m.name }}最新房源动态</h4>
           <div class="lcon-con">
             <div class="left">
               <img :src="m.img" alt />
             </div>
             <div class="right">
-              <p>{{m.content}}</p>
+              <p>{{ m.content }}</p>
               <span class="all" @click="all($event)">全文</span>
             </div>
           </div>
@@ -27,17 +27,13 @@
       </div>
     </div>
     <div class="m-botnav">
-      <a :href="'tel:'+call">
+      <a :href="'tel:' + call">
         <button class="m-pho">
-          <p class="ph1">
-            <img src="~/assets/phicon.png" alt />电话咨询
-          </p>
+          <p class="ph1"><img src="~/assets/phicon.png" alt />电话咨询</p>
         </button>
       </a>
       <button class="m-y p1" data-v="预约看房">
-        <p class="ph1">
-          <img src="~/assets/promsg.png" />预约看房
-        </p>
+        <p class="ph1"><img src="~/assets/promsg.png" />预约看房</p>
       </button>
     </div>
     <foot-view :pinyin="jkl"></foot-view>
@@ -50,9 +46,19 @@
       </div>
       <div class="t-bottom">
         <div class="t-b-first">
-          <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
+          <input
+            class="l-p"
+            type="tel"
+            placeholder="输入预约手机号码"
+            v-model="baoming"
+          />
           <p class="w-mg">
-            <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
+            <input
+              class="w-mg-c"
+              type="checkbox"
+              checked
+              v-model="checks"
+            />我已阅读并同意
             <a href="javasript:;">《允家新房用户协议》</a>
           </p>
           <p class="tishi">请勾选用户协议</p>
@@ -79,8 +85,15 @@
     <div class="hengda" v-show="ishengda">
       <img class="del" src="~/assets/w-del.png" alt @click="guanbi" />
       <img src="~/assets/hengda.png" alt class="topimg" />
-      <input type="text" placeholder="输入身份证号后6位" maxlength="6" v-model="IDcode" />
-      <p class="zhu">注: 根据本楼盘售楼处规定，实地看房需先提前报备 身份证后6位</p>
+      <input
+        type="text"
+        placeholder="输入身份证号后6位"
+        maxlength="6"
+        v-model="IDcode"
+      />
+      <p class="zhu">
+        注: 根据本楼盘售楼处规定，实地看房需先提前报备 身份证后6位
+      </p>
       <button @click="hengda">申请报备</button>
     </div>
     <div class="m-o-succ">
@@ -89,7 +102,7 @@
       <p id="o_p">已成功订阅最新动态，我们会第一时间通过短信通知您！</p>
       <button id="o_btn">确定</button>
     </div>
-    <div class="tsmsg" v-show="tstype">{{tsmsg}}</div>
+    <div class="tsmsg" v-show="tstype">{{ tsmsg }}</div>
   </div>
 </template>
 <script>
@@ -101,53 +114,60 @@ import {
   msg,
   verification,
   trend_put,
-  hengda
+  hengda,
 } from "~/api/api";
 import axios from "axios";
 export default {
   name: "Dynamic",
   async asyncData(context) {
-    let ip = context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
-    let name = context.store.state.cookie.cityname;
-    name = decodeURIComponent(name);
-    let token = context.store.state.cookie.token;
-    let jkl = context.store.state.cookie.pinyin;
-    let id = context.params.id;
-    let kid = context.store.state.cookie.kid
-      ? context.store.state.cookie.kid
-      : "";
-    let other = context.store.state.cookie.other
-      ? context.store.state.cookie.other
-      : "";
-    let [res] = await Promise.all([
-      context.$axios
-        .get("/yun_jia/dynamic/phone/info", {params:{
-          city: city,
-          platform: 2,
-          token: token,
-          ip: ip,
-          id: id,
-          limit: 50,
-          kid: kid,
-          other: other,
-        }})
-        .then((resp) => {
-          let data = resp.data;
-          return data;
-        }),
-    ]);
-    return {
-      lists: res.data,
-      phone: res.common.phone,
-      checks: false,
-      jkl: jkl,
-      title: res.common.header.title,
-      description: res.common.header.description,
-      keywords: res.common.header.keywords,
-      // name: res.building.name,
-      city: name,
-    };
+    try {
+      let ip = context.store.state.cookie.ip;
+      let city = context.store.state.cookie.city;
+      let name = context.store.state.cookie.cityname;
+      name = decodeURIComponent(name);
+      let token = context.store.state.cookie.token;
+      let jkl = context.store.state.cookie.pinyin;
+      let id = context.params.id;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .get("/yun_jia/dynamic/phone/info", {
+            params: {
+              city: city,
+              platform: 2,
+              token: token,
+              ip: ip,
+              id: id,
+              limit: 50,
+              kid: kid,
+              other: other,
+            },
+          })
+          .then((resp) => {
+            let data = resp.data;
+            return data;
+          }),
+      ]);
+      return {
+        lists: res.data,
+        phone: res.common.phone,
+        checks: false,
+        jkl: jkl,
+        title: res.common.header.title,
+        description: res.common.header.description,
+        keywords: res.common.header.keywords,
+        // name: res.building.name,
+        city: name,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   data() {
     return {
@@ -168,8 +188,8 @@ export default {
       city: "",
       ishengda: false,
       IDcode: "",
-      tstype:false,
-      tsmsg:''
+      tstype: false,
+      tsmsg: "",
     };
   },
   head() {
@@ -233,7 +253,7 @@ export default {
         token: token,
         ip: ip,
         id: id,
-        limit: 50
+        limit: 50,
       })
         .then((resp) => {
           that.ting = true;
@@ -263,7 +283,7 @@ export default {
             setTimeout(() => {
               that.tstype = false;
               that.ishengda = false;
-              that.guanbi()
+              that.guanbi();
             }, 1000);
           }
         });
@@ -272,8 +292,8 @@ export default {
     guanbi() {
       $(".t-b-first").show();
       $(".t-b-second").hide();
-      $('.m-chang').hide();
-      $('.hengda').hide();
+      $(".m-chang").hide();
+      $(".hengda").hide();
     },
     sendmsg(t) {
       this.phone = t;
@@ -478,6 +498,7 @@ nav {
   background-color: #fff;
   z-index: 2;
   top: 0;
+  max-width: 450px;
 }
 nav .back {
   position: absolute;
@@ -584,6 +605,7 @@ nav .search {
   background-color: #fff;
   z-index: 200;
   box-shadow: 0px 0px 9px 1px rgba(6, 0, 1, 0.04);
+  max-width: 450px;
 }
 
 .m-botnav p {

@@ -6,33 +6,33 @@
       <img src="~/assets/mapcai.png" alt class="cai" @click="taggle" />
       <ul class="cailist" v-if="list">
         <li class="cmn">
-          <router-link :to="'/'+jkl">
+          <router-link :to="'/' + jkl">
             <span></span>
             <img src="~/assets/barhome.png" />
             <p>首 页</p>
           </router-link>
         </li>
         <li>
-          <router-link :to="'/'+jkl+'/search'">
+          <router-link :to="'/' + jkl + '/search'">
             <img src="~/assets/barsearch.png" />
             <p>楼盘查询</p>
           </router-link>
         </li>
         <li>
-          <router-link :to="'/'+jkl+'/participate'">
+          <router-link :to="'/' + jkl + '/participate'">
             <img src="~/assets/tegother.png" />
             <!-- <img src="~/assets/barsearch.png" /> -->
             <p>平台合作</p>
           </router-link>
         </li>
         <li>
-          <router-link :to="'/'+jkl+'/encyclopedia/before/56'">
+          <router-link :to="'/' + jkl + '/encyclopedia/before/56'">
             <img src="~/assets/barke.png" />
             <p>买房百科</p>
           </router-link>
         </li>
         <li>
-          <router-link :to="'/'+jkl+'/realinformations/46'">
+          <router-link :to="'/' + jkl + '/realinformations/46'">
             <img src="~/assets/barxun.png" />
             <p>房产资讯</p>
           </router-link>
@@ -40,13 +40,13 @@
       </ul>
     </h3>
     <ul>
-      <li v-for="(item,key) in lists" :key="key">
+      <li v-for="(item, key) in lists" :key="key">
         <h4>
           <router-link :to="`/${jkl}/questions/${item.id}`">
-          <u>
-            <span>问</span>
-            {{item.question}}
-          </u>
+            <u>
+              <span>问</span>
+              {{ item.question }}
+            </u>
           </router-link>
         </h4>
         <div class="answer-peo">
@@ -54,24 +54,26 @@
           <img :src="item.staff.head_img" alt />
           <div class="peo-msg">
             <h6>
-              {{item.staff.name}}
+              {{ item.staff.name }}
               <span>专业解答</span>
             </h6>
             <p>
               最近咨询
-              <span>{{item.staff.ServeNum}}人</span>
+              <span>{{ item.staff.ServeNum }}人</span>
             </p>
           </div>
           <button @click="show">免费咨询</button>
         </div>
         <div class="answer">
           <router-link :to="`/${jkl}/questions/${item.id}`">
-          <p>
-            {{item.answer.substr(0,42)}}
-            <i v-if="item.answer.length>42">...</i>
-          </p>
+            <p>
+              {{ item.answer.substr(0, 42) }}
+              <i v-if="item.answer.length > 42">...</i>
+            </p>
           </router-link>
-          <span v-if="item.answer.length>42" @click="go(item.id)">[全文]</span>
+          <span v-if="item.answer.length > 42" @click="go(item.id)"
+            >[全文]</span
+          >
         </div>
         <!-- <div class="answer">
           <span>答</span>
@@ -89,19 +91,31 @@
         <div class="t-top">
           <h6>变价通知</h6>
           <p>一键预约看房免费小车上门接送，可带家人一起参观多个热门楼盘</p>
-          <img id="w-esc" src="~/assets/w-del.png" alt @click="close1"/>
+          <img id="w-esc" src="~/assets/w-del.png" alt @click="close1" />
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
+            <input
+              class="l-p"
+              type="tel"
+              placeholder="输入预约手机号码"
+              v-model="baoming"
+            />
             <p class="w-mg">
-              <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
-              <router-link :to="'/'+jkl+'/server'">
+              <input
+                class="w-mg-c"
+                type="checkbox"
+                checked
+                v-model="checks"
+              />我已阅读并同意
+              <router-link :to="'/' + jkl + '/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
             </p>
             <p class="tishi">请勾选用户协议</p>
-            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="send">立即订阅</button>
+            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="send">
+              立即订阅
+            </button>
             <p class="w-tit">
               <img src="~/assets/w-call.png" />允家严格保障您的信息安全
             </p>
@@ -111,7 +125,12 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" v-model="ma" id="ma-ll" />
+            <input
+              type="text"
+              placeholder="请输入验证码"
+              v-model="ma"
+              id="ma-ll"
+            />
             <button class="port1" @click="yan">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -125,7 +144,7 @@
 
     <transition name="fade">
       <div class="m-o-succ" v-show="succ">
-        <img class="o-esc" src="~/assets/m-esc.png" alt @click="close2"/>
+        <img class="o-esc" src="~/assets/m-esc.png" alt @click="close2" />
         <img src="~/assets/m-success.png" alt class="o-success" />
         <p id="o_p">已成功订阅最新动态，我们会第一时间通过短信通知您！</p>
         <button id="o_btn" @click="close2">确定</button>
@@ -147,37 +166,46 @@ import {
 export default {
   name: "Question",
   async asyncData(context) {
-    let ip = context.store.state.cookie.ip;
-    let id = context.route.params.id;
-    let city = context.store.state.cookie.city;
-    let token = context.store.state.cookie.token;
-    let jkl = context.store.state.cookie.pinyin;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res] = await Promise.all([
-      context.$axios
-        .get("/yun_jia/question/phone/list", {
-          params: {
-            page: 1,
-            limit: 10,
-            project:id,
-            kid:kid,
-            other:other,
-            platform:2
-          },
-        })
-        .then((resp) => {
-          let data = resp.data;
-          return data;
-        }),
-    ]);
-    return {
-      lists: res.data,
-      jkl: jkl,
-      title: res.common.header.title,
-      description: res.common.header.description,
-      keywords: res.common.header.keywords,
-    };
+    try {
+      let ip = context.store.state.cookie.ip;
+      let id = context.route.params.id;
+      let city = context.store.state.cookie.city;
+      let token = context.store.state.cookie.token;
+      let jkl = context.store.state.cookie.pinyin;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .get("/yun_jia/question/phone/list", {
+            params: {
+              page: 1,
+              limit: 10,
+              project: id,
+              kid: kid,
+              other: other,
+              platform: 2,
+            },
+          })
+          .then((resp) => {
+            let data = resp.data;
+            return data;
+          }),
+      ]);
+      return {
+        lists: res.data,
+        jkl: jkl,
+        title: res.common.header.title,
+        description: res.common.header.description,
+        keywords: res.common.header.keywords,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   components: {
     "foot-view": footView,
@@ -320,11 +348,11 @@ export default {
         localStorage.getItem("ip");
         let token = localStorage.getItem("token");
         let city = localStorage.getItem("city");
-        let id = this.$route.params.id
+        let id = this.$route.params.id;
         getquestions({
           page: that.page,
           limit: 10,
-          project:id
+          project: id,
         })
           .then((resp) => {
             let l = resp.data.data;
@@ -378,17 +406,17 @@ export default {
       let city = this.$store.state.city;
       let kid = sessionStorage.getItem("kid");
       let other = sessionStorage.getItem("other");
-      let id = this.$route.params.id
+      let id = this.$route.params.id;
       trend_put({
         ip: ip,
         tel: tel,
-        project:id,
+        project: id,
         position: 51,
         page: 3,
         type: 6,
         kid: kid,
         other: other,
-        city:city
+        city: city,
       })
         .then((resp) => {
           if (resp.data.code == 200) {
@@ -466,19 +494,23 @@ export default {
       $(".t-b-first").show();
       $(".t-b-second").hide();
       this.zhe = false;
-      this.change = false
+      this.change = false;
     },
     close2() {
       this.zhe = false;
       this.change = false;
-      this.succ = false
+      this.succ = false;
     },
-    go(id){
-      let pin =  this.jkl
-      this.$router.push(`/${pin}/questions/${id}`)
-    }
+    go(id) {
+      let pin = this.jkl;
+      this.$router.push(`/${pin}/questions/${id}`);
+    },
   },
   mounted() {
+    $("#Foot").css({
+      width: "100%",
+      marginBottom: "68px",
+    });
     this.start();
     let that = this;
     $("#btn").on("click", function () {
@@ -524,6 +556,7 @@ h3 {
   width: 100%;
   top: 0;
   z-index: 2;
+  max-width: 450px;
 }
 h3 .back {
   position: absolute;
@@ -543,7 +576,6 @@ ul li {
   border-bottom: 0.5px solid #f3f5fb;
 }
 ul li h4 {
-  
   font-size: 0.9375rem;
   margin-bottom: 20px;
   padding-top: 20px;
@@ -666,6 +698,7 @@ ul li .answer span {
   font-weight: bold;
 }
 .bottom {
+  max-width: 450px;
   position: fixed;
   bottom: 0;
   width: 100%;

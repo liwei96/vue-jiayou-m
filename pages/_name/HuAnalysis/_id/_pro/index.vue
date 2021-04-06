@@ -10,48 +10,50 @@
     </div>
     <div class="con">
       <h4>
-        {{one.title}}
-        <span class="con-tab">{{one.state}}</span>
+        {{ one.title }}
+        <span class="con-tab">{{ one.state }}</span>
         <!-- <span class="con-msg">房贷计算</span> -->
       </h4>
       <div class="con-con">
         <div class="con-left">
-        <p>
-          单价：
-          <span v-if="one.single_price!=0">{{one.single_price}}元/m²起</span>
-          <span v-else>未知</span>
-        </p>
-        <p>
-          建面：
-          <strong>{{one.area}}m²</strong>
-        </p>
-        <p>
-          特色：
-          <strong class="hu-tag">{{one.special}}</strong>
-        </p>
-      </div>
-      <div class="con-right">
-        <p>
-          总价：
-          <span v-if="one.price!=0">{{one.price}}万</span>
-          <span v-else>未知</span>
-        </p>
-        <!-- <p>
+          <p>
+            单价：
+            <span v-if="one.single_price != 0"
+              >{{ one.single_price }}元/m²起</span
+            >
+            <span v-else>未知</span>
+          </p>
+          <p>
+            建面：
+            <strong>{{ one.area }}m²</strong>
+          </p>
+          <p>
+            特色：
+            <strong class="hu-tag">{{ one.special }}</strong>
+          </p>
+        </div>
+        <div class="con-right">
+          <p>
+            总价：
+            <span v-if="one.price != 0">{{ one.price }}万</span>
+            <span v-else>未知</span>
+          </p>
+          <!-- <p>
           层高：
           <strong>{{one.height}}米</strong>
         </p> -->
-        <p>
-          类型：
-          <strong id="hu-tag">{{one.type}}</strong>
-        </p>
+          <p>
+            类型：
+            <strong id="hu-tag">{{ one.type }}</strong>
+          </p>
+        </div>
       </div>
-      </div>
-      
+
       <div class="con-bom">
         <button class="p1" data-v="降价通知">
           <img src="~/assets/force.png" alt />降价通知
         </button>
-        <button style="margin-right: 0;" data-v="开盘通知" class="p1">
+        <button style="margin-right: 0" data-v="开盘通知" class="p1">
           <img src="~/assets/horn.png" alt />开盘通知
         </button>
       </div>
@@ -61,37 +63,37 @@
       <img :src="staff.head_img" alt />
       <div class="peo-con">
         <h6>
-          {{staff.name}}
+          {{ staff.name }}
           <span>允家分析师</span>
         </h6>
         <p class="ping">评分 5.0</p>
         <p class="peo-msg">向他咨询更多详细户型信息</p>
         <img class="inf p1" src="~/assets/inf.png" alt data-v="咨询服务" />
-        <a :href="'tel:'+call">
+        <a :href="'tel:' + call">
           <img class="tel" src="~/assets/redtel.png" alt />
         </a>
       </div>
     </div>
     <div class="hu">
       <h5>户型分析</h5>
-      <p>{{one.analysis}}</p>
+      <p>{{ one.analysis }}</p>
     </div>
     <div class="line"></div>
     <div class="hus">
       <h4>本楼盘其它户型</h4>
       <ul>
-        <li v-for="(item,key) in others" :key="key">
-          <router-link :to="'/'+jkl+'/HuAnalysis/'+item.id">
+        <li v-for="(item, key) in others" :key="key">
+          <router-link :to="'/' + jkl + '/HuAnalysis/' + item.id">
             <img :src="item.small" alt />
             <div class="h-right">
               <h5>
-                {{item.title}}
-                <span class="now">{{item.state}}</span>
-                <span class="price">{{item.price}}万起</span>
+                {{ item.title }}
+                <span class="now">{{ item.state }}</span>
+                <span class="price">{{ item.price }}万起</span>
               </h5>
-              <p>特点：{{item.special}}</p>
-              <p>类型：{{item.type}}</p>
-              <p>户型分析：{{item.analysis}}</p>
+              <p>特点：{{ item.special }}</p>
+              <p>类型：{{ item.type }}</p>
+              <p>户型分析：{{ item.analysis }}</p>
             </div>
           </router-link>
         </li>
@@ -102,8 +104,8 @@
       <h4>猜你喜欢</h4>
       <div class="recommen">
         <div class="re-con">
-          <div class="re-list" v-for="(item,key) in likes" :key="key">
-            <router-link :to="'/'+jkl+'/content/'+item.id">
+          <div class="re-list" v-for="(item, key) in likes" :key="key">
+            <router-link :to="'/' + jkl + '/content/' + item.id">
               <div class="re-con-left">
                 <img :src="item.img" alt />
                 <!-- <span>
@@ -113,23 +115,26 @@
               </div>
               <div class="re-con-right">
                 <h5>
-                  {{item.name}}
-                  <span>{{item.status}}</span>
+                  {{ item.name }}
+                  <span>{{ item.status }}</span>
                 </h5>
                 <p class="price">
-                  <span>{{item.single_price}}</span>元/m²
+                  <span>{{ item.single_price }}</span
+                  >元/m²
                 </p>
                 <p class="area">
-                  <span>{{item.city}}-{{item.country}}</span>
+                  <span>{{ item.city }}-{{ item.country }}</span>
                   <span>建面</span>
-                  <span
-                    v-if="item.area_min"
-                  >{{parseInt(item.area_min)}}-{{parseInt(item.area_max)}}m²</span>
+                  <span v-if="item.area_min"
+                    >{{ parseInt(item.area_min) }}-{{
+                      parseInt(item.area_max)
+                    }}m²</span
+                  >
                 </p>
                 <p class="tabs">
-                  <strong>{{item.decorate}}</strong>
-                  <span v-show="item.railway">{{item.railway}}</span>
-                  <span>{{item.type}}</span>
+                  <strong>{{ item.decorate }}</strong>
+                  <span v-show="item.railway">{{ item.railway }}</span>
+                  <span>{{ item.type }}</span>
                 </p>
               </div>
             </router-link>
@@ -138,21 +143,17 @@
       </div>
     </div>
     <div class="m-botnav">
-      <p id="m_shou">
+      <!-- <p id="m_shou">
         <img id="fork" src="~/assets/forks.png" alt :data-v="id" @click="collect($event)" />
         <img id="forked" src="~/assets/heart.gif" />收藏
-      </p>
-      <a :href="'tel:'+call">
+      </p> -->
+      <a :href="'tel:' + call">
         <button class="m-pho">
-          <p class="ph1">
-            <img src="~/assets/phicon.png" alt />电话咨询
-          </p>
+          <p class="ph1"><img src="~/assets/phicon.png" alt />电话咨询</p>
         </button>
       </a>
       <button class="m-y p1" data-v="预约看房">
-        <p class="ph1">
-          <img src="~/assets/promsg.png" />预约看房
-        </p>
+        <p class="ph1"><img src="~/assets/promsg.png" />预约看房</p>
       </button>
     </div>
     <foot-view :pinyin="jkl"></foot-view>
@@ -162,19 +163,35 @@
         <div class="t-top">
           <h6>预约看房</h6>
           <p>一键预约看房免费小车上门接送，可带家人一起参观多个热门楼盘</p>
-          <img id="w-esc" src="~/assets/w-del.png" alt />
+          <img id="w-esc" src="~/assets/w-del.png" alt @click="close" />
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming" />
+            <input
+              class="l-p"
+              type="tel"
+              placeholder="输入预约手机号码"
+              v-model="baoming"
+            />
             <p class="w-mg">
-              <input class="w-mg-c" type="checkbox" checked v-model="checks" />我已阅读并同意
-              <router-link :to="'/'+jkl+'/server'">
+              <input
+                class="w-mg-c"
+                type="checkbox"
+                checked
+                v-model="checks"
+              />我已阅读并同意
+              <router-link :to="'/' + jkl + '/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
             </p>
             <p class="tishi">请勾选用户协议</p>
-            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue">立即订阅</button>
+            <button
+              class="t-b-btn t-b-btn2 bg_01"
+              id="dingxue"
+              @click="beforesend"
+            >
+              立即订阅
+            </button>
             <p class="w-tit">
               <img src="~/assets/w-call.png" />允家严格保障您的信息安全
             </p>
@@ -207,12 +224,19 @@
       <div class="hengda" v-show="ishengda">
         <img class="del" src="~/assets/w-del.png" alt @click="guanbi" />
         <img src="~/assets/hengda.png" alt class="topimg" />
-        <input type="text" placeholder="输入身份证号后6位" maxlength="6" v-model="IDcode" />
-        <p class="zhu">注: 根据本楼盘售楼处规定，实地看房需先提前报备 身份证后6位</p>
+        <input
+          type="text"
+          placeholder="输入身份证号后6位"
+          maxlength="6"
+          v-model="IDcode"
+        />
+        <p class="zhu">
+          注: 根据本楼盘售楼处规定，实地看房需先提前报备 身份证后6位
+        </p>
         <button @click="hengda">申请报备</button>
       </div>
     </transition>
-    <div class="tsmsg" v-show="tstype">{{tsmsg}}</div>
+    <div class="tsmsg" v-show="tstype">{{ tsmsg }}</div>
   </div>
 </template>
 <script>
@@ -224,55 +248,62 @@ import {
   verification,
   msg,
   morehus_put,
-  hengda
+  hengda,
 } from "~/api/api";
 export default {
   name: "HuAnalysis",
   async asyncData(context) {
-    let ip = context.store.state.cookie.ip;
-    let city = context.store.state.cookie.city;
-    let token = context.store.state.cookie.token;
-    let name = context.store.state.cookie.cityname;
-    name = decodeURIComponent(name);
-    let bud = context.store.state.cookie.name;
-    bud = decodeURIComponent(bud);
-    let id = context.params.id;
-    let jkl = context.store.state.cookie.pinyin;
-    let kid = context.store.state.cookie.kid
-      ? context.store.state.cookie.kid
-      : "";
-    let other = context.store.state.cookie.other
-      ? context.store.state.cookie.other
-      : "";
-    let [res] = await Promise.all([
-      context.$axios
-        .get("/yun_jia/houses/phone/detail", {params:{
-          ip: ip,
-          city: city,
-          id: id,
-          token: token,
-          kid: kid,
-          other: other,
-          platform: 2,
-        }})
-        .then((resp) => {
-          let data = resp.data;
-          return data;
-        }),
-    ]);
-    return {
-      others: res.other_rooms,
-      likes: res.recommends,
-      one: res.one,
-      jkl: jkl,
-      title: res.common.header.title,
-      description: res.common.header.description,
-      keywords: res.common.header.keywords,
-      city: name,
-      name: bud,
-      call: res.common.phone,
-      staff: res.common.staff
-    };
+    try {
+      let ip = context.store.state.cookie.ip;
+      let city = context.store.state.cookie.city;
+      let token = context.store.state.cookie.token;
+      let name = context.store.state.cookie.cityname;
+      name = decodeURIComponent(name);
+      let bud = context.store.state.cookie.name;
+      bud = decodeURIComponent(bud);
+      let id = context.params.id;
+      let jkl = context.store.state.cookie.pinyin;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .get("/yun_jia/houses/phone/detail", {
+            params: {
+              ip: ip,
+              city: city,
+              id: id,
+              token: token,
+              kid: kid,
+              other: other,
+              platform: 2,
+            },
+          })
+          .then((resp) => {
+            let data = resp.data;
+            return data;
+          }),
+      ]);
+      return {
+        others: res.other_rooms,
+        likes: res.recommends,
+        one: res.one,
+        jkl: jkl,
+        title: res.common.header.title,
+        description: res.common.header.description,
+        keywords: res.common.header.keywords,
+        city: name,
+        name: bud,
+        call: res.common.phone,
+        staff: res.common.staff,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   components: {
     "foot-view": footView,
@@ -292,7 +323,7 @@ export default {
       pro: "",
       n: "",
       call: "",
-      checks: "",
+      checks: true,
       baoming: "",
       title: "",
       description: "",
@@ -338,6 +369,34 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    close() {
+      this.change = false;
+      $(".m-chang").hide();
+      $(".t-b-first").show();
+      $(".t-b-second").hide();
+    },
+    beforesend() {
+      let check = this.checks;
+      if (!check) {
+        $(".tishi").show();
+        return;
+      } else {
+        $(".tishi").hide();
+      }
+      var phone = this.baoming;
+      var type = $(this).parent().parent().prev().find("h6").html();
+      var building_name = $(this).parent().next().find("#building_name").val();
+      var pattern_phone = /^1[3-9][0-9]{9}$/;
+      if (phone == "") {
+        $(".l-p").attr("placeholder", "手机号不能为空");
+        return;
+      } else if (!pattern_phone.test(phone)) {
+        $(".l-p").val("");
+        $(".l-p").attr("placeholder", "手机号码不合法");
+        return;
+      }
+      this.send(phone);
     },
     send(sends) {
       this.tel = sends;
@@ -407,9 +466,12 @@ export default {
       verification({ phone: t, code: checks, channel: 2 })
         .then((resp) => {
           if (resp.data.code == 200) {
-            if(sessionStorage.getItem('proname')&&sessionStorage.getItem('proname').indexOf('恒大')!==-1){
-              that.ishengda=true
-            }else{
+            if (
+              sessionStorage.getItem("proname") &&
+              sessionStorage.getItem("proname").indexOf("恒大") !== -1
+            ) {
+              that.ishengda = true;
+            } else {
               that.succ = true;
             }
             that.change = false;
@@ -527,30 +589,32 @@ export default {
       $(".m-chang").hide();
       that.change = false;
       that.succ = false;
+      $(".t-b-first").show();
+      $(".t-b-second").hide();
     });
     // 接口验证码
-    $(".t-b-btn2").on("click", function () {
-      let check = that.checks;
-      if (!check) {
-        $(".tishi").show();
-        return;
-      } else {
-        $(".tishi").hide();
-      }
-      var phone = $(this).prev().prev().prev().val();
-      var type = $(this).parent().parent().prev().find("h6").html();
-      var building_name = $(this).parent().next().find("#building_name").val();
-      var pattern_phone = /^1[3-9][0-9]{9}$/;
-      if (phone == "") {
-        $(".l-p").attr("placeholder", "手机号不能为空");
-        return;
-      } else if (!pattern_phone.test(phone)) {
-        $(".l-p").val("");
-        $(".l-p").attr("placeholder", "手机号码不合法");
-        return;
-      }
-      that.send(phone);
-    });
+    // $(".t-b-btn2").on("click", function () {
+    //   let check = that.checks;
+    //   if (!check) {
+    //     $(".tishi").show();
+    //     return;
+    //   } else {
+    //     $(".tishi").hide();
+    //   }
+    //   var phone = $(this).prev().prev().prev().val();
+    //   var type = $(this).parent().parent().prev().find("h6").html();
+    //   var building_name = $(this).parent().next().find("#building_name").val();
+    //   var pattern_phone = /^1[3-9][0-9]{9}$/;
+    //   if (phone == "") {
+    //     $(".l-p").attr("placeholder", "手机号不能为空");
+    //     return;
+    //   } else if (!pattern_phone.test(phone)) {
+    //     $(".l-p").val("");
+    //     $(".l-p").attr("placeholder", "手机号码不合法");
+    //     return;
+    //   }
+    //   that.send(phone);
+    // });
     $(".port1").on("click", function () {
       var ma = $(this).prev().val();
       if (!ma) {
@@ -1008,6 +1072,7 @@ h3 .home {
 /* 页面底部悬浮 */
 /* m-botnav */
 .m-botnav {
+  max-width: 450px;
   width: 100%;
   height: 64px;
   position: fixed;
@@ -1050,6 +1115,7 @@ h3 .home {
     rgba(255, 152, 106, 1)
   );
   color: #fff;
+  left: 11%;
 }
 .m-botnav .m-pho .ph1 {
   color: #ffffff;
@@ -1077,7 +1143,7 @@ h3 .home {
     rgba(106, 204, 255, 1)
   );
   color: #fff;
-  left: 62%;
+  left: 59%;
 }
 .m-botnav .m-y .ph1 {
   color: #ffffff;

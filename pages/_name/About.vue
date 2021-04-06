@@ -1,11 +1,11 @@
 <template>
   <div class="About">
     <div class="container-fluid m">
-      <div class="m-title visible-xs-block .visible-sm-block">
+      <div class="m-title">
         <img src="~/assets/return.png" alt @click="goback" />
         <h3>关于允家</h3>
       </div>
-      <div class="m-content visible-xs-block .visible-sm-block">
+      <div class="m-content">
         <img class="m-logo" src="~/assets/y-logo.png" alt />
         <h4>公司简介</h4>
         <p class="m-p">允家新房隶属杭州易得房科技有限公司，我们是一家线上销售模式的房地产公司。</p>

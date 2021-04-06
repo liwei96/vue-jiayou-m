@@ -3,37 +3,43 @@
     <nav>
       <img class="back" src="~/assets/return.png" @click="goback" />
       <p class="s-btn" id="sou">
-        <span class="s-b-city">{{cityname}}</span>
+        <span class="s-b-city">{{ cityname }}</span>
         <img class="bom" src="~/assets/triangle.png" alt />
         <span class="btn">
           <img src="~/assets/search.png" alt />请输入楼盘名称
         </span>
       </p>
       <p class="dian">
-        <router-link :to="'/'+jkl+'/map'">
+        <router-link :to="'/' + jkl + '/map'">
           <img src="~/assets/dian.png" alt />
           <span>地图</span>
         </router-link>
       </p>
     </nav>
-    <img class="imgbox" :src="banner.img" alt="" @click="gohome" v-if="banner.length!=0">
+    <img
+      class="imgbox"
+      :src="banner.img"
+      alt=""
+      @click="gohome"
+      v-if="banner.length != 0"
+    />
     <div class="top">
-      <div class="m-menu visible-xs-block .visible-sm--block">
+      <div class="m-menu">
         <ul>
           <li class="m-u">
-            <span :class="area1==1?'kk':''">区域</span>
+            <span :class="area1 == 1 ? 'kk' : ''">区域</span>
             <img src="~/assets/triangle.png" alt />
           </li>
           <li class="m-a">
-            <span :class="price1==1?'kk':''">价格</span>
+            <span :class="price1 == 1 ? 'kk' : ''">价格</span>
             <img src="~/assets/triangle.png" alt />
           </li>
           <li class="m-h">
-            <span :class="type1==1?'kk':''">户型</span>
+            <span :class="type1 == 1 ? 'kk' : ''">户型</span>
             <img src="~/assets/triangle.png" alt />
           </li>
           <li class="m-n">
-            <span :class="shai1==1?'kk':''">筛选</span>
+            <span :class="shai1 == 1 ? 'kk' : ''">筛选</span>
             <img src="~/assets/triangle.png" alt />
           </li>
         </ul>
@@ -49,24 +55,40 @@
           </div>
           <div class="m-two col-xs-8 col-sm-8" @click="a1">
             <ul id="qu">
-              <li :class="num6==0?'m-l-active':''" data-v="0" @click="qu($event)">不限</li>
               <li
-                :class="num6==(city.id)?'m-l-active':''"
+                :class="num6 == 0 ? 'm-l-active' : ''"
+                data-v="0"
+                @click="qu($event)"
+              >
+                不限
+              </li>
+              <li
+                :class="num6 == city.id ? 'm-l-active' : ''"
                 v-for="city in citys"
                 :key="city.id"
                 @click="qu($event)"
                 :data-v="city.id"
-              >{{city.name}}</li>
+              >
+                {{ city.name }}
+              </li>
             </ul>
             <ul id="tie">
-              <li :class="num7==0?'m-l-active':''" data-v="0" @click="tie($event)">不限</li>
               <li
-                :class="num7==(di.id)?'m-l-active':''"
+                :class="num7 == 0 ? 'm-l-active' : ''"
+                data-v="0"
+                @click="tie($event)"
+              >
+                不限
+              </li>
+              <li
+                :class="num7 == di.id ? 'm-l-active' : ''"
                 v-for="di in dities"
                 :key="di.id"
                 @click="tie($event)"
                 :data-v="di.id"
-              >{{di.name}}</li>
+              >
+                {{ di.name }}
+              </li>
             </ul>
           </div>
         </div>
@@ -79,24 +101,40 @@
           </div>
           <div class="m-two col-xs-8 col-sm-8" @click="p1">
             <ul id="zong">
-              <li :class="num4==0?'m-l-active':''" data-v="0" @click="zong($event)">不限</li>
               <li
-                :class="num4==(price.id)?'m-l-active':''"
+                :class="num4 == 0 ? 'm-l-active' : ''"
+                data-v="0"
+                @click="zong($event)"
+              >
+                不限
+              </li>
+              <li
+                :class="num4 == price.id ? 'm-l-active' : ''"
                 v-for="price in total_prices"
                 :key="price.id"
                 @click="zong($event)"
                 :data-v="price.id"
-              >{{price.name}}</li>
+              >
+                {{ price.name }}
+              </li>
             </ul>
             <ul id="dan">
-              <li :class="num5==0?'m-l-active':''" data-v="0" @click="dan($event)">不限</li>
               <li
-                :class="num5==(price.id)?'m-l-active':''"
+                :class="num5 == 0 ? 'm-l-active' : ''"
+                data-v="0"
+                @click="dan($event)"
+              >
+                不限
+              </li>
+              <li
+                :class="num5 == price.id ? 'm-l-active' : ''"
                 v-for="price in single_prices"
                 :key="price.id"
                 @click="dan($event)"
                 :data-v="price.id"
-              >{{price.name}}</li>
+              >
+                {{ price.name }}
+              </li>
             </ul>
           </div>
         </div>
@@ -110,8 +148,12 @@
                 action="##"
                 method="POST"
               >
-                <li v-for="hu in apartments" :key="hu.id" class="col-xs-12 col-sm-12">
-                  <span>{{hu.name}}</span>
+                <li
+                  v-for="hu in apartments"
+                  :key="hu.id"
+                  class="col-xs-12 col-sm-12"
+                >
+                  <span>{{ hu.name }}</span>
                   <input type="checkbox" name="hu" hidden />
                   <input type="checkbox" name v-model="hus" :value="hu.id" />
                 </li>
@@ -127,12 +169,13 @@
           <h4>类型</h4>
           <div class="m-one m-thre" id="m-xing" @click="s1">
             <span
-              :class="num3==key?'m-now':''"
-              v-for="(type,key) in build_types"
+              :class="num3 == key ? 'm-now' : ''"
+              v-for="(type, key) in build_types"
               :key="key"
               @click="tp($event)"
               :data-v="key"
-            >{{type.type}}</span>
+              >{{ type.type }}</span
+            >
           </div>
           <!-- <h4>开发商</h4>
           <div class="m-one m-two" id="m-shang" @click="s1">
@@ -144,12 +187,13 @@
           <h4>特色</h4>
           <div class="m-one m-thre m-thr" id="m-te" @click="s1">
             <span
-              :class="num2==(te.id)?'m-now':''"
+              :class="num2 == te.id ? 'm-now' : ''"
               v-for="te in features"
               :data-v="te.id"
               :key="te.id"
               @click="se($event)"
-            >{{te.name}}</span>
+              >{{ te.name }}</span
+            >
           </div>
           <div class="m-s-btn">
             <span class="m-h-l" @click="clear2">清空</span>
@@ -171,38 +215,45 @@
     </div>
     <div class="recommen" v-show="r">
       <div class="re-con">
-        <div class="re-list" v-for="(b,key) in buildings" :key="key">
-          <router-link :to="'/'+jkl+'/content/'+b.id">
+        <div class="re-list" v-for="(b, key) in buildings" :key="key">
+          <router-link :to="'/' + jkl + '/content/' + b.id">
             <div class="re-con-left">
               <img :src="b.img" alt />
               <span>
                 <i class="iconfont iconyanjing"></i>
-                {{b.num}}
+                {{ b.num }}
               </span>
             </div>
             <div class="re-con-right">
               <h5>
-                <strong>{{b.name}}</strong>
-                <span class="ishou"  v-if="b.status == '在售'">{{b.status}}</span>
-                <span class="isdai"  v-if="b.status == '待售'">{{b.status}}</span>
-                <span class="iskong" v-if="b.status == '售空'">{{b.status}}</span>
+                <strong>{{ b.name }}</strong>
+                <span class="ishou" v-if="b.status == '在售'">{{
+                  b.status
+                }}</span>
+                <span class="isdai" v-if="b.status == '待售'">{{
+                  b.status
+                }}</span>
+                <span class="iskong" v-if="b.status == '售空'">{{
+                  b.status
+                }}</span>
               </h5>
               <p class="price">
-                <span>{{b.single_price}}</span>元/m²
+                <span>{{ b.single_price }}</span
+                >元/m²
               </p>
               <p class="area">
-                <span>{{b.city}}-{{b.country}}</span>
+                <span>{{ b.city }}-{{ b.country }}</span>
                 <span>建面</span>
                 <span>
-                  {{parseInt(b.area_min)}}
+                  {{ parseInt(b.area_min) }}
                   <span v-if="b.area_max">-</span>
-                  {{parseInt(b.area_max)}}m²
+                  {{ parseInt(b.area_max) }}m²
                 </span>
               </p>
               <p class="tabs">
-                <span class="strong">{{b.decorate}}</span>
-                <span v-if="b.railway">{{b.railway}}</span>
-                <span>{{b.type}}</span>
+                <span class="strong">{{ b.decorate }}</span>
+                <span v-if="b.railway">{{ b.railway }}</span>
+                <span>{{ b.type }}</span>
               </p>
             </div>
           </router-link>
@@ -233,132 +284,148 @@ export default {
   name: "Search",
   components: {
     load: Loading,
-    "foot-view": footView
+    "foot-view": footView,
   },
   async asyncData(context) {
-    // console.log(context.route.path.split('/')[3].split('_')[0])
-    // console.log(context.route.path.split('/').length)
-    let ip = context.store.state.cookie.ip;
-    // let city = context.store.state.cookie.city;
-    let city = context.store.state.city;
-    console.log(city)
-    let token = context.store.state.cookie.token;
-    let jkl = context.params.name;
-    // if(jkl == 'chongqing'){
-    //   city = 41
-    // }
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let options = { city: city, token: token, ip: ip, platform: 2,kid:kid,other:other };
-    let area1 = 0;
-    let price1 = 0;
-    let type1 = 0;
-    let shai1 = 0;
-    let num6 = 0;
-    let num7 = 0;
-    let num4 = 0;
-    let num5 = 0;
-    let num3 = 100;
-    let num2 = 0;
-    let hus = [];
-    if (context.route.path.split("/").length == 4) {
-      let arr = context.route.path.split("/")[3].split("+");
-      for (let val of arr) {
-        let ll = val.split("-");
-        switch (ll[0]) {
-          case "country":
-            area1 = 1;
-            num6 = ll[1];
-            break;
-          case "railway":
-            area1 = 1;
-            num7 = ll[1];
-            break;
-          case "totalprice":
-            price1 = 1;
-            num4 = ll[1];
-            break;
-          case "single_price":
-            price1 = 1;
-            num5 = ll[1];
-            break;
-          case "apartment":
-            type1 = 1;
-            hus = ll[1].split(",");
-            break;
-          case "build_type":
-            shai1 = 1;
-            if(ll[1]=='公寓'){
-              num3 = 0;
-            }else if(ll[1]=='写字楼'){
-              num3 = 3;
-            }else if(ll[1]=='住宅'){
-              num3 = 1;
-            }else if(ll[1]=='商铺'){
-              num3 = 2;
-            }  
-            break;
-          case "feature":
-            shai1 = 1;
-            num2 = ll[1];
-            break;
-        }
-        options[ll[0]] = ll[1];
+    try {
+      let ip = context.store.state.cookie.ip;
+      let city = context.store.state.city;
+      console.log(city);
+      let token = context.store.state.cookie.token;
+      let jkl = context.params.name;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = "";
+      if (context.query.other) {
+        other = context.query.other;
+        context.store.state.cookie.other = other;
+      } else {
+        other = context.store.state.cookie.other;
       }
-    }
-    
-    let [res1, res2] = await Promise.all([
-      context.$axios.post("/api/project/search_info", options).then(resp => {
-        let dd=resp.data.data;
-        let data = resp.data.data.datas;
-        for (let item of data) {
-          if (item.railway) {
-            item.railway = item.railway.split(",")[0];
+      let options = {
+        city: city,
+        token: token,
+        ip: ip,
+        platform: 2,
+        kid: kid,
+        other: other,
+      };
+      let area1 = 0;
+      let price1 = 0;
+      let type1 = 0;
+      let shai1 = 0;
+      let num6 = 0;
+      let num7 = 0;
+      let num4 = 0;
+      let num5 = 0;
+      let num3 = 100;
+      let num2 = 0;
+      let hus = [];
+      if (context.route.path.split("/").length == 4) {
+        let arr = context.route.path.split("/")[3].split("+");
+        for (let val of arr) {
+          let ll = val.split("-");
+          switch (ll[0]) {
+            case "country":
+              area1 = 1;
+              num6 = ll[1];
+              break;
+            case "railway":
+              area1 = 1;
+              num7 = ll[1];
+              break;
+            case "totalprice":
+              price1 = 1;
+              num4 = ll[1];
+              break;
+            case "single_price":
+              price1 = 1;
+              num5 = ll[1];
+              break;
+            case "apartment":
+              type1 = 1;
+              hus = ll[1].split(",");
+              break;
+            case "build_type":
+              shai1 = 1;
+              if (ll[1] == "公寓") {
+                num3 = 0;
+              } else if (ll[1] == "写字楼") {
+                num3 = 3;
+              } else if (ll[1] == "住宅") {
+                num3 = 1;
+              } else if (ll[1] == "商铺") {
+                num3 = 2;
+              }
+              break;
+            case "feature":
+              shai1 = 1;
+              num2 = ll[1];
+              break;
           }
+          options[ll[0]] = ll[1];
         }
-        return dd;
-      }),
-      context.$axios
-        .post("/api/project/search", {
-          city: city,
-          platform: 2,
-          ip: ip,
-          token: token,
-          kid:kid,
-          other:other
-        })
-        .then(resp => {
-          let data = resp.data.data;
-          return data;
-        })
-    ]);
-    return {
-      citys: res2.conditions.cities,
-      dities: res2.conditions.railways,
-      single_prices: res2.conditions.single_prices,
-      total_prices: res2.conditions.total_prices,
-      apartments: res2.conditions.apartments,
-      build_types: res2.conditions.build_types,
-      features: res2.conditions.features,
-      buildings: res1.datas,
-      jkl: jkl,
-      area1: area1,
-      price1: price1,
-      type1: type1,
-      shai1: shai1,
-      num6: num6,
-      num7: num7,
-      num4: num4,
-      num5: num5,
-      num3: num3,
-      num2: num2,
-      hus: hus,
-      city:city,
-      title:res1.title,
-      keywords:res1.keywords,
-      description:res1.description,
-      banner: res2.banner
-    };
+      }
+
+      let [res1, res2] = await Promise.all([
+        context.$axios
+          .post("/api/project/search_info", options)
+          .then((resp) => {
+            let dd = resp.data.data;
+            let data = resp.data.data.datas;
+            for (let item of data) {
+              if (item.railway) {
+                item.railway = item.railway.split(",")[0];
+              }
+            }
+            return dd;
+          }),
+        context.$axios
+          .post("/api/project/search", {
+            city: city,
+            platform: 2,
+            ip: ip,
+            token: token,
+            kid: kid,
+            other: other,
+          })
+          .then((resp) => {
+            let data = resp.data.data;
+            return data;
+          }),
+      ]);
+      return {
+        citys: res2.conditions.cities,
+        dities: res2.conditions.railways,
+        single_prices: res2.conditions.single_prices,
+        total_prices: res2.conditions.total_prices,
+        apartments: res2.conditions.apartments,
+        build_types: res2.conditions.build_types,
+        features: res2.conditions.features,
+        buildings: res1.datas,
+        jkl: jkl,
+        area1: area1,
+        price1: price1,
+        type1: type1,
+        shai1: shai1,
+        num6: num6,
+        num7: num7,
+        num4: num4,
+        num5: num5,
+        num3: num3,
+        num2: num2,
+        hus: hus,
+        city: city,
+        title: res1.title,
+        keywords: res1.keywords,
+        description: res1.description,
+        banner: res2.banner,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
+    }
   },
   data() {
     return {
@@ -400,47 +467,47 @@ export default {
       test: {
         q: 5,
         t: 45,
-        h: 8
+        h: 8,
       },
-      city:'',
-      title:'',
-      keywords:'',
-      description:''
+      city: "",
+      title: "",
+      keywords: "",
+      description: "",
     };
   },
   head() {
     return {
       title: this.title || "允家新房",
-      meta:[
+      meta: [
         {
           name: "description",
-          content: this.description
+          content: this.description,
         },
         {
           name: "Keywords",
-          content: this.keywords
-        }
-      ]
+          content: this.keywords,
+        },
+      ],
     };
   },
   computed: {
     count() {
       return this.$store.getters.getcount;
-    }
+    },
   },
   methods: {
     gohome() {
-      if(this.banner.url) {
-        window.location.href=this.banner.url
+      if (this.banner.url) {
+        window.location.href = this.banner.url;
       }
     },
     start_data() {
       this.nn = this.$route.params.name;
       this.kk = false;
-      localStorage.setItem('city',this.city)
-      
+      localStorage.setItem("city", this.city);
+
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
       this.loading = true;
       this.isload = false;
@@ -467,7 +534,7 @@ export default {
         localStorage.setItem("city", 1);
       }
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
       let token = localStorage.getItem("token");
@@ -485,7 +552,7 @@ export default {
 
       let where = $cookies.get("where");
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
       let token = localStorage.getItem("token");
@@ -497,7 +564,7 @@ export default {
             platform: 2,
             ip: ip,
             token: token,
-            feature: t
+            feature: t,
           };
         } else {
           where = { city: city, platform: 2, ip: ip, token: token };
@@ -506,11 +573,11 @@ export default {
         $cookies.set("where", where, "5min");
       }
       search_search(where)
-        .then(resp => {
+        .then((resp) => {
           let data = resp.data.data.datas;
           this.buildings = data;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -643,7 +710,7 @@ export default {
         let where = $cookies.get("where");
         where.page = this.page;
         search_search(where)
-          .then(resp => {
+          .then((resp) => {
             that.kk = false;
             that.loaded = true;
             let data = resp.data.data.datas;
@@ -654,7 +721,7 @@ export default {
             that.buildings = l;
             that.page = that.page + 1;
           })
-          .then(error => {
+          .then((error) => {
             console.log(error);
           });
       }
@@ -663,7 +730,7 @@ export default {
       this.num2 = "";
       this.num3 = "";
       let where = $cookies.get("where");
-      let type=$cookies.get('type');
+      let type = $cookies.get("type");
       delete where.feature;
       delete where.build_type;
       delete type.build_type;
@@ -686,7 +753,7 @@ export default {
       $cookies.set("where", where, 0);
     },
     goback() {
-      this.$router.push('/'+this.jkl);
+      this.$router.push("/" + this.jkl);
     },
     a1() {
       this.area1 = 1;
@@ -739,7 +806,7 @@ export default {
       arr[3] = str;
       url = arr.join("/");
       this.$router.push(url);
-    }
+    },
   },
   mounted() {
     //   this.tostring();
@@ -747,9 +814,9 @@ export default {
     // if(this.$router.currentRoute.path!='/hangzhou/search/1'){
     //     this.$router.push('/hangzhou/search/1')
     // }
-    $('html').css('overflow','initial')
-    if(this.$route.path.split('/').length!=4){
-      $cookies.set('type',{})
+    $("html").css("overflow", "initial");
+    if (this.$route.path.split("/").length != 4) {
+      $cookies.set("type", {});
       sessionStorage.clear();
     }
     let h = $(".Search").height();
@@ -762,13 +829,10 @@ export default {
     this.kk = false;
     this.start_data();
     this.search_datas();
-    $(".m-thre ul li").on("click", function() {
-      $(this)
-        .addClass("m-r-active")
-        .siblings("li")
-        .removeClass("m-r-active");
+    $(".m-thre ul li").on("click", function () {
+      $(this).addClass("m-r-active").siblings("li").removeClass("m-r-active");
     });
-    $(".m-qu .m-one ul li").on("click", function() {
+    $(".m-qu .m-one ul li").on("click", function () {
       var str = $(this).text();
       if (str == "城区") {
         $("#qu").show();
@@ -778,7 +842,7 @@ export default {
         $("#tie").show();
       }
     });
-    $(".m-jia .m-one ul li").on("click", function() {
+    $(".m-jia .m-one ul li").on("click", function () {
       var str = $(this).text();
       if (str == "总价") {
         $("#zong").show();
@@ -788,22 +852,16 @@ export default {
         $("#dan").show();
       }
     });
-    $(".m-qu .m-two ul li").on("click", function() {
+    $(".m-qu .m-two ul li").on("click", function () {
       $(".m-u span").text($(this).text());
       $(".m-qu").slideUp("fast");
-      $(this)
-        .addClass("m-l-active")
-        .siblings("li")
-        .removeClass("m-l-active");
+      $(this).addClass("m-l-active").siblings("li").removeClass("m-l-active");
       $(".m-box").hide();
       $(".m-menu ul li").removeClass("m-as");
     });
     let that = this;
-    $(".m-pai ul li").on("click", function() {
-      $(this)
-        .addClass("m-act")
-        .siblings("li")
-        .removeClass("m-act");
+    $(".m-pai ul li").on("click", function () {
+      $(this).addClass("m-act").siblings("li").removeClass("m-act");
       var str = $(this).attr("data-v");
       let where = $cookies.get("where");
       where.order_type = str;
@@ -813,14 +871,11 @@ export default {
       $(".m-pai").hide();
       $(".m-box").hide();
     });
-    $(".m-shan .m-one span").on("click", function() {
-      $(this)
-        .parent("div")
-        .children("span")
-        .removeClass("m-now");
+    $(".m-shan .m-one span").on("click", function () {
+      $(this).parent("div").children("span").removeClass("m-now");
       $(this).addClass("m-now");
     });
-    $(".m-shan .m-s-btn .m-h-r").on("click", function() {
+    $(".m-shan .m-s-btn .m-h-r").on("click", function () {
       var xing = $("#m-xing .m-now").text();
       var te = $("#m-te .m-now").text();
       var kai = $("#m-shang .m-now").text();
@@ -829,23 +884,20 @@ export default {
       str[1] = te;
       str[2] = kai;
     });
-    $(".m-shan .m-s-btn .m-h-l").on("click", function() {
+    $(".m-shan .m-s-btn .m-h-l").on("click", function () {
       $(".m-shan span").removeClass("m-now");
       $(".m-h span").removeClass("kk");
       $(".m-n span").removeClass("kk");
     });
-    $(".m-hu .m-h-btn .m-h-l").on("click", function() {
+    $(".m-hu .m-h-btn .m-h-l").on("click", function () {
       $(".m-shan span").removeClass("m-now");
       $(".m-h span").removeClass("kk");
       $(".m-n span").removeClass("kk");
     });
-    $(".m-jia .m-two ul li").on("click", function() {
+    $(".m-jia .m-two ul li").on("click", function () {
       $(".m-jia").slideUp("fast");
       $(".m-box").hide();
-      $(this)
-        .addClass("m-l-active")
-        .siblings("li")
-        .removeClass("m-l-active");
+      $(this).addClass("m-l-active").siblings("li").removeClass("m-l-active");
       $(".m-menu ul li").removeClass("m-as");
     });
     // $(".m-hu .m-one ul li").on("click", function() {
@@ -864,13 +916,13 @@ export default {
     //   }
     // });
 
-    $(".m-h-r").on("click", function() {
+    $(".m-h-r").on("click", function () {
       $(".m-hu").slideUp(100);
       $(".m-shan").slideUp(100);
       $(".m-box").hide();
       $(".m-menu ul li").removeClass("m-as");
     });
-    $(".m-a").on("click", function() {
+    $(".m-a").on("click", function () {
       $(".m-jia").slideToggle("fast");
       $(".m-qu").hide();
       $(".m-hu").hide();
@@ -884,11 +936,9 @@ export default {
         $(this).addClass("m-as");
         $(".m-box").show();
       }
-      $(this)
-        .siblings("li")
-        .removeClass("m-as");
+      $(this).siblings("li").removeClass("m-as");
     });
-    $(".m-h").on("click", function() {
+    $(".m-h").on("click", function () {
       $(".m-hu").slideToggle("fast");
       $(".m-jia").hide();
       $(".m-qu").hide();
@@ -902,11 +952,9 @@ export default {
         $(this).addClass("m-as");
         $(".m-box").show();
       }
-      $(this)
-        .siblings("li")
-        .removeClass("m-as");
+      $(this).siblings("li").removeClass("m-as");
     });
-    $(".m-n").on("click", function() {
+    $(".m-n").on("click", function () {
       $(".m-shan").slideToggle("fast");
       $(".m-box").toggle();
       $(".m-jia").hide();
@@ -920,15 +968,10 @@ export default {
         $(this).addClass("m-as");
         $(".m-box").show();
       }
-      $(this)
-        .siblings("li")
-        .removeClass("m-as");
-      $(this)
-        .parent("ul")
-        .next()
-        .removeClass("m-as");
+      $(this).siblings("li").removeClass("m-as");
+      $(this).parent("ul").next().removeClass("m-as");
     });
-    $(".m-sort").on("click", function() {
+    $(".m-sort").on("click", function () {
       $(".m-pai").slideToggle("fast");
       $(".m-box").toggle();
       $(".m-jia").hide();
@@ -942,12 +985,9 @@ export default {
         $(this).addClass("m-as");
         $(".m-box").show();
       }
-      $(this)
-        .prev()
-        .children("li")
-        .removeClass("m-as");
+      $(this).prev().children("li").removeClass("m-as");
     });
-    $(".m-box").click(function() {
+    $(".m-box").click(function () {
       $(".m-qu").hide();
       $(".m-u").removeClass("m-as");
       $(".m-jia").hide();
@@ -960,7 +1000,7 @@ export default {
       $(".m-sort").removeClass("m-as");
       $(this).hide();
     });
-    $(".m-u").on("click", function() {
+    $(".m-u").on("click", function () {
       $(".m-qu").slideToggle("fast");
       $(".m-jia").hide();
       $(".m-hu").hide();
@@ -973,16 +1013,14 @@ export default {
         $(this).addClass("m-as");
         $(".m-box").show();
       }
-      $(this)
-        .siblings("li")
-        .removeClass("m-as");
+      $(this).siblings("li").removeClass("m-as");
     });
     // 路由
-    $(".btn").on("click", function() {
+    $(".btn").on("click", function () {
       that.$router.push("/" + that.nn + "/sou");
       // window.location.href = "/sou";
     });
-    $(".s-b-city").on("click", function() {
+    $(".s-b-city").on("click", function () {
       that.$router.push("/" + that.nn + "/address");
       // window.location.href = "/address";
     });
@@ -994,7 +1032,7 @@ export default {
   },
   activated() {
     this.kk = false;
-  }
+  },
 };
 </script>
 <style scoped>
@@ -1010,7 +1048,7 @@ export default {
 .imgbox {
   width: 92%;
   margin-left: 4%;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
 }
 li {
   list-style: none;
@@ -1191,8 +1229,8 @@ nav .dian img {
   text-align: center;
   line-height: 17px;
   float: right;
-  background:rgba(250,193,77,0.2);
-  color: #FAC14D;
+  background: rgba(250, 193, 77, 0.2);
+  color: #fac14d;
   display: block;
   font-weight: 500;
   font-size: 11px;
@@ -1204,7 +1242,7 @@ nav .dian img {
   text-align: center;
   line-height: 17px;
   float: right;
-  background:rgba(217,217,217,1);
+  background: rgba(217, 217, 217, 1);
   color: #fff;
   display: block;
   font-weight: 500;

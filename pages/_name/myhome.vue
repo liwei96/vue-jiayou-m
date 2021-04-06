@@ -1,7 +1,7 @@
 <template>
   <div class="Myhome">
     <div class="container-fluid m">
-      <div class="m-top visible-xs-block .visible-sm-block">
+      <div class="m-top">
         <div class="m-banner" :style="bannerimg"></div>
         <!-- <img class="m-banner" src="/static/home/imgs/banner.png" alt=""> -->
         <img class="m-re" src="~/assets/return1.png" alt @click="goback" />
@@ -30,7 +30,7 @@
           </ul>
         </div>
       </div>
-      <div class="m-jia visible-xs-block .visible-sm-block">
+      <div class="m-jia">
         <h4>允家功能</h4>
         <div class="m-line"></div>
         <ul>
@@ -77,7 +77,7 @@
           </li>
         </ul>
       </div>
-      <div class="m-bottom visible-xs-block .visible-sm-block">
+      <div class="m-bottom">
         <h4>允家服务</h4>
         <div class="m-line"></div>
         <ul>
@@ -536,6 +536,7 @@ li {
   position: fixed;
   bottom: 0;
   width: 100%;
+  max-width: 450px;
 }
 #Footer p {
   color: #929aa7;

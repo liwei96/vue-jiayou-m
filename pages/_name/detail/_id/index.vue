@@ -2,131 +2,128 @@
   <div class="Detail" v-cloak>
     <h3>
       <img class="back" src="~/assets/return.png" @click="goback" />楼盘详情
-      <img src="~/assets/top-house.png" alt="" class="home" @click="gohome">
+      <img src="~/assets/top-house.png" alt="" class="home" @click="gohome" />
     </h3>
     <div class="con">
       <h2>
-        {{build.name}}
-        <span>{{build.status}}</span>
+        {{ build.name }}
+        <span>{{ build.status }}</span>
       </h2>
       <p class="tabs">
-        <span class="blue">{{build.decorate}}</span>
-        <span v-if="build.railway">{{build.railway}}</span>
+        <span class="blue">{{ build.decorate }}</span>
+        <span v-if="build.railway">{{ build.railway }}</span>
       </p>
       <p class="info">
         参考单价
         <span>
-          <i>{{build.single_price}}/m²</i>
+          <i>{{ build.single_price }}/m²</i>
         </span>
       </p>
       <p class="info">
         参考总价
-        <span>{{build.total_price_min}}万起</span>
+        <span>{{ build.total_price_min }}万起</span>
       </p>
       <p class="info">
         交房时间
-        <span>{{build.givetime}}</span>
+        <span>{{ build.givetime }}</span>
       </p>
       <p class="info">
         楼盘户型
-        <span>{{build.houses}}</span>
+        <span>{{ build.houses }}</span>
       </p>
       <p class="info">
         开盘时间
-        <span>{{build.opentime}}</span>
+        <span>{{ build.opentime }}</span>
       </p>
       <p class="info">
         开&nbsp; 发 &nbsp;商
-        <span>{{build.builder}}</span>
+        <span>{{ build.builder }}</span>
       </p>
     </div>
     <div class="line"></div>
-    <div class="con" style="padding-top:24px">
+    <div class="con" style="padding-top: 24px">
       <p class="info">
         楼盘名称
-        <span>{{build.name}}</span>
+        <span>{{ build.name }}</span>
       </p>
       <p class="info">
         楼盘地址
-        <span>{{build.address}}</span>
+        <span>{{ build.address }}</span>
       </p>
       <p class="info">
         建筑类型
-        <span>{{build.type}}</span>
+        <span>{{ build.type }}</span>
       </p>
       <p class="info">
         装修状况
-        <span>{{build.decorate}}</span>
+        <span>{{ build.decorate }}</span>
       </p>
       <p class="info">
         层 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;高
-        <span>{{build.storey_height}}米</span>
+        <span v-if="build.storey_height">{{ build.storey_height }}米</span>
+        <span v-else>暂无</span>
       </p>
       <p class="info">
         产权年限
-        <span>{{build.year}}年</span>
+        <span>{{ build.year }}年</span>
       </p>
       <p class="info">
         预售许可证
-        <span>{{build.presale}}</span>
+        <span>{{ build.presale }}</span>
       </p>
     </div>
     <div class="line"></div>
-    <div class="con" style="padding-top:24px">
+    <div class="con" style="padding-top: 24px">
       <p class="info">
         户型面积
-        <span>{{build.area_min}}-{{build.area_max}}m²</span>
+        <span>{{ build.area_min }}-{{ build.area_max }}m²</span>
       </p>
       <p class="info">
         建筑面积
-        <span>{{build.build_area}}m²</span>
+        <span>{{ build.build_area }}m²</span>
       </p>
       <p class="info">
         容&nbsp; 积&nbsp; 率
-        <span>{{build.capicity_rate}}</span>
+        <span>{{ build.capicity_rate }}</span>
       </p>
       <p class="info">
         绿&nbsp; 化&nbsp; 率
-        <span>{{build.green_rate}}%</span>
+        <span>{{ build.green_rate }}%</span>
       </p>
       <p class="info">
         公交路线
-        <span>{{build.railway}}</span>
+        <span>{{ build.railway }}</span>
       </p>
       <p class="info">
         物业费用
-        <span>{{build.property_fee}}元/m²月</span>
+        <span>{{ build.property_fee }}元/m²月</span>
       </p>
       <p class="info">
         物业公司
-        <span>{{build.property}}</span>
+        <span>{{ build.property }}</span>
       </p>
       <p class="info">
         车位情况
-        <span>{{build.parking}}个车位</span>
+        <span>{{ build.parking }}个车位</span>
       </p>
     </div>
     <div class="line"></div>
     <div class="con">
       <h4>项目介绍</h4>
-      <p class="txt">{{build.introduce}}</p>
+      <p class="txt">{{ build.introduce }}</p>
     </div>
     <div class="m-botnav">
-      <p id="m_shou" data-_v="{$data.id}">
+      <!-- <p id="m_shou" data-_v="{$data.id}">
         <img id="fork" src="~/assets/forks.png" alt :data-v="id" @click="collection($event)" />
         <img id="forked" src="~/assets/heart.gif" />收藏
-      </p>
-      <a :href="'tel:'+call">
+      </p> -->
+      <a :href="'tel:' + call">
         <button class="m-pho">
-          <p class="ph1">
-            <img src="~/assets/phicon.png" alt />电话咨询
-          </p>
+          <p class="ph1"><img src="~/assets/phicon.png" alt />电话咨询</p>
         </button>
       </a>
       <button class="m-y p1" data-v="预约看房">
-        <p class="ph1">
-          <img src="~/assets/promsg.png" />预约看房
-        </p>
+        <p class="ph1"><img src="~/assets/promsg.png" />预约看房</p>
       </button>
     </div>
     <foot-view :pinyin="jkl"></foot-view>
@@ -140,15 +137,31 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming"/>
+            <input
+              class="l-p"
+              type="tel"
+              placeholder="输入预约手机号码"
+              v-model="baoming"
+            />
             <p class="w-mg">
-              <input class="w-mg-c" type="checkbox" checked v-model="checks"/>我已阅读并同意
-              <router-link :to="'/'+jkl+'/server'">
+              <input
+                class="w-mg-c"
+                type="checkbox"
+                checked
+                v-model="checks"
+              />我已阅读并同意
+              <router-link :to="'/' + jkl + '/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
             </p>
             <p class="tishi">请勾选用户协议</p>
-            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="sendmsg">立即订阅</button>
+            <button
+              class="t-b-btn t-b-btn2 bg_01"
+              id="dingxue"
+              @click="sendmsg"
+            >
+              立即订阅
+            </button>
             <p class="w-tit">
               <img src="~/assets/w-call.png" />允家严格保障您的信息安全
             </p>
@@ -158,7 +171,7 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" id="ma-ll"/>
+            <input type="text" placeholder="请输入验证码" id="ma-ll" />
             <button class="port1">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -187,36 +200,48 @@ import {
   msg,
   verification,
   trend_put,
-  collection
+  collection,
 } from "~/api/api";
 export default {
   name: "Detail",
-  async asyncData (context) {
-    let ip=context.store.state.ip;
-    let token=context.store.state.token;
-    let id=context.params.id;
-    let jkl=context.store.state.cookie.pinyin;
-    let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res]= await Promise.all([
-      context.$axios.get('/yun_jia/building/mobile/detail/abstract',{params:{ platform: 2, id: id, ip: ip,kid:kid,other:other }})
-      .then((resp)=>{
-        let data = resp.data;
-          return data;
-      })
-    ])
-    return{
-          build:res.data,
-          jkl:jkl,
-          title:res.common.header.title,
-          description:res.common.header.description,
-          keywords:res.common.header.keywords
+  async asyncData(context) {
+    try {
+      let ip = context.store.state.ip;
+      let token = context.store.state.token;
+      let id = context.params.id;
+      let jkl = context.store.state.cookie.pinyin;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .get("/yun_jia/building/mobile/detail/abstract", {
+            params: { platform: 2, id: id, ip: ip, kid: kid, other: other },
+          })
+          .then((resp) => {
+            let data = resp.data;
+            return data;
+          }),
+      ]);
+      return {
+        build: res.data,
+        jkl: jkl,
+        title: res.common.header.title,
+        description: res.common.header.description,
+        keywords: res.common.header.keywords,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
     }
   },
   data() {
     return {
-      baoming:'',
-      jkl:'',
+      baoming: "",
+      jkl: "",
       change: false,
       succ: false,
       defaultHeight: "0",
@@ -224,29 +249,29 @@ export default {
       build: {},
       id: "",
       call: "",
-      checks:'',
-      n:'',
-      title:'',
-      description:'',
-      keywords:''
+      checks: "",
+      n: "",
+      title: "",
+      description: "",
+      keywords: "",
     };
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
   head() {
     return {
-      title: this.title || '允家新房-房价趋势',
+      title: this.title || "允家新房-房价趋势",
       meta: [
         {
           name: "description",
-          content: this.description || '允家新房'
+          content: this.description || "允家新房",
         },
         {
           name: "Keywords",
-          content: this.keywords || '允家新房'
-        }
-      ]
+          content: this.keywords || "允家新房",
+        },
+      ],
     };
   },
   methods: {
@@ -254,7 +279,7 @@ export default {
       let id = this.$route.params.id;
       this.id = id;
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
       let collect = localStorage.getItem(id);
       if (collect == 0) {
@@ -266,22 +291,21 @@ export default {
       }
       this.call = localStorage.getItem("call");
       localStorage.getItem("ip");
-     
     },
-    gohome(){
-      let id = this.$route.params.id
-      let name = this.$route.params.name
-      this.$router.push(`/${name}/content/${id}`)
+    gohome() {
+      let id = this.$route.params.id;
+      let name = this.$route.params.name;
+      this.$router.push(`/${name}/content/${id}`);
     },
     sendmsg() {
       let check = this.checks;
       if (!check) {
-        $('.tishi').show()
+        $(".tishi").show();
         return;
-      }else {
-        $('.tishi').hide();
+      } else {
+        $(".tishi").hide();
       }
-      let t = this.baoming
+      let t = this.baoming;
       let pattern_phone = /^1[3-9][0-9]{9}$/;
       if (t == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -293,12 +317,12 @@ export default {
       }
       let that = this;
       msg({ phone: t, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             let ip = that.ip;
             let c = localStorage.getItem("city");
             let p = that.page;
-            let id = this.$route.params.id
+            let id = this.$route.params.id;
             trend_put({
               ip: ip,
               tel: t,
@@ -306,17 +330,17 @@ export default {
               position: 5,
               page: 3,
               type: 9,
-              project: id
+              project: id,
             })
-              .then(resp => {})
-              .catch(error => {
+              .then((resp) => {})
+              .catch((error) => {
                 console.log(error);
               });
             $(".t-b-first").hide();
             $(".t-b-second").show();
             var time = 60;
             var tel = t.substr(0, 3) + "****" + t.substr(7, 11);
-            var fn = function() {
+            var fn = function () {
               time--;
               if (time > 0) {
                 $(".t-b-scode").html("重新发送" + time + "s");
@@ -330,12 +354,12 @@ export default {
             fn();
             var interval = setInterval(fn, 1000);
             $("#ytel").html(tel);
-          }else{
-            $('.l-p').val('')
+          } else {
+            $(".l-p").val("");
             $(".l-p").attr("placeholder", "报名失败");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -343,16 +367,16 @@ export default {
       let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             that.change = false;
             that.succ = true;
-          }else{
-            $("#ma-ll").val('');
+          } else {
+            $("#ma-ll").val("");
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -360,62 +384,54 @@ export default {
       let id = e.target.getAttribute("data-v");
       let token = localStorage.getItem("token");
       collection({ project: id, token: token })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             $("#fork").hide();
             $("#forked").css("display", "block");
           }
         })
-        .then(error => {
+        .then((error) => {
           console.log(error);
         });
     },
     goback() {
       this.$router.go(-1);
-    }
+    },
   },
   mounted() {
     let h = $(".Detail").height();
     if (h < 700) {
       $("#Foot").css({ position: "fixed", bottom: "0", width: "100%" });
     } else if (h >= 700) {
-      $("#Foot").css({ position: "relative", bottom: "0", width: "100%", marginBottom: '56px' });
+      $("#Foot").css({
+        position: "relative",
+        bottom: "0",
+        width: "100%",
+        marginBottom: "56px",
+      });
     }
     this.start();
     let that = this;
-    $(".p1").on("click", function() {
+    $(".p1").on("click", function () {
       $(".m-chang").show();
       that.change = true;
     });
-    $(".m-chang").on("click", function() {
+    $(".m-chang").on("click", function () {
       $(".m-chang").hide();
       that.change = false;
       that.succ = false;
     });
     // 接口验证码
-    $(".t-b-btn2").on("click", function() {
-      let check=that.checks;
-      if(!check){
-        $('.tishi').show();
-      }else{
-        $('.tishi').hide();
+    $(".t-b-btn2").on("click", function () {
+      let check = that.checks;
+      if (!check) {
+        $(".tishi").show();
+      } else {
+        $(".tishi").hide();
       }
-      var phone = $(this)
-        .prev()
-        .prev()
-        .prev()
-        .val();
-      var type = $(this)
-        .parent()
-        .parent()
-        .prev()
-        .find("h6")
-        .html();
-      var building_name = $(this)
-        .parent()
-        .next()
-        .find("#building_name")
-        .val();
+      var phone = $(this).prev().prev().prev().val();
+      var type = $(this).parent().parent().prev().find("h6").html();
+      var building_name = $(this).parent().next().find("#building_name").val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -426,27 +442,23 @@ export default {
         return;
       }
     });
-    $(".port1").on("click", function() {
-      var ma = $(this)
-        .prev()
-        .val();
+    $(".port1").on("click", function () {
+      var ma = $(this).prev().val();
       if (!ma) {
-        $(this)
-          .prev()
-          .attr("placeholder", "验证码不能为空");
+        $(this).prev().attr("placeholder", "验证码不能为空");
         return;
       }
       that.check(ma);
     });
-    $("#o_btn").on("click", function() {
+    $("#o_btn").on("click", function () {
       that.succ = false;
       $(".m-chang").hide();
     });
-    $(".o-esc").on("click", function() {
+    $(".o-esc").on("click", function () {
       that.succ = false;
       $(".m-chang").hide();
     });
-    $("#w-esc").on("click", function() {
+    $("#w-esc").on("click", function () {
       $(".m-chang").hide();
       that.change = false;
     });
@@ -459,7 +471,7 @@ export default {
     };
   },
   watch: {
-    nowHeight: function() {
+    nowHeight: function () {
       if (this.defaultHeight != this.nowHeight) {
         $(".weiter").css("top", "100px");
         $("#nav-list").css("top", "42%");
@@ -467,8 +479,8 @@ export default {
         $(".weiter").css("top", "220px");
         $("#nav-list").css("top", "21%");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -489,8 +501,8 @@ h3 {
   position: relative;
   font-size: 16px;
 }
-.tishi{
-  color:red;
+.tishi {
+  color: red;
   font-size: 10px;
   display: none;
 }
@@ -584,6 +596,7 @@ h2 span {
   background-color: #fff;
   z-index: 200;
   box-shadow: 0px 0px 9px 1px rgba(6, 0, 1, 0.04);
+  max-width: 450px;
 }
 
 .m-botnav p {
@@ -609,12 +622,17 @@ h2 span {
   font-size: 15px;
   border-radius: 5px;
   border: 0px;
-  box-shadow:0px 2.5px 5px 0px rgba(78,169,255,0.2);
+  box-shadow: 0px 2.5px 5px 0px rgba(78, 169, 255, 0.2);
 }
 
 .m-botnav .m-pho {
-  background:linear-gradient(90deg,rgba(255,76,76,1),rgba(255,152,106,1));
+  background: linear-gradient(
+    90deg,
+    rgba(255, 76, 76, 1),
+    rgba(255, 152, 106, 1)
+  );
   color: #fff;
+  left: 11%;
 }
 .m-botnav .m-pho .ph1 {
   color: #ffffff;
@@ -636,9 +654,13 @@ h2 span {
 }
 
 .m-botnav .m-y {
-  background:linear-gradient(-270deg,rgba(52,138,255,1),rgba(106,204,255,1));
+  background: linear-gradient(
+    -270deg,
+    rgba(52, 138, 255, 1),
+    rgba(106, 204, 255, 1)
+  );
   color: #fff;
-  left: 62%;
+  left: 59%;
 }
 .m-botnav .m-y .ph1 {
   color: #ffffff;

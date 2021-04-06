@@ -146,10 +146,10 @@
 
     <!-- 底部悬浮按钮 -->
     <div class="m-botnav">
-      <p id="m_shou" data-_v="{$data.id}">
+      <!-- <p id="m_shou" data-_v="{$data.id}">
         <img id="fork" src="~/assets/forks.png" alt :data-v="id" @click="collection($event)" />
         <img id="forked" src="~/assets/heart.gif" />收藏
-      </p>
+      </p> -->
       <a :href="'tel:'+call">
         <button class="m-pho">
           <p class="ph1">
@@ -762,6 +762,7 @@ export default {
   z-index: 200;
   box-shadow: 0px 0px 9px 1px rgba(6, 0, 1, 0.04);
   background-color: black;
+  max-width: 450px;
 }
 
 #forked {
@@ -801,6 +802,7 @@ export default {
 .m-botnav .m-pho {
   background:linear-gradient(90deg,rgba(255,76,76,1),rgba(255,152,106,1));
   color: #fff;
+  left: 11%;
 }
 .m-botnav .m-pho .ph1 {
   color: #ffffff;
@@ -824,7 +826,7 @@ export default {
 .m-botnav .m-y {
   background:linear-gradient(-270deg,rgba(52,138,255,1),rgba(106,204,255,1));
   color: #fff;
-  left: 62%;
+  left: 59%;
 }
 .m-botnav .m-y .ph1 {
   color: #ffffff;
@@ -889,6 +891,7 @@ body {
   position: fixed;
   top: 0;
   z-index: 10;
+  max-width: 450px;
 }
 
 .title span,

@@ -71,6 +71,7 @@ li {
     position: relative;
     background:#fff;
     z-index:1000;
+    max-width: 450px;
 }
 .m-menu ul{
     margin: 0;

@@ -8,7 +8,13 @@
       <div class="m-liu">
         <img src="~/assets/liu_pic.png" alt />
         <h5>感谢您对允家的支持与关注。请将您的问题或意见建议反馈给我们</h5>
-        <textarea name id cols="30" rows="10" placeholder="输入您的问题"></textarea>
+        <textarea
+          name
+          id
+          cols="30"
+          rows="10"
+          placeholder="输入您的问题"
+        ></textarea>
         <button id="btn" class="bg_01">提交</button>
       </div>
       <div class="m-liu">
@@ -25,7 +31,7 @@
     <div class="m-zhe-tel"></div>
     <div class="m-zhe-box">
       <span class="iconfont iconguanbi" id="close"></span>
-      <input type="text" placeholder="请输入手机号" id="tel" v-model="tel"/>
+      <input type="text" placeholder="请输入手机号" id="tel" v-model="tel" />
 
       <button class="m-qu">取消</button>
       <button class="m-que" id="queren02">确定</button>
@@ -34,126 +40,142 @@
 </template>
 <script>
 import footView from "@/components/Foot.vue";
-import {top_sure} from '~/api/api'
+import { top_sure } from "~/api/api";
 export default {
   name: "LeaveQuestion",
-  asyncData (context) {
+  asyncData(context) {
     let jkl = context.store.state.cookie.pinyin;
     return {
-      jkl:jkl
-    }
+      jkl: jkl,
+    };
   },
-  data(){
+  data() {
     return {
-      tel:'',
-      con:'',
-      jkl:''
-    }
+      tel: "",
+      con: "",
+      jkl: "",
+    };
   },
   head() {
     return {
-      title:  "允家新房-楼盘留言提问",
+      title: "允家新房-楼盘留言提问",
       meta: [
         {
           name: "description",
-          content:  '允家新房'
+          content: "允家新房",
         },
         {
           name: "Keywords",
-          content:  '允家新房'
-        }
-      ]
+          content: "允家新房",
+        },
+      ],
     };
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
-  methods:{
-    goback(){
-      this.$router.go(-1)
+  methods: {
+    goback() {
+      this.$router.go(-1);
     },
-    put(tel,msg){
-      let id=this.$route.params.id;
-      let ip=localStorage.getItem('ip');
-      let city=localStorage.getItem('city');
-      top_sure({ip:ip,city:city,platform:2,remark:msg,tel:tel,page:3,position:6}).then(resp=>{
-        if(resp.data.code==200){
-          $(".m-zhe-box").hide();
-          $('.m-o-succ').show();
-        }
-      }).catch(error=>{
-        console.log(error)
+    put(tel, msg) {
+      let id = this.$route.params.id;
+      let ip = localStorage.getItem("ip");
+      let city = localStorage.getItem("city");
+      top_sure({
+        ip: ip,
+        city: city,
+        platform: 2,
+        remark: msg,
+        tel: tel,
+        page: 3,
+        position: 6,
+        project: id
       })
-    }
+        .then((resp) => {
+          if (resp.data.code == 200) {
+            $(".m-zhe-box").hide();
+            $(".m-o-succ").show();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   mounted() {
-    $("#Foot").css({ position: "fixed", bottom: "0", width: "100%",marginBottom:0 });
-    let that=this;
-    that.tel=localStorage.getItem('phone')
-    $(document).ready(function() {
-      $("#btn").on("click", function() {
+    $("#Foot").css({
+      position: "fixed",
+      bottom: "0",
+      width: "100%",
+      marginBottom: 0,
+    });
+    let that = this;
+    that.tel = localStorage.getItem("phone");
+    $(document).ready(function () {
+      $("#btn").on("click", function () {
         var text = $("textarea").val();
-        that.con=text;
+        that.con = text;
         if (text != "") {
           $(".m-zhe-tel").show();
           $(".m-zhe-box").show();
         }
       });
-      $(".m-que").on("click", function() {
+      $(".m-que").on("click", function () {
         var text = $("textarea").val();
         var phone = $("#tel").val();
         var pattern_phone = /^1[3-9][0-9]{9}$/;
-      if (phone == "") {
-        $("#tel").attr("placeholder", "手机号不能为空");
-        return;
-      } else if (!pattern_phone.test(phone)) {
-        $("#tel").val("");
-        $("#tel").attr("placeholder", "手机号码不合法");
-        return;
-      }
-        that.put(phone,text);
+        if (phone == "") {
+          $("#tel").attr("placeholder", "手机号不能为空");
+          return;
+        } else if (!pattern_phone.test(phone)) {
+          $("#tel").val("");
+          $("#tel").attr("placeholder", "手机号码不合法");
+          return;
+        }
+        that.put(phone, text);
       });
-      $(".m-chang").on("click", function() {
+      $(".m-chang").on("click", function () {
         $(".m-chang").hide();
         $(".m-o-succ").hide();
       });
-      $(".o-esc").on("click", function() {
+      $(".o-esc").on("click", function () {
         $(".m-chang").hide();
         $(".m-o-succ").hide();
       });
-      $("#o_btn").on("click", function() {
+      $("#o_btn").on("click", function () {
         $(".m-zhe-tel").hide();
         $(".m-o-succ").hide();
       });
       //留言
-      $("#close").click(function() {
+      $("#close").click(function () {
         $(".m-zhe-tel").hide();
         $(".m-zhe-box").hide();
       });
-      $(".m-qu").click(function() {
+      $(".m-qu").click(function () {
         $(".m-zhe-tel").hide();
         $(".m-zhe-box").hide();
       });
 
-      $(".m-zhe-tel").click(function() {
+      $(".m-zhe-tel").click(function () {
         $(".m-zhe-box").hide();
         $(this).hide();
-        $('.m-o-succ').hide();
+        $(".m-o-succ").hide();
       });
 
-      $(function() {
+      $(function () {
         function changeColor(id, class1, class2) {
-          $("#" + id).on("touchstart", function() {
+          $("#" + id).on("touchstart", function () {
             $(this).attr("class", class1);
           });
-          $("#" + id).on("touchend", function() {
+          $("#" + id).on("touchend", function () {
             $(this).attr("class", class2);
           });
         }
         changeColor("btn", "bg_02", "bg_01");
       });
     });
-  }
+  },
 };
 </script>
 <style scoped>
@@ -177,6 +199,7 @@ body {
   background-color: #fff;
   height: 44px;
   border-bottom: 0.5px solid #f2f2f2;
+  max-width: 450px;
 }
 
 .m-top img {

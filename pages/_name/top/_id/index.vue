@@ -27,37 +27,38 @@
     </nav>
     <!-- 楼盘列表 -->
     <div class="con" v-show="t1">
-      <div class="con-list" v-for="(top,key) in top1s" :key="top.id">
-        <router-link :to="'/'+jkl+'/content/'+top.id">
+      <div class="con-list" v-for="(top, key) in top1s" :key="top.id">
+        <router-link :to="'/' + jkl + '/content/' + top.id">
           <div class="con-list-top">
             <div class="list-top-left">
               <img :src="top.img" alt />
               <span>
                 <i class="iconfont iconyanjing"></i>
-                {{top.num}}
+                {{ top.num }}
               </span>
             </div>
             <div class="list-top-right">
               <h5>
-                <i>{{top.name}}</i>
-                <span>{{top.status}}</span>
+                <i>{{ top.name }}</i>
+                <span>{{ top.status }}</span>
               </h5>
               <p class="price">
-                <span>{{top.single_price}}</span>元/m²
+                <span>{{ top.single_price }}</span
+                >元/m²
               </p>
               <p class="area">
-                <span>{{top.city}}-{{top.country}}</span>
+                <span>{{ top.city }}-{{ top.country }}</span>
                 <span>建面</span>
                 <span>
-                  {{parseInt(top.area_min)}}
+                  {{ parseInt(top.area_min) }}
                   <span v-if="top.area_max">-</span>
-                  {{parseInt(top.area_max)}}m²
+                  {{ parseInt(top.area_max) }}m²
                 </span>
               </p>
               <p class="tabs">
-                <strong>{{top.decorate}}</strong>
-                <span v-if="top.railway">{{top.railway}}</span>
-                <span>{{top.type}}</span>
+                <strong>{{ top.decorate }}</strong>
+                <span v-if="top.railway">{{ top.railway }}</span>
+                <span>{{ top.type }}</span>
               </p>
             </div>
           </div>
@@ -65,45 +66,48 @@
         <div class="con-list-bottom">
           <div class="bang">
             <img src="~/assets/star.png" alt />
-            刚需榜第{{key+1}}名
+            刚需榜第{{ key + 1 }}名
           </div>
-          <button class="appointment" @click="show($event)" :data-v="top.id">预约看房</button>
-          <a :href="'tel:'+call" class="tel">电话咨询</a>
+          <button class="appointment" @click="show($event)" :data-v="top.id">
+            预约看房
+          </button>
+          <a :href="'tel:' + call" class="tel">电话咨询</a>
         </div>
       </div>
     </div>
     <div class="con" v-show="t2">
-      <div class="con-list" v-for="(top,key) in top2s" :key="top.id">
-        <router-link :to="'/'+jkl+'/content/'+top.id">
+      <div class="con-list" v-for="(top, key) in top2s" :key="top.id">
+        <router-link :to="'/' + jkl + '/content/' + top.id">
           <div class="con-list-top">
             <div class="list-top-left">
               <img :src="top.img" alt />
               <span>
                 <i class="iconfont iconyanjing"></i>
-                {{top.num}}
+                {{ top.num }}
               </span>
             </div>
             <div class="list-top-right">
               <h5>
-                <i>{{top.name}}</i>
-                <span>{{top.status}}</span>
+                <i>{{ top.name }}</i>
+                <span>{{ top.status }}</span>
               </h5>
               <p class="price">
-                <span>{{top.single_price}}</span>元/m²
+                <span>{{ top.single_price }}</span
+                >元/m²
               </p>
               <p class="area">
-                <span>{{top.city}}-{{top.country}}</span>
+                <span>{{ top.city }}-{{ top.country }}</span>
                 <span>建面</span>
                 <span>
-                  {{parseInt(top.area_min)}}
+                  {{ parseInt(top.area_min) }}
                   <span v-if="top.area_max">-</span>
-                  {{parseInt(top.area_max)}}m²
+                  {{ parseInt(top.area_max) }}m²
                 </span>
               </p>
               <p class="tabs">
-                <strong>{{top.decorate}}</strong>
-                <span v-if="top.railway">{{top.railway}}</span>
-                <span>{{top.type}}</span>
+                <strong>{{ top.decorate }}</strong>
+                <span v-if="top.railway">{{ top.railway }}</span>
+                <span>{{ top.type }}</span>
               </p>
             </div>
           </div>
@@ -111,45 +115,48 @@
         <div class="con-list-bottom">
           <div class="bang">
             <img src="~/assets/star.png" alt />
-            投资榜第{{key+1}}名
+            投资榜第{{ key + 1 }}名
           </div>
-          <button class="appointment" @click="show($event)" :data-v="top.id">预约看房</button>
-          <a :href="'tel:'+call" class="tel">电话咨询</a>
+          <button class="appointment" @click="show($event)" :data-v="top.id">
+            预约看房
+          </button>
+          <a :href="'tel:' + call" class="tel">电话咨询</a>
         </div>
       </div>
     </div>
     <div class="con" v-show="t3">
-      <div class="con-list" v-for="(top,key) in top3s" :key="top.id">
-        <router-link :to="'/'+jkl+'/content/'+top.id">
+      <div class="con-list" v-for="(top, key) in top3s" :key="top.id">
+        <router-link :to="'/' + jkl + '/content/' + top.id">
           <div class="con-list-top">
             <div class="list-top-left">
               <img :src="top.img" alt />
               <span>
                 <i class="iconfont iconyanjing"></i>
-                {{top.num}}
+                {{ top.num }}
               </span>
             </div>
             <div class="list-top-right">
               <h5>
-                <i>{{top.name}}</i>
-                <span>{{top.status}}</span>
+                <i>{{ top.name }}</i>
+                <span>{{ top.status }}</span>
               </h5>
               <p class="price">
-                <span>{{top.single_price}}</span>元/m²
+                <span>{{ top.single_price }}</span
+                >元/m²
               </p>
               <p class="area">
-                <span>{{top.city}}-{{top.country}}</span>
+                <span>{{ top.city }}-{{ top.country }}</span>
                 <span>建面</span>
                 <span>
-                  {{parseInt(top.area_min)}}
+                  {{ parseInt(top.area_min) }}
                   <span v-if="top.area_max">-</span>
-                  {{parseInt(top.area_max)}}m²
+                  {{ parseInt(top.area_max) }}m²
                 </span>
               </p>
               <p class="tabs">
-                <strong>{{top.decorate}}</strong>
-                <span v-if="top.railway">{{top.railway}}</span>
-                <span>{{top.type}}</span>
+                <strong>{{ top.decorate }}</strong>
+                <span v-if="top.railway">{{ top.railway }}</span>
+                <span>{{ top.type }}</span>
               </p>
             </div>
           </div>
@@ -157,45 +164,48 @@
         <div class="con-list-bottom">
           <div class="bang">
             <img src="~/assets/star.png" alt />
-            改善榜第{{key+1}}名
+            改善榜第{{ key + 1 }}名
           </div>
-          <button class="appointment" @click="show($event)" :data-v="top.id">预约看房</button>
-          <a :href="'tel:'+call" class="tel">电话咨询</a>
+          <button class="appointment" @click="show($event)" :data-v="top.id">
+            预约看房
+          </button>
+          <a :href="'tel:' + call" class="tel">电话咨询</a>
         </div>
       </div>
     </div>
     <div class="con" v-show="t4">
-      <div class="con-list" v-for="(top,key) in top4s" :key="top.id">
-        <router-link :to="'/'+jkl+'/content/'+top.id">
+      <div class="con-list" v-for="(top, key) in top4s" :key="top.id">
+        <router-link :to="'/' + jkl + '/content/' + top.id">
           <div class="con-list-top">
             <div class="list-top-left">
               <img :src="top.img" alt />
               <span>
                 <i class="iconfont iconyanjing"></i>
-                {{top.num}}
+                {{ top.num }}
               </span>
             </div>
             <div class="list-top-right">
               <h5>
-                <i>{{top.name}}</i>
-                <span>{{top.status}}</span>
+                <i>{{ top.name }}</i>
+                <span>{{ top.status }}</span>
               </h5>
               <p class="price">
-                <span>{{top.single_price}}</span>元/m²
+                <span>{{ top.single_price }}</span
+                >元/m²
               </p>
               <p class="area">
-                <span>{{top.city}}-{{top.country}}</span>
+                <span>{{ top.city }}-{{ top.country }}</span>
                 <span>建面</span>
                 <span>
-                  {{parseInt(top.area_min)}}
+                  {{ parseInt(top.area_min) }}
                   <span v-if="top.area_max">-</span>
-                  {{parseInt(top.area_max)}}m²
+                  {{ parseInt(top.area_max) }}m²
                 </span>
               </p>
               <p class="tabs">
-                <strong>{{top.decorate}}</strong>
-                <span v-if="top.railway">{{top.railway}}</span>
-                <span>{{top.type}}</span>
+                <strong>{{ top.decorate }}</strong>
+                <span v-if="top.railway">{{ top.railway }}</span>
+                <span>{{ top.type }}</span>
               </p>
             </div>
           </div>
@@ -203,10 +213,12 @@
         <div class="con-list-bottom">
           <div class="bang">
             <img src="~/assets/star.png" alt />
-            现房榜第{{key+1}}名
+            现房榜第{{ key + 1 }}名
           </div>
-          <button class="appointment" @click="show($event)" :data-v="top.id">预约看房</button>
-          <a :href="'tel:'+call" class="tel">电话咨询</a>
+          <button class="appointment" @click="show($event)" :data-v="top.id">
+            预约看房
+          </button>
+          <a :href="'tel:' + call" class="tel">电话咨询</a>
         </div>
       </div>
     </div>
@@ -214,36 +226,37 @@
     <div class="guess">
       <h4>猜你喜欢</h4>
       <div class="guess-con">
-        <div class="re-list" v-for="(list ,index) in lists" :key="index">
-          <router-link :to="'/'+jkl+'/content/'+list.id">
+        <div class="re-list" v-for="(list, index) in lists" :key="index">
+          <router-link :to="'/' + jkl + '/content/' + list.id">
             <div class="re-con-left">
               <img :src="list.img" />
               <span>
                 <i class="iconfont iconyanjing"></i>
-                {{list.num}}
+                {{ list.num }}
               </span>
             </div>
             <div class="re-con-right">
               <h5>
-                {{list.name}}
-                <span>{{list.status}}</span>
+                {{ list.name }}
+                <span>{{ list.status }}</span>
               </h5>
               <p class="price">
-                <span>{{list.single_price}}</span>元/m²
+                <span>{{ list.single_price }}</span
+                >元/m²
               </p>
               <p class="area">
-                <span>{{list.city}}-{{list.country}}</span>
+                <span>{{ list.city }}-{{ list.country }}</span>
                 <span>建面</span>
                 <span>
-                  {{parseInt(list.area_min)}}
+                  {{ parseInt(list.area_min) }}
                   <span v-if="list.area_max">-</span>
-                  {{parseInt(list.area_max)}}m²
+                  {{ parseInt(list.area_max) }}m²
                 </span>
               </p>
               <p class="tabs">
-                <span class="strong">{{list.decorate}}</span>
-                <span v-if="list.railway">{{list.railway}}</span>
-                <span>{{list.type}}</span>
+                <span class="strong">{{ list.decorate }}</span>
+                <span v-if="list.railway">{{ list.railway }}</span>
+                <span>{{ list.type }}</span>
               </p>
             </div>
           </router-link>
@@ -261,15 +274,27 @@
         </div>
         <div class="t-bottom">
           <div class="t-b-first">
-            <input class="l-p" type="tel" placeholder="输入预约手机号码" v-model="baoming"/>
+            <input
+              class="l-p"
+              type="tel"
+              placeholder="输入预约手机号码"
+              v-model="baoming"
+            />
             <p class="w-mg">
-              <input class="w-mg-c" type="checkbox" checked v-model="check" />我已阅读并同意
-              <router-link :to="'/'+jkl+'/server'">
+              <input
+                class="w-mg-c"
+                type="checkbox"
+                checked
+                v-model="check"
+              />我已阅读并同意
+              <router-link :to="'/' + jkl + '/server'">
                 <a href="javasript:;">《允家新房用户协议》</a>
               </router-link>
             </p>
             <p class="tishi">请勾选用户协议</p>
-            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="getmsg">立即订阅</button>
+            <button class="t-b-btn t-b-btn2 bg_01" id="dingxue" @click="getmsg">
+              立即订阅
+            </button>
             <p class="w-tit">
               <img src="~/assets/w-call.png" />允家严格保障您的信息安全
             </p>
@@ -279,7 +304,12 @@
               验证码已发送到
               <span id="ytel">187****4376</span>，请注意查看
             </p>
-            <input type="text" placeholder="请输入验证码" id="ma-ll" v-model="yanz"/>
+            <input
+              type="text"
+              placeholder="请输入验证码"
+              id="ma-ll"
+              v-model="yanz"
+            />
             <button class="port1" @click="yan">确定</button>
             <input type="hidden" id="building_name" value />
             <input type="hidden" value />
@@ -312,84 +342,101 @@ import Loadings from "@/components/loading";
 export default {
   name: "Top",
   components: {
-    'load-view':Loadings,
-    'foot-view':footView
+    "load-view": Loadings,
+    "foot-view": footView,
   },
-  async asyncData (context) {
-    let ip=context.store.state.cookie.ip;
-    let city = context.store.state.city;
-    let token=context.store.state.cookie.token;
-     let kk = context.params.id;
-     let jkl=context.store.state.cookie.pinyin;
-     let kid = context.store.state.cookie.kid ? context.store.state.cookie.kid : ''
-    let other = context.store.state.cookie.other ? context.store.state.cookie.other : ''
-    let [res]= await Promise.all([
-      context.$axios.post('/api/first/feature_second_mobile',{ city: city, ip: ip, platform: 2, token: token,kid:kid,other:other })
-      .then((resp)=>{
-        let data = resp.data.data;
-        data.t1=false
-        data.t2=false
-        data.t3=false
-        data.t4=false
-      if (kk == 1) {
-        data.t1 = true;
-        data.active1 = "active";
-      } else if (kk == 2) {
-        data.t2 = true;
-        data.active2 = "active";
-      } else if ((kk = 3)) {
-        data.t3 = true;
-        data.active3 = "active";
-      } else {
-        data.t4 = true;
-        data.active4 = "active";
-      }
-         
-          for (let item of data.rigid_demand) {
-            if (item.railway) {
-              item.railway = item.railway.split(",")[0];
+  async asyncData(context) {
+    try {
+      let ip = context.store.state.cookie.ip;
+      let city = context.store.state.city;
+      let token = context.store.state.cookie.token;
+      let kk = context.params.id;
+      let jkl = context.store.state.cookie.pinyin;
+      let kid = context.store.state.cookie.kid
+        ? context.store.state.cookie.kid
+        : "";
+      let other = context.store.state.cookie.other
+        ? context.store.state.cookie.other
+        : "";
+      let [res] = await Promise.all([
+        context.$axios
+          .post("/api/first/feature_second_mobile", {
+            city: city,
+            ip: ip,
+            platform: 2,
+            token: token,
+            kid: kid,
+            other: other,
+          })
+          .then((resp) => {
+            let data = resp.data.data;
+            data.t1 = false;
+            data.t2 = false;
+            data.t3 = false;
+            data.t4 = false;
+            if (kk == 1) {
+              data.t1 = true;
+              data.active1 = "active";
+            } else if (kk == 2) {
+              data.t2 = true;
+              data.active2 = "active";
+            } else if ((kk = 3)) {
+              data.t3 = true;
+              data.active3 = "active";
+            } else {
+              data.t4 = true;
+              data.active4 = "active";
             }
-          }
-          for (let item of data.invest) {
-            if (item.railway) {
-              item.railway = item.railway.split(",")[0];
+
+            for (let item of data.rigid_demand) {
+              if (item.railway) {
+                item.railway = item.railway.split(",")[0];
+              }
             }
-          }
-          for (let item of data.improve) {
-            if (item.railway) {
-              item.railway = item.railway.split(",")[0];
+            for (let item of data.invest) {
+              if (item.railway) {
+                item.railway = item.railway.split(",")[0];
+              }
             }
-          }
-          for (let item of data.existing) {
-            if (item.railway) {
-              item.railway = item.railway.split(",")[0];
+            for (let item of data.improve) {
+              if (item.railway) {
+                item.railway = item.railway.split(",")[0];
+              }
             }
-          }
-          for (let item of data.likes) {
-            if (item.railway) {
-              item.railway = item.railway.split(",")[0];
+            for (let item of data.existing) {
+              if (item.railway) {
+                item.railway = item.railway.split(",")[0];
+              }
             }
-          }
-          return data;
-      })
-    ])
-    return{
-          top1s : res.rigid_demand,
-          top2s : res.invest,
-          top3s : res.improve,
-          top4s : res.existing,
-          lists : res.likes,
-          check:true,
-          jkl:jkl,
-          title:res.title,
-          description:res.description,
-          keywords:res.keywords
+            for (let item of data.likes) {
+              if (item.railway) {
+                item.railway = item.railway.split(",")[0];
+              }
+            }
+            return data;
+          }),
+      ]);
+      return {
+        top1s: res.rigid_demand,
+        top2s: res.invest,
+        top3s: res.improve,
+        top4s: res.existing,
+        lists: res.likes,
+        check: true,
+        jkl: jkl,
+        title: res.title,
+        description: res.description,
+        keywords: res.keywords,
+      };
+    } catch (err) {
+      console.log("errConsole========:", err);
+      context.error({ statusCode: 404, message: "页面未找到或无数据" });
     }
   },
   data() {
     return {
-      baoming:'',
-      jkl:'',
+      baoming: "",
+      jkl: "",
       change: false,
       succ: false,
       defaultHeight: "0",
@@ -407,7 +454,7 @@ export default {
           areamax: "99",
           zhuangxiu: "精装",
           ditie: "地铁沿线",
-          tese: "繁华地段"
+          tese: "繁华地段",
         },
         {
           name: "绿地华家池印",
@@ -421,7 +468,7 @@ export default {
           areamax: "99",
           zhuangxiu: "精装",
           ditie: "地铁沿线",
-          tese: "繁华地段"
+          tese: "繁华地段",
         },
         {
           name: "绿地华家池印",
@@ -435,7 +482,7 @@ export default {
           areamax: "99",
           zhuangxiu: "精装",
           ditie: "地铁沿线",
-          tese: "繁华地段"
+          tese: "繁华地段",
         },
         {
           name: "绿地华家池印",
@@ -449,8 +496,8 @@ export default {
           areamax: "99",
           zhuangxiu: "精装",
           ditie: "地铁沿线",
-          tese: "繁华地段"
-        }
+          tese: "繁华地段",
+        },
       ],
       top1s: [
         {
@@ -465,7 +512,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -479,7 +526,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -493,7 +540,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -507,7 +554,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -521,8 +568,8 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
-        }
+          img: require("~/assets/lou1.png"),
+        },
       ],
       top2s: [
         {
@@ -537,7 +584,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -551,7 +598,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -565,7 +612,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -579,7 +626,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -593,8 +640,8 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
-        }
+          img: require("~/assets/lou1.png"),
+        },
       ],
       top3s: [
         {
@@ -609,7 +656,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -623,7 +670,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -637,7 +684,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -651,7 +698,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -665,8 +712,8 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
-        }
+          img: require("~/assets/lou1.png"),
+        },
       ],
       top4s: [
         {
@@ -681,7 +728,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -695,7 +742,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -709,7 +756,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -723,7 +770,7 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
+          img: require("~/assets/lou1.png"),
         },
         {
           name: "杭州之翼",
@@ -737,8 +784,8 @@ export default {
           tese: "刚需楼盘",
           num: "35353",
           isshou: "在售",
-          img: require("~/assets/lou1.png")
-        }
+          img: require("~/assets/lou1.png"),
+        },
       ],
       t1: false,
       t2: false,
@@ -754,25 +801,25 @@ export default {
       active3: "",
       active4: "",
       load: true,
-      title:'',
-      description:'',
-      keywords:'',
-      yanz:''
+      title: "",
+      description: "",
+      keywords: "",
+      yanz: "",
     };
   },
   head() {
     return {
-      title: this.title || '允家新房-楼盘榜',
+      title: this.title || "允家新房-楼盘榜",
       meta: [
         {
           name: "description",
-          content: this.description || '允家新房'
+          content: this.description || "允家新房",
         },
         {
           name: "Keywords",
-          content: this.keywords || '允家新房'
-        }
-      ]
+          content: this.keywords || "允家新房",
+        },
+      ],
     };
   },
   methods: {
@@ -786,25 +833,25 @@ export default {
         this.$router.go(-1);
       }
     },
-    t1s: function() {
+    t1s: function () {
       this.t1 = true;
       this.t2 = false;
       this.t3 = false;
       this.t4 = false;
     },
-    t2s: function() {
+    t2s: function () {
       this.t1 = false;
       this.t2 = true;
       this.t3 = false;
       this.t4 = false;
     },
-    t3s: function() {
+    t3s: function () {
       this.t1 = false;
       this.t2 = false;
       this.t3 = true;
       this.t4 = false;
     },
-    t4s: function() {
+    t4s: function () {
       this.t1 = false;
       this.t2 = false;
       this.t3 = false;
@@ -833,9 +880,9 @@ export default {
         localStorage.setItem("city", 1);
       }
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
-      this.load = false
+      this.load = false;
     },
     show(e) {
       this.change = true;
@@ -851,7 +898,7 @@ export default {
       } else {
         $(".tishi").hide();
       }
-      var phone = this.baoming
+      var phone = this.baoming;
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -881,22 +928,22 @@ export default {
         position: 8,
         token: token,
         kid: kid,
-        other: other
+        other: other,
       };
       msg(data)
-        .then(resp => {
+        .then((resp) => {
           let code = resp.data.code;
           if (code == 200) {
             top_sure(dd)
-              .then(resp => {})
-              .catch(error => {
+              .then((resp) => {})
+              .catch((error) => {
                 console.log(error);
               });
             $(".t-b-first").hide();
             $(".t-b-second").show();
             var time = 60;
             var tel = phone.substr(0, 3) + "****" + phone.substr(7, 11);
-            var fn = function() {
+            var fn = function () {
               time--;
               if (time > 0) {
                 $(".t-b-scode").html("重新发送" + time + "s");
@@ -910,93 +957,86 @@ export default {
             fn();
             var interval = setInterval(fn, 1000);
             $("#ytel").html(tel);
-          }else{
-            $('.l-p').val('')
+          } else {
+            $(".l-p").val("");
             $(".l-p").attr("placeholder", "报名失败");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     yan() {
-      var ma = this.yanz
+      var ma = this.yanz;
       if (!ma) {
-        $('#ma-ll').attr("placeholder", "验证码不能为空");
+        $("#ma-ll").attr("placeholder", "验证码不能为空");
         return;
       }
       let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: ma, channel: 2 })
-        .then(resp => {
+        .then((resp) => {
           if (resp.data.code == 200) {
             that.change = false;
             that.succ = true;
-          }else{
-            $("#ma-ll").val('');
+          } else {
+            $("#ma-ll").val("");
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     handleScroll() {
       let Y = window.scrollY;
-      if (Y <= 165 && Y>=0) {
+      if (Y <= 165 && Y >= 0) {
         $("#nav-list").css({ position: "absolute", top: "164px" });
-      } else if(Y>165) {
+      } else if (Y > 165) {
         $("#nav-list").css({ position: "fixed", top: "0" });
       }
-    }
+    },
   },
   mounted() {
-    $('html').css('overflow','initial')
-    this.baoming=localStorage.getItem('phone');
+    $("html").css("overflow", "initial");
+    this.baoming = localStorage.getItem("phone");
     this.start_data();
     let that = this;
-    $("nav ul li").on("click", function() {
-      $(this)
-        .addClass("active")
-        .siblings("li")
-        .removeClass("active");
+    $("nav ul li").on("click", function () {
+      $(this).addClass("active").siblings("li").removeClass("active");
     });
-    $("#w-esc").on("click", function() {
+    $("#w-esc").on("click", function () {
       $(".m-chang").hide();
       that.change = false;
     });
-    $(".m-chang").on("click", function() {
+    $(".m-chang").on("click", function () {
       $(".m-chang").hide();
       that.change = false;
       that.succ = false;
     });
     // 接口验证码
-    
-    $(".port1").on("click", function() {
-      var ma = $(this)
-        .prev()
-        .val();
+
+    $(".port1").on("click", function () {
+      var ma = $(this).prev().val();
       if (!ma) {
-        $(this)
-          .prev()
-          .attr("placeholder", "验证码不能为空");
+        $(this).prev().attr("placeholder", "验证码不能为空");
         return;
       }
       that.yan(ma);
     });
 
-    $(".o-esc").on("click", function() {
+    $(".o-esc").on("click", function () {
       $(".m-chang").hide();
       that.succ = false;
     });
-    $("#o_btn").on("click", function() {
+    $("#o_btn").on("click", function () {
       $(".m-chang").hide();
       that.succ = false;
     });
-    $(".l-p").on("focus", function() {
+    $(".l-p").on("focus", function () {
       $(".weiter").css("top", "100px");
     });
-    $(".l-p").on("blur", function() {
+    $(".l-p").on("blur", function () {
       $(".weiter").css("top", "220px");
     });
     //获取默认高度
@@ -1010,7 +1050,7 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
   watch: {
-    nowHeight: function() {
+    nowHeight: function () {
       if (this.defaultHeight != this.nowHeight) {
         $(".weiter").css("top", "100px");
         $("#nav-list").css("top", "42%");
@@ -1018,8 +1058,8 @@ export default {
         $(".weiter").css("top", "220px");
         $("#nav-list").css("top", "21%");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -1150,20 +1190,20 @@ nav ul li.active i {
 
 .con .con-list .con-list-top .list-top-right {
   display: inline-block;
-  width:60%;
+  width: 60%;
 }
 .con .con-list .con-list-top .list-top-right h5 {
   color: #333333;
   font-size: 17px;
   margin-bottom: 4px;
 }
-.con .con-list .con-list-top .list-top-right h5 i{
+.con .con-list .con-list-top .list-top-right h5 i {
   font-style: normal;
   display: inline-block;
   width: 80%;
   height: 18px;
   overflow: hidden;
-  text-overflow:ellipsis;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 .con .con-list .con-list-top .list-top-right h5 span {
