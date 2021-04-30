@@ -308,7 +308,7 @@
         <div class="phone-huo" v-if="participate!=0">
         <img src="~/assets/phone-huo.jpg" alt="">
         <p>{{participate}}人已领</p>
-        <button class="p1" data-v="家园专享购房送手机">立即抢</button>
+        <button class="p1" data-v="允家专享购房送手机">立即抢</button>
       </div>
         <div class="bomm">
           <div class="pin-bao y1" v-show="!newimg" @click="xiang(28)">
@@ -3805,10 +3805,10 @@ export default {
         $(".weiter .t-top h6").html("抢免费专车票");
         $(".weiter .t-top p").html("精准匹配房源，免费接送一次看完好房");
       }
-       else if (type == "家园专享购房送手机") {
+       else if (type == "允家专享购房送手机") {
          $("#dingxue").html("立即去抢");
         that.position = 121;
-        $(".weiter .t-top h6").html("家园专享购房送手机");
+        $(".weiter .t-top h6").html("允家专享购房送手机");
         $(".weiter .t-top p").html("本平台成交项目即送苹果12 pro max一台，平台合计1000台手机送完为止");
       }
       $(".weiter").css("z-index", "20001");
