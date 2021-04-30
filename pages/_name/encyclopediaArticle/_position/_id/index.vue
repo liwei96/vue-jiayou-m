@@ -128,7 +128,7 @@
             验证码已发送到
             <span id="ytel">187****4376</span>，请注意查看
           </p>
-          <input type="text" placeholder="请输入验证码" />
+          <input type="text" placeholder="请输入验证码" id="ma-ll"/>
           <button class="port1">确定</button>
           <input type="hidden" id="building_name" value />
           <input type="hidden" value />
@@ -353,6 +353,24 @@ export default {
     },
     sendmsg(p) {
       this.phone = p;
+      let ip = this.ip;
+      let c = localStorage.getItem("city");
+      let pro = this.pro;
+      trend_put({
+        ip: ip,
+        tel: p,
+        city: c,
+        position: 5,
+        page: 3,
+        project: pro,
+      })
+        .then((resp) => {
+          if (resp.data.code == 200) {
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       msg({ phone: p, channel: 2 })
         .then((resp) => {
           if (resp.data.code == 200) {
@@ -388,28 +406,10 @@ export default {
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
         .then((resp) => {
+          console.log(resp)
           if (resp.data.code == 200) {
-            let ip = that.ip;
-            let c = localStorage.getItem("city");
-            let p = that.page;
-            let pro = that.pro;
-            trend_put({
-              ip: ip,
-              tel: tel,
-              city: c,
-              position: 5,
-              page: 3,
-              project: pro,
-            })
-              .then((resp) => {
-                if (resp.data.code == 200) {
-                  $(".weiter").hide();
-                  $(".m-o-succ").show();
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-              });
+            $(".weiter").hide();
+            $(".m-o-succ").show();
           } else {
             $("#ma-ll").val("");
             $("#ma-ll").attr("placeholder", "验证码不正确");
@@ -513,6 +513,8 @@ export default {
       $(".m-chang").hide();
       $(".weiter").hide();
       $(".m-o-succ").hide();
+      $(".t-b-first").show();
+      $(".t-b-second").hide();
     });
     // 接口验证码
     $(".t-b-btn2").on("click", function () {
@@ -537,8 +539,6 @@ export default {
         return;
       }
       that.check(ma);
-      $(".weiter").hide();
-      $(".m-o-succ").show();
     });
     $("#o_btn").on("click", function () {
       $(".m-o-succ").hide();

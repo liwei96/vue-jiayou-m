@@ -83,7 +83,7 @@
       <h4>本楼盘其它户型</h4>
       <ul>
         <li v-for="(item, key) in others" :key="key">
-          <router-link :to="'/' + jkl + '/HuAnalysis/' + item.id">
+          <router-link :to="'/' + jkl + '/HuAnalysis/' + item.id+'/'+one.bid">
             <img :src="item.small" alt />
             <div class="h-right">
               <h5>
@@ -402,7 +402,7 @@ export default {
       this.tel = sends;
       let that = this;
       let phone = this.tel;
-      let id = this.$route.params.pro;
+      let id = this.one.bid;
       let country = localStorage.getItem("city");
       let ip = ip_arr["ip"];
       let token = localStorage.getItem("token");

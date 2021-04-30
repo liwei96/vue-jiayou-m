@@ -1,8 +1,6 @@
 <template>
   <div class="Comment">
-    <h3>
-      <img src="~/assets/return.png" @click="goback" />楼盘点评
-    </h3>
+    <h3><img src="~/assets/return.png" @click="goback" />楼盘点评</h3>
     <div class="con">
       <h5>是否考虑购买该楼盘？</h5>
       <p>
@@ -14,38 +12,25 @@
       <div class="score">
         <p>
           综合评分
-          <span id="num">3.0</span>分
+          <span id="num">{{ num }}.0</span>分
         </p>
-        <div class="rating-stars block" id="another-rating">
-          <input
-            style="display:none;"
-            type="number"
-            readonly="readonly"
-            class="form-control rating-value"
-            name="another-rating-stars-value"
-            id="another-rating-stars-value"
-            value="3"
-          />
-          <div class="rating-stars-container">
-            <div class="rating-star">
-              <i class="fa fa-star"></i>
-            </div>
-            <div class="rating-star">
-              <i class="fa fa-star"></i>
-            </div>
-            <div class="rating-star">
-              <i class="fa fa-star"></i>
-            </div>
-            <div class="rating-star">
-              <i class="fa fa-star"></i>
-            </div>
-            <div class="rating-star">
-              <i class="fa fa-star"></i>
-            </div>
-          </div>
-        </div>
+        <van-rate
+        class="vant-ll"
+          v-model="num"
+          :size="13"
+          color="#3EA6F0"
+          void-icon="star"
+          void-color="#E8EBED"
+        />
       </div>
-      <textarea name id cols="30" rows="10" placeholder="输入您精彩评论" v-model="content"></textarea>
+      <textarea
+        name
+        id
+        cols="30"
+        rows="10"
+        placeholder="输入您精彩评论"
+        v-model="content"
+      ></textarea>
       <button @click="put">发表</button>
     </div>
     <foot-view :pinyin="jkl"></foot-view>
@@ -59,11 +44,11 @@ export default {
   asyncData(context) {
     let jkl = context.store.state.cookie.pinyin;
     return {
-      jkl: jkl
+      jkl: jkl,
     };
   },
   components: {
-    "foot-view": footView
+    "foot-view": footView,
   },
   data() {
     return {
@@ -71,24 +56,24 @@ export default {
       ip: "",
       status: "1",
       content: "",
-      num: "3",
+      num: 3,
       n: "",
-      jkl: ""
+      jkl: "",
     };
   },
   head() {
     return {
-      title:  "允家新房-楼盘点评",
+      title: "允家新房-楼盘点评",
       meta: [
         {
           name: "description",
-          content:  '允家新房'
+          content: "允家新房",
         },
         {
           name: "Keywords",
-          content:  '允家新房'
-        }
-      ]
+          content: "允家新房",
+        },
+      ],
     };
   },
   methods: {
@@ -111,39 +96,39 @@ export default {
           content: c,
           platform: 2,
           consider: s,
-          project: i
+          project: i,
         };
         comment_put(where)
-          .then(resp => {
+          .then((resp) => {
             if (resp.data.code == 200) {
-              if(sessionStorage.getItem('comment')){
-                let id = sessionStorage.getItem('comment').split('/')[3]
+              if (sessionStorage.getItem("comment")) {
+                let id = sessionStorage.getItem("comment").split("/")[3];
                 let n = localStorage.getItem("pinyin");
-                this.$router.push(`/${n}/morecomments/${id}`)
-              }else{
-                let i = this.id
+                this.$router.push(`/${n}/morecomments/${id}`);
+              } else {
+                let i = this.id;
                 let n = localStorage.getItem("pinyin");
-                this.$router.push(`/${n}/morecomments/${i}`)
+                this.$router.push(`/${n}/morecomments/${i}`);
               }
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
           });
       }
     },
     getip() {
       let ip = ip_arr["ip"];
-          // let ip = returnCitySN["cip"];
+      // let ip = returnCitySN["cip"];
       this.ip = ip;
       localStorage.getItem("ip");
     },
     goback() {
       this.$router.go(-1);
-    }
+    },
   },
   mounted() {
-    jQuery.fn.ratingStars = function(e) {
+    jQuery.fn.ratingStars = function (e) {
       var r = {
           selectors: {
             starsSelector: ".rating-stars",
@@ -151,35 +136,29 @@ export default {
             starActiveClass: "is--active",
             starHoverClass: "is--hover",
             starNoHoverClass: "is--no-hover",
-            targetFormElementSelector: ".rating-value"
-          }
+            targetFormElementSelector: ".rating-value",
+          },
         },
         t = $.extend({}, r, e),
         s = {
-          init: function(e) {
+          init: function (e) {
             s.registerEvents(e), s.loadDefaultValue(e);
           },
-          loadDefaultValue: function(e) {
-            var r = $(e)
-                .children(t.selectors.targetFormElementSelector)
-                .val(),
+          loadDefaultValue: function (e) {
+            var r = $(e).children(t.selectors.targetFormElementSelector).val(),
               s = 0;
             $.each(
-              $(e)
-                .children(t.starsSelector)
-                .children(t.starSelector),
-              function(e, a) {
+              $(e).children(t.starsSelector).children(t.starSelector),
+              function (e, a) {
                 s <= r - 1 && $(a).addClass(t.selectors.starActiveClass), s++;
               }
             );
           },
-          registerEvents: function(e) {
+          registerEvents: function (e) {
             var r = this;
             $.each(
-              $(e)
-                .children(t.starsSelector)
-                .children(t.starSelector),
-              function(t, s) {
+              $(e).children(t.starsSelector).children(t.starSelector),
+              function (t, s) {
                 $(s).on("mouseenter", $.proxy(r.onStarEnter, r, s, e)),
                   $(s).on("mouseleave", $.proxy(r.onStarLeave, r, s, e)),
                   $(s).on(
@@ -189,14 +168,12 @@ export default {
               }
             );
           },
-          onStarEnter: function(e, r) {
+          onStarEnter: function (e, r) {
             var s = $(e).index(),
               a = 0;
             $.each(
-              $(r)
-                .children(t.starsSelector)
-                .children(t.starSelector),
-              function(e, r) {
+              $(r).children(t.starsSelector).children(t.starSelector),
+              function (e, r) {
                 a <= s
                   ? $(r).addClass(t.selectors.starHoverClass)
                   : $(r).addClass(t.selectors.starNoHoverClass),
@@ -205,7 +182,7 @@ export default {
             ),
               $(r).trigger("ratingOnEnter", { ratingValue: s + 1 });
           },
-          onStarLeave: function(e, r) {
+          onStarLeave: function (e, r) {
             var s = $(e).index();
             $(r)
               .children(t.starsSelector)
@@ -217,7 +194,7 @@ export default {
                 .removeClass(t.selectors.starNoHoverClass),
               $(r).trigger("ratingOnLeave", { ratingValue: s + 1 });
           },
-          onStarSelected: function(e, r) {
+          onStarSelected: function (e, r) {
             var s = $(e).index();
             $(r)
               .children(t.starsSelector)
@@ -225,10 +202,8 @@ export default {
               .removeClass(t.selectors.starActiveClass);
             var a = 0;
             $.each(
-              $(r)
-                .children(t.starsSelector)
-                .children(t.starSelector),
-              function(e, r) {
+              $(r).children(t.starsSelector).children(t.starSelector),
+              function (e, r) {
                 a <= s && $(r).addClass(t.selectors.starActiveClass), a++;
               }
             ),
@@ -236,9 +211,9 @@ export default {
                 .children(t.selectors.targetFormElementSelector)
                 .val(s + 1),
               $(r).trigger("ratingChanged", { ratingValue: s + 1 });
-          }
+          },
         };
-      return this.each(function() {
+      return this.each(function () {
         s.init($(this));
       });
     };
@@ -253,27 +228,24 @@ export default {
         starActiveClass: "is--active",
         starHoverClass: "is--hover",
         starNoHoverClass: "is--no-hover",
-        targetFormElementSelector: ".rating-value"
-      }
+        targetFormElementSelector: ".rating-value",
+      },
     };
 
     $(".rating-stars").ratingStars(ratingOptions);
-    $(".rating-stars").on("ratingChanged", function(ev, data) {
+    $(".rating-stars").on("ratingChanged", function (ev, data) {
       // dome something
       let nums = data.ratingValue;
       that.num = nums;
       nums = nums + ".0";
       $("#num").html(nums);
     });
-    $(".btn").on("click", function() {
-      $(this)
-        .addClass("tab")
-        .siblings("span")
-        .removeClass("tab");
+    $(".btn").on("click", function () {
+      $(this).addClass("tab").siblings("span").removeClass("tab");
       let n = $(this).attr("data-v");
       that.status = n;
     });
-  }
+  },
 };
 </script>
 <style scoped>
@@ -281,7 +253,7 @@ export default {
   padding: 0;
   margin: 0;
 }
-#Foot{
+#Foot {
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -341,22 +313,11 @@ h3 img {
 }
 .con .score {
   margin-bottom: 30px;
+  display: flex;
+  align-items: center;
 }
-.rating-stars .rating-stars-container .rating-star {
-  display: inline-block;
-  font-size: 18px;
-  color: #e8ebed;
-  cursor: pointer;
-  padding-right: 3px;
-}
-
-.rating-stars .rating-stars-container .rating-star.is--active,
-.rating-stars .rating-stars-container .rating-star.is--hover {
-  color: #59c1ff;
-}
-.rating-stars {
-  display: inline-block;
-  margin-left: 10px;
+.con .score .vant-ll {
+  display: flex;
 }
 .con .score p {
   color: #919499;

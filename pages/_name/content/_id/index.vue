@@ -255,7 +255,8 @@
             <span>{{min}}</span>:
             <span>{{second}}</span>
           </p>-->
-          <button @click="huomsg = true">活动规则</button>
+          <button @click="huomsg = true" v-if="participate==0">活动规则</button>
+          <button @click="huomsg1 = true" v-if="participate!=0">活动规则</button>
         </nav>
         <div class="hong-tit" v-if="activity.length != 0">
           <span>返乡置业</span>1亿购房补贴大放送
@@ -275,7 +276,7 @@
             </p>
           </div>
         </div>
-        <div class="top" v-if="activity.length == 0">
+        <div class="top" v-if="activity.length == 0 && participate==0">
           <img src="~/assets/tuna-hased.png" alt />
           <div class="pin-bao" @click="xiangs(22)">领取优惠</div>
           <p class="pin-msg">{{ 85 + 55 }}人已领取</p>
@@ -304,6 +305,11 @@
             </div>
           </div> -->
         </div>
+        <div class="phone-huo" v-if="participate!=0">
+        <img src="~/assets/phone-huo.jpg" alt="">
+        <p>{{participate}}人已领</p>
+        <button class="p1" data-v="家园专享购房送手机">立即抢</button>
+      </div>
         <div class="bomm">
           <div class="pin-bao y1" v-show="!newimg" @click="xiang(28)">
             抢优惠券
@@ -345,6 +351,18 @@
               结算方式：提供已实名的支付宝账户给与您对接的允家咨询师，规定时间内会将优惠费用打至该账户。
             </p>
             <p>详细活动方案请致允家电客服电话：4007186686</p>
+            <p>注：活动最终解释权归允家所有</p>
+          </div>
+        </div>
+      </div>
+      <div class="huo-msg huo-msg1" v-show="huomsg1">
+        <div class="msg-con">
+          <h4>活动规则</h4>
+          <img @click="huomsg1 = false" src="~/assets/w-del.png" alt />
+          <div>
+            <p>
+              即日起，凡是通过本线上营销中心成交的本项目，即送苹果12 pro max一台，平台合计1000台手机送完为止。具体活动详情来电咨询
+            </p>
             <p>注：活动最终解释权归允家所有</p>
           </div>
         </div>
@@ -1033,6 +1051,7 @@
           <img src="~/assets/talkimg.png" alt />
           在线咨询
           <span v-show="wsshow">{{ wsnum }}</span>
+          <span v-show="!wsshow">1</span>
         </p>
         <p id="m_shou" class="havenew" @click="gotalk" v-if="totalnum > 0">
           <img src="~/assets/talking.gif" alt />
@@ -1516,6 +1535,7 @@ export default {
       return {
         jkl: res1.common.city.pin,
         call: res1.common.phone,
+        participate: res1.participate,
         la: res1.data.latitude,
         ln: res1.data.longitude,
         topnum: res1.data.imgs_num,
@@ -1721,6 +1741,7 @@ export default {
       pois: [],
       mapimg: require("~/assets/path.png"),
       huomsg: false,
+      huomsg1: false,
       ws: false,
       isagree: true,
       isagrees: true,
@@ -2987,11 +3008,13 @@ export default {
         });
         wx.ready(function () {
           if (that.iswxsid) {
+            let scid = $cookies.get('scid')
+            console.log('http://ll.edefang.net/front/user/getcode_front?scid='+scid)
             if (wx.onMenuShareAppMessage) {
               wx.onMenuShareAppMessage({
                 title: that.share.config.title, // 分享标题
                 desc: that.share.config.description, // 分享描述
-                link: window.location.href, // 分享链接
+                link: 'http://ll.edefang.net/front/user/getcode_front?scid='+scid, // 分享链接
                 imgUrl: that.share.config.img, // 分享图标
                 type: "", // 分享类型,music、video或link，不填默认为link
                 dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
@@ -3005,7 +3028,7 @@ export default {
               });
               wx.onMenuShareTimeline({
                 title: that.share.config.title, // 分享标题
-                link: window.location.href, // 分享链接
+                link: 'http://ll.edefang.net/front/user/getcode_front?scid='+scid, // 分享链接
                 imgUrl: that.share.config.img, // 分享图标
                 success: function () {
                   // 用户点击了分享后执行的回调函数
@@ -3015,7 +3038,7 @@ export default {
               wx.updateAppMessageShareData({
                 title: that.share.config.title, // 分享标题
                 desc: that.share.config.description, // 分享描述
-                link: window.location.href, // 分享链接
+                link: 'http://ll.edefang.net/front/user/getcode_front?scid='+scid, // 分享链接
                 imgUrl: that.share.config.img, // 分享图标
                 success: function () {
                   // 设置成功
@@ -3024,7 +3047,7 @@ export default {
               });
               wx.updateTimelineShareData({
                 title: that.share.config.title, // 分享标题
-                link: window.location.href, // 分享链接
+                link: 'http://ll.edefang.net/front/user/getcode_front?scid='+scid, // 分享链接
                 imgUrl: that.share.config.img, // 分享图标
                 success: function () {
                   // 设置成功
@@ -3066,6 +3089,7 @@ export default {
               }, 10000);
             }
           } else {
+            console.log('is fail')
             if (wx.onMenuShareAppMessage) {
               wx.onMenuShareAppMessage({
                 title: that.title, // 分享标题
@@ -3699,7 +3723,7 @@ export default {
 
     $(".p1").on("click", function () {
       window.type = $(this).attr("data-v");
-
+      $("#dingxue").html("立即订阅");
       if (type == "最新变价通知") {
         that.position = 3;
         $(".weiter .t-top h6").html(type);
@@ -3780,6 +3804,12 @@ export default {
         that.position = 12;
         $(".weiter .t-top h6").html("抢免费专车票");
         $(".weiter .t-top p").html("精准匹配房源，免费接送一次看完好房");
+      }
+       else if (type == "家园专享购房送手机") {
+         $("#dingxue").html("立即去抢");
+        that.position = 121;
+        $(".weiter .t-top h6").html("家园专享购房送手机");
+        $(".weiter .t-top p").html("本平台成交项目即送苹果12 pro max一台，平台合计1000台手机送完为止");
       }
       $(".weiter").css("z-index", "20001");
       $(".m-chang").show();
@@ -4070,6 +4100,36 @@ body {
   background: url("~assets/b1.png") no-repeat;
   background-size: 100%;
 }
+.phone-huo {
+    position: relative;
+    margin-top: .875rem;
+    img {
+      width: 100%;
+      margin: 0;
+    }
+    p {
+      position: absolute;
+      font-size: .75rem;
+      color: #fff;
+      right: 2.3125rem;
+      bottom: .875rem;
+    }
+    button {
+      width: 4rem;
+      height: 1.5rem;
+      border-radius: .75rem;
+      background-color: #fff;
+      text-align: center;
+      line-height: 1.5rem;
+      border: 0;
+      outline: none;
+      position: absolute;
+      right: 2rem;
+      top: 1.875rem;
+      color: #153870;
+      font-size: .75rem;
+    }
+  }
 .hui-left {
   padding-left: 1rem;
   padding-top: 0.625rem;
@@ -5007,6 +5067,9 @@ body {
   padding: 1.5625rem;
   background-color: #fff;
   z-index: 300;
+}
+.huo-msg1 .msg-con {
+  top: 37vh;
 }
 .huo-msg .msg-con div {
   max-height: 280px;

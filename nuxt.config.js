@@ -52,10 +52,10 @@ export default {
         rel: 'stylesheet',
         href: '//at.alicdn.com/t/font_1566358_0x5fpl1pct4s.css'
       },
-      {
-        rel: 'stylesheet',
-        href: '//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css'
-      },
+      // {
+      //   rel: 'stylesheet',
+      //   href: '//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css'
+      // },
       {
         rel: 'stylesheet',
         href: '//at.alicdn.com/t/font_1416845_qauhw48dee.css'
