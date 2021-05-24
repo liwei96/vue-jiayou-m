@@ -26,9 +26,11 @@ axios.interceptors.request.use(function (config) {
   if (process.server == false && config.method == 'post') {
     let kid = $cookies.get('kid') ? $cookies.get('kid') : ''
     let other = $cookies.get('other') ? $cookies.get('other') : ''
-    config.data.kid = kid
-    config.data.other = other
-    config.data.platform = 2
+    if (config.data) {
+      config.data.kid = kid
+      config.data.other = other
+      config.data.platform = 2
+    }
   }
   if (process.server == false && config.method == 'get') {
     let kid = $cookies.get('kid') ? $cookies.get('kid') : ''
@@ -633,5 +635,15 @@ export const check = (name) => {
     method: 'post',
     url: '/front/flow/sure',
     data: name
+  })
+}
+export const temore = (name) => {
+  return axios.request({
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    method: 'post',
+    url: '/yunjia/area/buidlings',
+    params: name
   })
 }

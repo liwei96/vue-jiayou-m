@@ -11,8 +11,14 @@ export default function ({
   $axios.onRequest(config => {
     if(config.method == 'get'){
       config.params.uuid = store.state.cookie.uuid
-    }else{
-      config.data.uuid = store.state.cookie.uuid
+      config.params.pinyin = store.state.pinyin
+    } else {
+      if (config.data) {
+        config.data.uuid = store.state.cookie.uuid
+      } else {
+        config.params.uuid = store.state.cookie.uuid
+      }
+      
     }
       return config
   })

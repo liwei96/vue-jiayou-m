@@ -138,6 +138,76 @@ export default ({
         $cookies.set('city', 129)
       }
       store.state.city = 129
+        break;
+      case 'kunming':
+      if (process.server == false) {
+        localStorage.setItem('city', 291)
+        $cookies.set('city', 291)
+      }
+      store.state.city = 291
+        break;
+      case 'huangshan':
+      if (process.server == false) {
+        localStorage.setItem('city', 206)
+        $cookies.set('city', 206)
+      }
+      store.state.city = 206
+      break;
+      case 'suzhou':
+      if (process.server == false) {
+        localStorage.setItem('city', 262)
+        $cookies.set('city', 262)
+      }
+      store.state.city = 262
+      break;
+      case 'shanghai':
+      if (process.server == false) {
+        localStorage.setItem('city', 273)
+        $cookies.set('city', 273)
+      }
+      store.state.city = 273
+      break;
+      case 'xishuangbanna':
+      if (process.server == false) {
+        localStorage.setItem('city', 306)
+        $cookies.set('city', 306)
+      }
+      store.state.city = 306
+      break;
+      case 'yangjiang':
+      if (process.server == false) {
+        localStorage.setItem('city', 310)
+        $cookies.set('city', 310)
+      }
+      store.state.city = 310
+      break;
+      case 'qinzhou':
+      if (process.server == false) {
+        localStorage.setItem('city', 316)
+        $cookies.set('city', 316)
+      }
+      store.state.city = 316
+      break;
+      case 'huizhou':
+      if (process.server == false) {
+        localStorage.setItem('city', 321)
+        $cookies.set('city', 321)
+      }
+      store.state.city = 321
+      break;
+      case 'nanning':
+      if (process.server == false) {
+        localStorage.setItem('city', 327)
+        $cookies.set('city', 327)
+      }
+      store.state.city = 327
+      break;
+      case 'wenchang':
+      if (process.server == false) {
+        localStorage.setItem('city', 341)
+        $cookies.set('city', 341)
+      }
+      store.state.city = 341
       break;
     }
     // let city = localStorage.getItem('city')

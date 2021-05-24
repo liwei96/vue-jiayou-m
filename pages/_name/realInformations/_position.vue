@@ -11,7 +11,7 @@
       <div class="swiper-topimg">
         <div class="swiper-wrapper">
           <div class="swiper-slide" v-for="(item, key) in tops" :key="key">
-            <nuxt-link :to="'/' + jkl + '/realinformations/' + item.id">
+            <nuxt-link :to="'/' + jkl + '/encyclopediaArticle/' + navnum + '/' + item.id">
               <img :src="item.img" :alt="item.title" />
               <p>{{ item.title }}</p>
             </nuxt-link>
@@ -110,6 +110,8 @@ export default {
         title: res1.common.header.title,
         description: res1.common.header.description,
         keywords: res1.common.header.keywords,
+        cityid: res1.common.city_info.current.area_id,
+        cityname: res1.common.city_info.current.short,
       };
     } catch (err) {
       console.log("errConsole========:", err);
@@ -207,6 +209,9 @@ export default {
     },
   },
   mounted() {
+    this.$store.commit('setcity', this.cityid)
+    $cookies.set("city",this.cityid);
+    localStorage.setItem("cityname", this.cityname);
     let that = this;
     var mySwiper1 = new Swiper(".swiper-topimg", {
       slidesPerView: 1.3,

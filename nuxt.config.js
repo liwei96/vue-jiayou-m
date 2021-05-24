@@ -93,6 +93,10 @@ export default {
       ssr: false
     },
     {
+      src: '~plugins/toast',
+      ssr: false
+    },
+    {
       src: '~plugins/map',
       ssr: false
     },
@@ -241,6 +245,13 @@ export default {
       changeOrigin: true, // 是否跨域
       pathRewrite: {
         "^/jy": "/jy" // 去掉接口地址中的api字符串
+      }
+    },
+    "/yunjia": {
+      target: "http://java.edefang.net/", // 重新映射的新地址 
+      changeOrigin: true, // 是否跨域
+      pathRewrite: {
+        "^/yunjia": "/yunjia" // 去掉接口地址中的api字符串
       }
     }
   },

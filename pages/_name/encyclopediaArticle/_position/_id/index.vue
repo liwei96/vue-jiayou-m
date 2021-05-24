@@ -213,6 +213,8 @@ export default {
         // type: res.article.source_type,
         source: res.article.source,
         time: res.article.time,
+        cityid: res.common.city_info.current.area_id,
+        cityname: res.common.city_info.current.short,
         title: res.common.header.title,
         keywords: res.common.header.keywords,
         description: res.common.header.description,
@@ -497,6 +499,9 @@ export default {
     },
   },
   mounted() {
+    this.$store.commit('setcity', this.cityid)
+    $cookies.set("city",this.cityid);
+    localStorage.setItem("cityname", this.cityname);
     var ua = navigator.userAgent.toLowerCase();
     if (ua.match(/MicroMessenger/i) == "micromessenger") {
       this.get();

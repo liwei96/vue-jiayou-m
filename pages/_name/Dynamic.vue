@@ -150,6 +150,8 @@ export default {
         title: res.common.header.title,
         description: res.common.header.description,
         keywords: res.common.header.keywords,
+        cityid: res.common.city.id,
+        cityname: res.common.city.name
       };
     } catch (err) {
       console.log("errConsole========:", err);
@@ -362,6 +364,9 @@ export default {
     },
   },
   mounted() {
+    this.$store.commit('setcity', this.cityid)
+    $cookies.set("city",this.cityid);
+    localStorage.setItem("cityname", this.cityname);
     this.baoming = localStorage.getItem("phone");
     this.start_data();
     let that = this;

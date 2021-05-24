@@ -199,6 +199,8 @@ export default {
         title: res.common.header.title,
         description: res.common.header.description,
         keywords: res.common.header.keywords,
+        cityid: res.common.city_info.current.area_id,
+        cityname: res.common.city_info.current.short,
       };
     } catch (err) {
       console.log("errConsole========:", err);

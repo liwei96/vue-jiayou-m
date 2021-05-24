@@ -116,7 +116,9 @@ export default {
       recommends: res.recommends,
       title:res1.common.header.title,
       description:res1.common.header.description,
-      keywords:res1.common.header.keywords
+      keywords:res1.common.header.keywords,
+      cityid: res1.common.city_info.current.area_id,
+        cityname: res1.common.city_info.current.short,
     };
   },
   head() {
@@ -185,6 +187,9 @@ export default {
     },
   },
   mounted(){
+    this.$store.commit('setcity', this.cityid)
+    $cookies.set("city",this.cityid);
+    localStorage.setItem("cityname", this.cityname);
     window.addEventListener("scroll", this.getmore);
   },
   beforeDestroy() {

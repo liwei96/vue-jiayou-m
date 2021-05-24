@@ -304,7 +304,6 @@ export default {
       console.log(name)
       this.n=localStorage.getItem('pinyin');
     } 
-    
   },
   methods: {
     handler({ BMap, map }) {

@@ -922,6 +922,10 @@ export default {
               }
             }
             back.data = data;
+            if (!back.data.city_info) {
+              back.data.city_info= {}
+            }
+            // console.log(back)
             return back;
           }),
       ]);
@@ -1143,10 +1147,11 @@ export default {
       localStorage.setItem("ip", ip);
       let pin = this.pinyin;
       let cityname = this.cityname;
-      if (pin != name) {
-        localStorage.setItem("pinyin", pin);
-        window.location.href = "/" + pin;
-      }
+      console.log(pin,cityname)
+      // if (pin != name) {
+      //   localStorage.setItem("pinyin", pin);
+      //   window.location.href = "/" + pin;
+      // }
       let city = this.city;
       $cookies.set("city", city);
       localStorage.setItem("city", city);
@@ -1278,6 +1283,9 @@ export default {
     },
   },
   mounted() {
+    this.$store.commit('setcity', this.city)
+    $cookies.set("city",this.city);
+    localStorage.setItem("cityname", this.cityname);
     $cookies.set("ip", ip_arr["ip"]);
     let h = $(".Index").height();
     if (h < 700) {

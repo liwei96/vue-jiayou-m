@@ -773,9 +773,9 @@
         </div>
         <button class="p1" data-v="获取详细周边配套">获取详细周边配套</button>
       </div>
-      <div class="m-line"></div>
+      <div class="m-line" v-if="trend_price1.length"></div>
       <!-- 房价趋势 -->
-      <div class="m-trend">
+      <div class="m-trend" v-if="trend_price1.length">
         <h4>房价趋势</h4>
         <div id="pic"></div>
         <div class="m-mark">
@@ -792,9 +792,9 @@
         </p>
         <button class="p1" data-v="最新房价趋势解读">最新房价趋势解读</button>
       </div>
-      <div class="m-line"></div>
+      <div class="m-line" v-if="compares.length"></div>
       <!-- 楼盘对比 -->
-      <div class="m-contrast">
+      <div class="m-contrast" v-if="compares.length">
         <h4>楼盘对比</h4>
         <div class="swiper-pk">
           <div class="swiper-wrapper">
@@ -907,9 +907,9 @@
           </nuxt-link>
         </ul>
       </div>
-      <div class="m-line"></div>
+      <div class="m-line" v-if="same_price.length"></div>
       <!-- 同价位、区位 -->
-      <div class="m-tui">
+      <div class="m-tui" v-if="same_price.length">
         <div class="m-nav">
           <p class="n-active" @click="n1s">
             同价位楼盘
@@ -1083,7 +1083,7 @@
         </button>
         <a :href="share.staff ? 'tel:' + share.staff.tel : ''">
           <button class="wxtel">
-            <img src="~/assets/wxtel.png" alt />
+            <img src="~/assets/navtel.png" alt />
             电话咨询
           </button>
         </a>
@@ -3090,12 +3090,31 @@ export default {
             }
           } else {
             console.log('is fail')
-            if (wx.onMenuShareAppMessage) {
+            if (wx.updateAppMessageShareData) {
+              wx.updateAppMessageShareData({
+                title: that.share.config.title, // 分享标题
+                desc: that.share.config.description, // 分享描述
+                link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: that.share.config.img, // 分享图标
+                success: function () {
+                  // 设置成功
+                  // alert('1.40')
+                },
+              });
+              wx.updateTimelineShareData({
+                title: that.share.config.title, // 分享标题
+                link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: that.share.config.img, // 分享图标
+                success: function () {
+                  // 设置成功
+                },
+              });
+            } else {
               wx.onMenuShareAppMessage({
-                title: that.title, // 分享标题
-                desc: that.keywords, // 分享描述
+                title: that.share.config.title, // 分享标题
+                desc: that.share.config.description, // 分享描述
                 link: window.location.href, // 分享链接
-                imgUrl: that.building.img, // 分享图标
+                imgUrl: that.share.config.img, // 分享图标
                 type: "", // 分享类型,music、video或link，不填默认为link
                 dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
                 success: function () {
@@ -3104,25 +3123,6 @@ export default {
                 },
                 cancel: function () {
                   // 用户取消分享后执行的回调函数
-                },
-              });
-            } else {
-              wx.updateAppMessageShareData({
-                title: that.title, // 分享标题
-                desc: that.keywords, // 分享描述
-                link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                imgUrl: that.building.img, // 分享图标
-                success: function () {
-                  // 设置成功
-                  // alert('1.40')
-                },
-              });
-              wx.updateTimelineShareData({
-                title: that.title, // 分享标题
-                link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                imgUrl: that.building.img, // 分享图标
-                success: function () {
-                  // 设置成功
                 },
               });
             }
