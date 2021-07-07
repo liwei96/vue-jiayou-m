@@ -73,8 +73,8 @@
             </div>
             <div id="swiper-pagination1"></div>
           </div>-->
-          <p class="lun-xiao">效果图</p>
-          <p class="lun-xiao">户型图</p>
+          <p class="lun-xiao active">效果图</p>
+          <p class="lun-hu">户型图</p>
           <span id="lnum">共{{ topnum }}张</span>
         </div>
       </div>
@@ -96,12 +96,6 @@
       <div class="tuan-msg" v-show="tuan == 1">
         <div class="tar">
           <div class="left">
-            <!-- <h5>
-              已售：
-              <span>{{group_buy.saled_num}}</span>
-              套&nbsp;&nbsp;&nbsp;距下一期优惠差{{group_buy.remain_num}}套
-            </h5>
-            <p>(每多5套可优惠1000元最高优惠5000元)</p>-->
             <img src="~/assets/tar-left.png" alt />
           </div>
           <div class="right">
@@ -117,10 +111,12 @@
       </div>
       <div class="m-incro">
         <h3>{{ building.name }}</h3>
-
         <div class="m-ic-icons">
           <span class="m-zai">{{ building.sale_state }}</span>
-          <span class="m-jing" v-if="building.railways.length">{{
+          <span>{{
+            building.type
+          }}</span>
+          <span v-if="building.railways.length">{{
             building.railways[0]
           }}</span>
           <!-- <span v-show="building.railway">{{ building.railway }}</span> -->
@@ -129,15 +125,6 @@
           }}</span>
           <strong v-show="tuan == 1">限时优惠</strong>
           <div class="build-icons" v-show="!iswx">
-            <div class="icons-left">
-              <img
-                src="~/assets/contrast.png"
-                alt
-                @click="pks($event)"
-                :data-v="id"
-              />
-              PK
-            </div>
             <div>
               <img
                 id="fork"
@@ -154,7 +141,6 @@
                 @click="collections($event)"
                 v-show="forknum === 1"
               />
-              收藏
             </div>
           </div>
           <div class="wxshare" v-show="iswx" @click="goshare">
@@ -165,6 +151,9 @@
             <img src="~/assets/contrast.png" alt />
             <i class="m_shou01" @click="pks($event)" :data-v="id">楼盘PK</i>
           </i>-->
+        </div>
+        <div class="price">
+
         </div>
         <ul class="m-jtop">
           <li>
@@ -624,17 +613,17 @@
                   :src="q.my_like == 0 ? beforeck : cked"
                   :type="q.my_like"
                   :data-v="q.id"
-                  :data-n="q.number"
+                  :data-n="q.like_count"
                   data-y="1"
                   @click="agree($event)"
                 />
                 <span
                   :type="q.my_like"
                   :data-v="q.id"
-                  :data-n="q.number"
+                  :data-n="q.like_count"
                   data-y="1"
                   @click="agrees($event)"
-                  >有用({{ q.number ? q.number : 0 }})</span
+                  >有用({{ q.like_count ? q.like_count : 0 }})</span
                 >
               </span>
             </div>
@@ -789,7 +778,7 @@
                     id="agree"
                     :data-v="v.id"
                     :type="v.my_like"
-                    :data-n="v.like_num"
+                    :data-n="v.like_count"
                     @click="agree($event)"
                     data-y="2"
                     :src="v.my_like == 0 ? beforeck : cked"
@@ -797,10 +786,10 @@
                   <span
                     :data-v="v.id"
                     :type="v.my_like"
-                    :data-n="v.like_num"
+                    :data-n="v.like_count"
                     data-y="2"
                     @click="agrees($event)"
-                    >有用({{ v.like_num }})</span
+                    >有用({{ v.like_count }})</span
                   >
                 </p>
               </h6>
@@ -1327,7 +1316,7 @@ export default {
           data.scid = context.store.state.cookie.scid;
         }
       }
-      data.userId = context.store.state.userId;
+      data.userId = context.store.state.userid;
       let jkl = context.params.name;
       let [res2] = await Promise.all([
         context.$axios
@@ -4019,9 +4008,19 @@ export default {
     position: absolute;
     left: 8.4375rem;
     bottom: .625rem;
-    z-index: 2;
+    z-index: 11;
     text-align: center;
     line-height: 1.25rem;
+    background-color: #fff;
+    color: #646566;
+    font-size: .625rem;
+  }
+  .lun-hu {
+    left: 12.0625rem;
+  }
+  .active {
+    background-color: #3EACF0;
+    color: #fff
   }
 }
 html {
