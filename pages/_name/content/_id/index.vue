@@ -118,10 +118,14 @@
         <h3>{{ building.name }}</h3>
 
         <div class="m-ic-icons">
-          <span class="m-zai">{{ building.status }}</span>
-          <span class="m-jing">{{ building.decorate }}</span>
+          <span class="m-zai">{{ building.sale_state }}</span>
+          <span class="m-jing" v-if="building.railways.length">{{
+            building.railways[0]
+          }}</span>
           <!-- <span v-show="building.railway">{{ building.railway }}</span> -->
-          <span>{{ building.feature.value }}</span>
+          <span v-if="building.features.length">{{
+            building.features[0]
+          }}</span>
           <strong v-show="tuan == 1">限时优惠</strong>
           <div class="build-icons" v-show="!iswx">
             <div class="icons-left">
@@ -188,7 +192,9 @@
           <ul>
             <li>
               户型：
-              <span class="m-pric">{{ building.houses }}</span>
+              <span class="m-pric" v-if="building.house_types.length">{{
+                building.house_types.join(",")
+              }}</span>
             </li>
             <li>
               装修：
@@ -202,7 +208,7 @@
             </li>
             <li>
               开盘：
-              <span>{{ building.firstopentime }}</span>
+              <span>{{ building.open_time }}</span>
             </li>
           </ul>
           <nuxt-link :to="'/' + jkl + '/detail/' + id">
@@ -255,8 +261,12 @@
             <span>{{min}}</span>:
             <span>{{second}}</span>
           </p>-->
-          <button @click="huomsg = true" v-if="participate==0">活动规则</button>
-          <button @click="huomsg1 = true" v-if="participate!=0">活动规则</button>
+          <button @click="huomsg = true" v-if="participate == 0">
+            活动规则
+          </button>
+          <button @click="huomsg1 = true" v-if="participate != 0">
+            活动规则
+          </button>
         </nav>
         <div class="hong-tit" v-if="activity.length != 0">
           <span>返乡置业</span>1亿购房补贴大放送
@@ -276,64 +286,28 @@
             </p>
           </div>
         </div>
-        <div class="top" v-if="activity.length == 0 && participate==0">
+        <div class="top" v-if="activity.length == 0 && !participate">
           <img src="~/assets/tuna-hased.png" alt />
           <div class="pin-bao" @click="xiangs(22)">领取优惠</div>
-          <p class="pin-msg">{{ 85 + 55 }}人已领取</p>
+          <p class="pin-msg">{{ num1 }}人已领取</p>
           <p class="pin-left">
             售楼处专供允家平台客户<span>（{{ endtime.substr(5) }}截止）</span>
           </p>
-          <!-- <img
-            src="~/assets/tuna-hased.jpg"
-            alt
-            class="hased"
-            v-show="newimg"
-          />
-          <div class="bom">
-            <div class="trend-con1">
-              <div class="swiper-container10">
-                <div class="swiper-wrapper">
-                  <div
-                    class="swiper-slide"
-                    v-for="(trend, key) in group_buy.joined_tels"
-                    :key="key"
-                  >
-                    {{ trend }}领取了优惠券
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </div>
-        <div class="phone-huo" v-if="participate!=0">
-        <img src="~/assets/phone-huo.jpg" alt="">
-        <p>{{participate}}人已领</p>
-        <button class="p1" data-v="允家专享购房送手机">立即抢</button>
-      </div>
+        <div class="phone-huo" v-if="participate != 0 && participate">
+          <img src="~/assets/phone-huo.jpg" alt="" />
+          <p>{{ participate }}人已领</p>
+          <button class="p1" data-v="允家专享购房送手机">立即抢</button>
+        </div>
         <div class="bomm">
           <div class="pin-bao y1" v-show="!newimg" @click="xiang(28)">
             抢优惠券
           </div>
-          <p class="pin-msg ym">{{ 256 }}人已抢到</p>
+          <p class="pin-msg ym">{{ num2 }}人已抢到</p>
           <p class="pin-time">
-            免费专车1对1服务限时券<span>（剩余{{ 256 - 123 }}张）</span>
+            免费专车1对1服务限时券<span>（剩余{{ num3 }}张）</span>
           </p>
           <img src="~/assets/youhui.png" alt />
-          <!-- <div class="bom">
-            <div class="trend-con1">
-              <div class="swiper-container10">
-                <div class="swiper-wrapper">
-                  <div
-                    class="swiper-slide"
-                    v-for="(trend, key) in sign.info"
-                    :key="key"
-                  >
-                    {{ trend }}领取了优惠券
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </div>
       </div>
       <div class="huo-msg" v-show="huomsg">
@@ -361,7 +335,8 @@
           <img @click="huomsg1 = false" src="~/assets/w-del.png" alt />
           <div>
             <p>
-              即日起，凡是通过本线上营销中心成交的本项目，即送苹果12 pro max一台，平台合计1000台手机送完为止。具体活动详情来电咨询
+              即日起，凡是通过本线上营销中心成交的本项目，即送苹果12 pro
+              max一台，平台合计1000台手机送完为止。具体活动详情来电咨询
             </p>
             <p>注：活动最终解释权归允家所有</p>
           </div>
@@ -373,11 +348,6 @@
         <span>刚需楼盘榜第4名</span>
         <img class="totop" src="~/assets/m-go.png" alt />
       </div>
-
-      <!-- <div class="banner" v-if="banner.length != 0" @click="gobanner">
-        <img :src="banner.img" alt />
-      </div>
-      <div class="m-line" v-if="banner.length != 0"></div> -->
       <div class="m-dong">
         <h3 id="m_dong">
           楼盘动态
@@ -389,22 +359,28 @@
           </nuxt-link>
         </h3>
 
-        <div class="m-tai m-d">
+        <div
+          :class="item.state == '否' ? 'm-tai m-d' : 'm-jia m-d'"
+          v-for="item in nowdong"
+          :key="item.id"
+        >
           <span>
-            {{ nowdong.time }}
-            <i>最新</i>
+            {{ item.time }}
+            <i v-if="item.state == '否'">最新</i>
+            <i v-if="item.state == '是'">加推</i>
           </span>
-          <h4>最新房源动态</h4>
-          <p>{{ nowdong.content }}</p>
+          <h4 v-if="item.state == '否'">最新房源动态</h4>
+          <h4 v-if="item.state == '是'">最新加推楼盘</h4>
+          <p>{{ item.content }}</p>
         </div>
-        <div class="m-jia m-d" v-show="tui">
+        <!-- <div class="m-jia m-d" v-show="tui">
           <span>
             {{ tui.time }}
             <i>加推</i>
           </span>
           <h4>最新加推楼盘</h4>
           <p>{{ tui.content }}</p>
-        </div>
+        </div> -->
 
         <div class="t-o o1"></div>
         <div class="t-o o2" v-show="tui"></div>
@@ -469,14 +445,14 @@
                 >
                   <div class="top">
                     <img
-                      :src="h.img ? h.img : defaultimg"
+                      :src="h.small ? h.small : defaultimg"
                       :alt="building.name + '户型图'"
                       :title="building.name + '户型图'"
                     />
                   </div>
                   <h5>
                     {{ h.title }}
-                    <span>{{ h.status }}</span>
+                    <span>{{ h.state }}</span>
                   </h5>
                   <p class="jian">
                     建面 {{ h.area }}&nbsp;&nbsp;&nbsp;类型 {{ h.type }}
@@ -494,12 +470,6 @@
         </div>
         <!-- <button class="p1" data-v="了解详细户型">了解详细户型</button> -->
       </div>
-      <!-- <div class="m-line visible-xs-block .visible-sm-block"></div>
-      <div class="m-you visible-xs-block .visible-sm-block">
-        <img class="m-y-g" src="~/assets/new-yuyue1.png" />
-        <button class="p1" data-v="预约看房">预约看房</button>
-        <span>876人已领取</span>
-      </div> -->
 
       <div class="m-line"></div>
 
@@ -523,7 +493,7 @@
                 <div class="tou-con">
                   <h4>投资分析</h4>
                   <p v-for="(v, key) in invest" :key="key">
-                    {{ key + 1 }}、{{ v.content }}
+                    {{ key + 1 }}、{{ v }}
                   </p>
                 </div>
                 <div class="tou-img">
@@ -536,7 +506,7 @@
                 <div class="tou-con">
                   <h4>宜居分析</h4>
                   <p v-for="(v, key) in live" :key="key">
-                    {{ key + 1 }}、{{ v.content }}
+                    {{ key + 1 }}、{{ v }}
                   </p>
                 </div>
                 <div class="tou-img">
@@ -551,18 +521,6 @@
         <button class="p1" data-v="获取楼盘分析资料">获取楼盘分析资料</button>
       </div>
       <div class="m-line" v-show="tuan == 1"></div>
-      <!-- <div class="tuan-qiang" v-show="tuan==1">
-        <img src="~/assets/tuan-qiang.png" alt />
-        <div class="q-con">
-          <h6>省钱买好房拼团享优惠</h6>
-          <p>购房享1000元优惠最高5000元</p>
-        </div>
-        <div class="q-right">
-          <button @click="xiang(25)">马上抢</button>
-          <p>{{group_buy.snatched_num}}已抢</p>
-        </div>
-      </div>
-      <div class="m-line visible-xs-block .visible-sm-block"></div>-->
       <div class="m-ling">
         <h3>
           领取免费地图
@@ -587,8 +545,8 @@
         </div>
         <button class="p1" data-v="领取免费地图">我要领取地图</button>
       </div>
-      <div class="m-line" v-if="chengjiao.length > 0 && isnow"></div>
-      <div class="m-huo" v-if="chengjiao.length > 0 && isnow">
+      <div class="m-line" v-if="chengjiao"></div>
+      <div class="m-huo" v-if="chengjiao">
         <h3>
           查询最新成交价
           <p>
@@ -607,7 +565,7 @@
                 <th>成交金额</th>
               </tr>
               <tr v-for="(dd, key) in chengjiao" :key="key">
-                <td>{{ dd.date }}</td>
+                <td>{{ dd.time }}</td>
                 <td>{{ dd.num }}套</td>
                 <td>***万</td>
               </tr>
@@ -636,7 +594,7 @@
           暂无问答，快来提问吧
         </p>
         <div class="m-d-content">
-          <template v-show="questions.length == 0 ? false : true">
+          <template v-if="questions.length != 0">
             <div class="m-w-content" v-for="(q, key) in questions" :key="key">
               <nuxt-link :to="'/' + jkl + '/questions/' + q.id">
                 <h4>
@@ -646,8 +604,8 @@
               </nuxt-link>
               <p>
                 <span>答</span>
-                <em class="imgbox"><img :src="staff[key].head_img" alt /></em>
-                <em class="peoname">{{ staff[key].name }}</em>
+                <em class="imgbox"><img :src="staffs[key].image" alt/></em>
+                <em class="peoname">{{ staffs[key].name }}</em>
                 <em class="peowork">允家咨询师</em>
               </p>
               <p>
@@ -658,7 +616,7 @@
                 </i>
                 <i class="sl">{{ q.answer }}</i>
               </p>
-              <span class="time">{{ q.time }}</span>
+              <span class="time">{{ q.time.substr(0, 10) }}</span>
               <span class="giveup">
                 <img
                   id="answer"
@@ -773,25 +731,6 @@
         </div>
         <button class="p1" data-v="获取详细周边配套">获取详细周边配套</button>
       </div>
-      <div class="m-line" v-if="trend_price1.length"></div>
-      <!-- 房价趋势 -->
-      <div class="m-trend" v-if="trend_price1.length">
-        <h4>房价趋势</h4>
-        <div id="pic"></div>
-        <div class="m-mark">
-          <i class="m-s1"></i>
-          <span>{{ building.name }}</span>
-          <i class="m-s2"></i>
-          <span>{{ building.country_name }}</span>
-          <i class="m-s3"></i>
-          <span>{{ building.city_name }}</span>
-        </div>
-        <p class="msg">
-          <img src="~/assets/bell.png" alt />
-          价格变动这么快？ 订阅最新变价通知，楼盘变价我们第一时间通知您
-        </p>
-        <button class="p1" data-v="最新房价趋势解读">最新房价趋势解读</button>
-      </div>
       <div class="m-line" v-if="compares.length"></div>
       <!-- 楼盘对比 -->
       <div class="m-contrast" v-if="compares.length">
@@ -894,7 +833,7 @@
       <div class="my-infos" v-if="infos.length > 0">
         <h4>
           相关资讯<nuxt-link :to="'/' + jkl + '/realinformations/46'"
-            ><span>更多资讯 <img src="~/assets/m-go.png" alt /></span
+            ><span>更多资讯 <img src="~/assets/m-go.png" alt/></span
           ></nuxt-link>
         </h4>
         <ul>
@@ -925,7 +864,7 @@
             <nuxt-link :to="'/' + jkl + '/content/' + list.id">
               <div class="re-con-left">
                 <img
-                  :src="list.img ? list.img : defaultimg"
+                  :src="list.image ? list.image : defaultimg"
                   :alt="list.name"
                   :title="list.name"
                 />
@@ -937,10 +876,10 @@
               <div class="re-con-right">
                 <h5>
                   {{ list.name }}
-                  <span>{{ list.status }}</span>
+                  <span>{{ list.state }}</span>
                 </h5>
                 <p class="price">
-                  <span>{{ list.single_price }}</span
+                  <span>{{ list.price }}</span
                   >元/m²
                 </p>
                 <p class="area">
@@ -956,10 +895,8 @@
                 </p>
                 <p class="tabs">
                   <span class="strong">{{ list.decorate }}</span>
-                  <!-- <span v-show="list.railway">{{ list.railway }}</span> -->
-                  <template v-for="(item, key) in list.features">
-                    <span :key="'tong' + key">{{ item }}</span>
-                  </template>
+                  <span v-if="list.railway">{{ list.railway }}</span>
+                  <span v-if="list.feature">{{ list.feature }}</span>
                 </p>
               </div>
             </nuxt-link>
@@ -970,7 +907,7 @@
             <nuxt-link :to="'/' + jkl + '/content/' + list.id">
               <div class="re-con-left">
                 <img
-                  :src="list.img ? list.img : defaultimg"
+                  :src="list.image ? list.image : defaultimg"
                   :alt="list.name"
                   :title="list.name"
                 />
@@ -982,10 +919,10 @@
               <div class="re-con-right">
                 <h5>
                   {{ list.name }}
-                  <span>{{ list.status }}</span>
+                  <span>{{ list.state }}</span>
                 </h5>
                 <p class="price">
-                  <span>{{ list.single_price }}</span
+                  <span>{{ list.price }}</span
                   >元/m²
                 </p>
                 <p class="area">
@@ -1001,10 +938,8 @@
                 </p>
                 <p class="tabs">
                   <span class="strong">{{ list.decorate }}</span>
-                  <!-- <span v-show="list.railway">{{ list.railway }}</span> -->
-                  <template v-for="(item, key) in list.features">
-                    <span :key="'tong1' + key">{{ item }}</span>
-                  </template>
+                  <span v-if="list.railway">{{ list.railway }}</span>
+                  <span v-if="list.feature">{{ list.feature }}</span>
                 </p>
               </div>
             </nuxt-link>
@@ -1067,7 +1002,7 @@
           <p class="ph1"><img src="~/assets/promsg.png" />预约看房</p>
         </button>
       </div>
-      <div class="wxwork" v-show="iswxsid">
+      <div class="wxwork" v-if="iswxsid">
         <div class="wximg" @click="gotalk">
           <img :src="share.staff ? share.staff.head_img : nolmalimg" alt />
           <p>咨询</p>
@@ -1315,7 +1250,7 @@ import {
   getsdk,
   getsid,
   putmap,
-  hengda,
+  hengda
 } from "~/api/api";
 export default {
   name: "Content",
@@ -1327,13 +1262,13 @@ export default {
     "remote-js": {
       render(createElement) {
         return createElement("script", {
-          attrs: { type: "text/javascript", src: this.src },
+          attrs: { type: "text/javascript", src: this.src }
         });
       },
       props: {
-        src: { type: String, required: true },
-      },
-    },
+        src: { type: String, required: true }
+      }
+    }
   },
   validate({ params }) {
     // 必须是number类型
@@ -1376,7 +1311,7 @@ export default {
         ip: ip,
         token: token,
         kid: kid,
-        other: other,
+        other: other
       };
       let url = context.route.fullPath;
       if (url) {
@@ -1391,204 +1326,148 @@ export default {
           data.scid = context.store.state.cookie.scid;
         }
       }
-
+      data.userId = context.store.state.userId;
       let jkl = context.params.name;
-      let [res1] = await Promise.all([
+      let [res2] = await Promise.all([
         context.$axios
-          .get("/yun_jia/building/mobile/detail", { params: data })
-          .then((res) => {
-            if (res) {
-              if (res.data.code === 200) {
-                let data = res.data;
-                data.topimg = data.data.img;
-
-                let times = [];
-                for (let item of data.data.deals) {
-                  if (item.date) {
-                    times.push(item.date.replace(/-/g, "/").substr(5));
-                  }
-                }
-                let prices = [];
-                for (let item of data.data.deals) {
-                  prices.push(item.money);
-                }
-                data.prices = prices;
-                data.times = times;
-                let trend = data.data.price_trend;
-                let p1 = [];
-                let p2 = [];
-                let p3 = [];
-                let t = [];
-                for (let item in trend) {
-                  p1.unshift(Number(trend[item]["city_price"]).toFixed(0));
-                  p2.unshift(Number(trend[item]["country_price"]).toFixed(0));
-                  p3.unshift(Number(trend[item]["project_price"]).toFixed(0));
-                  if (trend[item]["time"]) {
-                    let d = trend[item]["time"].replace(/-/g, "/");
-                    t.unshift(d);
-                  }
-                }
-                data.p1 = p1;
-                data.p2 = p2;
-                data.p3 = p3;
-                data.t = t;
-                let date = new Date();
-                let now = date.getTime();
-
-                if (
-                  new Date(data.data.getlandtime.replace(/-/g, "/")).getTime() <
-                  now
-                ) {
-                  data.jfss = "tegood";
-                  data.ndss = "dactive tegood";
-                } else {
-                  data.ndss = "tegood";
-                }
-                console.log(data.data.push_time);
-                if (data.data.push_time) {
-                  if (
-                    new Date(data.data.push_time.replace(/-/g, "/")).getTime() <
-                    now
-                  ) {
-                    data.jtss = "dactive tegood";
-                    data.jfss = "tegood";
-                    data.ndss = "tegood";
-                    data.skss = "tegood";
-                  } else {
-                    data.jtss = "tegood";
-                  }
-                }
-
-                console.log(88888);
-                if (data.data.firstopentime) {
-                  if (
-                    new Date(
-                      data.data.firstopentime.replace(/-/g, "/")
-                    ).getTime() < now
-                  ) {
-                    data.skss = "dactive tegood";
-                    data.jfss = "tegood";
-                    data.ndss = "tegood";
-                    data.jtss = "tegood";
-                    data.isnow = true;
-                  } else {
-                    data.skss = "tegood";
-                    data.isnow = false;
-                  }
-                }
-                if (data.data.givetime) {
-                  if (
-                    new Date(data.data.givetime.replace(/-/g, "/")).getTime() <
-                    now
-                  ) {
-                    data.jfss = "dactive tegood";
-                    data.jtss = "tegood";
-                    data.ndss = "tegood";
-                    data.skss = "tegood";
-                  } else {
-                    data.jfss = "tegood";
-                  }
-                }
-
-                data.nowdong = {};
-                data.tui = {};
-                if (data.data.dynamics.length != 0) {
-                  data.nowdong = data.data.dynamics[0];
-                  if (data.data.dynamics.length === 2) {
-                    data.tui = data.data.dynamics[1];
-                  }
-                }
-                let p = parseInt(data.data.single_price / 10000);
-                data.max = p + 3;
-
-                if (!data.hasOwnProperty("common")) {
-                  data.common.phone = "400-718-6686";
-                  data.common.header.title = "允家新房";
-                  data.common.header.description = "允家新房";
-                  data.common.header.keywords = "允家新房";
-                  data.common.header.open = 0;
-                }
-                if (Object.keys(data.common.share_info).length == 0) {
-                  data.common.share_info = {
-                    staff: {
-                      tel: 123,
-                      name: "456",
-                      head_img: require("~/assets/jiapeo.png"),
-                    },
-                    visitors: [],
-                  };
-                }
-                data.live = [];
-                data.invest = [];
-                for (let item of data.data.analysises) {
-                  if (item.type == 1) {
-                    data.live.push(item);
-                  } else {
-                    data.invest.push(item);
-                  }
-                }
-                return data;
+          .get("/yun_jia_new/building", { params: data })
+          .then(res => {
+            let data = res.data.data;
+            let date = new Date();
+            let now = date.getTime();
+            let prices = [];
+            if (data.share_info) {
+              if (Object.keys(data.share_info).length == 0) {
+                data.share_info = {
+                  staff: {
+                    tel: 123,
+                    name: "456",
+                    head_img: require("~/assets/jiapeo.png")
+                  },
+                  visitors: []
+                };
               }
             }
-          }),
+            let times = []
+            if (data.transactionPrices) {
+              for (let item of data.transactionPrices) {
+                prices.push(item.price);
+                times.push(item.time.substr(6))
+              }
+            }
+            data.times = times
+            data.prices = prices;
+            if (
+              new Date(
+                data.building.get_land_time.replace(/-/g, "/")
+              ).getTime() < now
+            ) {
+              data.jfss = "tegood";
+              data.ndss = "dactive tegood";
+            } else {
+              data.ndss = "tegood";
+            }
+            console.log(data.building.add_push_time);
+            if (data.building.add_push_time) {
+              if (
+                new Date(
+                  data.building.add_push_time.replace(/-/g, "/")
+                ).getTime() < now
+              ) {
+                data.jtss = "dactive tegood";
+                data.jfss = "tegood";
+                data.ndss = "tegood";
+                data.skss = "tegood";
+              } else {
+                data.jtss = "tegood";
+              }
+            }
+
+            console.log(88888);
+            if (data.building.open_time) {
+              if (
+                new Date(data.building.open_time.replace(/-/g, "/")).getTime() <
+                now
+              ) {
+                data.skss = "dactive tegood";
+                data.jfss = "tegood";
+                data.ndss = "tegood";
+                data.jtss = "tegood";
+                data.isnow = false;
+              } else {
+                data.skss = "tegood";
+                data.isnow = true;
+              }
+            }
+            if (data.building.give_time) {
+              if (
+                new Date(data.building.give_time.replace(/-/g, "/")).getTime() <
+                now
+              ) {
+                data.jfss = "dactive tegood";
+                data.jtss = "tegood";
+                data.ndss = "tegood";
+                data.skss = "tegood";
+              } else {
+                data.jfss = "tegood";
+              }
+            }
+            return data;
+          })
       ]);
       return {
-        jkl: res1.common.city.pin,
-        call: res1.common.phone,
-        participate: res1.participate,
-        la: res1.data.latitude,
-        ln: res1.data.longitude,
-        topnum: res1.data.imgs_num,
-        building: res1.data,
-        tit: res1.data.name,
-        ds: res1.data.dynamic_num,
-        phone: res1.common.phone,
-        nowdong: res1.nowdong,
-        tui: res1.tui,
-        hu: res1.data.appartments,
-        live: res1.live,
-        invest: res1.invest,
+        jkl: res2.building.city.pinyin,
+        call: res2.phone,
+        participate: res2.participate,
+        la: res2.building.latitude,
+        ln: res2.building.longitude,
+        topnum: res2.img_count,
+        building: res2.building,
+        tit: res2.building.name,
+        ds: res2.dynamic_count,
+        phone: res2.phone,
+        nowdong: res2.dynamics,
+        hu: res2.house_type,
+        live: res2.analysis.livable,
+        invest: res2.analysis.investment,
         // searchnum: res1.num.search_num,
-        chengjiao: res1.data.deals,
-        times: res1.times,
-        prices: res1.prices,
-        questions: res1.data.questions,
-        location: res1.data.location,
-        compares: res1.data.contrast,
-        comments: res1.data.comments,
-        same_price: res1.data.same_prices,
-        same_area: res1.data.same_areas,
-        trend_time: res1.t,
-        trend_price1: res1.p1,
-        trend_price2: res1.p2,
-        trend_price3: res1.p3,
-        ndtime: res1.data.getlandtime,
-        jftime: res1.data.givetime,
-        sktime: res1.data.push_time,
-        jttime: res1.data.firstopentime,
-        ndss: res1.ndss,
-        jtss: res1.jtss,
-        skss: res1.skss,
-        jfss: res1.jfss,
-        title: res1.common.header.title,
-        description: res1.common.header.description,
-        keywords: res1.common.header.keywords,
-        collect: res1.data.collect,
+        chengjiao: res2.transactionPrices,
+        times: res2.times,
+        prices: res2.prices,
+        questions: res2.questions,
+        // location: res1.data.location,
+        comments: res2.comments,
+        same_price: res2.same_prices,
+        same_area: res2.same_areas,
+        // trend_time: res1.t,
+        ndtime: res2.building.get_land_time,
+        jftime: res2.building.give_time,
+        sktime: res2.building.add_push_time,
+        jttime: res2.building.open_time,
+        ndss: res2.ndss,
+        jtss: res2.jtss,
+        skss: res2.skss,
+        jfss: res2.jfss,
+        title: res2.header.title,
+        description: res2.header.description,
+        keywords: res2.header.keywords,
+        collect: res2.collect,
         checks: true,
-        city: res1.common.city.id,
+        city: res2.building.city.id,
         // tuan: res1.activity.group.flag,
         // group_buy: res1.activity.group.info,
         // sign: res1.activity.sign,
         // open: res1.head.open,
-        topimg: res1.topimg,
-        max: res1.max,
+        topimg: res2.building.img,
+        // max: res1.max,
         ws: false,
-        share: res1.common.share_info,
-        banner: res1.banner,
-        activity: res1.activity || [],
-        infos: res1.data.articles,
-        isnow: res1.isnow,
-        staff: res1.common.staff,
+        share: res2.share_info || {},
+        banner: res2.banner,
+        activity: res2.activity || [],
+        infos: res2.articles,
+        // isnow: res1.isnow,
+        // staff: res1.common.staff,
+        staffs: res2.staffs
       };
     } catch (err) {
       console.log("errConsole========:", err);
@@ -1597,6 +1476,9 @@ export default {
   },
   data() {
     return {
+      num1: 154,
+      num2: 245,
+      num3: 211,
       ws: {},
       abstract: [],
       remark: "",
@@ -1613,8 +1495,8 @@ export default {
         staff: {
           tel: 123,
           name: "456",
-          head_img: require("~/assets/jiapeo.png"),
-        },
+          head_img: require("~/assets/jiapeo.png")
+        }
       },
       iswxsid: false,
       iswx: false,
@@ -1764,7 +1646,7 @@ export default {
       staffname: "",
       staffimg: "",
       talktype: false,
-      staffid: 152,
+      staffid: 152
     };
   },
   head() {
@@ -1773,13 +1655,13 @@ export default {
       meta: [
         {
           name: "description",
-          content: this.description,
+          content: this.description
         },
         {
           name: "Keywords",
-          content: this.keywords,
-        },
-      ],
+          content: this.keywords
+        }
+      ]
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -1800,7 +1682,7 @@ export default {
       let pp = {
         controller: "Staff",
         action: "info",
-        params: { uuid: id, host: host },
+        params: { uuid: id, host: host }
       };
       if (id) {
         this.ws.send(JSON.stringify(pp));
@@ -1903,7 +1785,7 @@ export default {
           source: "微信分享2",
           kid: kid,
           staff_id: that.share.staff.sid,
-          other: other,
+          other: other
         };
         op = wx;
       } else {
@@ -1918,11 +1800,11 @@ export default {
           kid: kid,
           other: other,
           source: "线上推广2",
-          platform: 2,
+          platform: 2
         };
         op = normal;
       }
-      trend_put(op).then((res) => {
+      trend_put(op).then(res => {
         if (res.data.code == 200) {
           that.warning = "领取成功";
           that.warningbtn = true;
@@ -1964,7 +1846,7 @@ export default {
       );
       $("#dingxue").html("立即抢券");
     },
-    method1: function () {
+    method1: function() {
       echarts();
       ratingStar();
     },
@@ -2053,7 +1935,7 @@ export default {
       var options = {
         //定义一个标题
         legend: {
-          data: ["AI"],
+          data: ["AI"]
         },
         color: ["rgba(77,181,255,1)"],
         //X轴设置
@@ -2064,17 +1946,17 @@ export default {
             axisLine: {
               lineStyle: {
                 color: "rgba(153,153,153,1)",
-                fontSize: "10px",
-              },
+                fontSize: "10px"
+              }
             },
             axisLabel: {
               interval: 0,
               show: true,
               textStyle: {
-                color: "rgba(153,153,153,1)", //这里用参数代替了
-              },
-            },
-          },
+                color: "rgba(153,153,153,1)" //这里用参数代替了
+              }
+            }
+          }
         ],
         yAxis: [
           {
@@ -2083,24 +1965,24 @@ export default {
             axisLabel: {
               show: true,
               textStyle: {
-                color: "rgba(153,153,153,1)", //这里用参数代替了
-              },
+                color: "rgba(153,153,153,1)" //这里用参数代替了
+              }
             },
             axisLine: {
               lineStyle: {
-                color: "rgba(153,153,153,1)",
-              },
-            },
-          },
+                color: "rgba(153,153,153,1)"
+              }
+            }
+          }
         ],
         series: [
           {
             name: "销量",
             data: that.prices,
             type: "bar",
-            barWidth: 18,
-          },
-        ],
+            barWidth: 18
+          }
+        ]
       };
       myChart.setOption(options);
     },
@@ -2113,7 +1995,7 @@ export default {
         backgroundColor: "#fff",
         tooltip: {
           trigger: "axis",
-          formatter: function (params) {
+          formatter: function(params) {
             return (
               params[0].seriesName +
               params[0].data +
@@ -2127,39 +2009,39 @@ export default {
               params[2].data +
               "元"
             );
-          },
+          }
         },
         legend: {
-          data: "房价",
+          data: "房价"
         },
         grid: {
           x: "45px",
           y: "10px",
           x2: "18px",
-          y2: "20px",
+          y2: "20px"
         },
         calculable: true,
         xAxis: [
           {
             axisLabel: {
               rotate: 30,
-              interval: 0,
+              interval: 0
             },
             axisLine: {
               lineStyle: {
-                color: "#919499",
-              },
+                color: "#919499"
+              }
             },
 
             boundaryGap: false,
-            data: (function () {
+            data: (function() {
               var list = that.trend_time;
               return list;
             })(),
             axisLabel: {
-              rotate: 0,
-            },
-          },
+              rotate: 0
+            }
+          }
         ],
         yAxis: [
           {
@@ -2171,18 +2053,18 @@ export default {
             splitNumber: 5,
             axisLine: {
               lineStyle: {
-                color: "#919499",
+                color: "#919499"
               },
               show: false,
-              formatter: "{value}万",
+              formatter: "{value}万"
             },
             splitLine: {
               shwo: true,
               lineStyle: {
-                type: "dashed",
-              },
-            },
-          },
+                type: "dashed"
+              }
+            }
+          }
         ],
         series: [
           {
@@ -2191,7 +2073,7 @@ export default {
             symbol: "none",
             smooth: 0.2,
             color: ["#40A2F4"],
-            data: that.trend_price3,
+            data: that.trend_price3
           },
           {
             name: that.building.country_name + "&nbsp;&nbsp;均价",
@@ -2199,7 +2081,7 @@ export default {
             symbol: "none",
             smooth: 0.2,
             color: ["#29CC72"],
-            data: that.trend_price2,
+            data: that.trend_price2
           },
           {
             name: that.building.city_name + "&nbsp;&nbsp;均价",
@@ -2207,9 +2089,9 @@ export default {
             symbol: "none",
             smooth: 0.2,
             color: ["#A3AACC"],
-            data: that.trend_price1,
-          },
-        ],
+            data: that.trend_price1
+          }
+        ]
       };
       chart.setOption(option);
     },
@@ -2221,7 +2103,7 @@ export default {
       let img = require("~/assets/mappro.png");
       let pro = this.building.name;
       let add = this.building.address;
-      AMap.convertFrom(baidu, "baidu", function (status, result) {
+      AMap.convertFrom(baidu, "baidu", function(status, result) {
         if (result.info === "ok") {
           var lnglats = result.locations; // Array.<LngLat>
           that.pois = [lnglats[0].lng, lnglats[0].lat];
@@ -2229,7 +2111,7 @@ export default {
             zoom: 14, //初始化地图层级
             center: that.pois, //初始化地图中心点
             zoomEnable: false,
-            dragEnable: false,
+            dragEnable: false
           });
           let content = `<div
           style="width:140px;height: 36px;box-shadow:0px 0px 5px 0px rgba(6,0,1,0.1);border-radius:18px;padding-left: 17px;position: relative;background: #fff;">
@@ -2245,19 +2127,19 @@ export default {
           let marker = new AMap.Marker({
             content: content,
             position: that.pois,
-            offset: new AMap.Pixel(-70, -44),
+            offset: new AMap.Pixel(-70, -44)
           });
           let con =
             '<div style="width: 24px;height: 24px;border-radius: 50%;background:rgba(71,161,255,0.3);position: relative;"><div style="width: 6px;height: 6px;border-radius: 50%;background:rgba(71,161,255,1);position: absolute;top:50%;left:50%;margin-top: -3px;margin-left: -3px;"></div></div>';
           let mark = new AMap.Marker({
             content: con,
             position: that.pois,
-            offset: new AMap.Pixel(-12, -12),
+            offset: new AMap.Pixel(-12, -12)
           });
           mark.setMap(map);
           marker.setMap(map);
 
-          AMap.service(["AMap.PlaceSearch"], function () {
+          AMap.service(["AMap.PlaceSearch"], function() {
             // eslint-disable-line no-unused-vars
             //构造地点查询类
             var placeSearch = new AMap.PlaceSearch({
@@ -2267,11 +2149,11 @@ export default {
               citylimit: false, //是否强制限制在设置的城市内搜索
               map: map, // 展现结果的地图实例
               panel: "panel", // 结果列表将在此容器中进行展示。
-              autoFitView: false, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
+              autoFitView: false // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
             });
 
             var cpoint = that.pois; //中心点坐标
-            placeSearch.searchNearBy(name, cpoint, 2000, function (
+            placeSearch.searchNearBy(name, cpoint, 2000, function(
               // eslint-disable-line no-unused-vars
               status,
               result
@@ -2285,7 +2167,7 @@ export default {
               } else {
                 that.isnull = false;
                 that.setzhou(name, result.poiList.pois.length);
-                $.each(result.poiList.pois, function (i, e) {
+                $.each(result.poiList.pois, function(i, e) {
                   if (i <= 2) {
                     var p2 = [e.location.lng, e.location.lat];
                     var s = AMap.GeometryUtil.distance(cpoint, p2) / 1000;
@@ -2338,7 +2220,7 @@ export default {
       let id = this.id;
       let data = { channel: 2, phone: tel, ip: ip };
       msg(data)
-        .then((resp) => {
+        .then(resp => {
           let code = resp.data.code;
           if (code == 200) {
             let city = localStorage.getItem("city");
@@ -2347,7 +2229,7 @@ export default {
               localStorage.setItem("city", 1);
             }
             var time = 60;
-            var fn = function () {
+            var fn = function() {
               time--;
               if (time > 0) {
                 $(".t-b-scode").html("重新发送" + time + "s");
@@ -2362,7 +2244,7 @@ export default {
             var interval = setInterval(fn, 1000);
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
@@ -2374,7 +2256,7 @@ export default {
       }
       let that = this;
       collection({ project: id, token: token })
-        .then((resp) => {
+        .then(resp => {
           if (resp.data.code == 200) {
             if (that.forknum == 0) {
               that.forknum = 1;
@@ -2386,7 +2268,7 @@ export default {
             that.$router.push("/" + that.n + "/login");
           }
         })
-        .then((error) => {
+        .then(error => {
           console.log(error);
         });
     },
@@ -2412,7 +2294,7 @@ export default {
         project: id,
         kid: kid,
         other: other,
-        platform: 2,
+        platform: 2
       };
       let tuan = {
         platform: 2,
@@ -2424,7 +2306,7 @@ export default {
         project: id,
         remark: "团购2",
         kid: kid,
-        other: other,
+        other: other
       };
       let options = {};
       let url = window.location.href;
@@ -2444,7 +2326,7 @@ export default {
           source: "微信分享2",
           kid: kid,
           staff_id: that.share.staff.sid,
-          other: other,
+          other: other
         };
         options = wx;
       } else {
@@ -2456,18 +2338,18 @@ export default {
       }
 
       trend_put(options)
-        .then((resp) => {
+        .then(resp => {
           // console.log(resp)
           if (resp.data.code == 200) {
             msg({ phone: t, channel: 2, ip: ip })
-              .then((resp) => {
+              .then(resp => {
                 if (resp.data.code == 200) {
                   $(".t-b-first").hide();
                   $(".t-b-second").show();
 
                   var time = 60;
                   var tels = t.substr(0, 3) + "****" + t.substr(7, 11);
-                  var fn = function () {
+                  var fn = function() {
                     time--;
                     if (time > 0) {
                       $(".t-b-scode").html("重新发送" + time + "s");
@@ -2483,7 +2365,7 @@ export default {
                   $("#ytel").html(tels);
                 }
               })
-              .catch((error) => {
+              .catch(error => {
                 console.log(error);
               });
           } else if (resp.data.code == 500) {
@@ -2498,7 +2380,7 @@ export default {
             $(".l-p").attr("placeholder", "报名失败");
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
@@ -2511,7 +2393,7 @@ export default {
       let tel = this.baoming;
       let that = this;
       verification({ phone: tel, code: m, channel: 2 })
-        .then((resp) => {
+        .then(resp => {
           if (resp.data.code == 200) {
             if (this.ones == 1) {
               this.li = 1;
@@ -2531,7 +2413,7 @@ export default {
             $("#ma-ll").attr("placeholder", "验证码不正确");
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
@@ -2545,7 +2427,7 @@ export default {
           that.tstype = false;
         }, 1000);
       } else {
-        hengda({ identity: that.IDcode, phone: tel }).then((res) => {
+        hengda({ identity: that.IDcode, phone: tel }).then(res => {
           if (res.data.code == 200) {
             that.tsmsg = res.data.message;
             that.tstype = true;
@@ -2572,7 +2454,7 @@ export default {
       } else {
         this.warn = true;
         let that = this;
-        setTimeout(function () {
+        setTimeout(function() {
           that.warn = false;
         }, 1500);
       }
@@ -2584,13 +2466,13 @@ export default {
         this.$router.push("/" + this.n + "/login");
       }
       collection({ project: id, token: token })
-        .then((resp) => {
+        .then(resp => {
           if (resp.data.code == 200) {
             $(".fk").hide();
             $(".fed").css("display", "block");
           }
         })
-        .then((error) => {
+        .then(error => {
           console.log(error);
         });
     },
@@ -2618,9 +2500,9 @@ export default {
           id: id,
           platform: 2,
           token: token,
-          type: y,
+          type: y
         })
-          .then((resp) => {
+          .then(resp => {
             if (resp.data.code == 500) {
               that.$router.push("/" + that.pinyin + "/login");
               // window.location.href = "/login";
@@ -2644,7 +2526,7 @@ export default {
               that.isagree = true;
             }
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
           });
       }
@@ -2665,9 +2547,9 @@ export default {
           id: id,
           platform: 2,
           token: token,
-          type: y,
+          type: y
         })
-          .then((resp) => {
+          .then(resp => {
             if (resp.data.code == 500) {
               that.$router.push("/" + that.pinyin + "/login");
               // window.location.href = "/login";
@@ -2690,7 +2572,7 @@ export default {
               that.isagrees = true;
             }
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
           });
       }
@@ -2715,12 +2597,12 @@ export default {
       } else {
         let token = localStorage.getItem("token");
         comment_del({ token: token, id: id })
-          .then((resp) => {
+          .then(resp => {
             if (resp.data.code == 200) {
               location.reload();
             }
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
           });
       }
@@ -2803,14 +2685,14 @@ export default {
         let Y = window.scrollY;
         if (key == 0) {
           if (Y > 100) {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, -10);
               if (window.scrollY <= 100) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, 10);
               if (window.scrollY >= 100) {
                 clearInterval(timer);
@@ -2819,14 +2701,14 @@ export default {
           }
         } else if (key == 1) {
           if (Y > 1100) {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, -10);
               if (window.scrollY <= 1100) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, 10);
               if (window.scrollY >= 1100) {
                 clearInterval(timer);
@@ -2835,14 +2717,14 @@ export default {
           }
         } else if (key == 2) {
           if (Y > 2700) {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, -10);
               if (window.scrollY <= 2700) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, 10);
               if (window.scrollY >= 2700) {
                 clearInterval(timer);
@@ -2851,14 +2733,14 @@ export default {
           }
         } else if (key == 3) {
           if (Y > 3200) {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, -10);
               if (window.scrollY <= 3200) {
                 clearInterval(timer);
               }
             }, 0.01);
           } else {
-            var timer = setInterval(function () {
+            var timer = setInterval(function() {
               window.scrollBy(0, 10);
               if (window.scrollY >= 3200) {
                 clearInterval(timer);
@@ -2992,10 +2874,10 @@ export default {
         "onMenuShareWeibo",
         "updateAppMessageShareData",
         "updateTimelineShareData",
-        "getLocation",
+        "getLocation"
       ];
 
-      getsdk(url).then((res) => {
+      getsdk(url).then(res => {
         // console.log(res);
         let that = this;
         wx.config({
@@ -3004,61 +2886,67 @@ export default {
           timestamp: res.data.data.timestamp, // 必填，生成签名的时间戳
           nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
           signature: res.data.data.signature, // 必填，签名
-          jsApiList: jsApiList, // 必填，需要使用的JS接口列表
+          jsApiList: jsApiList // 必填，需要使用的JS接口列表
         });
-        wx.ready(function () {
+        wx.ready(function() {
           if (that.iswxsid) {
-            let scid = $cookies.get('scid')
-            console.log('http://ll.edefang.net/front/user/getcode_front?scid='+scid)
+            let scid = $cookies.get("scid");
+            console.log(
+              "http://ll.edefang.net/front/user/getcode_front?scid=" + scid
+            );
             if (wx.onMenuShareAppMessage) {
               wx.onMenuShareAppMessage({
                 title: that.share.config.title, // 分享标题
                 desc: that.share.config.description, // 分享描述
-                link: 'http://ll.edefang.net/front/user/getcode_front?scid='+scid, // 分享链接
+                link:
+                  "http://ll.edefang.net/front/user/getcode_front?scid=" + scid, // 分享链接
                 imgUrl: that.share.config.img, // 分享图标
                 type: "", // 分享类型,music、video或link，不填默认为link
                 dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
-                success: function () {
+                success: function() {
                   // 用户确认分享后执行的回调函数
                   // alert('1.01')
                 },
-                cancel: function () {
+                cancel: function() {
                   // 用户取消分享后执行的回调函数
-                },
+                }
               });
               wx.onMenuShareTimeline({
                 title: that.share.config.title, // 分享标题
-                link: 'http://ll.edefang.net/front/user/getcode_front?scid='+scid, // 分享链接
+                link:
+                  "http://ll.edefang.net/front/user/getcode_front?scid=" + scid, // 分享链接
                 imgUrl: that.share.config.img, // 分享图标
-                success: function () {
+                success: function() {
                   // 用户点击了分享后执行的回调函数
-                },
+                }
               });
             } else {
               wx.updateAppMessageShareData({
                 title: that.share.config.title, // 分享标题
                 desc: that.share.config.description, // 分享描述
-                link: 'http://ll.edefang.net/front/user/getcode_front?scid='+scid, // 分享链接
+                link:
+                  "http://ll.edefang.net/front/user/getcode_front?scid=" + scid, // 分享链接
                 imgUrl: that.share.config.img, // 分享图标
-                success: function () {
+                success: function() {
                   // 设置成功
                   // alert('1.40')
-                },
+                }
               });
               wx.updateTimelineShareData({
                 title: that.share.config.title, // 分享标题
-                link: 'http://ll.edefang.net/front/user/getcode_front?scid='+scid, // 分享链接
+                link:
+                  "http://ll.edefang.net/front/user/getcode_front?scid=" + scid, // 分享链接
                 imgUrl: that.share.config.img, // 分享图标
-                success: function () {
+                success: function() {
                   // 设置成功
-                },
+                }
               });
             }
             if (that.iswxsid) {
               setInterval(() => {
                 wx.getLocation({
                   type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-                  success: function (res) {
+                  success: function(res) {
                     that.wxlat = res.latitude; // 纬度，浮点数，范围为90 ~ -90
                     that.wxlng = res.longitude; // 经度，浮点数，范围为180 ~ -180。
                     let url = window.location.href;
@@ -3069,45 +2957,45 @@ export default {
                       putmap({
                         lat: res.latitude,
                         long: res.longitude,
-                        id: id,
-                      }).then((res) => {
+                        id: id
+                      }).then(res => {
                         console.log(res);
                       });
                     }
                   },
-                  fail: function (res) {
+                  fail: function(res) {
                     let id = that.$route.query.last_log_id;
                     putmap({
                       lat: "",
                       long: "",
-                      id: id,
-                    }).then((res) => {
+                      id: id
+                    }).then(res => {
                       console.log(res);
                     });
-                  },
+                  }
                 });
               }, 10000);
             }
           } else {
-            console.log('is fail')
+            console.log("is fail");
             if (wx.updateAppMessageShareData) {
               wx.updateAppMessageShareData({
                 title: that.share.config.title, // 分享标题
                 desc: that.share.config.description, // 分享描述
                 link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                 imgUrl: that.share.config.img, // 分享图标
-                success: function () {
+                success: function() {
                   // 设置成功
                   // alert('1.40')
-                },
+                }
               });
               wx.updateTimelineShareData({
                 title: that.share.config.title, // 分享标题
                 link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                 imgUrl: that.share.config.img, // 分享图标
-                success: function () {
+                success: function() {
                   // 设置成功
-                },
+                }
               });
             } else {
               wx.onMenuShareAppMessage({
@@ -3117,18 +3005,18 @@ export default {
                 imgUrl: that.share.config.img, // 分享图标
                 type: "", // 分享类型,music、video或link，不填默认为link
                 dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
-                success: function () {
+                success: function() {
                   // 用户确认分享后执行的回调函数
                   // alert('1.01')
                 },
-                cancel: function () {
+                cancel: function() {
                   // 用户取消分享后执行的回调函数
-                },
+                }
               });
             }
           }
         });
-        wx.error((res) => {
+        wx.error(res => {
           // alert(res);
         });
       });
@@ -3166,7 +3054,7 @@ export default {
         myweekday = "0" + myweekday;
       }
       return myyear + "-" + mymonth + "-" + myweekday;
-    },
+    }
   },
   beforeMount() {
     let ul = window.location.href;
@@ -3229,12 +3117,15 @@ export default {
     }
   },
   mounted() {
+    this.num1 = Math.floor(Math.random() * 100) + 200;
+    this.num2 = Math.floor(Math.random() * 100) + 200;
+    this.num3 = Math.floor(Math.random() * 100) + 200;
     let that = this;
-    console.log(99);
+    console.log(this.staffs, 8989);
     $cookies.set("cityname", this.building.city_fullname);
     localStorage.setItem("call", this.call);
     this.ws = this.$store.state.ws;
-    this.ws.onmessage = function (event) {
+    this.ws.onmessage = function(event) {
       let data = JSON.parse(event.data);
       if (data.action == 301) {
         that.staffid = data.fromUserName;
@@ -3316,9 +3207,9 @@ export default {
           staff: {
             tel: 123,
             name: "456",
-            head_img: require("~/assets/jiapeo.png"),
+            head_img: require("~/assets/jiapeo.png")
           },
-          visitors: [],
+          visitors: []
         };
       }
     }
@@ -3338,7 +3229,7 @@ export default {
       }, 20000);
     }
 
-    $(".huo-more").on("click", function () {
+    $(".huo-more").on("click", function() {
       $(this).hide();
       $(".table").css("height", "auto");
     });
@@ -3348,7 +3239,7 @@ export default {
       observer: true,
       slidesOffsetAfter: 12,
       resistanceRatio: 0.1,
-      slidesOffsetBefore: 14,
+      slidesOffsetBefore: 14
     });
     var swiper05 = new Swiper(".swiper-dynamic", {
       slidesPerView: 3.8,
@@ -3356,7 +3247,7 @@ export default {
       observer: true,
       slidesOffsetBefore: 20,
       resistanceRatio: 0.1,
-      slidesOffsetAfter: 10,
+      slidesOffsetAfter: 10
     });
     var swiper06 = new Swiper(".swiper-house", {
       slidesPerView: 2.08,
@@ -3364,7 +3255,7 @@ export default {
       observer: true,
       slidesOffsetAfter: 2,
       resistanceRatio: 0.1,
-      slidesOffsetBefore: 14,
+      slidesOffsetBefore: 14
     });
     var swiper07 = new Swiper(".swiper-pk", {
       slidesPerView: 2.4,
@@ -3372,7 +3263,7 @@ export default {
       observer: true,
       resistanceRatio: 0.1,
       slidesOffsetAfter: 1,
-      slidesOffsetBefore: 14,
+      slidesOffsetBefore: 14
     });
     if (navigator.cookieEnabled != true) {
       this.load = false;
@@ -3389,7 +3280,7 @@ export default {
       position: "relative",
       bottom: "0",
       width: "100%",
-      marginBottom: "56px",
+      marginBottom: "56px"
     });
     that.baoming = localStorage.getItem("phone");
     let id = this.$route.params.id;
@@ -3399,7 +3290,7 @@ export default {
       this.start();
       setTimeout(() => {
         this.drawline();
-        this.priceline();
+        // this.priceline();
       }, 10);
     });
     //获取默认高度
@@ -3410,15 +3301,18 @@ export default {
       })();
     };
 
-    $(".go-map").on("click", function () {
+    $(".go-map").on("click", function() {
       that.$router.push("/" + that.n + "/Periphery/" + that.id + "/1");
     });
     //同价位楼盘
-    $(".m-nav p").on("click", function () {
+    $(".m-nav p").on("click", function() {
       let txt = $(this).text();
-      $(this).addClass("n-active").siblings("p").removeClass("n-active");
+      $(this)
+        .addClass("n-active")
+        .siblings("p")
+        .removeClass("n-active");
     });
-    jQuery.fn.ratingStars = function (e) {
+    jQuery.fn.ratingStars = function(e) {
       var r = {
           selectors: {
             starsSelector: ".rating-stars",
@@ -3426,29 +3320,35 @@ export default {
             starActiveClass: "is--active",
             starHoverClass: "is--hover",
             starNoHoverClass: "is--no-hover",
-            targetFormElementSelector: ".rating-value",
-          },
+            targetFormElementSelector: ".rating-value"
+          }
         },
         t = $.extend({}, r, e),
         s = {
-          init: function (e) {
+          init: function(e) {
             s.registerEvents(e), s.loadDefaultValue(e);
           },
-          loadDefaultValue: function (e) {
-            var r = $(e).children(t.selectors.targetFormElementSelector).val(),
+          loadDefaultValue: function(e) {
+            var r = $(e)
+                .children(t.selectors.targetFormElementSelector)
+                .val(),
               s = 0;
             $.each(
-              $(e).children(t.starsSelector).children(t.starSelector),
-              function (e, a) {
+              $(e)
+                .children(t.starsSelector)
+                .children(t.starSelector),
+              function(e, a) {
                 s <= r - 1 && $(a).addClass(t.selectors.starActiveClass), s++;
               }
             );
           },
-          registerEvents: function (e) {
+          registerEvents: function(e) {
             var r = this;
             $.each(
-              $(e).children(t.starsSelector).children(t.starSelector),
-              function (t, s) {
+              $(e)
+                .children(t.starsSelector)
+                .children(t.starSelector),
+              function(t, s) {
                 $(s).on("mouseenter", $.proxy(r.onStarEnter, r, s, e)),
                   $(s).on("mouseleave", $.proxy(r.onStarLeave, r, s, e)),
                   $(s).on(
@@ -3458,12 +3358,14 @@ export default {
               }
             );
           },
-          onStarEnter: function (e, r) {
+          onStarEnter: function(e, r) {
             var s = $(e).index(),
               a = 0;
             $.each(
-              $(r).children(t.starsSelector).children(t.starSelector),
-              function (e, r) {
+              $(r)
+                .children(t.starsSelector)
+                .children(t.starSelector),
+              function(e, r) {
                 a <= s
                   ? $(r).addClass(t.selectors.starHoverClass)
                   : $(r).addClass(t.selectors.starNoHoverClass),
@@ -3472,7 +3374,7 @@ export default {
             ),
               $(r).trigger("ratingOnEnter", { ratingValue: s + 1 });
           },
-          onStarLeave: function (e, r) {
+          onStarLeave: function(e, r) {
             var s = $(e).index();
             $(r)
               .children(t.starsSelector)
@@ -3484,7 +3386,7 @@ export default {
                 .removeClass(t.selectors.starNoHoverClass),
               $(r).trigger("ratingOnLeave", { ratingValue: s + 1 });
           },
-          onStarSelected: function (e, r) {
+          onStarSelected: function(e, r) {
             var s = $(e).index();
             $(r)
               .children(t.starsSelector)
@@ -3492,8 +3394,10 @@ export default {
               .removeClass(t.selectors.starActiveClass);
             var a = 0;
             $.each(
-              $(r).children(t.starsSelector).children(t.starSelector),
-              function (e, r) {
+              $(r)
+                .children(t.starsSelector)
+                .children(t.starSelector),
+              function(e, r) {
                 a <= s && $(r).addClass(t.selectors.starActiveClass), a++;
               }
             ),
@@ -3501,13 +3405,13 @@ export default {
                 .children(t.selectors.targetFormElementSelector)
                 .val(s + 1),
               $(r).trigger("ratingChanged", { ratingValue: s + 1 });
-          },
+          }
         };
-      return this.each(function () {
+      return this.each(function() {
         s.init($(this));
       });
     };
-    $(".question").on("click", function () {
+    $(".question").on("click", function() {
       let token = localStorage.getItem("token");
       if (token) {
         that.$router.push("/" + that.jkl + "/leavequestion/" + that.id);
@@ -3519,7 +3423,7 @@ export default {
       direction: "vertical", // 垂直切换选项
       autoplay: true,
       observer: true, //修改swiper自己或子元素时，自动初始化swiper
-      observeParents: true, //修改swiper的父元素时，自动初始化swiper
+      observeParents: true //修改swiper的父元素时，自动初始化swiper
     });
     /*对比分析资料轮播*/
     var swiper = new Swiper(".dui-zi", {
@@ -3529,11 +3433,11 @@ export default {
       observeParents: true, //修改swiper的父元素时，自动初始化swiper
       resistanceRatio: 0.1,
       pagination: {
-        el: ".swiper-pagination2",
-      },
+        el: ".swiper-pagination2"
+      }
     });
     /*微信浏览记录轮播*/
-    this.$nextTick(function () {
+    this.$nextTick(function() {
       var swiper = new Swiper(".wxlu", {
         // eslint-disable-line no-unused-vars
         spaceBetween: 20,
@@ -3541,7 +3445,7 @@ export default {
         observeParents: true, //修改swiper的父元素时，自动初始化swiper
         resistanceRatio: 0.1,
         loop: true,
-        autoplay: true,
+        autoplay: true
       });
     });
 
@@ -3551,7 +3455,7 @@ export default {
       slidesPerView: 1.8,
       spaceBetween: 30,
       observer: true, //修改swiper自己或子元素时，自动初始化swiper
-      observeParents: true, //修改swiper的父元素时，自动初始化swiper
+      observeParents: true //修改swiper的父元素时，自动初始化swiper
     });
 
     var swiper = new Swiper(".swiper-top", {
@@ -3562,37 +3466,51 @@ export default {
       observeParents: true, //修改swiper的父元素时，自动初始化swiper
       pagination: {
         el: ".swiper-pagination",
-        clickable: true,
+        clickable: true
       },
-      resistanceRatio: 0.1,
+      resistanceRatio: 0.1
     });
 
-    $(document).ready(function () {
+    $(document).ready(function() {
       var h = $(".h-c-c").height();
       $(".h-c-i img").css("height", h + "px");
 
       var cnm = 1;
 
-      $(".p-c-exc").on("click", function () {
+      $(".p-c-exc").on("click", function() {
         $(".m-p-succ").hide();
         $(".m-chang").hide();
       });
-      $("#m_sc_esc").on("click", function () {
+      $("#m_sc_esc").on("click", function() {
         $("#m_sc_box").hide();
         $(".m-chang").hide();
       });
-      $(".m-c-content input").focus(function () {
+      $(".m-c-content input").focus(function() {
         $(".m-c-content").css("margin-top", "80px");
       });
-      $(".m-c-content input").blur(function () {
+      $(".m-c-content input").blur(function() {
         $(".m-c-content").css("margin-top", "170px");
       });
       // 验证码
-      $(".m-c-btn").on("click", function () {
-        var tel = $(this).prev().prev().prev().prev().prev().prev().val();
+      $(".m-c-btn").on("click", function() {
+        var tel = $(this)
+          .prev()
+          .prev()
+          .prev()
+          .prev()
+          .prev()
+          .prev()
+          .val();
         var pattern_tel = /^1[3-9][0-9]{9}$/;
         if (tel == "") {
-          $(this).prev().prev().prev().prev().prev().prev().val("");
+          $(this)
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .val("");
           $(this)
             .prev()
             .prev()
@@ -3603,7 +3521,14 @@ export default {
             .attr("placeholder", "手机号码不能为空");
           return;
         } else if (!pattern_tel.test(tel)) {
-          $(this).prev().prev().prev().prev().prev().prev().val("");
+          $(this)
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .prev()
+            .val("");
           $(this)
             .prev()
             .prev()
@@ -3620,82 +3545,100 @@ export default {
       //   that.$router.push("/" + that.n);
       // });
 
-      $(".m-listen").on("click", function () {
+      $(".m-listen").on("click", function() {
         $(".m-chang").show();
         $("#m_a_box").show(300);
       });
-      $("#m_a_esc").on("click", function () {
+      $("#m_a_esc").on("click", function() {
         $(".m-chang").hide();
         $("#m_a_box").hide();
       });
 
-      $("#m_want").on("click", function () {
+      $("#m_want").on("click", function() {
         $(".m-chang").show();
         $("#m_sc_box").show(150);
       });
 
-      $("#m_look").on("click", function () {
+      $("#m_look").on("click", function() {
         $(".m-chang").show();
         $("#m_y_box").show(300);
       });
-      $("#m_fen").on("click", function () {
+      $("#m_fen").on("click", function() {
         $(".m-chang").show();
         $("#m_f_box").show(300);
       });
-      $(".m-y").on("click", function () {
+      $(".m-y").on("click", function() {
         $(".m-chang").show();
         $("#m_y_box").show(300);
       });
-      $("#m_f_esc").on("click", function () {
+      $("#m_f_esc").on("click", function() {
         $(".m-chang").hide();
         $("#m_f_box").hide();
       });
     });
 
     // 点击顶部图片跳转
-    $(".zao").on("click", function () {
+    $(".zao").on("click", function() {
       that.$router.push("/" + that.n + "/album/" + that.id);
     });
     // 周边规划跳转
-    $(".m-zhou h3 span").on("click", function () {
+    $(".m-zhou h3 span").on("click", function() {
       that.$router.push("/" + that.n + "/Periphery/" + that.id + "/1");
     });
 
-    document.addEventListener("touchmove", function (e) {
+    document.addEventListener("touchmove", function(e) {
       var h = document.body.scrollTop;
       if (h >= 2279) {
-        $(".m-3").addClass("m-active").siblings("span").removeClass("m-active");
+        $(".m-3")
+          .addClass("m-active")
+          .siblings("span")
+          .removeClass("m-active");
       } else if (h >= 1538) {
-        $(".m-2").addClass("m-active").siblings("span").removeClass("m-active");
+        $(".m-2")
+          .addClass("m-active")
+          .siblings("span")
+          .removeClass("m-active");
       } else if (h >= 170) {
         $(".m-tnav").show();
-        $(".m-1").addClass("m-active").siblings("span").removeClass("m-active");
+        $(".m-1")
+          .addClass("m-active")
+          .siblings("span")
+          .removeClass("m-active");
       } else {
         $(".m-tnav").hide();
       }
     });
 
-    $(".m-1").on("click", function () {
+    $(".m-1").on("click", function() {
       document.body.scrollTop = 170;
-      $(".m-1").addClass("m-active").siblings("span").removeClass("m-active");
+      $(".m-1")
+        .addClass("m-active")
+        .siblings("span")
+        .removeClass("m-active");
     });
-    $(".m-2").on("click", function () {
+    $(".m-2").on("click", function() {
       document.body.scrollTop = 1538;
-      $(".m-2").addClass("m-active").siblings("span").removeClass("m-active");
+      $(".m-2")
+        .addClass("m-active")
+        .siblings("span")
+        .removeClass("m-active");
     });
-    $(".m-3").on("click", function () {
+    $(".m-3").on("click", function() {
       document.body.scrollTop = 2279;
-      $(".m-3").addClass("m-active").siblings("span").removeClass("m-active");
+      $(".m-3")
+        .addClass("m-active")
+        .siblings("span")
+        .removeClass("m-active");
     });
-    $(".m-bian").on("click", function () {
+    $(".m-bian").on("click", function() {
       $("#m_c_box").show(150);
       $(".m-chang").show();
     });
-    $("#m_c_esc").on("click", function () {
+    $("#m_c_esc").on("click", function() {
       $("#m_c_box").hide();
       $(".m-chang").hide();
     });
-    $(".m-chang").on("click", function () {
+    $(".m-chang").on("click", function() {
       $(".m-p-succ").hide();
       $(".m-chang").hide();
       $("#m_c_box").hide();
@@ -3721,7 +3664,7 @@ export default {
       that.tu = false;
     });
 
-    $(".p1").on("click", function () {
+    $(".p1").on("click", function() {
       window.type = $(this).attr("data-v");
       $("#dingxue").html("立即订阅");
       if (type == "最新变价通知") {
@@ -3804,20 +3747,23 @@ export default {
         that.position = 12;
         $(".weiter .t-top h6").html("抢免费专车票");
         $(".weiter .t-top p").html("精准匹配房源，免费接送一次看完好房");
-      }
-       else if (type == "允家专享购房送手机") {
-         $("#dingxue").html("立即去抢");
+      } else if (type == "允家专享购房送手机") {
+        $("#dingxue").html("立即去抢");
         that.position = 121;
         $(".weiter .t-top h6").html("允家专享购房送手机");
-        $(".weiter .t-top p").html("本平台成交项目即送苹果12 pro max一台，平台合计1000台手机送完为止");
+        $(".weiter .t-top p").html(
+          "本平台成交项目即送苹果12 pro max一台，平台合计1000台手机送完为止"
+        );
       }
       $(".weiter").css("z-index", "20001");
       $(".m-chang").show();
       that.change = true;
     });
 
-    $(".t-b-scode").on("click", function () {
-      var phone = $(this).prev().val();
+    $(".t-b-scode").on("click", function() {
+      var phone = $(this)
+        .prev()
+        .val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -3829,7 +3775,7 @@ export default {
       }
 
       var time = 60;
-      var fn = function () {
+      var fn = function() {
         time--;
         if (time > 0) {
           $(".t-b-scode").html("重发" + time + "s");
@@ -3843,31 +3789,31 @@ export default {
       fn();
       var interval = setInterval(fn, 1000);
       var data = {
-        phone: phone,
+        phone: phone
       };
     });
 
-    $("#s_esc").on("click", function () {
+    $("#s_esc").on("click", function() {
       $(".succ").hide();
       $(".zhao").hide();
     });
-    $(".s-btn").on("click", function () {
+    $(".s-btn").on("click", function() {
       $(".succ").hide();
       $(".zhao").hide();
     });
-    $("#find").on("click", function () {
+    $("#find").on("click", function() {
       $("#bname").submit();
     });
 
-    $("#a-esc").on("click", function () {
+    $("#a-esc").on("click", function() {
       $(".addre").hide();
       $(".zhao").hide();
     });
-    $("#l-esc").on("click", function () {
+    $("#l-esc").on("click", function() {
       $(".login").hide();
       $(".zhao").hide();
     });
-    $(".zhao").on("click", function () {
+    $(".zhao").on("click", function() {
       $(this).hide();
       $(".login").hide();
       $(".weiter").hide();
@@ -3877,12 +3823,15 @@ export default {
       $("#mpanel5").hide();
       $(".ts").css("z-index", "20001");
     });
-    $(".register").on("click", function () {
+    $(".register").on("click", function() {
       $(".zhao").show();
       $(".login").show(150);
     });
-    $(".m-get").on("click", function () {
-      var phone = $(this).prev().prev().val();
+    $(".m-get").on("click", function() {
+      var phone = $(this)
+        .prev()
+        .prev()
+        .val();
       var pattern_phone = /^1[3-9][0-9]{9}$/;
       if (phone == "") {
         $(".l-p").attr("placeholder", "手机号不能为空");
@@ -3894,7 +3843,7 @@ export default {
       }
 
       var time = 60;
-      var fn = function () {
+      var fn = function() {
         time--;
         if (time > 0) {
           $(".m-get").html("重新发送" + time + "s");
@@ -3908,34 +3857,49 @@ export default {
       fn();
       var interval = setInterval(fn, 1000);
       var data = {
-        phone: phone,
+        phone: phone
       };
     });
 
     // 验证码
-    $(".m-getcode").on("click", function () {
-      var tel = $(this).prev().val();
+    $(".m-getcode").on("click", function() {
+      var tel = $(this)
+        .prev()
+        .val();
 
       var pattern_tel = /^1[3-9][0-9]{9}$/;
       if (tel == "") {
-        $(this).prev().val("");
-        $(this).prev().attr("placeholder", "手机号码不能为空");
+        $(this)
+          .prev()
+          .val("");
+        $(this)
+          .prev()
+          .attr("placeholder", "手机号码不能为空");
         return;
       } else if (!pattern_tel.test(tel)) {
-        $(this).prev().val("");
-        $(this).prev().attr("placeholder", "手机号码不合法");
+        $(this)
+          .prev()
+          .val("");
+        $(this)
+          .prev()
+          .attr("placeholder", "手机号码不合法");
         return;
       }
-      var type = $(this).next().val();
-      var building_name = $(this).next().next().val();
+      var type = $(this)
+        .next()
+        .val();
+      var building_name = $(this)
+        .next()
+        .next()
+        .val();
       var data = {
         phone: tel,
         type: type,
-        building_name: building_name,
+        building_name: building_name
       };
-      $.post("{:url('home/content/port1')}", data, function (res) {}, "json");
+      $.post("{:url('home/content/port1')}", data, function(res) {}, "json");
       var time = 3;
-      var fn = function () {
+      var fn = function() {
         time--;
         if (time > 0) {
           $(".m-getcode").html("重新发送" + time + "s");
@@ -3950,39 +3914,45 @@ export default {
       var interval = setInterval(fn, 1000);
     });
 
-    $("#o_btn").on("click", function () {
+    $("#o_btn").on("click", function() {
       that.succ = false;
       $(".m-chang").hide();
     });
-    $(".o-esc").on("click", function () {
+    $(".o-esc").on("click", function() {
       that.succ = false;
       $(".m-chang").hide();
     });
 
     //楼盘问答---查看全文
     var flag = true;
-    $(".m-w-all").click(function () {
+    $(".m-w-all").click(function() {
       if (flag == true) {
-        $(this).prev().children("i").css({
-          "-webkit-line-clamp": "inherit",
-        });
+        $(this)
+          .prev()
+          .children("i")
+          .css({
+            "-webkit-line-clamp": "inherit"
+          });
         $(this).html("点击收起");
         flag = false;
       } else {
-        $(this).prev().children("i").css({
-          "-webkit-line-clamp": "3",
-        });
+        $(this)
+          .prev()
+          .children("i")
+          .css({
+            "-webkit-line-clamp": "3"
+          });
         $(this).html("查看全文");
         flag = true;
       }
     });
     //点击按钮出现hover
-    $(function () {
+    $(function() {
       function changeColor(id, class1, class2) {
-        $("#" + id).on("touchstart", function () {
+        $("#" + id).on("touchstart", function() {
           $(this).attr("class", class1);
         });
-        $("#" + id).on("touchend", function () {
+        $("#" + id).on("touchend", function() {
           $(this).attr("class", class2);
         });
       }
@@ -4004,10 +3974,10 @@ export default {
       this.drawline();
     },
     trend_time(val) {
-      this.priceline();
+      // this.priceline();
     },
 
-    nowHeight: function () {
+    nowHeight: function() {
       if (this.defaultHeight != this.nowHeight) {
         $(".weiter").css("top", "100px");
       } else {
@@ -4016,7 +3986,7 @@ export default {
     },
     $route() {
       this.$router.go(0);
-    },
+    }
   },
   updated() {
     if (this.over) {
@@ -4030,7 +4000,7 @@ export default {
   destroyed() {
     clearTimeout(this.timename);
     localStorage.removeItem("map");
-  },
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -4101,35 +4071,35 @@ body {
   background-size: 100%;
 }
 .phone-huo {
-    position: relative;
-    margin-top: .875rem;
-    img {
-      width: 100%;
-      margin: 0;
-    }
-    p {
-      position: absolute;
-      font-size: .75rem;
-      color: #fff;
-      right: 2.3125rem;
-      bottom: .875rem;
-    }
-    button {
-      width: 4rem;
-      height: 1.5rem;
-      border-radius: .75rem;
-      background-color: #fff;
-      text-align: center;
-      line-height: 1.5rem;
-      border: 0;
-      outline: none;
-      position: absolute;
-      right: 2rem;
-      top: 1.875rem;
-      color: #153870;
-      font-size: .75rem;
-    }
+  position: relative;
+  margin-top: 0.875rem;
+  img {
+    width: 100%;
+    margin: 0;
   }
+  p {
+    position: absolute;
+    font-size: 0.75rem;
+    color: #fff;
+    right: 2.3125rem;
+    bottom: 0.875rem;
+  }
+  button {
+    width: 4rem;
+    height: 1.5rem;
+    border-radius: 0.75rem;
+    background-color: #fff;
+    text-align: center;
+    line-height: 1.5rem;
+    border: 0;
+    outline: none;
+    position: absolute;
+    right: 2rem;
+    top: 1.875rem;
+    color: #153870;
+    font-size: 0.75rem;
+  }
+}
 .hui-left {
   padding-left: 1rem;
   padding-top: 0.625rem;

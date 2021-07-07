@@ -19,7 +19,8 @@ const store = () => new Vuex.Store({
     cookie: {},
     proid: '',
     uuid: '',
-    hostname: ''
+    hostname: '',
+    userid: 0
   },
   mutations: {
     setip(state, data) {
@@ -54,6 +55,9 @@ const store = () => new Vuex.Store({
     },
     setws(state, id) {
       state.ws = id
+    },
+    setuserid(state, id) {
+      state.userid = id
     },
     sethostname(state, type) {
       state.hostname = type
@@ -294,6 +298,9 @@ const store = () => new Vuex.Store({
     },
     setws(context, data) {
       context.commit('setws', data)
+    },
+    setuserid(context, data) {
+      context.commit('setuserid', data)
     }
   },
 

@@ -312,10 +312,8 @@
                         <h1>{{ hot.name }}</h1>
                         <p>
                           {{ hot.country }}&nbsp;&nbsp;&nbsp;{{
-                            parseInt(hot.area_min)
-                          }}
-                          <span v-if="hot.area_max">-</span>
-                          {{ parseInt(hot.area_max) }}m²
+                            parseInt(hot.area)
+                          }}m²
                         </p>
                         <h6>{{ parseInt(hot.price) }}元/m²起</h6>
                       </div>
@@ -351,10 +349,8 @@
                         <h1>{{ hot.name }}</h1>
                         <p>
                           {{ hot.country }}&nbsp;&nbsp;&nbsp;{{
-                            parseInt(hot.area_min)
-                          }}
-                          <span v-if="hot.area_max">-</span>
-                          {{ parseInt(hot.area_max) }}m²
+                            parseInt(hot.area)
+                          }}m²
                         </p>
                         <h6>{{ parseInt(hot.price) }}元/m²起</h6>
                       </div>

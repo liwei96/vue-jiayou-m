@@ -43,7 +43,7 @@ export default {
       jkl: jkl,
     };
   },
-  props: ['id','typenum','name','typebtn','txt','proname','lucktype','iswenjian'],
+  props: ['id','typenum','name','typebtn','txt','proname','lucktype','iswenjian','city'],
   data() {
     return {
       show: false,
@@ -71,6 +71,9 @@ export default {
       let jkl = this.$route.params.name;
       this.$router.push("/" + jkl + "/server");
     },
+    cli(e) {
+      this.tan = e;
+    },
     send() {
       let that = this;
       clearInterval(that.interval);
@@ -91,7 +94,7 @@ export default {
       let id = this.id;
       let typenum = this.typenum;
       let ip = ip_arr["ip"];
-      let city = $cookies.get("city");
+      let city = this.city || $cookies.get("city");
       let kid = $cookies.get("kid");
       let other = $cookies.get("other");
       let txt = this.txt;
@@ -313,7 +316,11 @@ export default {
       this.str =
         "最新楼盘分析资料，看看房产专家对楼盘的分析和解读";
       this.btnstr = "立即领取";
-    }
+    } else if (type == "申请开放") {
+        this.str =
+          "向我们申请开放该城市，让我们一起点亮并守护您选择的城市";
+      this.btnstr = "立即申请";
+      }
     console.log(this.name);
   },
   watch: {

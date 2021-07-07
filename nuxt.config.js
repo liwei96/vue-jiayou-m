@@ -226,7 +226,7 @@ export default {
         "^/mobile": "/mobile" // 去掉接口地址中的api字符串
       }
     },
-    "/yun_jia": {
+    "/yun_jia/": {
       target: "http://api.edefang.net/", // 重新映射的新地址 
       changeOrigin: true, // 是否跨域
       pathRewrite: {
@@ -253,7 +253,21 @@ export default {
       pathRewrite: {
         "^/yunjia": "/yunjia" // 去掉接口地址中的api字符串
       }
-    }
+    },
+    "/cities": {
+      target: "http://java.edefang.net/", // 重新映射的新地址 
+      changeOrigin: true, // 是否跨域
+      pathRewrite: {
+        "^/cities": "/cities" // 去掉接口地址中的api字符串
+      }
+    },
+    "/yun_jia_new": {
+      target: "http://39.98.227.114:8989/", // 重新映射的新地址 
+      changeOrigin: true, // 是否跨域
+      pathRewrite: {
+        "^/yun_jia_new": "/yun_jia_new" // 去掉接口地址中的api字符串
+      }
+    },
   },
   axios: {
     proxy: true // 表示开启代理
