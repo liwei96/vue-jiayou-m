@@ -94,7 +94,9 @@ export default {
         .then((resp) => {
           if (resp.data.code == 200) {
             $cookies.set("token", resp.data.token);
+            $cookies.set("userid", resp.data.userId);
             localStorage.setItem("token", resp.data.token);
+            this.$store.dispatch("setuuid", resp.data.userId);
             // that.$router.push('/'+that.n)
             // window.location.href = "/"+that.n;
             if (sessionStorage.getItem("comment")) {

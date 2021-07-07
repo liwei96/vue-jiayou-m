@@ -82,6 +82,7 @@ const store = () => new Vuex.Store({
         commit('setcookie', {
           'cookie': obj
         })
+        commit('setuserid',obj.userid)
       }
       let name = req.url.split('/')[1].split('?')[0]
       commit('setpinyin', {

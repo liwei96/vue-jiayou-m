@@ -14,13 +14,12 @@
             alt
             @click="listtype = !listtype"
           />
-          <!-- <img class="topright tophome" src="~/assets/top-house.png" alt /> -->
-          <img
+          <!-- <img
             class="topright"
             src="~/assets/top-user.png"
             alt
             @click="gohome"
-          />
+          /> -->
           <ul class="cailist" v-if="listtype">
             <li class="cmn">
               <router-link :to="'/' + jkl">
@@ -74,6 +73,8 @@
             </div>
             <div id="swiper-pagination1"></div>
           </div>-->
+          <p class="lun-xiao">效果图</p>
+          <p class="lun-xiao">户型图</p>
           <span id="lnum">共{{ topnum }}张</span>
         </div>
       </div>
@@ -4009,6 +4010,19 @@ export default {
 * {
   font-family: "Microsoft YaHei";
   -webkit-overflow-scrolling: touch;
+}
+.m-luns {
+  p {
+    width: 2.875rem;
+    height: 1.25rem;
+    border-radius: .625rem;
+    position: absolute;
+    left: 8.4375rem;
+    bottom: .625rem;
+    z-index: 2;
+    text-align: center;
+    line-height: 1.25rem;
+  }
 }
 html {
   height: 100%;
