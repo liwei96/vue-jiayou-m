@@ -73,8 +73,35 @@
             </div>
             <div id="swiper-pagination1"></div>
           </div>-->
-          <p class="lun-xiao">效果图</p>
-          <p class="lun-xiao">户型图</p>
+          <p :class="imgtype == 0 ? 'lun-xiao active' : ''">效果图</p>
+          <p :class="imgtype == 1 ? 'lun-hu active' : 'lun-hu'">户型图</p>
+          <div class="topgun">
+            <van-notice-bar
+              left-icon="volume-o"
+              :scrollable="false"
+              color="#FFA56E"
+            >
+              <van-swipe
+                vertical
+                class="notice-swipe"
+                :autoplay="3000"
+                :show-indicators="false"
+              >
+                <van-swipe-item
+                  >145*****875
+                  &nbsp;&nbsp;&nbsp;查询底价&nbsp;&nbsp;&nbsp;56分钟前</van-swipe-item
+                >
+                <van-swipe-item
+                  >145*****875
+                  &nbsp;&nbsp;&nbsp;查询底价&nbsp;&nbsp;&nbsp;56分钟前</van-swipe-item
+                >
+                <van-swipe-item
+                  >145*****875
+                  &nbsp;&nbsp;&nbsp;查询底价&nbsp;&nbsp;&nbsp;56分钟前</van-swipe-item
+                >
+              </van-swipe>
+            </van-notice-bar>
+          </div>
           <span id="lnum">共{{ topnum }}张</span>
         </div>
       </div>
@@ -120,7 +147,8 @@
 
         <div class="m-ic-icons">
           <span class="m-zai">{{ building.sale_state }}</span>
-          <span class="m-jing" v-if="building.railways.length">{{
+          <span>{{ building.type }}</span>
+          <span v-if="building.railways.length">{{
             building.railways[0]
           }}</span>
           <!-- <span v-show="building.railway">{{ building.railway }}</span> -->
@@ -129,15 +157,6 @@
           }}</span>
           <strong v-show="tuan == 1">限时优惠</strong>
           <div class="build-icons" v-show="!iswx">
-            <div class="icons-left">
-              <img
-                src="~/assets/contrast.png"
-                alt
-                @click="pks($event)"
-                :data-v="id"
-              />
-              PK
-            </div>
             <div>
               <img
                 id="fork"
@@ -154,7 +173,6 @@
                 @click="collections($event)"
                 v-show="forknum === 1"
               />
-              收藏
             </div>
           </div>
           <div class="wxshare" v-show="iswx" @click="goshare">
@@ -166,7 +184,20 @@
             <i class="m_shou01" @click="pks($event)" :data-v="id">楼盘PK</i>
           </i>-->
         </div>
-        <ul class="m-jtop">
+        <div class="toppri p1">
+          均价：<span class="pri">{{ parseInt(building.single_price) }}</span
+          ><span class="danwei">元/m²</span>
+          <p class="detailmore">详细信息<img src="~/assets/m-go.png" alt /></p>
+        </div>
+        <div class="toppri">
+          开盘：<span class="open">{{ building.open_time }}</span>
+        </div>
+        <div class="toppri">
+          地址：
+          <p class="open">{{ building.address }}</p>
+          <img class="address" src="~/assets/map-address.png" alt="" />
+        </div>
+        <!-- <ul class="m-jtop">
           <li>
             <p>
               <span>{{ parseInt(building.single_price) }}</span
@@ -188,8 +219,8 @@
             </p>
             <span>建筑面积</span>
           </li>
-        </ul>
-        <div class="m-ibottom">
+        </ul> -->
+        <!-- <div class="m-ibottom">
           <ul>
             <li>
               户型：
@@ -218,27 +249,21 @@
               <img src="~/assets/m-go.png" alt />
             </p>
           </nuxt-link>
-        </div>
-        <div class="go-map">
-          <!-- <img class="map-address" src="~/assets/blackaddress.png" alt /> -->
-          <span class="map-address">地址：</span>
-          <span class="map-msg">{{ building.address }}</span>
-          <img class="map-go" src="~/assets/map-address.png" alt />
-        </div>
+        </div> -->
+        <p class="zhushi">注：以上价格为开发商报价，可联系咨询师咨询最低价</p>
         <div class="m-new">
           <div href="javascript:;" class="p1" data-v="最新变价通知">
-            <img src="~/assets/newforce.png" />最新变价通知
+            查询底价
+            <img src="~/assets/topbtnleft.png" alt="">
           </div>
           <div href="javascript:;" class="p1" data-v="最新开盘通知">
-            <img src="~/assets/newhorn.png" />最新开盘通知
+            查成交价
+            <img src="~/assets/topbtnright.png" alt="">
           </div>
         </div>
       </div>
-
-      <div class="m-image">
-        <!-- <a data-agl-cvt="2" :href="'tel:'+call" v-show="!iswxsid">
-          <img src="~/assets/mj-tell.png" alt />
-        </a>-->
+      <div class="m-line"></div>
+      <!-- <div class="m-image">
         <div class="wxtel" v-show="!iswxsid">
           <a :href="'tel:' + call">
             <p>{{ callmsg }}</p>
@@ -251,7 +276,7 @@
             <img src="~/assets/wxtel.jpg" alt />
           </a>
         </div>
-      </div>
+      </div> -->
       <div class="pin">
         <nav>
           <h3>优惠信息</h3>
@@ -262,12 +287,8 @@
             <span>{{min}}</span>:
             <span>{{second}}</span>
           </p>-->
-          <button @click="huomsg = true" v-if="participate == 0">
-            活动规则
-          </button>
-          <button @click="huomsg1 = true" v-if="participate != 0">
-            活动规则
-          </button>
+          <img src="~/assets/backhome-question.png" alt="" @click="huomsg = true" v-if="participate == 0">
+          <img src="~/assets/backhome-question.png" alt="" @click="huomsg1 = true" v-if="participate != 0">
         </nav>
         <div class="hong-tit" v-if="activity.length != 0">
           <span>返乡置业</span>1亿购房补贴大放送
@@ -292,7 +313,7 @@
           <div class="pin-bao" @click="xiangs(22)">领取优惠</div>
           <p class="pin-msg">{{ num1 }}人已领取</p>
           <p class="pin-left">
-            售楼处专供允家平台客户<span>（{{ endtime.substr(5) }}截止）</span>
+            <span>（{{ endtime.substr(5) }}截止）</span>
           </p>
         </div>
         <div class="phone-huo" v-if="participate != 0 && participate">
@@ -302,11 +323,11 @@
         </div>
         <div class="bomm">
           <div class="pin-bao y1" v-show="!newimg" @click="xiang(28)">
-            抢优惠券
+            免费领取
           </div>
           <p class="pin-msg ym">{{ num2 }}人已抢到</p>
           <p class="pin-time">
-            免费专车1对1服务限时券<span>（剩余{{ num3 }}张）</span>
+            <span>（剩余{{ num3 }}张）</span>
           </p>
           <img src="~/assets/youhui.png" alt />
         </div>
@@ -349,83 +370,8 @@
         <span>刚需楼盘榜第4名</span>
         <img class="totop" src="~/assets/m-go.png" alt />
       </div>
-      <div class="m-dong">
-        <h3 id="m_dong">
-          楼盘动态
-          <nuxt-link :to="'/' + jkl + '/contentdynamic/' + id">
-            <span>
-              共{{ ds }}条
-              <img src="~/assets/m-go.png" alt />
-            </span>
-          </nuxt-link>
-        </h3>
+      
 
-        <div
-          :class="item.state == '否' ? 'm-tai m-d' : 'm-jia m-d'"
-          v-for="item in nowdong"
-          :key="item.id"
-        >
-          <span>
-            {{ item.time }}
-            <i v-if="item.state == '否'">最新</i>
-            <i v-if="item.state == '是'">加推</i>
-          </span>
-          <h4 v-if="item.state == '否'">最新房源动态</h4>
-          <h4 v-if="item.state == '是'">最新加推楼盘</h4>
-          <p>{{ item.content }}</p>
-        </div>
-        <!-- <div class="m-jia m-d" v-show="tui">
-          <span>
-            {{ tui.time }}
-            <i>加推</i>
-          </span>
-          <h4>最新加推楼盘</h4>
-          <p>{{ tui.content }}</p>
-        </div> -->
-
-        <div class="t-o o1"></div>
-        <div class="t-o o2" v-show="tui"></div>
-        <div class="t-l l1"></div>
-        <div class="t-l l2" v-show="tui"></div>
-        <div class="dynamic-hd">
-          <div class="swiper-dynamic">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <div :class="ndss">
-                  <h5>拿地</h5>
-                  <p>{{ ndtime }}</p>
-                  <div></div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div :class="jtss">
-                  <h5>首开</h5>
-                  <p>{{ jttime }}</p>
-                  <div></div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div :class="skss">
-                  <h5>加推</h5>
-                  <p>{{ sktime }}</p>
-                  <div></div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div :class="jfss">
-                  <h5>交房</h5>
-                  <p>{{ jftime }}</p>
-                  <div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <button class="p1" data-v="订阅最新动态">获取最新动态</button>
-      </div>
-
-      <div class="m-line" v-show="hu"></div>
 
       <div class="m-hu" v-show="hu">
         <h3>
@@ -456,7 +402,7 @@
                     <span>{{ h.state }}</span>
                   </h5>
                   <p class="jian">
-                    建面 {{ h.area }}&nbsp;&nbsp;&nbsp;类型 {{ h.type }}
+                    建面 {{ h.area }}
                   </p>
                   <p class="red">
                     约
@@ -464,10 +410,14 @@
                     >万起
                   </p>
                 </nuxt-link>
-                <button class="p1" data-v="咨询详细户型">咨询详细户型</button>
+                
               </div>
             </div>
           </div>
+        </div>
+        <div class="hubtn">
+          <button class="p1" data-v="帮我找户型">帮我找户型</button>
+          <button class="p1" data-v="听户型讲解">听户型讲解</button>
         </div>
         <!-- <button class="p1" data-v="了解详细户型">了解详细户型</button> -->
       </div>
@@ -477,15 +427,11 @@
       <!--对比分析资料 -->
       <div class="m-fen">
         <h3>
-          项目分析资料
-          <nuxt-link :to="'/' + jkl + '/analysis/' + id">
-            <span class="m-more-fen">
-              详细分析
-              <img class="xiang-img" src="~/assets/m-go.png" alt />
-            </span>
-          </nuxt-link>
+          楼盘概况
         </h3>
-
+        <div class="fenmap">
+          <img :src="mapurl" alt="">
+        </div>
         <!--对比分析资料 -->
         <div class="dui-zi">
           <div class="swiper-wrapper">
@@ -731,6 +677,81 @@
           </div>
         </div>
         <button class="p1" data-v="获取详细周边配套">获取详细周边配套</button>
+      </div>
+      <div class="m-line"></div>
+      <div class="m-dong">
+        <h3 id="m_dong">
+          最新消息
+          <nuxt-link :to="'/' + jkl + '/contentdynamic/' + id">
+            <span>
+             全部动态
+              <img src="~/assets/m-go.png" alt />
+            </span>
+          </nuxt-link>
+        </h3>
+        <div
+          :class="item.state == '否' ? 'm-tai m-d' : 'm-jia m-d'"
+          v-for="item in nowdong"
+          :key="item.id"
+        >
+          <span>
+            {{ item.time }}
+            <i v-if="item.state == '否'">最新</i>
+            <i v-if="item.state == '是'">加推</i>
+          </span>
+          <h4 v-if="item.state == '否'">最新房源动态</h4>
+          <h4 v-if="item.state == '是'">最新加推楼盘</h4>
+          <p>{{ item.content }}</p>
+        </div>
+        <!-- <div class="m-jia m-d" v-show="tui">
+          <span>
+            {{ tui.time }}
+            <i>加推</i>
+          </span>
+          <h4>最新加推楼盘</h4>
+          <p>{{ tui.content }}</p>
+        </div> -->
+
+        <div class="t-o o1"></div>
+        <div class="t-o o2" v-show="tui"></div>
+        <div class="t-l l1"></div>
+        <div class="t-l l2" v-show="tui"></div>
+        <div class="dynamic-hd">
+          <div class="swiper-dynamic">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <div :class="ndss">
+                  <h5>拿地</h5>
+                  <p>{{ ndtime }}</p>
+                  <div></div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div :class="jtss">
+                  <h5>首开</h5>
+                  <p>{{ jttime }}</p>
+                  <div></div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div :class="skss">
+                  <h5>加推</h5>
+                  <p>{{ sktime }}</p>
+                  <div></div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div :class="jfss">
+                  <h5>交房</h5>
+                  <p>{{ jftime }}</p>
+                  <div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="p1" data-v="订阅最新动态">获取最新动态</button>
       </div>
       <div class="m-line" v-if="compares.length"></div>
       <!-- 楼盘对比 -->
@@ -1349,14 +1370,14 @@ export default {
                 };
               }
             }
-            let times = []
+            let times = [];
             if (data.transactionPrices) {
               for (let item of data.transactionPrices) {
                 prices.push(item.price);
-                times.push(item.time.substr(6))
+                times.push(item.time.substr(6));
               }
             }
-            data.times = times
+            data.times = times;
             data.prices = prices;
             if (
               new Date(
@@ -1647,7 +1668,8 @@ export default {
       staffname: "",
       staffimg: "",
       talktype: false,
-      staffid: 152
+      staffid: 152,
+      imgtype: 0
     };
   },
   head() {
@@ -3251,7 +3273,7 @@ export default {
       slidesOffsetAfter: 10
     });
     var swiper06 = new Swiper(".swiper-house", {
-      slidesPerView: 2.08,
+      slidesPerView: 2.6,
       spaceBetween: 10,
       observer: true,
       slidesOffsetAfter: 2,
@@ -4015,15 +4037,122 @@ export default {
   p {
     width: 2.875rem;
     height: 1.25rem;
-    border-radius: .625rem;
+    border-radius: 0.625rem;
     position: absolute;
     left: 8.4375rem;
-    bottom: .625rem;
-    z-index: 2;
+    bottom: 0.625rem;
+    z-index: 11;
     text-align: center;
     line-height: 1.25rem;
+    background-color: #fff;
+    color: #646566;
+    font-size: 0.625rem;
+  }
+  .lun-hu {
+    left: 12.0625rem;
+  }
+  .active {
+    background-color: #3eacf0;
+    color: #fff;
+  }
+  .topgun {
+    position: absolute;
+    width: 15.625rem;
+    z-index: 11;
+    height: 1.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0.9375rem;
+    border-radius: 0.875rem;
+    background: rgba(0, 0, 0, 0.6);
+    .van-notice-bar {
+      background: rgba(0, 0, 0, 0);
+      height: 1.75rem;
+      line-height: 1.75rem;
+      padding-left: 0.625rem;
+    }
+    .notice-swipe {
+      height: 1.75rem;
+      line-height: 1.75rem;
+      color: #e1e1e1;
+      font-size: 0.6875rem;
+    }
   }
 }
+.m-incro {
+  .toppri {
+    color: #7d7f80;
+    font-size: 0.875rem;
+    display: flex;
+    padding: 0 4%;
+    align-items: center;
+    .pri {
+      color: #ff6040;
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+    .danwei {
+      color: #ff6040;
+      font-size: 0.625rem;
+    }
+    .detailmore {
+      color: #969799;
+      font-size: 0.8125rem;
+      margin-left: auto;
+      img {
+        width: 0.75rem;
+      }
+    }
+    p.open {
+      max-width: 15.625rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .open {
+      color: #2e3133;
+      font-size: 0.875rem;
+    }
+    .address {
+      width: 2.25rem;
+      margin-left: auto;
+    }
+  }
+  .p1 {
+    margin-bottom: .25rem;
+  }
+  .zhushi {
+    color: #2E3133;
+    font-size: .75rem;
+    margin-top: .75rem;
+    padding-left: 4%;
+    margin-bottom: 1.375rem;
+  }
+  .m-new {
+    margin-bottom: 1.0625rem;
+    .p1 {
+      position: relative;
+      width: 10.4375rem;
+      height: 3rem;
+      border-radius: .5rem;
+      background: linear-gradient(90deg, #3287FB 0%, #6ACCFF 100%);
+      font-size: 1rem;
+      color: #fff;
+      line-height: 3rem;
+      img {
+        width: 3rem;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        margin: 0;
+      }
+    }
+    .p1:nth-last-of-type(1) {
+      background: linear-gradient(90deg, #FF6047 0%, #FFA56E 100%);
+    }
+  }
+}
+
 html {
   height: 100%;
   overflow: hidden;
@@ -5522,6 +5651,114 @@ h2 .cailist li img {
     li:last-child {
       border: 0;
       margin-bottom: 0.4375rem;
+    }
+  }
+}
+
+.pin {
+  padding-bottom: 1.25rem;
+  nav {
+    padding-top: 1.25rem;
+    h3 {
+      color: #0F161A;
+    }
+    img {
+      width: 1rem;
+      margin-left: .375rem;
+      margin-bottom: -0.125rem;
+    }
+  }
+  .pin-left {
+    left: 42%;
+    top: 54%
+  }
+  .pin-time {
+    left: 42%;
+    top: 59%
+  }
+  .bomm {
+    img {
+      margin-bottom: 0;
+    }
+  }
+}
+.m-hu {
+  h3 {
+    margin: 1.125rem 0 1.125rem 4%;
+    font-size: 1.0625rem;
+    color: #19191A;
+    span {
+      color: #969799;
+    }
+  }
+  .swiper-house {
+    padding-bottom: 1.25rem;
+    .swiper-wrapper {
+      .swiper-slide {
+        box-shadow: 0px 0px .9375rem 0px rgba(0, 0, 0, 0.04);
+        border-radius: .375rem;
+        overflow: hidden;
+        .tegood {
+          padding-bottom: .625rem;
+          padding-left: .625rem;
+          .top {
+            height: 5.9375rem;
+          }
+          h5 {
+            color: #3D3E40;
+            font-size: .9375rem;
+            margin-top: .75rem;
+            margin-bottom: .375rem;
+            span {
+              background-color: #E6FAEF;
+              color: #29CC72;
+            }
+          }
+          .jian {
+            color: #7D7E80;
+            font-size: .75rem;
+          }
+          .red {
+            color: #FF5747;
+            font-size: .625rem;
+            span {
+              font-size: 1rem;
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+  }
+  .hubtn {
+    display: flex;
+    .p1 {
+      width: 10.4375rem;
+      height: 3rem;
+      border-radius: .5rem;
+      background-color: #E8F6FC;
+      text-align: center;
+      line-height: 3rem;
+      color: #4283AB;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 1.25rem;
+    }
+    .p1:nth-of-type(2) {
+      margin-left: .6875rem;
+    }
+  }
+}
+.m-fen {
+  h3 {
+    color: #121212;
+    font-size: 1.0625rem;
+    margin: 1.125rem 0;
+  }
+  .fenmap {
+    img {
+      width: 100%;
+      height: 8.125rem;
     }
   }
 }
