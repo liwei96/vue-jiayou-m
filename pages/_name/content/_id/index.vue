@@ -14,12 +14,12 @@
             alt
             @click="listtype = !listtype"
           />
-          <!-- <img
+          <img
             class="topright"
             src="~/assets/top-user.png"
             alt
             @click="gohome"
-          /> -->
+          />
           <ul class="cailist" v-if="listtype">
             <li class="cmn">
               <router-link :to="'/' + jkl">
@@ -73,8 +73,8 @@
             </div>
             <div id="swiper-pagination1"></div>
           </div>-->
-          <p class="lun-xiao active">效果图</p>
-          <p class="lun-hu">户型图</p>
+          <!-- <p class="lun-xiao active">效果图</p>
+          <p class="lun-hu">户型图</p> -->
           <span id="lnum">共{{ topnum }}张</span>
         </div>
       </div>
