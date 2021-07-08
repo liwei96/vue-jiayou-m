@@ -262,7 +262,7 @@ export default {
       }
     },
     "/yun_jia_new": {
-      target: "http://39.98.227.114:8989/", // 重新映射的新地址 
+      target: "http://java.edefang.net/", // 重新映射的新地址 
       changeOrigin: true, // 是否跨域
       pathRewrite: {
         "^/yun_jia_new": "/yun_jia_new" // 去掉接口地址中的api字符串
@@ -272,7 +272,6 @@ export default {
   axios: {
     proxy: true // 表示开启代理
   },
-
   router: {
     scrollBehavior(to, from, savedPosition) {
       // if (savedPosition) {        
