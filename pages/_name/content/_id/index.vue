@@ -73,8 +73,8 @@
             </div>
             <div id="swiper-pagination1"></div>
           </div>-->
-          <p :class="imgtype == 0 ? 'lun-xiao active' : ''">效果图</p>
-          <p :class="imgtype == 1 ? 'lun-hu active' : 'lun-hu'">户型图</p>
+          <p :class="imgtype == 0 ? 'lun-xiao active' : ''" @click="setimg(0)">效果图</p>
+          <p :class="imgtype == 1 ? 'lun-hu active' : 'lun-hu'"  @click="setimg(1)">户型图</p>
           <div class="topgun">
             <van-notice-bar
               left-icon="volume-o"
@@ -184,10 +184,10 @@
             <i class="m_shou01" @click="pks($event)" :data-v="id">楼盘PK</i>
           </i>-->
         </div>
-        <div class="toppri p1">
+        <div class="toppri pr1">
           均价：<span class="pri">{{ parseInt(building.single_price) }}</span
           ><span class="danwei">元/m²</span>
-          <p class="detailmore">详细信息<img src="~/assets/m-go.png" alt /></p>
+          <p class="detailmore" @click="godetail">详细信息<img src="~/assets/m-go.png" alt /></p>
         </div>
         <div class="toppri">
           开盘：<span class="open">{{ building.open_time }}</span>
@@ -197,68 +197,15 @@
           <p class="open">{{ building.address }}</p>
           <img class="address" src="~/assets/map-address.png" alt="" />
         </div>
-        <!-- <ul class="m-jtop">
-          <li>
-            <p>
-              <span>{{ parseInt(building.single_price) }}</span
-              >元/m²
-            </p>
-            <span>参考单价</span>
-          </li>
-          <li>
-            <p class="lo">
-              <span>{{ parseInt(building.total_price) }}</span
-              >万起
-            </p>
-            <span>参考总价</span>
-          </li>
-          <li>
-            <p v-show="building.area">
-              <span>{{ building.area }}</span
-              >/m²
-            </p>
-            <span>建筑面积</span>
-          </li>
-        </ul> -->
-        <!-- <div class="m-ibottom">
-          <ul>
-            <li>
-              户型：
-              <span class="m-pric" v-if="building.house_types.length">{{
-                building.house_types.join(",")
-              }}</span>
-            </li>
-            <li>
-              装修：
-              <span>{{ building.decorate }}</span>
-            </li>
-          </ul>
-          <ul>
-            <li>
-              类型：
-              <span class="m-pric">{{ building.type }}</span>
-            </li>
-            <li>
-              开盘：
-              <span>{{ building.open_time }}</span>
-            </li>
-          </ul>
-          <nuxt-link :to="'/' + jkl + '/detail/' + id">
-            <p id="moreinfro">
-              详情
-              <img src="~/assets/m-go.png" alt />
-            </p>
-          </nuxt-link>
-        </div> -->
         <p class="zhushi">注：以上价格为开发商报价，可联系咨询师咨询最低价</p>
         <div class="m-new">
           <div href="javascript:;" class="p1" data-v="最新变价通知">
             查询底价
-            <img src="~/assets/topbtnleft.png" alt="">
+            <img src="~/assets/topbtnleft.png" alt="" />
           </div>
           <div href="javascript:;" class="p1" data-v="最新开盘通知">
             查成交价
-            <img src="~/assets/topbtnright.png" alt="">
+            <img src="~/assets/topbtnright.png" alt="" />
           </div>
         </div>
       </div>
@@ -287,8 +234,18 @@
             <span>{{min}}</span>:
             <span>{{second}}</span>
           </p>-->
-          <img src="~/assets/backhome-question.png" alt="" @click="huomsg = true" v-if="participate == 0">
-          <img src="~/assets/backhome-question.png" alt="" @click="huomsg1 = true" v-if="participate != 0">
+          <img
+            src="~/assets/backhome-question.png"
+            alt=""
+            @click="huomsg = true"
+            v-if="participate == 0"
+          />
+          <img
+            src="~/assets/backhome-question.png"
+            alt=""
+            @click="huomsg1 = true"
+            v-if="participate != 0"
+          />
         </nav>
         <div class="hong-tit" v-if="activity.length != 0">
           <span>返乡置业</span>1亿购房补贴大放送
@@ -370,9 +327,63 @@
         <span>刚需楼盘榜第4名</span>
         <img class="totop" src="~/assets/m-go.png" alt />
       </div>
-      
-
-
+      <div class="special">
+        <div class="toptit">
+          <img src="~/assets/shot.png" alt="" />
+          <span class="tit">今日特价房</span>
+          <div class="ritime">
+            距结束仅剩02天
+            <p><span>02</span>:<span>02</span>:<span>02</span></p>
+          </div>
+        </div>
+        <div class="swiper-special">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="di"></div>
+              <div class="center">
+                <p>房号-1803 78.8m²</p>
+              </div>
+              <div class="top">
+                <p class="te">特价<span>278.5</span>万</p>
+                <p class="old">原价304.5万</p>
+                <button>立即抢</button>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="di"></div>
+              <div class="center">
+                <p>房号-1803 78.8m²</p>
+              </div>
+              <div class="top">
+                <p class="te">特价<span>278.5</span>万</p>
+                <p class="old">原价304.5万</p>
+                <button>立即抢</button>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="di"></div>
+              <div class="center">
+                <p>房号-1803 78.8m²</p>
+              </div>
+              <div class="top">
+                <p class="te">特价<span>278.5</span>万</p>
+                <p class="old">原价304.5万</p>
+                <button>立即抢</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bomtxt">
+          <van-notice-bar
+            left-icon="volume-o"
+            color="#4B4B4D" 
+            background="#fff"
+            text="在代码阅读过程中人们说脏话的频率是衡量代码质量的唯一标准。"
+          />
+        </div>
+        <button class="p1">咨询特价房</button>
+      </div>
+      <div class="m-line"></div>
       <div class="m-hu" v-show="hu">
         <h3>
           主力户型
@@ -401,16 +412,13 @@
                     {{ h.title }}
                     <span>{{ h.state }}</span>
                   </h5>
-                  <p class="jian">
-                    建面 {{ h.area }}
-                  </p>
+                  <p class="jian">建面 {{ h.area }}</p>
                   <p class="red">
                     约
                     <span>{{ h.price }}</span
                     >万起
                   </p>
                 </nuxt-link>
-                
               </div>
             </div>
           </div>
@@ -430,10 +438,21 @@
           楼盘概况
         </h3>
         <div class="fenmap">
-          <img :src="mapurl" alt="">
+          <img :src="mapurl" alt="" />
+        </div>
+        <p class="title"><img src="~/assets/fenyou.png" />项目优势</p>
+        <p class="fencontent">
+          {{ invest.join(";") }}
+        </p>
+        <p class="title"><img src="~/assets/fenju.png" />宜居分析</p>
+        <p class="fencontent">
+          {{ live.join(";") }}
+        </p>
+        <div class="zhao">
+          <img src="~/assets/fensuo.png" alt="" />
         </div>
         <!--对比分析资料 -->
-        <div class="dui-zi">
+        <div class="dui-zi" v-if="false">
           <div class="swiper-wrapper">
             <div class="swiper-slide dui-box">
               <nuxt-link :to="'/' + jkl + '/analysis/' + id">
@@ -465,48 +484,75 @@
           <!-- Add Pagination -->
           <div class="swiper-pagination2"></div>
         </div>
-        <button class="p1" data-v="获取楼盘分析资料">获取楼盘分析资料</button>
+        <button class="p1" data-v="限时免费解锁报告">限时免费解锁报告</button>
       </div>
-      <div class="m-line" v-show="tuan == 1"></div>
-      <div class="m-ling">
-        <h3>
-          领取免费地图
-          <span>
-            已有
-            <i>860</i>人领取
-          </span>
-        </h3>
-        <img src="~/assets/new-map1.jpg" alt />
-        <div class="m-iright">
-          <h4>为什么大家在准备买房的时候领 一份资料？</h4>
-          <p>1.优质地段、优质楼盘一图囊括</p>
-          <p class="ling-ssd">
-            <i>
-              2.电子地图、快捷分享、多人收益
-              <em v-show="ling">...</em>
-            </i>
-            <i>3.高效率看房、更多楼盘三维对比</i>
-            <i>4.提供精准的价格、商业分析</i>
-          </p>
-          <span @click="lingbtn($event)">展开</span>
+      <div class="m-line"></div>
+      <div class="vip">
+        <h2><span>VIP</span>服务</h2>
+        <p class="icons">
+          <span><img src="~/assets/save.png" alt="" />专业服务</span>
+          <span><img src="~/assets/icon-path.png" alt="" />区域解读</span>
+          <span><img src="~/assets/icon-pin.png" alt="" />户型分析</span>
+        </p>
+        <div class="peo">
+          <div class="img">
+            <img :src="staffs[0].image" alt="" />
+          </div>
+          <div class="peocon">
+            <h3>金牌顾问 <span>李聪然</span></h3>
+            <div class="contxt">
+              <p class="msg">服务</p>
+              <p class="txt">
+                <span>1.</span>楼盘户型介绍<span>2.</span>近期活动介绍
+              </p>
+            </div>
+          </div>
+          <button>免费咨询</button>
         </div>
-        <button class="p1" data-v="领取免费地图">我要领取地图</button>
+        <div class="peo">
+          <div class="img">
+            <img :src="staffs[0].image" alt="" />
+          </div>
+          <div class="peocon">
+            <h3>金牌顾问 <span>李聪然</span></h3>
+            <div class="contxt">
+              <p class="msg">服务</p>
+              <p class="txt">
+                <span>1.</span>提供优惠折扣<span>2.</span>剩余房源介绍
+              </p>
+            </div>
+          </div>
+          <button>咨询优惠</button>
+        </div>
+        <div class="peo">
+          <div class="img">
+            <img :src="staffs[0].image" alt="" />
+          </div>
+          <div class="peocon">
+            <h3>金牌顾问 <span>李聪然</span></h3>
+            <div class="contxt">
+              <p class="msg">服务</p>
+              <p class="txt">
+                <span>1.</span>特价房申请<span>2.</span>总监级购房优惠
+              </p>
+            </div>
+          </div>
+          <button>一键通话</button>
+        </div>
       </div>
       <div class="m-line" v-if="chengjiao"></div>
       <div class="m-huo" v-if="chengjiao">
         <h3>
-          查询最新成交价
-          <p>
-            已有
-            <span>{{ searchnum }}</span
-            >人查询
-          </p>
+          最新成交价
+          <span>
+            6小时前更新
+          </span>
         </h3>
-        <div id="chart" style="width: 100%; height: 250px"></div>
+        <div id="chart" style="width: 100%; height: 220px"></div>
         <div class="table">
           <table>
             <tbody>
-              <tr>
+              <tr class="title">
                 <th>日期</th>
                 <th>成交套数</th>
                 <th>成交金额</th>
@@ -522,12 +568,20 @@
             <img src="~/assets/huo-down.png" alt />
           </div>
         </div>
+        <div class="pricemsg">
+          <van-notice-bar
+            left-icon="volume-o"
+            text="客户 137****7883  2月16日 成功购房"
+            background="#fff"
+            color="#646466"
+          />
+        </div>
         <div class="m-btns">
           <button class="p1" data-v="获取最新成交价">获取最新成交价</button>
         </div>
       </div>
       <div class="m-line"></div>
-      <div class="m-dai">
+      <div class="m-dai" v-if="false">
         <h3>
           楼盘问答
           <nuxt-link :to="'/' + jkl + '/question/' + id">
@@ -588,87 +642,92 @@
           <button class="question">我要提问</button>
         </div>
       </div>
-      <div class="m-line visible-xs-block .visible-sm-block"></div>
+      <div v-if="false" class="m-line visible-xs-block .visible-sm-block"></div>
 
       <div class="m-zhou visible-xs-block .visible-sm-block">
         <h3>
           周边配套
-          <span>
-            详细配套
-            <img src="~/assets/m-go.png" alt />
-          </span>
         </h3>
+        <p class="maptop">
+          <span class="name">位置：</span>浙江省杭州市临安区青山湖街道
+        </p>
+        <p class="maptop">
+          <span class="name">配套：</span
+          ><span class="blue"
+            >咨询具体位置和周边设施情况<img src="~/assets/maptalk.png" alt=""
+          /></span>
+        </p>
+        <div class="swiper-map">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div
+                :class="mapnum === 0 ? 'tegood active' : 'tegood'"
+                @click="setmap(0, '公交')"
+              >
+                公交
+                <i></i>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div
+                :class="mapnum === 1 ? 'tegood active' : 'tegood'"
+                @click="setmap(1, '地铁')"
+              >
+                地铁
+                <i></i>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div
+                :class="mapnum === 2 ? 'tegood active' : 'tegood'"
+                @click="setmap(2, '教育')"
+              >
+                教育
+                <i></i>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div
+                :class="mapnum === 3 ? 'tegood active' : 'tegood'"
+                @click="setmap(3, '医院')"
+              >
+                医院
+                <i></i>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div
+                :class="mapnum === 4 ? 'tegood active' : 'tegood'"
+                @click="setmap(4, '购物')"
+              >
+                购物
+                <i></i>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div
+                :class="mapnum === 5 ? 'tegood active' : 'tegood'"
+                @click="setmap(5, '美食')"
+              >
+                美食
+                <i></i>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div
+                :class="mapnum === 6 ? 'tegood active' : 'tegood'"
+                @click="setmap(6, '娱乐')"
+              >
+                娱乐
+                <i></i>
+              </div>
+            </div>
+          </div>
+        </div>
         <nuxt-link :to="'/' + jkl + '/Periphery/' + id + '/1'">
           <div class="m-continer" id="m-container"></div>
         </nuxt-link>
         <div class="m-z-icons">
-          <div class="swiper-map">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <div
-                  :class="mapnum === 0 ? 'tegood active' : 'tegood'"
-                  @click="setmap(0, '公交')"
-                >
-                  公交
-                  <i></i>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div
-                  :class="mapnum === 1 ? 'tegood active' : 'tegood'"
-                  @click="setmap(1, '地铁')"
-                >
-                  地铁
-                  <i></i>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div
-                  :class="mapnum === 2 ? 'tegood active' : 'tegood'"
-                  @click="setmap(2, '教育')"
-                >
-                  教育
-                  <i></i>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div
-                  :class="mapnum === 3 ? 'tegood active' : 'tegood'"
-                  @click="setmap(3, '医院')"
-                >
-                  医院
-                  <i></i>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div
-                  :class="mapnum === 4 ? 'tegood active' : 'tegood'"
-                  @click="setmap(4, '购物')"
-                >
-                  购物
-                  <i></i>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div
-                  :class="mapnum === 5 ? 'tegood active' : 'tegood'"
-                  @click="setmap(5, '美食')"
-                >
-                  美食
-                  <i></i>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div
-                  :class="mapnum === 6 ? 'tegood active' : 'tegood'"
-                  @click="setmap(6, '娱乐')"
-                >
-                  娱乐
-                  <i></i>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="map-con">
             <ul class="con"></ul>
             <p class="msg" v-show="isnull">
@@ -676,20 +735,31 @@
             </p>
           </div>
         </div>
-        <button class="p1" data-v="获取详细周边配套">获取详细周边配套</button>
+        <div class="mapbom">
+          <img src="~/assets/mapbom.png" alt="" />
+          <div class="bomcon">
+            <h6>区域解读</h6>
+            <p>获取学区、医院、周边配套信息</p>
+          </div>
+          <button class="p1" data-v="帮我分析">帮我分析</button>
+        </div>
       </div>
       <div class="m-line"></div>
       <div class="m-dong">
         <h3 id="m_dong">
-          最新消息
+          最新消息<i>最新</i>
           <nuxt-link :to="'/' + jkl + '/contentdynamic/' + id">
             <span>
-             全部动态
+              全部动态
               <img src="~/assets/m-go.png" alt />
             </span>
           </nuxt-link>
         </h3>
-        <div
+        <div class="dynamic">
+          {{ nowdong[0].content }}
+        </div>
+        <p class="dytime">{{ nowdong[0].time }}</p>
+        <!-- <div
           :class="item.state == '否' ? 'm-tai m-d' : 'm-jia m-d'"
           v-for="item in nowdong"
           :key="item.id"
@@ -702,7 +772,7 @@
           <h4 v-if="item.state == '否'">最新房源动态</h4>
           <h4 v-if="item.state == '是'">最新加推楼盘</h4>
           <p>{{ item.content }}</p>
-        </div>
+        </div> -->
         <!-- <div class="m-jia m-d" v-show="tui">
           <span>
             {{ tui.time }}
@@ -712,7 +782,7 @@
           <p>{{ tui.content }}</p>
         </div> -->
 
-        <div class="t-o o1"></div>
+        <!-- <div class="t-o o1"></div>
         <div class="t-o o2" v-show="tui"></div>
         <div class="t-l l1"></div>
         <div class="t-l l2" v-show="tui"></div>
@@ -749,13 +819,23 @@
               </div>
             </div>
           </div>
+        </div> -->
+        <div class="bombtn">
+          <div class="left">
+            <div class="name">设置楼盘提醒</div>
+            <p>加推楼盘早知道</p>
+          </div>
+          <div class="right">
+            <div class="rightpu">
+              <input type="text" placeholder="输入手机号设置提醒" v-model="baotel"/>
+            </div>
+            <button @click="sendtxt">开启提醒</button>
+          </div>
         </div>
-
-        <button class="p1" data-v="订阅最新动态">获取最新动态</button>
       </div>
-      <div class="m-line" v-if="compares.length"></div>
+      <div class="m-line" v-if="false"></div>
       <!-- 楼盘对比 -->
-      <div class="m-contrast" v-if="compares.length">
+      <div class="m-contrast" v-if="false">
         <h4>楼盘对比</h4>
         <div class="swiper-pk">
           <div class="swiper-wrapper">
@@ -781,9 +861,9 @@
           </div>
         </div>
       </div>
-      <div class="m-line"></div>
+      <div class="m-line" v-if="false"></div>
       <!-- 楼盘点评 -->
-      <div class="m-dian" id="dianping">
+      <div class="m-dian" id="dianping" v-if="false">
         <h4>
           楼盘点评
           <nuxt-link :to="'/' + jkl + '/morecomments/' + id">
@@ -850,9 +930,9 @@
         <button class="m-d-x" @click="gocomment">我要点评</button>
         <!-- </nuxt-link> -->
       </div>
-      <div class="m-line" v-if="infos.length > 0"></div>
+      <div class="m-line" v-if="false"></div>
       <!-- 相关资讯 -->
-      <div class="my-infos" v-if="infos.length > 0">
+      <div class="my-infos" v-if="false">
         <h4>
           相关资讯<nuxt-link :to="'/' + jkl + '/realinformations/46'"
             ><span>更多资讯 <img src="~/assets/m-go.png" alt/></span
@@ -868,19 +948,37 @@
           </nuxt-link>
         </ul>
       </div>
+      <div class="m-line"></div>
+      <div class="m-detail">
+        <h3>
+          楼盘详情<span @click="godetail">详细信息<img src="~/assets/m-go.png" alt/></span>
+        </h3>
+        <div class="detailmsg">
+          <div class="left"><span>户型：</span>{{
+                building.house_types?building.house_types.join(","):''
+              }}</div>
+          <div class="left"><span>类型：</span>{{ building.type }}</div>
+        </div>
+        <div class="detailmsg">
+          <div class="left"><span>开盘：</span>{{ building.open_time }}</div>
+          <div class="left"><span>交房：</span>{{ building.give_time }}</div>
+        </div>
+        <div class="detailmsg">
+          <div class="left"><span>层高：</span>{{ building.floor_height }}米</div>
+          <div class="left"><span>产权：</span>{{ building.year }}年</div>
+        </div>
+        <div class="detailmsg">
+          <div class="left"><span>装修：</span>{{ building.decorate }}</div>
+          <div class="left"><span>车位：</span>{{ building.parking_num }}</div>
+        </div>
+        <button>获取楼盘详细资料</button>
+      </div>
       <div class="m-line" v-if="same_price.length"></div>
       <!-- 同价位、区位 -->
       <div class="m-tui" v-if="same_price.length">
-        <div class="m-nav">
-          <p class="n-active" @click="n1s">
-            同价位楼盘
-            <i></i>
-          </p>
-          <p @click="n2s">
-            同区位楼盘
-            <i></i>
-          </p>
-        </div>
+        <h4>
+          看了该楼盘的人还看了
+        </h4>
         <div class="re-con r1" v-show="n1">
           <div class="re-list" v-for="(list, key) in same_price" :key="key">
             <nuxt-link :to="'/' + jkl + '/content/' + list.id">
@@ -968,6 +1066,13 @@
           </div>
         </div>
       </div>
+      <!-- 免费拨打 -->
+      <div class="callbox">
+        <a :href="'tel:'+phone">
+        <img src="~/assets/callimg.png" alt="" />
+        <p>免费拨打</p>
+        </a>
+      </div>
       <div class="m-ll"></div>
       <!-- 微信环境的浏览记录 -->
       <div class="wxlu" v-show="iswxsid">
@@ -990,21 +1095,6 @@
       <!-- 底部悬浮 -->
       <div class="m-botnav" v-show="!iswxsid">
         <p id="m_shou" @click="gotalk" v-if="totalnum <= 0 || !totalnum">
-          <!-- <img
-            id="fork"
-            src="~/assets/forks.png"
-            alt
-            :data-v="id"
-            @click="collections($event)"
-            v-show="forknum === 0"
-          />
-          <img
-            id="forked"
-            src="~/assets/heart.gif"
-            :data-v="id"
-            @click="collections($event)"
-            v-show="forknum === 1"
-          />收藏-->
           <img src="~/assets/talkimg.png" alt />
           在线咨询
           <span v-show="wsshow">{{ wsnum }}</span>
@@ -1015,14 +1105,16 @@
           有新消息
           <span>{{ totalnum }}</span>
         </p>
+        <button class="m-y p1" data-v="预约看房">
+          <p class="ph1">预约看房</p>
+          <img class="bj" src="~/assets/topbtnright.png" alt="" />
+        </button>
         <a :href="'tel:' + call">
           <button class="m-pho">
-            <p class="ph1"><img src="~/assets/phicon.png" alt />电话咨询</p>
+            <p class="ph1">电话咨询</p>
+            <img class="bj" src="~/assets/topbtnright.png" alt="" />
           </button>
         </a>
-        <button class="m-y p1" data-v="预约看房">
-          <p class="ph1"><img src="~/assets/promsg.png" />预约看房</p>
-        </button>
       </div>
       <div class="wxwork" v-if="iswxsid">
         <div class="wximg" @click="gotalk">
@@ -1669,7 +1761,9 @@ export default {
       staffimg: "",
       talktype: false,
       staffid: 152,
-      imgtype: 0
+      imgtype: 0,
+      mapurl: "",
+      baotel: ''
     };
   },
   head() {
@@ -1698,6 +1792,17 @@ export default {
     next();
   },
   methods: {
+    sendtxt(){
+      if(baotel) {
+        
+      }
+    },
+    godetail(){
+      this.$router.push('/'+this.jkl+'/detail/'+this.$route.params.id)
+    },
+    setimg(n){
+      this.imgtype = n
+    },
     putcard() {
       let urlid = this.$route.params.id;
       let id = sessionStorage.getItem(urlid);
@@ -1967,10 +2072,14 @@ export default {
             type: "category",
             data: that.times,
             axisLine: {
+              show: false,
               lineStyle: {
                 color: "rgba(153,153,153,1)",
                 fontSize: "10px"
               }
+            },
+            axisTick: {
+              show: false
             },
             axisLabel: {
               interval: 0,
@@ -1991,13 +2100,27 @@ export default {
                 color: "rgba(153,153,153,1)" //这里用参数代替了
               }
             },
+            axisTick: {
+              show: false
+            },
+            splitLine: {
+              lineStyle: {
+                type: "dashed",
+                color: "rgba(153,153,153,0.3)"
+              }
+            },
             axisLine: {
+              show: false,
               lineStyle: {
                 color: "rgba(153,153,153,1)"
               }
             }
           }
         ],
+        grid: {
+          y2: 40,
+          y: 50
+        },
         series: [
           {
             name: "销量",
@@ -3140,6 +3263,7 @@ export default {
     }
   },
   mounted() {
+    this.mapurl = `http://api.map.baidu.com/staticimage/v2?ak=Tz47quqSiGkQi7RyS3QKaFZxMy3GbH5o&center=${this.ln},${this.la}&width=315&height=130&zoom=17&markers=${this.ln},${this.la}`;
     this.num1 = Math.floor(Math.random() * 100) + 200;
     this.num2 = Math.floor(Math.random() * 100) + 200;
     this.num3 = Math.floor(Math.random() * 100) + 200;
@@ -3280,6 +3404,15 @@ export default {
       resistanceRatio: 0.1,
       slidesOffsetBefore: 14
     });
+    new Swiper(".swiper-special", {
+      slidesPerView: 2.6,
+      spaceBetween: 10,
+      observer: true,
+      slidesOffsetAfter: 2,
+      resistanceRatio: 0.1,
+      slidesOffsetBefore: 14
+    });
+
     var swiper07 = new Swiper(".swiper-pk", {
       slidesPerView: 2.4,
       spaceBetween: 10,
@@ -4118,13 +4251,13 @@ export default {
       margin-left: auto;
     }
   }
-  .p1 {
-    margin-bottom: .25rem;
+  .pr1 {
+    margin-bottom: 0.25rem;
   }
   .zhushi {
-    color: #2E3133;
-    font-size: .75rem;
-    margin-top: .75rem;
+    color: #2e3133;
+    font-size: 0.75rem;
+    margin-top: 0.75rem;
     padding-left: 4%;
     margin-bottom: 1.375rem;
   }
@@ -4134,8 +4267,8 @@ export default {
       position: relative;
       width: 10.4375rem;
       height: 3rem;
-      border-radius: .5rem;
-      background: linear-gradient(90deg, #3287FB 0%, #6ACCFF 100%);
+      border-radius: 0.5rem;
+      background: linear-gradient(90deg, #3287fb 0%, #6accff 100%);
       font-size: 1rem;
       color: #fff;
       line-height: 3rem;
@@ -4148,7 +4281,7 @@ export default {
       }
     }
     .p1:nth-last-of-type(1) {
-      background: linear-gradient(90deg, #FF6047 0%, #FFA56E 100%);
+      background: linear-gradient(90deg, #ff6047 0%, #ffa56e 100%);
     }
   }
 }
@@ -5660,21 +5793,21 @@ h2 .cailist li img {
   nav {
     padding-top: 1.25rem;
     h3 {
-      color: #0F161A;
+      color: #0f161a;
     }
     img {
       width: 1rem;
-      margin-left: .375rem;
+      margin-left: 0.375rem;
       margin-bottom: -0.125rem;
     }
   }
   .pin-left {
     left: 42%;
-    top: 54%
+    top: 54%;
   }
   .pin-time {
     left: 42%;
-    top: 59%
+    top: 59%;
   }
   .bomm {
     img {
@@ -5686,7 +5819,7 @@ h2 .cailist li img {
   h3 {
     margin: 1.125rem 0 1.125rem 4%;
     font-size: 1.0625rem;
-    color: #19191A;
+    color: #19191a;
     span {
       color: #969799;
     }
@@ -5695,32 +5828,32 @@ h2 .cailist li img {
     padding-bottom: 1.25rem;
     .swiper-wrapper {
       .swiper-slide {
-        box-shadow: 0px 0px .9375rem 0px rgba(0, 0, 0, 0.04);
-        border-radius: .375rem;
+        box-shadow: 0px 0px 0.9375rem 0px rgba(0, 0, 0, 0.04);
+        border-radius: 0.375rem;
         overflow: hidden;
         .tegood {
-          padding-bottom: .625rem;
-          padding-left: .625rem;
+          padding-bottom: 0.625rem;
+          padding-left: 0.625rem;
           .top {
             height: 5.9375rem;
           }
           h5 {
-            color: #3D3E40;
-            font-size: .9375rem;
-            margin-top: .75rem;
-            margin-bottom: .375rem;
+            color: #3d3e40;
+            font-size: 0.9375rem;
+            margin-top: 0.75rem;
+            margin-bottom: 0.375rem;
             span {
-              background-color: #E6FAEF;
-              color: #29CC72;
+              background-color: #e6faef;
+              color: #29cc72;
             }
           }
           .jian {
-            color: #7D7E80;
-            font-size: .75rem;
+            color: #7d7e80;
+            font-size: 0.75rem;
           }
           .red {
-            color: #FF5747;
-            font-size: .625rem;
+            color: #ff5747;
+            font-size: 0.625rem;
             span {
               font-size: 1rem;
               font-weight: bold;
@@ -5735,31 +5868,741 @@ h2 .cailist li img {
     .p1 {
       width: 10.4375rem;
       height: 3rem;
-      border-radius: .5rem;
-      background-color: #E8F6FC;
+      border-radius: 0.5rem;
+      background-color: #e8f6fc;
       text-align: center;
       line-height: 3rem;
-      color: #4283AB;
+      color: #4283ab;
       font-size: 1rem;
       font-weight: bold;
       margin-bottom: 1.25rem;
     }
     .p1:nth-of-type(2) {
-      margin-left: .6875rem;
+      margin-left: 0.6875rem;
     }
   }
 }
 .m-fen {
+  position: relative;
   h3 {
     color: #121212;
     font-size: 1.0625rem;
     margin: 1.125rem 0;
+    margin-left: 4%;
   }
   .fenmap {
+    padding: 0 4%;
+    margin-bottom: 1.125rem;
     img {
       width: 100%;
       height: 8.125rem;
     }
+  }
+  .title {
+    color: #121212;
+    font-size: 0.9375rem;
+    font-weight: bold;
+    padding-left: 4%;
+    margin-bottom: 0.625rem;
+    img {
+      width: 1rem;
+      margin-right: 0.25rem;
+      margin-top: -0.125rem;
+    }
+  }
+  .fencontent {
+    color: #323233;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    padding: 0 4%;
+    margin-bottom: 1.25rem;
+  }
+  .zhao {
+    width: 92%;
+    height: 3.625rem;
+    background: linear-gradient(0deg, #ffffff 40%, rgba(255, 255, 255, 0));
+    position: absolute;
+    bottom: 4.25rem;
+    left: 4%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 1rem;
+    }
+  }
+  button {
+    margin-top: 0;
+    height: 3rem;
+    line-height: 3rem;
+    background-color: #e8f6fc;
+    color: #4283ab;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+}
+.vip {
+  padding: 0 4%;
+  h2 {
+    color: #1f1f1f;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 1.125rem 0 0.75rem 0;
+    span {
+      color: #ff4040;
+      font-size: 1.125rem;
+    }
+  }
+  .icons {
+    margin-bottom: 1.125rem;
+    span {
+      color: #969899;
+      font-size: 0.8125rem;
+      margin-right: 1.25rem;
+      img {
+        width: 0.875rem;
+        margin-right: 0.1875rem;
+        margin-bottom: -0.125rem;
+      }
+    }
+  }
+  .peo {
+    display: flex;
+    align-items: center;
+    margin-right: 0.625rem;
+    margin-bottom: 1.5625rem;
+    .img {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 0.625rem;
+      img {
+        width: 100%;
+      }
+    }
+    .peocon {
+      h3 {
+        color: #2e3133;
+        font-size: 0.9375rem;
+        margin-bottom: 0.5rem;
+        span {
+          color: #0f161a;
+          font-size: 0.8125rem;
+        }
+      }
+      .contxt {
+        border-radius: 0.1875rem;
+        display: flex;
+        .msg {
+          width: 1.625rem;
+          height: 1.25rem;
+          text-align: center;
+          line-height: 1.25rem;
+          border-radius: 0.1875rem 0 0 0.1875rem;
+          background: #ff7519;
+          color: #fff;
+          font-size: 0.6875rem;
+        }
+        .txt {
+          width: 11.25rem;
+          height: 1.1875rem;
+          border-radius: 0 0.1875rem 0.1875rem 0;
+          border: 0.0625rem solid #ff7519;
+          text-align: center;
+          line-height: 1.125rem;
+          color: #646466;
+          font-size: 0.6875rem;
+          span {
+            color: #ff7519;
+          }
+        }
+      }
+    }
+    button {
+      margin-left: auto;
+      width: 4.125rem;
+      height: 1.625rem;
+      border-radius: 0.375rem;
+      text-align: center;
+      line-height: 1.625rem;
+      background: #3eacf0;
+      color: #fff;
+      font-size: 0.75rem;
+      border: 0;
+      outline: none;
+    }
+  }
+  .peo:nth-of-type(2) {
+    .peocon {
+      .contxt {
+        .msg {
+          background: #5dbdff;
+        }
+        .txt {
+          border-color: #5dbdff;
+          span {
+            color: #5dbdff;
+          }
+        }
+      }
+    }
+  }
+  .peo:nth-of-type(3) {
+    .peocon {
+      .contxt {
+        .msg {
+          background: #2fc66e;
+        }
+        .txt {
+          border-color: #2fc66e;
+          span {
+            color: #2fc66e;
+          }
+        }
+      }
+    }
+  }
+}
+.m-huo {
+  h3 {
+    margin-top: 1.125rem;
+    color: #19191a;
+    span {
+      color: #969699;
+      font-size: 0.625rem;
+      margin-left: 0.15rem;
+      font-weight: normal;
+    }
+  }
+  .table {
+    table {
+      overflow: hidden;
+      border-radius: 0.375rem;
+    }
+    .title {
+      background: #f2f2f2;
+      th {
+        color: #4b4b4c;
+        font-size: 0.75rem;
+      }
+    }
+    tr {
+      td {
+        color: #7d7d80;
+        font-size: 0.625rem;
+      }
+    }
+  }
+  .pricemsg {
+    padding: 0 4%;
+    font-size: 0.8125rem;
+  }
+  .m-btns {
+    button {
+      height: 3rem;
+      border-radius: 0.5rem;
+      line-height: 3rem;
+      background-color: #e8f6fc;
+      color: #4283ab;
+      font-weight: bold;
+      font-size: 1rem;
+      margin-top: 0.625rem;
+      margin-bottom: 0;
+    }
+  }
+}
+.m-zhou {
+  h3 {
+    color: #1f1f1f;
+    font-size: 1.0625rem;
+    margin: 1.125rem 0 1rem 4%;
+  }
+  .maptop {
+    color: #323233;
+    font-size: 0.9375rem;
+    margin-bottom: 0.75rem;
+    padding-left: 4%;
+    .name {
+      color: #969699;
+    }
+    .blue {
+      color: #4283ab;
+      img {
+        width: 1.125rem;
+        margin-left: 0.125rem;
+      }
+    }
+  }
+  .swiper-map {
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    .swiper-wrapper {
+      .swiper-slide {
+        .tegood {
+          width: 4.375rem;
+          height: 1.75rem;
+          border-radius: 0.875rem;
+          text-align: center;
+          line-height: 1.75rem;
+          background-color: #f5f5f5;
+          color: #4b4b4d;
+          font-size: 0.8125rem;
+        }
+        .active {
+          background-color: #ebf9ff;
+          color: #3eacf0;
+        }
+      }
+    }
+  }
+  .m-z-icons {
+    /deep/.map-con {
+      li {
+        h5 {
+          color: #323233;
+          font-size: 0.875rem;
+        }
+        p {
+          color: #969799;
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+  .mapbom {
+    display: flex;
+    align-items: center;
+    padding: 0 4%;
+    padding-bottom: 1.25rem;
+    img {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      margin-right: 0.625rem;
+    }
+    .bomcon {
+      h6 {
+        color: #0f161a;
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+      p {
+        color: #616466;
+        font-size: 0.75rem;
+      }
+    }
+    button {
+      width: 4.875rem;
+      height: 1.75rem;
+      border-radius: 0.875rem;
+      text-align: center;
+      line-height: 1.75rem;
+      background-color: #3eacf0;
+      border: 0;
+      outline: none;
+      color: #fff;
+      font-size: 0.75rem;
+      margin: 0;
+      margin-left: auto;
+    }
+  }
+}
+.m-dong {
+  padding-bottom: 1.25rem;
+  h3 {
+    color: #1f1f1f;
+    font-size: 1.0625rem;
+    margin: 1.125rem 0 1rem 4%;
+    i {
+      display: inline-block;
+      width: 2rem;
+      height: 0.9375rem;
+      background: linear-gradient(90deg, #f59024, #f46344);
+      border-radius: 0.375rem 0px 0.375rem 0px;
+      text-align: center;
+      line-height: 0.9375rem;
+      margin-left: 0.375rem;
+      font-size: 11px;
+      color: #fff;
+      font-weight: normal;
+      font-style: normal;
+    }
+    span {
+      width: 22%;
+    }
+  }
+  .dynamic {
+    padding: 0 4%;
+    color: #5c5c5c;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  .dytime {
+    color: #919499;
+    font-size: 0.75rem;
+    padding-left: 4%;
+  }
+  .bombtn {
+    display: flex;
+    width: 92%;
+    margin-left: 4%;
+    height: 3.625rem;
+    border-radius: 0.5rem;
+    background: linear-gradient(270deg, #d1ecff, #bff0ee);
+    align-items: center;
+    margin-top: 0.875rem;
+    .left {
+      margin-left: 0.5rem;
+      margin-right: 0.625rem;
+      .name {
+        color: #4283ab;
+        font-weight: bold;
+        font-size: 0.875rem;
+        margin-bottom: 0.2rem;
+        font-weight: bold;
+      }
+      p {
+        color: #4283ab;
+        font-size: 0.75rem;
+      }
+    }
+    .right {
+      display: flex;
+      .rightpu {
+        width: 9.375rem;
+        height: 2.25rem;
+        background-color: #fff;
+        border-radius: 1.0625rem 0 0 1.0625rem;
+        display: flex;
+        align-items: center;
+        input {
+          border: 0;
+          outline: none;
+          margin-left: 0.625rem;
+        }
+      }
+      button {
+        width: 4.625rem;
+        height: 2.25rem;
+        border-radius: 0 1.0625rem 1.0625rem 0;
+        text-align: center;
+        line-height: 2.25rem;
+        border: 0;
+        outline: none;
+        background-color: #3eacf0;
+        margin: 0;
+        color: #fefffe;
+        font-size: 0.8125rem;
+      }
+    }
+  }
+}
+.m-tui {
+  h4 {
+    color: #1f1f1f;
+    font-size: 1.0625rem;
+    margin: 1.125rem 0 0.125rem 4%;
+    font-weight: bold;
+  }
+  .re-list {
+    border: 0;
+    padding: 0.9375rem 0;
+    .re-con-left {
+      width: 6.875rem;
+      height: 5.125rem;
+      border-radius: 0.375rem;
+      img {
+        width: 6.875rem;
+        height: 5.125rem;
+        border-radius: 0.375rem;
+      }
+    }
+    .re-con-right {
+      h5 {
+        color: #0f161a;
+        font-size: 1rem;
+        font-weight: bold;
+        span {
+          background: #e6faef;
+          color: #3ecf7c;
+          font-size: 0.6875rem;
+        }
+      }
+      .price {
+        color: #fa5332;
+        font-size: 0.8125rem;
+        span {
+          font-size: 1rem;
+          font-weight: 800;
+        }
+      }
+      .area {
+        color: #2e3133;
+        font-size: 0.75rem;
+      }
+      .tabs {
+        .strong {
+          background: #e3f4fc;
+          color: #36a8e0;
+        }
+      }
+    }
+  }
+}
+.callbox {
+  position: fixed;
+  z-index: 10;
+  right: 0.9375rem;
+  bottom: 11.875rem;
+  width: 4.375rem;
+  height: 5.625rem;
+  border-radius: 0.75rem;
+  box-shadow: 0px 0px 0.9375rem 0px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  text-align: center;
+  img {
+    width: 2.8125rem;
+    height: 2.8125rem;
+    margin: 0.75rem 0 0.625rem 0;
+  }
+  p {
+    text-align: center;
+    color: #ff6349;
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+}
+.m-botnav {
+  #m_shou {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    margin-top: 0.625rem;
+    img {
+      width: 2rem;
+      margin-left: 18%;
+    }
+    span {
+      right: 0.2rem;
+    }
+  }
+  button {
+    width: 8rem;
+    height: 3rem;
+    border-radius: 0.5rem;
+    line-height: 3rem;
+    top: 0.625rem;
+    .bj {
+      width: 2.75rem;
+      height: 3rem;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    .ph1 {
+      color: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+  }
+  .m-pho {
+    right: 0.9375rem;
+  }
+  .m-y {
+    left: 5.8125rem;
+  }
+}
+.m-detail {
+  padding: 0 4%;
+  padding-bottom: 1.25rem;
+  h3 {
+    color: #1f1f1f;
+    font-size: 1.0625rem;
+    font-weight: bold;
+    padding: 1.125rem 0;
+    span {
+      color: #969799;
+      font-size: 0.8125rem;
+      float: right;
+      img {
+        width: 0.75rem;
+        margin-left: 0.125rem;
+      }
+    }
+  }
+  .detailmsg {
+    display: flex;
+    margin-bottom: 0.75rem;
+    .left {
+      width: 50%;
+      color: #2e3133;
+      font-size: 0.875rem;
+      span {
+        color: #808080;
+        font-size: 0.875rem;
+      }
+    }
+  }
+  button {
+    width: 92%;
+    height: 3rem;
+    margin-left: 4%;
+    text-align: center;
+    line-height: 3rem;
+    background: #e8f6fc;
+    border: 0;
+    outline: none;
+    color: #4283ab;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 0.125rem;
+    border-radius: 0.5rem;
+  }
+}
+.special {
+  padding-bottom: 1.25rem;
+  .toptit {
+    margin: 0 4%;
+    border-bottom: 0.03125rem solid #ededed;
+    display: flex;
+    padding-top: 1.75rem;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.875rem;
+    img {
+      width: 1rem;
+      margin-right: 0.25rem;
+    }
+    .tit {
+      color: #121212;
+      font-size: 1.0625rem;
+      font-weight: bold;
+    }
+    .ritime {
+      margin-left: auto;
+      color: #313233;
+      font-size: 0.8125rem;
+      display: flex;
+      p {
+        font-size: 0.625rem;
+        color: #ff2f51;
+        span {
+          display: inline-block;
+          width: 1rem;
+          height: 1rem;
+          text-align: center;
+          line-height: 1rem;
+          background-color: #ff4040;
+          color: #ffffff;
+          font-size: 0.6875rem;
+          border-radius: 0.125rem;
+          margin: 0 0.25rem;
+        }
+      }
+    }
+  }
+  .swiper-special {
+    overflow: hidden;
+    margin-bottom: 0.4rem;
+    .swiper-wrapper {
+      .swiper-slide {
+        position: relative;
+        width: 8.75rem;
+        height: 7.03125rem;
+        .di {
+          width: 8.75rem;
+          height: 5rem;
+          border-radius: 0.5rem;
+          background: linear-gradient(90deg, #f2444a, #fa8370);
+          position: absolute;
+          top: 0.9375rem;
+        }
+        .center {
+          width: 7.5rem;
+          height: 4.875rem;
+          border-radius: 0.5rem;
+          border: 0.09375rem solid #ece3d5;
+          background-color: #fff;
+          position: absolute;
+          left: 0.625rem;
+          top: 0;
+          p {
+            color: #69513d;
+            font-size: 0.6875rem;
+            text-align: center;
+            padding-top: 0.625rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+        .top {
+          width: 8.75rem;
+          height: 5rem;
+          background: linear-gradient(90deg, #f2444a, #fa8370);
+          border-radius: 0 0 0.5rem 0.5rem;
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          .te {
+            text-align: center;
+            color: #ffffff;
+            font-size: 0.625rem;
+            margin-top: 0.25rem;
+            span {
+              font-size: 1.375rem;
+              font-weight: bold;
+            }
+          }
+          .old {
+            text-align: center;
+            color: #fad9d4;
+            font-size: 0.6875rem;
+            text-decoration: line-through;
+            position: relative;
+            top: -0.125rem;
+          }
+          button {
+            width: 4.125rem;
+            height: 1.25rem;
+            border-radius: 0.625rem;
+            text-align: center;
+            line-height: 1.25rem;
+            background-color: #fff;
+            color: #7f5431;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border: 0;
+            outline: none;
+            margin-left: 2.3125rem;
+          }
+        }
+      }
+    }
+  }
+  .bomtxt {
+    padding: 0 4%;
+    margin-bottom: .375rem;
+  }
+  .p1 {
+    width: 92%;
+    margin-left: 4%;
+    height: 3rem;
+    border-radius: .5rem;
+    text-align: center;
+    line-height: 3rem;
+    border: 0;
+    outline: none;
+    background-color: #E8F6FC;
+    color: #4283AB;
+    font-size: 1.0625rem;
+    font-weight: bold;
   }
 }
 </style>
