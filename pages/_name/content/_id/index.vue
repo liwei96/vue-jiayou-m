@@ -143,7 +143,7 @@
               />
             </div>
           </div>
-          <div class="wxshare" v-show="iswx" @click="goshare">
+          <div class="wxshare" v-show="iswx" @click="goshare" v-if="false">
             <img src="~/assets/wxshare.png" alt />
             分享
           </div>
@@ -1693,15 +1693,18 @@ export default {
       let city = this.city;
       let id = this.$route.params.id;
       let staffid = this.staffid;
+      let other = this.$store.state.cookie.other
       if (this.staffid == 152) {
-        newurl += `?proid=${id}&uuid=${uuid}&city=${city}`;
+        newurl += `?proid=${id}&uuid=${uuid}&city=${city}&other=${other}`;
       } else {
-        newurl += `?proid=${id}&uuid=${uuid}&city=${city}&staffid=${staffid}`;
+        newurl += `?proid=${id}&uuid=${uuid}&city=${city}&other=${other}&staffid=${staffid}`;
       }
       console.log(newurl);
       newurl = encodeURIComponent(newurl);
       // window.location.href =
-      //   "http://localhost:3000/hangzhou/talk?reconnect=" + newurl;
+      //   "http://localhost:3010/hangzhou/talk?reconnect=" + newurl+
+      //   "&uuid=" +
+      //   this.$route.query.uuid;
       // window.location.href =
       //   "http://testim.jy1980.com/hangzhou/talk?reconnect=" + newurl+'&uuid='+this.$route.query.uuid;
       window.location.href =
@@ -3046,66 +3049,66 @@ export default {
       return myyear + "-" + mymonth + "-" + myweekday;
     }
   },
-  beforeMount() {
-    let ul = window.location.href;
-    ul = ul.split("?")[1];
-    if (this.$route.params.name != this.jkl) {
-      this.$router.push(
-        "/" + this.jkl + "/content/" + this.$route.params.id + "?" + ul
-      );
-    }
-    let that = this;
-    var ua = navigator.userAgent.toLowerCase();
-    if (ua.match(/MicroMessenger/i) == "micromessenger") {
-      let url = window.location.href;
-      url = url.split("?")[1];
-      if (url && url.indexOf("scid") !== -1) {
-        let sid = that.$route.query.scid;
-        $cookies.set("scid", sid);
-        that.iswx = false;
-        that.iswxsid = true;
-        if (!sessionStorage.getItem("wxscid")) {
-          window.location.href = `http://ll.edefang.net/front/user/getcode_front?scid=${sid}`;
-          sessionStorage.setItem("wxscid", sid);
-        }
-      } else {
-        if (localStorage.getItem("gowx")) {
-          if (url && url.indexOf("staff_id") !== -1) {
-            let sid = url.split("=")[1];
-            sessionStorage.setItem("wxstaff", sid);
-            if (sid) {
-              that.iswx = true;
-            }
-          } else if (url && url.indexOf("scid") !== -1) {
-            let sid = url.split("=")[1];
-            sessionStorage.setItem("wxscid", sid);
-            $cookies.set("scid", sid);
-            if (!sessionStorage.getItem("wxscid")) {
-              window.location.href = `http://ll.edefang.net/front/user/getcode_front?scid=${sid}&${ul}`;
-            } else {
-              that.iswx = false;
-              that.iswxsid = true;
-              sessionStorage.setItem(
-                "wxurl",
-                window.location.href.split("?")[1]
-              );
-              sessionStorage.setItem(that.building.id, that.share.staff.sid);
-              sessionStorage.setItem("staffname", that.share.staff.name);
-              sessionStorage.setItem(
-                "staff" + that.share.staff.sid,
-                that.share.staff.head_img
-              );
-            }
-          } else {
-            window.location.href = `http://ll.edefang.net/front/user/getcode_transfer?silent=0&id=${that.building.id}`;
-          }
-        } else {
-          localStorage.setItem("gowx", 1);
-          window.location.href = `http://ll.edefang.net/front/user/getcode_transfer?silent=0&id=${that.building.id}&${ul}`;
-        }
-      }
-    }
-  },
+  // beforeMount() {
+  //   let ul = window.location.href;
+  //   ul = ul.split("?")[1];
+  //   if (this.$route.params.name != this.jkl) {
+  //     this.$router.push(
+  //       "/" + this.jkl + "/content/" + this.$route.params.id + "?" + ul
+  //     );
+  //   }
+  //   let that = this;
+  //   var ua = navigator.userAgent.toLowerCase();
+  //   if (ua.match(/MicroMessenger/i) == "micromessenger") {
+  //     let url = window.location.href;
+  //     url = url.split("?")[1];
+  //     if (url && url.indexOf("scid") !== -1) {
+  //       let sid = that.$route.query.scid;
+  //       $cookies.set("scid", sid);
+  //       that.iswx = false;
+  //       that.iswxsid = true;
+  //       if (!sessionStorage.getItem("wxscid")) {
+  //         window.location.href = `http://ll.edefang.net/front/user/getcode_front?scid=${sid}`;
+  //         sessionStorage.setItem("wxscid", sid);
+  //       }
+  //     } else {
+  //       if (localStorage.getItem("gowx")) {
+  //         if (url && url.indexOf("staff_id") !== -1) {
+  //           let sid = url.split("=")[1];
+  //           sessionStorage.setItem("wxstaff", sid);
+  //           if (sid) {
+  //             that.iswx = true;
+  //           }
+  //         } else if (url && url.indexOf("scid") !== -1) {
+  //           let sid = url.split("=")[1];
+  //           sessionStorage.setItem("wxscid", sid);
+  //           $cookies.set("scid", sid);
+  //           if (!sessionStorage.getItem("wxscid")) {
+  //             window.location.href = `http://ll.edefang.net/front/user/getcode_front?scid=${sid}&${ul}`;
+  //           } else {
+  //             that.iswx = false;
+  //             that.iswxsid = true;
+  //             sessionStorage.setItem(
+  //               "wxurl",
+  //               window.location.href.split("?")[1]
+  //             );
+  //             sessionStorage.setItem(that.building.id, that.share.staff.sid);
+  //             sessionStorage.setItem("staffname", that.share.staff.name);
+  //             sessionStorage.setItem(
+  //               "staff" + that.share.staff.sid,
+  //               that.share.staff.head_img
+  //             );
+  //           }
+  //         } else {
+  //           window.location.href = `http://ll.edefang.net/front/user/getcode_transfer?silent=0&id=${that.building.id}`;
+  //         }
+  //       } else {
+  //         localStorage.setItem("gowx", 1);
+  //         window.location.href = `http://ll.edefang.net/front/user/getcode_transfer?silent=0&id=${that.building.id}&${ul}`;
+  //       }
+  //     }
+  //   }
+  // },
   mounted() {
     this.num1 = Math.floor(Math.random() * 100) + 200;
     this.num2 = Math.floor(Math.random() * 100) + 200;
@@ -3114,6 +3117,28 @@ export default {
     console.log(this.staffs, 8989);
     $cookies.set("cityname", this.building.city_fullname);
     localStorage.setItem("call", this.call);
+    // let city = localStorage.getItem("city");
+    // let ip = ip_arr["ip"];
+    // let pro = this.$route.params.id
+    // let url = window.location.href;
+    //   let newurl = url.split("?")[0];
+    //   let uuid = this.$route.query.uuid;
+    // let pp = {
+    //   controller: "Info",
+    //   action: "register",
+    //   params: {
+    //     city: city,
+    //     project: pro,
+    //     ip: ip,
+    //     url: url,
+    //     uuid: localStorage.getItem("uuid"),
+    //     host: 'm.jy8006.com'
+    //   },
+    // };
+    // if (sessionStorage.getItem("url") !== url) {
+    //   this.$store.state.ws.send(JSON.stringify(pp));
+    //   sessionStorage.setItem("url", url);
+    // }
     this.ws = this.$store.state.ws;
     this.ws.onmessage = function(event) {
       let data = JSON.parse(event.data);
